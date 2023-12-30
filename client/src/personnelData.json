@@ -1,0 +1,58 @@
+{
+    "personnel": [
+      {
+        "id": 1,
+        "name": "Alice Johnson",
+        "bookings": [
+          {
+            "day": "Monday",
+            "startTime": 9,
+            "endTime": 10
+          },
+          {
+            "day": "Wednesday",
+            "startTime": 14,
+            "endTime": 15
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Bob Smith",
+        "bookings": [
+          {
+            "day": "Tuesday",
+            "startTime": 11,
+            "endTime": 12
+          },
+          {
+            "day": "Thursday",
+            "startTime": 15,
+            "endTime": 17
+          },
+          {
+            "day": "Friday",
+            "startTime": 16,
+            "endTime": 18
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Charlie Brown",
+        "bookings": [
+          {
+            "day": "Monday",
+            "startTime": 10,
+            "endTime": 11
+          },
+          {
+            "day": "Thursday",
+            "startTime": 13,
+            "endTime": 18
+          }
+        ]
+      }
+    ]
+  }
+  

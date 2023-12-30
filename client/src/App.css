@@ -1,0 +1,52 @@
+:root {
+  --green: #20FC8F;
+  --grey: #2D2D2A;
+  --olive: #38423B;
+  --blue: #3F5E5A;
+  --ash: #9DC0BC;
+  --white: #F7F7F7;
+  --font-main: 'Archivo Narrow', sans-serif;
+  --font-secondary: 'Julius Sans One', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background-color: var(--grey);
+  overflow: hidden;
+}
+
+.app {
+  min-height: 100vh;
+  min-width: 100vh;
+}
+
+.main {
+  display: flex;
+  width: calc(100% - 300px);
+  height: 100%;
+  margin-left: 300px;
+}
+
+.main-header {
+  width: calc(100% - 300px);
+  margin-left: 300px;
+}
+
+.main-header>h1 {
+  margin-left: 25%;
+  color: var(--green);
+  font-family: var(--font-secondary);
+  font-weight: 800;
+}
+
+.row {
+  display: flex;
+  flex-direction: row !important;
+}
+
+
+
+
+
