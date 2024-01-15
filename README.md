@@ -13,7 +13,10 @@ Feedback System: Clients can provide reviews, aiding businesses in enhancing the
 Analytics and Reporting: Offers valuable insights into booking patterns, popular services, and client demographics, aiding in strategic planning and decision-making.
 
 Student Names:
-  Charlie Haldane 300129685
+  Charlie Haldane 
+  Jacob Pilon
+  Dominic Salas
+  Sihan Wang 
 
 Customer Name
 Timm Emberley
