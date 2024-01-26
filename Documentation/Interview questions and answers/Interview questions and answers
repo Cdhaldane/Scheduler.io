@@ -1,0 +1,30 @@
+Interview Questions (2024-01-26):
+
+What is the current appointment scheduling system?
+Currently, my salon relies on a mix of phone calls, a basic online booking tool, and a traditional appointment book, which can be quite cumbersome and time-consuming to manage.
+
+Who are the primary users of the TimeSlot system, and can you describe their typical workflow when scheduling appointments?
+The primary users are our customers who are looking to get hair appointments. Their current workflow involves calling the salon, requesting a specific service, and choosing a suitable time based on availability.
+
+What specific features do you envision for the web applications vs. Mobile apps? Do you expect any functionality differences between those two?
+The core functionalities such as booking appointments, managing schedules, and sending reminders, will be consistent across both web and mobile platforms. However, the mobile app might offer additional features like push notifications for reminders and a more user-friendly mobile interface. The web application could provide more comprehensive analytics and reporting tools.
+
+Can you provide examples of the types of businesses that will use TimeSlot, and what are their specific scheduling needs?
+TimeSlot is ideal for small service-based businesses like beauty salons, dental clinics, fitness studios, and consulting firms. For instance, a salon like mine needs customizable time slots for various hair services, while a fitness studio would benefit from features supporting recurring appointments for classes.
+
+Are there any existing systems that you would like to emulate?
+I find the simplicity of systems like Jane appealing, as well as the widespread accessibility of Google Calendar. I think it's important for TimeSlot to integrate the best features of these platforms while adding unique functionalities that cater to small businesses, like enhanced client management and customizable scheduling.
+
+What kind of scalability are you expecting for TimeSlot in terms of the number of users, appointments, and data volume?
+In my case, I would need the system to handle about 5-10 appointments per day, but it should be scalable to accommodate more as my business grows.
+
+How would you like businesses to customize their scheduling? Are there specific parameters or constraints you envision for setting available times and services?
+It's vital to have the ability to set specific times for different services and adjust the schedule for holidays or special events. This flexibility is key to maximizing efficiency and catering effectively to our clients' needs.
+
+How do you prioritize the features you've listed in terms of development, and are there any that you would like to see implemented first?
+The scheduling and client management features are top priority for me as they are crucial for the day-to-day running of my salon. While features like analytics and a feedback system are important, they can be developed in later phases.
+
+Could we schedule a recurring biweekly scrum meeting for the next four months? 
+I should be available at 1:00 pm every other Friday.
+
+
