@@ -1,0 +1,28 @@
+NFR1: The web application and mobile app should have a maximum of 2 seconds between each operation (picking a date, picking a service, entering information, etc.)
+NFR2: TimeSlot should be able to handle at least 20 clients at once.
+NFR3: TimeSlot should be able to scale horizontally to accommodate an increasing number of users and/or businesses.
+NFR4: TimeSlot should be available to use with minimal downtime and failures (99.9% availability).
+NFR5: TimeSlot should meet accessibility standards (i.e. WCAG 2.0) to be usable by people with disabilities.
+NFR6: TimeSlot should be able to restrict clients from accessing other clients’ scheduling information.
+NFR7: TimeSlot should be able to restrict clients from editing other clients’ scheduling information.
+NFR8: TimeSlot should be able to distinct owners from clients, with owners requiring security information.
+NFR9: TimeSlot should be able to address and follow relevant legal and social requirements, as well as follow the guidelines for those requirements if given.
+NFR10: TimeSlot should be able to handle different localization options.
+NFR11: In case of failure and need of manual maintenance, TimeSlot should still be available through the use of other components (component remains redundant in an ideal system)
+NFR12: TimeSlot must be capable of increasing the number of appointments on a day to day basis.
+NFR 13: TimeSlot shall be available to allow users to switch languages. 
+
+
+FR1: With TimeSlot, clients should be able to book an appointment/service on a certain date and time with the service's provider, given there is an availability for that time and service.
+FR2: When clients try to book an appointment/service on a date and time that is occupied by another client or not available, TimeSlot should not allow the user to book the appointment.
+FR3: After booking a timed appointment/service with TimeSlot, users will receive an email notification confirming my appointment with the service's provider.
+FR4: After booking a timed appointment/service with TimeSlot, owners will receive an email notification notifying the date and time of a new appointment booked by a client.
+FR5: A client must be capable of selecting a specific service.
+FR6: The TimeSlot shall be able to allow business owners to create new services. 
+FR7: A client must be able to view available times for their booking.
+FR8: The User must be able to send reminders out to clients with appointments booked.
+FR9: TimeSlot must allow for customizable time slots.
+FR10: The User shall be able to view client information easily through bookings.
+FR11: The customer must be able to pick how the system reminds them of their booking.
+FR12: TimeSlot must allow the customer to add a note when booking their appointment.
+FR13: The TimeSlot shall be able to allow users to leave comments corresponding to the booking services. 
