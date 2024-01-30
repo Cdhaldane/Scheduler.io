@@ -1,80 +1,108 @@
 .main-calendar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 70%;
-    color: var(--green);
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+  color: var(--green);
+  padding: 20px;
 }
 
 .calendar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    border-radius: 10px;
-    width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 10px;
+  width: 100%;
 }
 
 .header {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .header-cell {
-    border-top: var(--green);
+  border-top: var(--green);
 }
 
 .header-cell,
 .cell {
-    width: 12%;
-    height: 30px;
-    border: 1px solid var(--blue);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--green);
-    background-color: var(--grey);
+  width: 12%;
+  height: 30px;
+  border: 1px solid var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  background-color: var(--grey);
 }
 
 .empty {
-    border: none !important;
-    width: 8%;
-    height: 30px;
+  border: none !important;
+  width: 8%;
+  height: 30px;
 }
 
 .body {
-    width: 100%;
+  width: 100%;
 }
 
 .body .row {
-    display: flex;
+  display: flex;
+  position: relative;
 }
 
 .cell {
-    cursor: pointer;
-    background-color: var(--grey);
+  position: relative;
+  cursor: pointer;
+  background-color: var(--grey);
 }
 
 .cell.hours {
-    color: #999;
-    background-color: transparent;
-    border: none;
-    width: 8%;
+  color: #999;
+  background-color: transparent;
+  border: none;
+  width: 8%;
 }
 
 .cell.scheduled {
-    background-color: var(--blue);
-    color: var(--grey);
-    border: 1px solid var(--blue);
+  background-color: var(--blue);
+  color: var(--white);
+  border: 1px solid var(--blue);
 }
 
 .cell.selected {
-    background-color: var(--green);
+  background-color: var(--green);
+}
+
+.cell.over {
+  background-color: var(--blue);
 }
 
 .day.selected {
-    background-color: #61dafb;
+  background-color: #61dafb;
 }
 
+.expand-indicator {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  cursor: -webkit-grab;
+}
+
+.expand-indicator.top {
+  top: -15px; /* Adjust based on the cell's border and desired appearance */
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid var(--green);
+}
+
+.expand-indicator.bottom {
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+  border-top: 10px solid var(--green);
+  bottom: -15px; /* Adjust based on the cell's border and desired appearance */
+}
