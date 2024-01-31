@@ -9,7 +9,7 @@ const PuzzlePiece = ({ piece }) => {
   // Use `useDrag` hook from react-dnd to make this component draggable
   const [{ isDragging }, drag] = useDrag({
     type: "service",
-    item: { id: piece.id, name: piece.name },
+    item: { id: piece.id, name: piece.name, color: piece.color },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -52,7 +52,6 @@ const PuzzleContainer = ({
   });
 
   const [isOpen, setIsOpen] = useState(false);
-  console.log(puzzlePieces);
 
   return (
     <div
@@ -68,6 +67,7 @@ const PuzzleContainer = ({
       <Calendar
         personID={personID}
         handleSelectedSlot={(e) => handleSelectedSlot(e)}
+        puzzlePieces={puzzlePieces}
       />
       <div className="pieces-container">
         {puzzlePieces.map((piece, index) => (

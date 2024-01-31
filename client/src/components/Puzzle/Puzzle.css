@@ -18,7 +18,6 @@
 .puzzle-piece {
   position: relative;
   cursor: grab;
-  background-color: var(--blue);
   border-radius: 10px;
   margin: 20px;
   color: var(--white);
@@ -30,7 +29,6 @@
   justify-content: center;
   align-items: center;
   transition: opacity 0.2s ease-in-out;
-  border: none;
   border: 3px solid var(--blue);
 }
 .puzzle-piece::before {

@@ -67,13 +67,19 @@
 }
 
 .cell.scheduled {
-  background-color: var(--blue);
+  background-color: inherit;
   color: var(--white);
-  border: 1px solid var(--blue);
+  border: 1px solid inherit;
 }
 
 .cell.selected {
-  background-color: var(--green);
+  background-color: var(--green) !important;
+  border: 1px solid var(--green) !important;
+}
+
+.cell.group-selected {
+  background-color: var(--green) !important ;
+  border: 1px solid var(--green) !important;
 }
 
 .cell.over {
@@ -86,10 +92,10 @@
 
 .expand-indicator {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 44%;
   z-index: 1;
   cursor: -webkit-grab;
+  animation: pulse 1s infinite;
 }
 
 .expand-indicator.top {
@@ -105,4 +111,23 @@
 
   border-top: 10px solid var(--green);
   bottom: -15px; /* Adjust based on the cell's border and desired appearance */
+}
+
+.scheduled-slot {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

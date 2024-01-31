@@ -8,7 +8,7 @@ import "./Calendar.css";
 const Calendar = (props) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [scheduledSlots, setScheduledSlots] = useState([]);
-  const [serviceName, setServiceName] = useState("");
+  const [timeRange, setTimeRange] = useState([]);
 
   const daysOfWeek = [
     "Sunday",
@@ -56,10 +56,11 @@ const Calendar = (props) => {
     });
   };
 
-  const isSlotEdge = (day, hour) => {
-    const daySlots = scheduledSlots.filter((slot) => slot.day === day);
+  const isSlotEdge = (day, hour, name) => {
+    let daySlots = scheduledSlots.filter((slot) => slot.day === day);
+    daySlots = daySlots.filter((slot) => slot.item.name === name);
     daySlots.sort((a, b) => a.start - b.start);
-
+    console.log(daySlots);
     const slotIndex = daySlots.findIndex((slot) => slot.start === hour);
     if (slotIndex === -1) return false;
 
@@ -72,12 +73,71 @@ const Calendar = (props) => {
     return isFirst || isLast;
   };
 
-  const handleSlotClick = (day, hour) => {
-    setSelectedSlot({ day, hour });
+  const handleSlotClick = (day, hour, slots) => {
+    let allSlots = scheduledSlots;
+    if (slots) allSlots = slots;
+    const clickedSlot = allSlots.find(
+      (slot) => slot.day === day && hour >= slot.start && hour < slot.end
+    );
+    if (clickedSlot) {
+      console.log(clickedSlot.item);
+      const slotsGroupedByDay = groupSlotsByDay(allSlots);
+      const connectedGrouping = findConnectedGrouping(
+        slotsGroupedByDay[day],
+        day,
+        hour
+      );
+      setSelectedSlot({
+        day,
+        hour: connectedGrouping?.end - 1,
+        item: clickedSlot.item,
+        start: connectedGrouping?.start,
+        end: connectedGrouping?.end - 1,
+      });
+    } else {
+      setSelectedSlot({ day, hour });
+    }
+
     props.handleSelectedSlot({ day, hour });
   };
 
+  const findConnectedGrouping = (slots, clickedDay, clickedHour) => {
+    const clickedSlotIndex = slots.findIndex(
+      (slot) =>
+        slot.day === clickedDay &&
+        clickedHour >= slot.start &&
+        clickedHour < slot.end
+    );
+
+    if (clickedSlotIndex === -1) return null;
+
+    const clickedSlot = slots[clickedSlotIndex];
+    let start = clickedSlot.start;
+    let end = clickedSlot.end;
+    const itemName = clickedSlot.item.name;
+
+    // Traverse backward to find the earliest connected start time with the same item.name
+    for (let i = clickedSlotIndex - 1; i >= 0; i--) {
+      if (slots[i].end === start && slots[i].item.name === itemName) {
+        start = slots[i].start;
+      } else {
+        break; // Break if slots are not connected or names don't match
+      }
+    }
+
+    // Traverse forward to find the latest connected end time with the same item.name
+    for (let i = clickedSlotIndex + 1; i < slots.length; i++) {
+      if (slots[i].start === end && slots[i].item.name === itemName) {
+        end = slots[i].end;
+      } else {
+        break; // Break if slots are not connected or names don't match
+      }
+    }
+    return { start, end, itemName };
+  };
+
   const handlePieceDrop = (day, hour, item) => {
+    if (isSlotScheduled(day, hour)) return;
     setScheduledSlots((prev) => [
       ...prev,
       { day, start: hour, end: hour + 1, item },
@@ -85,29 +145,55 @@ const Calendar = (props) => {
     setSelectedSlot({ day, hour });
   };
 
+  const groupSlotsByDay = (scheduledSlots) => {
+    return scheduledSlots.reduce((acc, slot) => {
+      if (!acc[slot.day]) {
+        acc[slot.day] = [];
+      }
+
+      acc[slot.day].push(slot);
+      acc[slot.day] = acc[slot.day].sort((a, b) => a.start - b.start);
+      return acc;
+    }, {});
+  };
+
   const handlePieceExpand = (day, hour, item) => {
     let startingTime = Math.min(selectedSlot.hour, hour);
     let endingTime = Math.max(selectedSlot.hour, hour);
-    console.log(item);
-    // Remove any slots that overlap with the new expanded range for the selected day
-    const updatedSlots = scheduledSlots.filter((slot) => {
+
+    let updatedSlots = scheduledSlots.filter((slot) => {
       return (
         slot.day !== day || slot.end <= startingTime || slot.start > endingTime
       );
     });
 
-    // Generate new slots to fill the expanded range
     let newSlots = [];
     for (let i = startingTime; i <= endingTime; i++) {
       newSlots.push({ day, start: i, end: i + 1, item: item });
     }
-    console.log(newSlots);
+    let connectedGrouping = findConnectedGrouping(
+      [...updatedSlots, ...newSlots],
+      day,
+      hour
+    );
 
-    // Update the scheduled slots with the filtered slots plus the new slots
+    if ((item.direction === "bottom") & (hour < selectedSlot.hour)) {
+      newSlots = [{ day, start: hour, end: hour + 1, item }];
+    }
+    if ((item.direction === "top") & (hour > connectedGrouping?.start)) {
+      updatedSlots = updatedSlots.filter((slot) => slot.day !== day);
+    }
+
     setScheduledSlots([...updatedSlots, ...newSlots]);
+    handleSlotClick(day, hour, [...updatedSlots, ...newSlots]);
+  };
 
-    // Update the selected slot if necessary
-    setSelectedSlot({ day, hour: endingTime });
+  const isLastInGroup = (day, hour) => {
+    const grouping = findConnectedGrouping(scheduledSlots, day, hour);
+    if (grouping?.end - 1 === grouping?.start) {
+      return false;
+    }
+    return grouping && hour === grouping.end - 1;
   };
 
   const renderCalendar = () => {
@@ -144,6 +230,9 @@ const Calendar = (props) => {
                         hour < slot.end
                     )?.item?.name
                   }
+                  scheduledSlots={scheduledSlots}
+                  isLastInGroup={isLastInGroup}
+                  puzzlePieces={props.puzzlePieces}
                 />
               ))}
             </div>

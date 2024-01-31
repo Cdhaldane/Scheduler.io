@@ -1,12 +1,12 @@
 :root {
-  --green: #20FC8F;
-  --grey: #2D2D2A;
-  --olive: #38423B;
-  --blue: #3F5E5A;
-  --ash: #9DC0BC;
-  --white: #F7F7F7;
-  --font-main: 'Archivo Narrow', sans-serif;
-  --font-secondary: 'Julius Sans One', sans-serif;
+  --green: #20fc8f;
+  --grey: #2d2d2a;
+  --olive: #38423b;
+  --blue: #3f5e5a;
+  --ash: #9dc0bc;
+  --white: #f7f7f7;
+  --font-main: "Archivo Narrow", sans-serif;
+  --font-secondary: "Julius Sans One", sans-serif;
 }
 
 body {
@@ -34,7 +34,7 @@ body {
   margin-left: 300px;
 }
 
-.main-header>h1 {
+.main-header > h1 {
   margin-left: 25%;
   color: var(--green);
   font-family: var(--font-secondary);
@@ -45,8 +45,3 @@ body {
   display: flex;
   flex-direction: row !important;
 }
-
-
-
-
-
