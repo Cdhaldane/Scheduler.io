@@ -74,7 +74,9 @@ const Cell = ({
   const handleCellClick = (day, hour, e) => {
     handleSlotClick(day, hour);
   };
-  const color = puzzlePieces.find((piece) => piece.name === serviceName)?.color;
+  const color = puzzlePieces?.find(
+    (piece) => piece?.name === serviceName
+  )?.color;
   return (
     <div
       ref={drop}

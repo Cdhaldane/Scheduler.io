@@ -13,8 +13,9 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-main);
-  background-color: var(--grey);
-  overflow: hidden;
+  background-color: #333;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .app {
@@ -25,23 +26,48 @@ body {
 .main {
   display: flex;
   width: calc(100% - 300px);
-  height: 100%;
+  height: calc(100%);
   margin-left: 300px;
+  background-color: var(--grey);
+  border-radius: 10px 0px 0px 0px;
+  animation: slideInTop 0.5s ease-in-out normal forwards;
 }
 
-.main-header {
-  width: calc(100% - 300px);
-  margin-left: 300px;
-}
-
-.main-header > h1 {
-  margin-left: 25%;
-  color: var(--green);
-  font-family: var(--font-secondary);
-  font-weight: 800;
+.app-main {
+  min-height: 85vh;
+  background-color: var(--grey);
 }
 
 .row {
   display: flex;
   flex-direction: row !important;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  width: 3px;
+}
+
+@keyframes slideInTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
 }

@@ -39,9 +39,6 @@ const Admin = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <Sidebar setPersonID={setPersonID} />
-      <div className="main-header">
-        <h1 onClick={() => navigate("./admin")}>TimeSlot Admin</h1>
-      </div>
       <div className="main">
         <PuzzleContainer
           puzzlePieces={puzzlePieces}

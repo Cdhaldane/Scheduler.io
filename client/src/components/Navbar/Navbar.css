@@ -1,0 +1,62 @@
+/* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/Navbar/Navbar.css */
+
+.navbar {
+  background-color: #333;
+  color: #fff;
+  width: calc(100% - 300px);
+  margin-left: 300px;
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 10px;
+}
+
+.navbar ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+.navbar ul li {
+  margin-right: 10px;
+}
+
+.navbar ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar ul li a i {
+  margin-right: 5px;
+  font-size: 1.2em;
+  margin: 0px 10px;
+}
+
+.navbar ul li:hover {
+  text-decoration: underline;
+  transform: scale(1.1);
+}
+
+.navbar-header {
+  margin-left: 25% !important;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-header > h1 {
+  color: var(--green);
+  font-family: var(--font-secondary);
+  font-weight: 800;
+}
+
+.navbar-header img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}

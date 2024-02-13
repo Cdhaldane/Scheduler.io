@@ -12,15 +12,15 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleSelectedSlot = (e) => {
-    console.log("selectedSlot", e);
     setSelectedSlot({ day: e.day, hour: e.hour });
   };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Sidebar setPersonID={setPersonID} />
-      <div className="main-header">
+      {/* <div className="main-header">
         <h1 onClick={() => navigate("./admin")}>Scheduler.io {personID}</h1>
-      </div>
+      </div> */}
       <div className="main">
         <Calendar
           personID={personID}
