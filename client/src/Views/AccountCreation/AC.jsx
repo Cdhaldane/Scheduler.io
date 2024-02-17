@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Blob from "../../Components/Blob/Blob";
+import Blob from "../../components/Blob/Blob";
 
 import "./AC.css";
 

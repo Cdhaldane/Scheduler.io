@@ -3,7 +3,7 @@ import data from "../../personnelData.json";
 import { useDrop } from "react-dnd";
 import Cell from "./Cell";
 
-import "./Calendar.css";
+import "./calendar.css";
 
 const Calendar = (props) => {
   const [selectedSlot, setSelectedSlot] = useState(null);

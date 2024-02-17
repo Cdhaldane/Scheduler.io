@@ -9,9 +9,9 @@ import {
 import "./App.css";
 import Home from "./Views/Home";
 import Admin from "./Views/Admin";
-import Navbar from "./Components/Navbar/Navbar";
-import Footer from "./Components/Footer/Footer";
-import Login from "./Components/Login/Login";
+import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
+import Login from "./components/Login/Login";
 import ACMain from "./Views/AccountCreation/ACMain";
 
 function App() {
