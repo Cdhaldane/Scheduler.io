@@ -64,10 +64,12 @@ const PuzzleContainer = ({
         position: "relative",
       }}
     >
+
       <Calendar
         personID={personID}
         handleSelectedSlot={(e) => handleSelectedSlot(e)}
         puzzlePieces={puzzlePieces}
+        
       />
       <div className="pieces-container">
         {puzzlePieces.map((piece, index) => (
@@ -82,7 +84,9 @@ const PuzzleContainer = ({
         onClose={() => setIsOpen(false)}
         onAddService={onAddService}
       />
+
     </div>
+
   );
 };
 

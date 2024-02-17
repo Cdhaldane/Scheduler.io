@@ -7,6 +7,21 @@
   padding: 20px;
 }
 
+.book-appointment{
+  display: flex;
+  justify-content: center;
+  align-items: bottom;
+  margin-top: 20px;
+  position:relative;
+  background-color: var(--olive);
+  color: var(--green);
+  bottom:0%;
+  left:5%;
+  height: 40px;
+  width: 100px;
+  border-radius: 10px;
+}
+
 .calendar {
   display: flex;
   flex-wrap: wrap;
