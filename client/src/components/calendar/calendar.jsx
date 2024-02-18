@@ -241,7 +241,6 @@ const Calendar = (props) => {
           ))}
 
         </div>
-        <button class="book-appointment" onClick={() => navigate("booking")}>Book Appointment</button>
       </div>
     );
   };

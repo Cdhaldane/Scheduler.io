@@ -1,0 +1,28 @@
+.main{
+    display:flex;
+    flex-direction:row;
+    width:80%;
+}
+
+.center{
+    display:flex;
+    justify-content: center;
+    flex-direction:column;
+    min-width:fit-content;
+    width:100%;
+}
+
+.book-appointment{
+    justify-content: center;
+    align-items: bottom;
+    margin-top: 20px;
+    position:relat;
+    background-color: var(--olive);
+    color: var(--green);
+    bottom:10%;
+    left:10%;
+    height: 40px;
+    width: 100px;
+    border-radius: 10px;
+    margin:10%;
+  }

@@ -16,6 +16,9 @@ import ACMain from "./Views/AccountCreation/ACMain";
 import BookingPage from "./components/BookingPage/BookingPage";
 import GuestBookingPage from "./components/GuestBookingPage/GuestBookingPage";
 import SuccessfullyBookingPage from "./components/SuccessfullyBookingPage/SuccessfullyBookingPage";
+import CustomerLogin from "./components/Customer/CustomerLogin/CustomerLogin";
+import CustomerRegister from "./components/Customer/CustomerRegister/CustomerRegister";
+import CustomerBookingPage from "./components/Customer/CustomerLoginBooking/CustomerBookingPage"; 
 
 function App() {
   const location = useLocation() || "";
@@ -33,9 +36,10 @@ function App() {
           <Route path="/create-account" element={<ACMain />} />
           <Route path="/booking" element={<BookingPage />} />
           <Route path="/guest-booking" element={<GuestBookingPage />} />
-          <Route
-            path="/SuccessfullyBookingPage"
-            element={<SuccessfullyBookingPage />} />
+          <Route path="/successfully-bookingPage" element={<SuccessfullyBookingPage />} />
+          <Route path="/customer-login" element={<CustomerLogin />} />
+          <Route path="/customer-register" element={<CustomerRegister />} />
+          <Route path="/customer-bookingPage" element={<CustomerBookingPage />} />
         </Routes>
       </div>
       {shouldRenderNavbarAndFooter && <Footer />}

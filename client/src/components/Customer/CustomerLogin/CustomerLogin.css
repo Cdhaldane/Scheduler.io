@@ -1,0 +1,38 @@
+/* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/Customer/CustomerLogin/CustomerLogin.css */
+
+.error-message{
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center; /* Vertically aligns items */
+  color: #fff; /* Text color */
+}
+
+.stay-logged-in-label {
+  display: flex; 
+  align-items: center; 
+  margin-left: 8px; 
+  white-space: nowrap;
+}
+
+.button {
+  background: none;
+  border: 3 solid #fff;
+  border-radius:  4px;
+  font-size: 24px; 
+  color: #fff; 
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 0 10px;
+  transition: all 0.3s ease;
+}
+.button:hover {
+  color: #007bff;
+  border-color:#007bff;
+  text-decoration: none;
+  text-shadow: none;
+}

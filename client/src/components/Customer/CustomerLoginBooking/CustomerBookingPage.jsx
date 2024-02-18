@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "./GuestBookingPage.css";
+import "./CustomerBookingPage.css";
 
-const GuestBookingPage = () => {
+const CustomerBookingPage = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [confirmPhoneNumber, setConfirmPhoneNumber] = useState("");
@@ -56,12 +56,15 @@ const GuestBookingPage = () => {
     <div className="guestbooking-container">
       <div className="guest-booking">
       <div>
-        <h1>Guest Booking</h1>
+        <h1>Customer Booking</h1>
+      </div>
+      <div className="info-display">
+        You are loggin as user Account email.
       </div>
       <div className="info-display">
         This is the place to display service from booking page. 
       </div>
-      <div className="guest-booking">
+      {/* <div className="guest-booking">
         <h2>Enter your email and password to book an appointment</h2>
         <input
           type="text"
@@ -90,7 +93,7 @@ const GuestBookingPage = () => {
           title="Phone number must be exactly 9 digits."
         />
         {errorMessages && <div className="error-messages">{errorMessages}</div>}
-      </div>
+      </div> */}
       <button onClick={(handleSubmit)} className="submit-booking-button">Submit
       </button>
       </div>
@@ -98,4 +101,4 @@ const GuestBookingPage = () => {
   );
 };
 
-export default GuestBookingPage;
+export default CustomerBookingPage;
