@@ -44,7 +44,7 @@ const GuestBookingPage = () => {
       // Perform any additional form submission logic here
   
       // Navigate to the desired page
-      navigate('/submit-booking'); // Replace '/next-page' with the path of the page you want to navigate to
+      navigate('/SuccessfullyBookingPage',{state:{name, phoneNumber}}); // Replace '/next-page' with the path of the page you want to navigate to
     }
   };
   
