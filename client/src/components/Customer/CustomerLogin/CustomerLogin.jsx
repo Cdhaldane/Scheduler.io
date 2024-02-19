@@ -9,6 +9,8 @@ const CustomerLogin = () => {
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const [emialError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState("");
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -29,10 +31,16 @@ const CustomerLogin = () => {
     return /\S+@\S+\.\S+/.test(email);
   };
 
+  const handlePhoneNumberChange = (e) => {
+    setPhoneNumber(e.target.value);
+    if(phoneNumberError) { setPhoneNumberError("");}
+  };
+
   const handleLogin = () => {
     // Perform login logic here
     setEmailError("");
     setPasswordError("");
+    setPhoneNumberError("");
 
     if(!validateEmail(email)) {
       setEmailError("Invalid email address.");
@@ -44,8 +52,13 @@ const CustomerLogin = () => {
       return;
     }
 
-    console.log("Logging in...",{email, password, stayLoggedIn});
-    navigate("/customer-bookingPage");
+    if(!/^\d{9}$/.test(phoneNumber)) {
+      setPhoneNumberError("Phone number must be exactly 9 digits.");
+      return;
+    }
+
+    console.log("Logging in...",{email, password, phoneNumber, stayLoggedIn});
+    navigate("/customer-bookingPage",{state: {email, phoneNumber}});
   };
 
   return (
@@ -59,6 +72,13 @@ const CustomerLogin = () => {
         className={emialError ? "input-error" : ""}
       />
       {emialError && <div className="error-message">{emialError}</div>}
+      <input
+        type="tel"
+        placeholder="Phone Number (9 digits)"
+        onChange={handlePhoneNumberChange}
+        className={phoneNumberError ? "input-error" : ""}
+      />
+      {phoneNumberError && <div className="error-message">{phoneNumberError}</div>}
       <input
         type="password"
         placeholder="Password"
