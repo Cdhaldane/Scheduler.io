@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 import "./CustomerRegister.css";
 
 const CustomerRegister = () => {
@@ -14,7 +15,7 @@ const CustomerRegister = () => {
   const navigate = useNavigate();
   
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
-  const isPhoneNumberValid = (phoneNumber) => /^\d{9}$/.test(phoneNumber);
+  const isPhoneNumberValid = (phoneNumber) => /^\d{10}$/.test(phoneNumber);
   const doPasswordsMatch = (password, verifiedPassword) => password === verifiedPassword;
 
 
@@ -40,8 +41,8 @@ const CustomerRegister = () => {
     setPhoneNumber(newPhoneNumber);
     setErrorMessage((preErrorMessages) => preErrorMessages.filter((message) => message !== "Phone number cannot be empty."));
 
-    if (/^\d{9}$/.test(newPhoneNumber)) {
-      setErrorMessage((prevErrorMessages) => prevErrorMessages.filter((message) => !message.includes("Phone number must be 9 digits.")));
+    if (/^\d{10}$/.test(newPhoneNumber)) {
+      setErrorMessage((prevErrorMessages) => prevErrorMessages.filter((message) => !message.includes("Phone number must be 10 digits.")));
     }
   };
 
@@ -68,7 +69,7 @@ const CustomerRegister = () => {
     if(!phoneNumber) {
       newErrorMessages.push("Phone number cannot be empty.");
     }else if(!isPhoneNumberValid(phoneNumber)) {
-      newErrorMessages.push("Phone number must be 9 digits.");
+      newErrorMessages.push("Phone number must be 10 digits.");
     }
 
     if(newErrorMessages.length > 0) {
@@ -76,6 +77,7 @@ const CustomerRegister = () => {
       return
     }
     console.log("Registering in...",{email, password, name, phoneNumber, homeAddress});
+    navigate('/customer-register-submitPage', {state: {email, password, name, phoneNumber, homeAddress}});
   };
 
 
