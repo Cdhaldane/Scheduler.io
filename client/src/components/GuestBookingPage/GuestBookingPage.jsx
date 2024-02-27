@@ -6,6 +6,7 @@ import "./GuestBookingPage.css";
 const GuestBookingPage = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [confirmPhoneNumber, setConfirmPhoneNumber] = useState("");
   const [errorMessages, setErrorMessage] = useState([]); 
   const [nameErrorMessage, setNameErrorMessage] = useState([]);
@@ -33,10 +34,10 @@ const GuestBookingPage = () => {
   };
 
   const handleSubmit = () => {
-    const phoneNumberPattern = /^\d{9}$/; // Regular expression for exactly 9 digits
+    const phoneNumberPattern = /^\d{10}$/; // Regular expression for exactly 9 digits
   
     if (!phoneNumberPattern.test(phoneNumber)) {
-      setErrorMessage("Phone number must be exactly 9 digits.");
+      setErrorMessage("Phone number must be exactly 10 digits.");
     } else if (phoneNumber !== confirmPhoneNumber) {
       setErrorMessage("Phone numbers do not match.");
     } else {
@@ -44,7 +45,7 @@ const GuestBookingPage = () => {
       // Perform any additional form submission logic here
   
       // Navigate to the desired page
-      navigate('/successfully-bookingPage',{state:{name, phoneNumber}}); // Replace '/next-page' with the path of the page you want to navigate to
+      navigate('/successfully-bookingPage',{state:{name, phoneNumber, email}}); // Replace '/next-page' with the path of the page you want to navigate to
     }
   };
   
@@ -77,8 +78,8 @@ const GuestBookingPage = () => {
           placeholder="Phone Number"
           value={phoneNumber}
           onChange={handlePhoneNumberChange}
-          pattern="\d{9}"
-          title="Phone number must be exactly 9 digits."
+          pattern="\d{10}"
+          title="Phone number must be exactly 10 digits."
         />
 
         <input
@@ -86,8 +87,8 @@ const GuestBookingPage = () => {
           placeholder="Confirm Phone Number"
           value={confirmPhoneNumber}
           onChange={handleConfirmPhoneNumberChange}
-          pattern="\d{9}"
-          title="Phone number must be exactly 9 digits."
+          pattern="\d{10}"
+          title="Phone number must be exactly 10 digits."
         />
         {errorMessages && <div className="error-messages">{errorMessages}</div>}
       </div>

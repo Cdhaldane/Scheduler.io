@@ -20,6 +20,8 @@ import CustomerLogin from "./components/Customer/CustomerLogin/CustomerLogin";
 import CustomerRegister from "./components/Customer/CustomerRegister/CustomerRegister";
 import CustomerBookingPage from "./components/Customer/CustomerLoginBooking/CustomerBookingPage"; 
 import CustomerSubmitPage from "./components/Customer/CustomerSubmitPage/CustomerSubmitPage";
+import CustomerRegisterSubmitPage from "./components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage";
+
 function App() {
   const location = useLocation() || "";
 
@@ -41,6 +43,7 @@ function App() {
           <Route path="/customer-register" element={<CustomerRegister />} />
           <Route path="/customer-bookingPage" element={<CustomerBookingPage />} />
           <Route path="/customer-submitPage" element={<CustomerSubmitPage />} />
+          <Route path="/customer-register-submitPage" element={<CustomerRegisterSubmitPage/>}/>
         </Routes>
       </div>
       {shouldRenderNavbarAndFooter && <Footer />}

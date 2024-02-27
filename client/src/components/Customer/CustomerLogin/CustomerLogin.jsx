@@ -7,7 +7,7 @@ const CustomerLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
-  const [emialError, setEmailError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
@@ -15,7 +15,7 @@ const CustomerLogin = () => {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    if(emialError) { setEmailError("");}
+    if(emailError) { setEmailError("");}
   };
 
   const handlePasswordChange = (e) => {
@@ -52,8 +52,8 @@ const CustomerLogin = () => {
       return;
     }
 
-    if(!/^\d{9}$/.test(phoneNumber)) {
-      setPhoneNumberError("Phone number must be exactly 9 digits.");
+    if(!/^\d{10}$/.test(phoneNumber)) {
+      setPhoneNumberError("Phone number must be exactly 10 digits.");
       return;
     }
 
@@ -69,12 +69,12 @@ const CustomerLogin = () => {
         placeholder="Email"
         value={email}
         onChange={handleEmailChange}
-        className={emialError ? "input-error" : ""}
+        className={emailError ? "input-error" : ""}
       />
-      {emialError && <div className="error-message">{emialError}</div>}
+      {emailError && <div className="error-message">{emailError}</div>}
       <input
         type="tel"
-        placeholder="Phone Number (9 digits)"
+        placeholder="Phone Number (10 digits)"
         onChange={handlePhoneNumberChange}
         className={phoneNumberError ? "input-error" : ""}
       />

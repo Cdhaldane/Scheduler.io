@@ -53,23 +53,21 @@ const CustomerRegister = () => {
   const handleRegister = () => {
     const newErrorMessages = [];
     if(!email) {
-      newErrorMessages.push("Email cannot be empty.");
+      newErrorMessages.push("Please enter a valid email"); //no email is entered
     }else if(!validateEmail(email)) {
-      newErrorMessages.push("Invalid email format.");
+      newErrorMessages.push("Invalid email format."); //invalid email format
     }
     if(!password) {
-      newErrorMessages.push("Password cannot be empty.");
+      newErrorMessages.push("Password cannot be empty."); //no password is entered
     }
-    if(!verifiedPassword) {
-      newErrorMessages.push("Verified password cannot be empty.");
-    }else if(!doPasswordsMatch(password, verifiedPassword)) {
-      newErrorMessages.push("Passwords do not match.");
+    if(!doPasswordsMatch(password, verifiedPassword) || !verifiedPassword) {
+      newErrorMessages.push("Passwords do not match."); //verify password is empty or does not match
     }
 
     if(!phoneNumber) {
-      newErrorMessages.push("Phone number cannot be empty.");
+      newErrorMessages.push("Please enter a phone number"); //no phone number is entered
     }else if(!isPhoneNumberValid(phoneNumber)) {
-      newErrorMessages.push("Phone number must be 10 digits.");
+      newErrorMessages.push("Phone number must be 10 digits."); //Phone number is not valid
     }
 
     if(newErrorMessages.length > 0) {

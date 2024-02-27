@@ -5,19 +5,22 @@ import { useLocation } from "react-router-dom";
 import "./CustomerRegisterSubmitPage.css";
 
 const CustomerRegisterSubmitPage = () => {
-  const {email, name} = useLocation().state || {};
+  //Pull the accounts' name, phone number and email
+  const {email, phoneNumber, name} = useLocation().state || {};
   const navigate = useNavigate();
   
   const handleVerifyClick = () => {
     // The function will be edited when the backend is implemented
-    navigate("/customer-bookingPage");
+    navigate("/customer-bookingPage", {state: {email, phoneNumber, name}});
   }
 
   return (
     <div className="customer-register-submit-container">
-      <h1>Register Verfication</h1>
+      <h1>Register Verification</h1>
       <div className="info-display">
-        Please verify your email address, {email}, to complete your registration.
+        One last step {name}, before you book! 
+        <br/>
+        Please verify your email address, {email}, to complete your account registration.
       </div>
       <div>
         <input 
