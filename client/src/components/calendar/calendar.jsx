@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import data from "../../personnelData.json";
 import { useDrop } from "react-dnd";
 import Cell from "./Cell";
-
-import "./Calendar.css";
+import { useNavigate } from "react-router-dom";
+import "./calendar.css";
+import { Route } from "react-router-dom";
 
 const Calendar = (props) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [scheduledSlots, setScheduledSlots] = useState([]);
   const [timeRange, setTimeRange] = useState([]);
+  const navigate = useNavigate();
 
   const daysOfWeek = [
     "Sunday",
@@ -237,6 +239,7 @@ const Calendar = (props) => {
               ))}
             </div>
           ))}
+
         </div>
       </div>
     );

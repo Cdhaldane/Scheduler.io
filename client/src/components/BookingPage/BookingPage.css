@@ -1,0 +1,48 @@
+/* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/BookingPage/BookingPage.css */
+
+.booking-container {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-top: 50px;
+  }
+
+  .booking-container > div
+    {
+    flex:1;
+    font-size: 24px;
+    margin-bottom: 16px;
+    text-align:center;
+    color: #fff;
+  }
+
+  .button {
+    background: none;
+    border: 3 solid #fff;
+    border-radius:  4px;
+    font-size: 24px; 
+    color: #fff; 
+    cursor: pointer;
+    padding: 10px 20px;
+    margin: 0 10px;
+    transition: all 0.3s ease;
+  }
+  
+  .button:hover {
+    color: #007bff;
+    border-color:#007bff;
+    text-decoration: none;
+    text-shadow: none;
+  }
+
+  .or-label{
+    font-size: 24px;
+    margin-bottom: 16px;
+    text-align:center;
+    color: #fff;
+  }
+  
+
+  

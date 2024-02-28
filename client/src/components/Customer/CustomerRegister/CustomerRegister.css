@@ -1,6 +1,6 @@
-/* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/Login/Login.css */
+/* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/Customer/CustomerRegister/CustomerRegister.css */
 
-.login-container {
+.customer-register-container {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -8,13 +8,13 @@
   justify-content: center;
 }
 
-.login-container h2 {
+.customer-register-container h2 {
   font-size: 24px;
   margin-bottom: 16px;
   color: #fff;
 }
 
-.login-container input {
+.customer-register-container input {
   width: 30%;
   padding: 8px;
   margin-bottom: 16px;

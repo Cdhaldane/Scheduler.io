@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import data from "../../personnelData.json";
 
-import "./Sidebar.css";
+import "./sidebar.css";
 
 const Sidebar = (props) => {
   const [personID, setPersonID] = useState(null);

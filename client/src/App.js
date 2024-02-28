@@ -13,6 +13,14 @@ import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
 import Login from "./Components/Login/Login";
 import ACMain from "./Views/AccountCreation/ACMain";
+import BookingPage from "./Components/BookingPage/BookingPage";
+import GuestBookingPage from "./Components/GuestBookingPage/GuestBookingPage";
+import SuccessfullyBookingPage from "./Components/SuccessfullyBookingPage/SuccessfullyBookingPage";
+import CustomerLogin from "./Components/Customer/CustomerLogin/CustomerLogin";
+import CustomerRegister from "./Components/Customer/CustomerRegister/CustomerRegister";
+import CustomerBookingPage from "./Components/Customer/CustomerLoginBooking/CustomerBookingPage";
+import CustomerSubmitPage from "./Components/Customer/CustomerSubmitPage/CustomerSubmitPage";
+import CustomerRegisterSubmitPage from "./Components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage";
 
 function App() {
   const location = useLocation() || "";
@@ -28,6 +36,23 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/create-account" element={<ACMain />} />
+          <Route path="/booking" element={<BookingPage />} />
+          <Route path="/guest-booking" element={<GuestBookingPage />} />
+          <Route
+            path="/successfully-bookingPage"
+            element={<SuccessfullyBookingPage />}
+          />
+          <Route path="/customer-login" element={<CustomerLogin />} />
+          <Route path="/customer-register" element={<CustomerRegister />} />
+          <Route
+            path="/customer-bookingPage"
+            element={<CustomerBookingPage />}
+          />
+          <Route path="/customer-submitPage" element={<CustomerSubmitPage />} />
+          <Route
+            path="/customer-register-submitPage"
+            element={<CustomerRegisterSubmitPage />}
+          />
         </Routes>
       </div>
       {shouldRenderNavbarAndFooter && <Footer />}
