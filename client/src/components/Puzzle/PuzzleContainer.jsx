@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDrop, useDrag } from "react-dnd";
-import Calendar from "../calendar/calendar";
+import Calendar from "../Calendar/calendar";
 import Modal from "../Modal/Modal";
 
 import "./Puzzle.css";
@@ -64,12 +64,10 @@ const PuzzleContainer = ({
         position: "relative",
       }}
     >
-
       <Calendar
         personID={personID}
         handleSelectedSlot={(e) => handleSelectedSlot(e)}
         puzzlePieces={puzzlePieces}
-        
       />
       <div className="pieces-container">
         {puzzlePieces.map((piece, index) => (
@@ -84,9 +82,7 @@ const PuzzleContainer = ({
         onClose={() => setIsOpen(false)}
         onAddService={onAddService}
       />
-
     </div>
-
   );
 };
 

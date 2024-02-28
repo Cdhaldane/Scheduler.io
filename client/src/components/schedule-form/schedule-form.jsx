@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import data from "../../personnelData.json";
 
-import "./schedule-form.css";
+import "./Schedule-form.css";
 
 const ScheduleForm = (props) => {
   const [personID, setPersonID] = useState(props.personID);

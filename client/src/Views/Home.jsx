@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Sidebar from "../components/sidebar/sidebar";
-import Calendar from "../components/calendar/calendar";
-import ScheduleForm from "../components/schedule-form/schedule-form";
+import Sidebar from "../Components/Sidebar/sidebar";
+import Calendar from "../Components/Calendar/calendar";
+import ScheduleForm from "../Components/Schedule-form/schedule-form";
 import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -25,14 +25,16 @@ const Home = () => {
       </div> */}
       <div className="main">
         <div className="center">
-        <Calendar
-          personID={personID}
-          handleSelectedSlot={(e) => handleSelectedSlot(e)}
-        />
-        <button class="book-appointment" onClick={() => navigate("booking")}>Book Appointment</button>
+          <Calendar
+            personID={personID}
+            handleSelectedSlot={(e) => handleSelectedSlot(e)}
+          />
+          <button class="book-appointment" onClick={() => navigate("booking")}>
+            Book Appointment
+          </button>
         </div>
         <div className="right">
-        <ScheduleForm personID={personID} selectedSlot={selectedSlot} />
+          <ScheduleForm personID={personID} selectedSlot={selectedSlot} />
         </div>
       </div>
     </DndProvider>
