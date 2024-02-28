@@ -19,7 +19,7 @@ const Navbar = () => {
         </div>
         <ul>
           <li>
-            <a onClick={() => navigate()}>
+            <a onClick={() => navigate("/")}>
               <i class="fa-solid fa-house"></i>
               {/* Home */}
             </a>
