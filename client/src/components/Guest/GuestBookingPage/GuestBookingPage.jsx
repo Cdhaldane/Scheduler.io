@@ -35,7 +35,7 @@ const GuestBookingPage = () => {
   const handleSubmit = () => {
     let formIsValid = true;
     const newErrorMessages = [];
-    const phoneNumberPattern = /^\d{9}$/; // Regular expression for exactly 9 digits
+    const phoneNumberPattern = /^\d{10}$/; // Regular expression for exactly 10 digits
   
     if(!name.trim()) {
       newErrorMessages.push("Name cannot be empty.");
@@ -45,7 +45,7 @@ const GuestBookingPage = () => {
       newErrorMessages.push("Phone number cannot be empty.");
       formIsValid = false;
     }else if (!phoneNumberPattern.test(phoneNumber)) {
-      newErrorMessages.push("Phone number must be exactly 9 digits.");
+      newErrorMessages.push("Phone number must be exactly 10 digits.");
       formIsValid = false;
     } 
     
@@ -91,8 +91,8 @@ const GuestBookingPage = () => {
           placeholder="Phone Number"
           value={phoneNumber}
           onChange={handlePhoneNumberChange}
-          pattern="\d{9}"
-          title="Phone number must be exactly 9 digits."
+          pattern="\d{10}"
+          title="Phone number must be exactly 10 digits."
         />
 
         <input
@@ -100,8 +100,8 @@ const GuestBookingPage = () => {
           placeholder="Confirm Phone Number"
           value={confirmPhoneNumber}
           onChange={handleConfirmPhoneNumberChange}
-          pattern="\d{9}"
-          title="Phone number must be exactly 9 digits."
+          pattern="\d{10}"
+          title="Phone number must be exactly 10 digits."
         />
         {errorMessages.length >0 &&(
           <div className="error-messages">
