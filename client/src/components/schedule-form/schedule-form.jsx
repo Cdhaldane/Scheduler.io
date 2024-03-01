@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDrag } from "react-dnd";
 import data from "../../personnelData.json";
 
 import "./schedule-form.css";
@@ -8,6 +9,8 @@ const ScheduleForm = (props) => {
   const [person, setPerson] = useState(data.personnel[personID]);
   const [day, setDay] = useState(props.selectedSlot.day);
   const [start, setStart] = useState(props.selectedSlot.hour);
+  const [selectedSlot, setSelectedSlot] = useState(props.selectedSlot);
+  const [selectedService, setSelectedService] = useState(props.selectedService);
 
   console.log(start, day);
 
@@ -21,8 +24,17 @@ const ScheduleForm = (props) => {
     setStart(props.selectedSlot.hour);
   }, [props]);
 
+  const[{isDragging}, drag] = useDrag({
+    type: 'service',
+    item: {type:'service', id:personID, service: selectedService, start: selectedSlot.hour},
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+
   return (
-    <div className="schedule-container">
+    <div className="schedule-container" ref={drag}>
       <h1>Personel: {person.name}</h1>
       <div className="schedule-appointment">
         <span className="row">

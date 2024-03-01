@@ -14,14 +14,15 @@ import Footer from "./components/Footer/Footer";
 import Login from "./components/Login/Login";
 import ACMain from "./Views/AccountCreation/ACMain";
 import BookingPage from "./components/BookingPage/BookingPage";
-import GuestBookingPage from "./components/GuestBookingPage/GuestBookingPage";
-import SuccessfullyBookingPage from "./components/SuccessfullyBookingPage/SuccessfullyBookingPage";
+import GuestBookingPage from "./components/Guest/GuestBookingPage/GuestBookingPage";
+import SuccessfullyBookingPage from "./components/Guest/SuccessfullyBookingPage/SuccessfullyBookingPage";
 import CustomerLogin from "./components/Customer/CustomerLogin/CustomerLogin";
 import CustomerRegister from "./components/Customer/CustomerRegister/CustomerRegister";
 import CustomerBookingPage from "./components/Customer/CustomerLoginBooking/CustomerBookingPage"; 
 import CustomerSubmitPage from "./components/Customer/CustomerSubmitPage/CustomerSubmitPage";
 import CustomerRegisterSubmitPage from "./components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage";
-
+import CustomerLandingPage from "./components/Customer/CustomerLandingPage/CustomerLandingPage";
+import CustomerCommentPage from "./components/Customer/CustomerCommentPage/CustomerCommentPage";
 function App() {
   const location = useLocation() || "";
 
@@ -43,7 +44,9 @@ function App() {
           <Route path="/customer-register" element={<CustomerRegister />} />
           <Route path="/customer-bookingPage" element={<CustomerBookingPage />} />
           <Route path="/customer-submitPage" element={<CustomerSubmitPage />} />
-          <Route path="/customer-register-submitPage" element={<CustomerRegisterSubmitPage/>}/>
+          <Route path="/customer-register-submitPage" element={<CustomerRegisterSubmitPage />} />
+          <Route path="/customer-landingPage" element={<CustomerLandingPage />} />
+          <Route path="/customer-commentPage" element={<CustomerCommentPage />} />
         </Routes>
       </div>
       {shouldRenderNavbarAndFooter && <Footer />}

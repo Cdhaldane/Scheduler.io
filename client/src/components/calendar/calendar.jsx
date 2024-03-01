@@ -1,56 +1,46 @@
 import React, { useState, useEffect } from "react";
-import data from "../../personnelData.json";
-import { useDrop } from "react-dnd";
 import Cell from "./Cell";
-import { useNavigate } from "react-router-dom";
 import "./calendar.css";
-import { Route } from "react-router-dom";
 
 const Calendar = (props) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [scheduledSlots, setScheduledSlots] = useState([]);
+  // The timeRange state seems unused in the code provided, you might want to review its usage.
   const [timeRange, setTimeRange] = useState([]);
-  const navigate = useNavigate();
+  
+  // This function will calculate the start of the week based on the currentDate
+  const getStartOfWeek = (date) => {
+    const start = new Date(date);
+    start.setDate(start.getDate() - start.getDay());
+    start.setHours(0, 0, 0, 0);
+    return start;
+  };
 
-  const daysOfWeek = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+  // This will generate an array of dates representing the current week
+  const daysOfWeek = Array.from({ length: 7 }, (_, index) => {
+    const startOfWeek = getStartOfWeek(currentDate);
+    return new Date(startOfWeek.setDate(startOfWeek.getDate() + index));
+  });
+
   const hoursInDay = Array.from({ length: 24 }, (_, i) => i);
 
-  useEffect(() => {
-    // let personID = props.personID;
-    // if (personID === null) return;
-    // let person = data.personnel[personID];
-    // let bookings = person.bookings;
-    // let slots = [];
-    // for (let i = 0; i < bookings.length; i++) {
-    //   const booking = bookings[i];
-    //   let start = parseInt(booking.startTime);
-    //   let end = parseInt(booking.endTime);
-    //   let day = booking.day;
-    //   slots.push({ day, start: start, end: end });
-    // }
-    // setScheduledSlots(slots);
-  }, [props]);
+  // Handlers for navigating weeks
+  const goToPreviousWeek = () => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(newDate.getDate() - 7);
+      return newDate;
+    });
+  };
 
-  useEffect(() => {
-    //event listener for click outside set selected slot to null
-    const handleClickOutside = (e) => {
-      if (!e.target.className.includes("cell")) {
-        setSelectedSlot(null);
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [selectedSlot]);
+  const goToNextWeek = () => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(newDate.getDate() + 7);
+      return newDate;
+    });
+  };
 
   const isSlotScheduled = (day, hour) => {
     return scheduledSlots.some((slot) => {
@@ -198,54 +188,81 @@ const Calendar = (props) => {
     return grouping && hour === grouping.end - 1;
   };
 
-  const renderCalendar = () => {
-    return (
-      <div className="calendar">
-        <div className="header">
-          <div key={0} className="cell empty"></div>
-          {daysOfWeek.map((day) => (
-            <div key={day} className="header-cell">
-              {day}
-            </div>
-          ))}
-        </div>
-        <div className="body">
-          {hoursInDay.map((hour) => (
-            <div key={hour} className="row">
-              <div className={`cell hours`}>{hour}:00</div>
-              {daysOfWeek.map((day) => (
-                <Cell
-                  key={day + hour}
-                  day={day}
-                  hour={hour}
-                  handleSlotClick={handleSlotClick}
-                  handlePieceDrop={handlePieceDrop}
-                  selectedSlot={selectedSlot}
-                  isSlotScheduled={isSlotScheduled}
-                  isSlotEdge={isSlotEdge}
-                  handlePieceExpand={handlePieceExpand}
-                  serviceName={
-                    scheduledSlots.find(
-                      (slot) =>
-                        slot.day === day &&
-                        hour >= slot.start &&
-                        hour < slot.end
-                    )?.item?.name
-                  }
-                  scheduledSlots={scheduledSlots}
-                  isLastInGroup={isLastInGroup}
-                  puzzlePieces={props.puzzlePieces}
-                />
-              ))}
-            </div>
-          ))}
 
-        </div>
+  const renderHeader = () => {
+    const startOfWeek = getStartOfWeek(currentDate);
+    const weekDays = Array.from({ length: 7 }, (_, index) => {
+      const day = new Date(startOfWeek);
+      day.setDate(day.getDate() + index);
+      return day;
+    });
+  
+    return (
+      <div className="header">
+        <button className="navigation-button" onClick={goToPreviousWeek}>
+          &#8592;
+        </button>
+        {weekDays.map((day, index) => (
+          <div key={index} className="header-cell">
+            {day.toLocaleDateString("en-US", { weekday: "long" })}
+            <br />
+            {day.toLocaleDateString("en-US", { month: "numeric", day: "numeric" })}
+          </div>
+        ))}
+        <button className="navigation-button" onClick={goToNextWeek}>
+          &#8594;
+        </button>
       </div>
     );
   };
+  
 
-  return <div className="main-calendar">{renderCalendar()}</div>;
+  // Render the body of the calendar with times and cells
+  const renderBody = () => {
+    return hoursInDay.map((hour, index) => (
+      <div key={index} className="row">
+        <div className="cell hours">{`${hour}:00`}</div>
+        {daysOfWeek.map((day) => (
+          <Cell
+            key={day + hour}
+            day={day}
+            hour={hour}
+            handleSlotClick={handleSlotClick}
+            handlePieceDrop={handlePieceDrop}
+            selectedSlot={selectedSlot}
+            isSlotScheduled={isSlotScheduled}
+            isSlotEdge={isSlotEdge}
+            handlePieceExpand={handlePieceExpand}
+            serviceName={
+              scheduledSlots.find(
+                (slot) =>
+                  slot.day === day &&
+                  hour >= slot.start &&
+                  hour < slot.end
+                  )?.item?.name
+            }
+            scheduledSlots={scheduledSlots}
+            isLastInGroup={isLastInGroup}
+            puzzlePieces={props.puzzlePieces}
+          />
+
+        ))}
+      </div>
+    ));
+  };
+
+  return (
+    <div className="main-calendar">
+      <div className="calendar">
+        <div className="header">
+          {renderHeader()}
+        </div>
+        <div className="body">
+          {renderBody()}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Calendar;
