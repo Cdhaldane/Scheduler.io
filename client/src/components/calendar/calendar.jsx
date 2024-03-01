@@ -6,10 +6,12 @@ const Calendar = (props) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [scheduledSlots, setScheduledSlots] = useState([]);
-  // The timeRange state seems unused in the code provided, you might want to review its usage.
   const [timeRange, setTimeRange] = useState([]);
   
-  // This function will calculate the start of the week based on the currentDate
+  useEffect(() => {
+    console.log("Scheduled slots", scheduledSlots);
+  }, [scheduledSlots]);
+
   const getStartOfWeek = (date) => {
     const start = new Date(date);
     start.setDate(start.getDate() - start.getDay());
@@ -129,12 +131,38 @@ const Calendar = (props) => {
   };
 
   const handlePieceDrop = (day, hour, item) => {
-    if (isSlotScheduled(day, hour)) return;
-    setScheduledSlots((prev) => [
-      ...prev,
-      { day, start: hour, end: hour + 1, item },
-    ]);
-    setSelectedSlot({ day, hour });
+    console.log('Received day:', day);
+  if (day && typeof day.toISOString === 'function') {
+    const startTime = new Date(day.setHours(hour, 0, 0, 0));
+    const endTime = new Date(day.setHours(hour + 1, 0, 0, 0));
+
+    const newSlot = {
+      id: `${day.toISOString()}_${hour}`,
+      day: day.toISOString(),
+      start: startTime.toISOString(),
+      end: endTime.toISOString(),
+      item: {
+        type: item.type,
+        id: item.id,
+        service: item.service,
+        name: personalbar.name,
+      }
+    };
+    // if (isSlotScheduled(day, hour)){
+    //   console.log('Slot already scheduled');
+    //   return;
+    // }
+
+    if(scheduledSlots.some(slot => slot.id === newSlot.id)){
+      console.log('Slot already scheduled');
+      return;
+    }
+    setScheduledSlots(prev => [...prev,newSlot,]);
+    setSelectedSlot(newSlot);
+
+  }else{
+    console.error('handlePieceDrop was passed an invalid day:', day);
+  }
   };
 
   const groupSlotsByDay = (scheduledSlots) => {
@@ -178,6 +206,7 @@ const Calendar = (props) => {
 
     setScheduledSlots([...updatedSlots, ...newSlots]);
     handleSlotClick(day, hour, [...updatedSlots, ...newSlots]);
+    
   };
 
   const isLastInGroup = (day, hour) => {

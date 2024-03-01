@@ -12,17 +12,31 @@ const ScheduleForm = (props) => {
   const [selectedSlot, setSelectedSlot] = useState(props.selectedSlot);
   const [selectedService, setSelectedService] = useState(props.selectedService);
 
-  console.log(start, day);
+  //console.log(start, day);
+
+  // useEffect(() => {
+  //   let personID = props.personID;
+  //   if (personID === null) return;
+  //   let person = data.personnel[personID];
+  //   setPerson(person);
+  //   console.log(props.selectedSlot);
+  //   setDay(props.selectedSlot.day);
+  //   setStart(props.selectedSlot.hour);
+  // }, [props]);
 
   useEffect(() => {
-    let personID = props.personID;
-    if (personID === null) return;
-    let person = data.personnel[personID];
-    setPerson(person);
-    console.log(props.selectedSlot);
-    setDay(props.selectedSlot.day);
-    setStart(props.selectedSlot.hour);
+    if (props.personID !== null) {
+      setPerson(data.personnel[props.personID]);
+      setDay(props.selectedSlot.day);
+      setStart(props.selectedSlot.hour);
+    }
   }, [props]);
+
+  //add a handler for the service change
+  const handleServiceChange = (event) => {
+    setSelectedService(event.target.value);
+    //props.onServiceChange(event.target.value);
+  }
 
   const[{isDragging}, drag] = useDrag({
     type: 'service',
@@ -39,7 +53,7 @@ const ScheduleForm = (props) => {
       <div className="schedule-appointment">
         <span className="row">
           <h1>Appointment type:</h1>
-          <select>
+            <select onChange={handleServiceChange} value={selectedService}>
             <option value="haircut">Haircut</option>
             <option value="shave">Shave</option>
             <option value="haircut and shave">Haircut and Shave</option>
