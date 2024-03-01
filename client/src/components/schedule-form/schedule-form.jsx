@@ -35,7 +35,7 @@ const ScheduleForm = (props) => {
   //add a handler for the service change
   const handleServiceChange = (event) => {
     setSelectedService(event.target.value);
-    //props.onServiceChange(event.target.value);
+    
   }
 
   const[{isDragging}, drag] = useDrag({
@@ -65,10 +65,10 @@ const ScheduleForm = (props) => {
           <h2>Price: $20</h2>
         </div>
       </div>
-      <div className="schedule-time">
+      {/* <div className="schedule-time">
         <h1>Start {start}:00</h1>
         <h1>End {start + 2}:00</h1>
-      </div>
+      </div> */}
     </div>
   );
 };

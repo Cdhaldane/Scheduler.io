@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useDrop } from "react-dnd";
 import Cell from "./Cell";
 import "./calendar.css";
 
@@ -7,6 +8,7 @@ const Calendar = (props) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [scheduledSlots, setScheduledSlots] = useState([]);
   const [timeRange, setTimeRange] = useState([]);
+
   
   useEffect(() => {
     console.log("Scheduled slots", scheduledSlots);
@@ -132,9 +134,9 @@ const Calendar = (props) => {
 
   const handlePieceDrop = (day, hour, item) => {
     console.log('Received day:', day);
-  if (day && typeof day.toISOString === 'function') {
-    const startTime = new Date(day.setHours(hour, 0, 0, 0));
-    const endTime = new Date(day.setHours(hour + 1, 0, 0, 0));
+
+      const startTime = new Date(day.setHours(hour, 0, 0, 0));
+      const endTime = new Date(day.setHours(hour + 1, 0, 0, 0));
 
     const newSlot = {
       id: `${day.toISOString()}_${hour}`,
@@ -146,6 +148,8 @@ const Calendar = (props) => {
         id: item.id,
         service: item.service,
         name: personalbar.name,
+        duration:item.duration,
+        price:item.price,
       }
     };
     // if (isSlotScheduled(day, hour)){
@@ -160,9 +164,7 @@ const Calendar = (props) => {
     setScheduledSlots(prev => [...prev,newSlot,]);
     setSelectedSlot(newSlot);
 
-  }else{
-    console.error('handlePieceDrop was passed an invalid day:', day);
-  }
+  
   };
 
   const groupSlotsByDay = (scheduledSlots) => {
@@ -245,6 +247,17 @@ const Calendar = (props) => {
     );
   };
   
+  const [{ isOver, trashBinDrop }, drop] = useDrop({
+    accept: "service",
+    drop: (item, monitor) => {
+      setScheduledSlots((prev) => 
+        prev.filter(slot => slot.id !== item.id));
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      //canDrop: monitor.canDrop(),
+    }),
+  });
 
   // Render the body of the calendar with times and cells
   const renderBody = () => {
@@ -271,6 +284,7 @@ const Calendar = (props) => {
                   )?.item?.name
             }
             scheduledSlots={scheduledSlots}
+            setScheduledSlots={setScheduledSlots}
             isLastInGroup={isLastInGroup}
             puzzlePieces={props.puzzlePieces}
           />
@@ -279,6 +293,7 @@ const Calendar = (props) => {
       </div>
     ));
   };
+
 
   return (
     <div className="main-calendar">

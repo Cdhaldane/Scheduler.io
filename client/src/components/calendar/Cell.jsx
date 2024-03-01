@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useDrop, useDrag } from "react-dnd";
 import ScheduleForm from "../schedule-form/schedule-form";
 import PuzzleContainer from "../Puzzle/PuzzleContainer";
+import { type } from "@testing-library/user-event/dist/type";
 
 const ResizeIndicator = ({ direction, onResize, name }) => {
   const [, drag] = useDrag({
@@ -17,9 +18,9 @@ const ResizeIndicator = ({ direction, onResize, name }) => {
   return <div ref={drag} className={`expand-indicator ${direction}`}></div>;
 };
 
-const onDropService = (item, day, hour) => {
-  console.log("Dropped service", item, day, hour);
-}
+// const onDropService = (item, day, hour) => {
+//   console.log("Dropped service", item, day, hour);
+// }
 
 const Cell = ({
   day,
@@ -32,6 +33,7 @@ const Cell = ({
   isSlotEdge,
   serviceName,
   scheduledSlots,
+  setScheduledSlots,
   isLastInGroup,
   puzzlePieces,
   onDropService,
@@ -41,30 +43,34 @@ const Cell = ({
     const slotStart = new Date(slot.start);
     return slotStart.getHours() === hour && slotStart.toDateString() === day.toDateString();
   });
-
-  
+  const [{isDragging}, drag] = useDrag({
+    type: SERVICE,
+    item: {type: SERVICE, day, hour, ...matchingSlot ?.item},
+    canDrag: !!matchingSlot,
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+    end:(item, monitor) => {
+      const dropResult = monitor.getDropResult();
+      if(!dropResult){
+        setScheduledSlots((prev) => prev.filter(slot => slot.id !== item.id));
+      }
+    }
+  });
 
   const [{ isOver, canDrop }, drop] = useDrop({
-   accept: SERVICE,
-    drop: (item, monitor) => {
-      console.log("Dropped_test", item, day, hour);
-      if(onDropService){
-        onDropService(item, monitor, day, hour);
-      }
-      handlePieceDrop(day, hour, item);
-    },
-    collect: monitor => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
-  });
-  const [{isDragging}, drag] = useDrag({
-    type: 'service',
-    item: {type:'service', day, hour},
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
+    accept: SERVICE,
+     drop: (item, monitor) => {
+       if(onDropService){
+         onDropService(item, monitor, day, hour);
+       }
+       handlePieceDrop(day, hour, item);
+     },
+     collect: monitor => ({
+       isOver: !!monitor.isOver(),
+       canDrop: !!monitor.canDrop(),
+     }),
+   });
 
   const isSlotScheduled = useCallback((day, hour) => {
     return scheduledSlots.some(slot => {
@@ -77,12 +83,6 @@ const Cell = ({
     });
   }, [scheduledSlots]);
 
-
-  // const isScheduled = scheduledSlots.some(slot => {
-  //   const slotStart = new Date(slot.start);
-  //   const slotEnd = new Date(slot.end);
-  //   return slotStart.getHours() === hour && new Date(slot.day).toISOString() === day.toISOString();
-  // });
   const isScheduled = useCallback((day, hour) => {
     return scheduledSlots.some(slot => {
       const slotStart = new Date(slot.start);
@@ -100,10 +100,7 @@ const Cell = ({
   if(isOver && canDrop){
     cellClass += " over";
   }
-  // const cellStyles = {
-  //   opacity: isOver ? 0.5:1,
-  //   backgroundColor: canDrop ? 'lightgreen' : 'white',
-  // };
+
 
 
 
@@ -130,27 +127,30 @@ const Cell = ({
     console.log(`Resizing ${direction} at ${day} ${hour}`);
   };
 
-  const handleCellClick = (day, hour, e) => {
-    handleSlotClick(day, hour);
+  const handleCellClick = (day, hour) => {
+    const slot = scheduledSlots.find(s =>
+      s.day === day.toISOString() && hour >= new Date(s.start).getHours() && hour < new Date(s.end).getHours()
+  );
+    if (slot) {
+      setScheduledSlots({
+        ...slot,
+        item: {
+          ...slot.item,
+          serviceName,
+        },
+      });
+      }
+    //handleSlotClick(day, hour);
   };
   const color = puzzlePieces?.find(
     (piece) => piece?.name === serviceName
   )?.color;
+
+  const ref = useRef(null);
+  drag(drop(ref));
   return (
-    // <div
-    //   ref={drop}
-    //   className={`cell ${isSelected ? "selected" : ""} ${
-    //     isSlotScheduled(day, hour) ? "scheduled" : ""
-    //   } ${isOver && canDrop ? "over" : ""}
-    //   ${groupSelect ? "group-selected" : ""}
-    //   `}
-    //   style={{
-    //     backgroundColor: isSlotScheduled(day, hour) ? color : color,
-    //     border: isSlotScheduled(day, hour) ? `1px solid ${color}` : "",
-    //   }}
-    //   onClick={(e) => handleCellClick(day, hour, e)}
-    // >
-    <div ref={drop} className={cellClass}  onClick={(e) => handleCellClick(day, hour, e)}>
+
+    <div ref={ref} className={cellClass} onClick={(e) => handleCellClick(day, hour, e)}>
       {groupSelect && isSlotEdge(day, hour, serviceName) && (
         <div className="group-select">
           <ResizeIndicator
@@ -171,7 +171,7 @@ const Cell = ({
               <div className="service-name">{slot.item.serviceName}</div>
               <div className="person-name">{slot.item.personName}</div>
               <div className="appointment-type">{slot.item.appointmentType}</div>
-              <div className="duration">{`Duration: ${slot.item.duration} hours`}</div>
+              <div className="duration">{`Duration: ${slot.item.duration || 'N/A'} hours`}</div>
               <div className="price">{`Price: $${slot.item.price}`}</div>
               <div className="start-time">{`Start: ${new Date(slot.start).toLocaleTimeString()}`}</div>
               <div className="end-time">{`End: ${new Date(slot.end).toLocaleTimeString()}`}</div>
