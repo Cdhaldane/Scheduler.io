@@ -52,6 +52,8 @@
   color: var(--green);
   font-family: var(--font-secondary);
   font-weight: 800;
+  white-space: nowrap;
+  margin-right: 10px;
 }
 
 .navbar-header img {
@@ -59,4 +61,8 @@
   height: 50px;
   border-radius: 50%;
   margin-right: 10px;
+}
+
+.flipped {
+  transform: rotateY(180deg);
 }

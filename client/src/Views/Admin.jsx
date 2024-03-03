@@ -39,15 +39,13 @@ const Admin = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <Sidebar setPersonID={setPersonID} />
-      <div className="main">
-        <PuzzleContainer
-          puzzlePieces={puzzlePieces}
-          onDrop={handleDrop}
-          personID={personID}
-          handleSelectedSlot={handleSelectedSlot}
-          onAddService={onAddService}
-        />
-      </div>
+      <PuzzleContainer
+        puzzlePieces={puzzlePieces}
+        onDrop={handleDrop}
+        personID={personID}
+        handleSelectedSlot={handleSelectedSlot}
+        onAddService={onAddService}
+      />
     </DndProvider>
   );
 };

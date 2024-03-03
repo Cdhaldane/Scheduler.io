@@ -21,6 +21,7 @@ import CustomerRegister from "./Components/Customer/CustomerRegister/CustomerReg
 import CustomerBookingPage from "./Components/Customer/CustomerLoginBooking/CustomerBookingPage";
 import CustomerSubmitPage from "./Components/Customer/CustomerSubmitPage/CustomerSubmitPage";
 import CustomerRegisterSubmitPage from "./Components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage";
+import Info from "./Views/Info";
 
 function App() {
   const location = useLocation() || "";
@@ -35,6 +36,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/info" element={<Info />} />
           <Route path="/create-account" element={<ACMain />} />
           <Route path="/booking" element={<BookingPage />} />
           <Route path="/guest-booking" element={<GuestBookingPage />} />

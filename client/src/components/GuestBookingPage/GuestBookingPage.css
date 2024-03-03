@@ -2,34 +2,49 @@
 
 .guestbooking-container {
   display: flex;
-  width: 100%;
-  flex-direction: row;
+  width: 50%;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
 }
 
-.guestbooking-container > div
-    {
-    flex:1;
-    font-size: 24px;
-    margin-bottom: 16px;
-    text-align:center;
-    color: #fff;
-  }
-
-.guest-booking{
-  flex:1;
+.guest-booking {
+  flex: 1;
   font-size: 24px;
   margin-bottom: 16px;
-  text-align:center;
+  text-align: center;
   color: #fff;
-
 }
-.info-display{
-  flex:1;
+
+.guest-booking form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.guest-booking label {
+  color: #fff;
   font-size: 24px;
   margin-bottom: 16px;
-  text-align:center;
+}
+
+.guest-booking input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  border: none;
+}
+
+.info-display {
+  flex: 1;
+  font-size: 24px;
+  margin-bottom: 16px;
+  text-align: center;
   color: #fff;
   margin: 50px;
   padding: 20px;
@@ -38,9 +53,8 @@
   background-color: #eaeef2;
   color: #0e0d0d;
 }
-.error-messages{
+.error-messages {
   color: red;
   font-size: 24px;
   margin-bottom: 16px;
 }
-  

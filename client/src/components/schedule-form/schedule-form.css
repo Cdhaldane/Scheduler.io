@@ -1,39 +1,77 @@
 .schedule-container {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    width: 30%;
-    background-color: var(--olive);
-    margin: 50px 50px 50px 0px;
-    border-radius: 10px;
-    color: var(--green)
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 30%;
+  background-color: var(--olive);
+  margin: 30px 30px 30px 0px;
+  border-radius: 10px;
+  color: var(--green);
+}
+
+.schedule-container .body {
+  height: 90%;
+}
+.schedule-container footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 10%;
 }
 
 .schedule-appointment {
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    justify-content: center;
-    background-color: var(--grey);
-    border-radius: 10px;
-    color: var(--ash);
-    font-size: 0.8em;
-    padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  background-color: var(--grey);
+  border-radius: 10px;
+  color: var(--ash);
+  font-size: 0.7em;
+  padding-left: 20px;
+}
+
+.schedule-appointment .row h1 {
+  width: 50%;
 }
 
 .schedule-appointment select {
-    width: 200px;
-    height: 50px;
-    margin: 10px;
-    border-radius: 10px;
-    background-color: var(--ash);
-    color: var(--white);
-    font-size: 1.3rem;
-    text-align: center;
+  width: 50%;
+  height: fit-content;
+  margin: 10px;
+  border-radius: 6px;
+  background-color: var(--ash);
+  color: var(--white);
+  font-size: 1rem;
+  text-align: center;
+  padding: 10px;
 }
 
-.schedule-appointment-info{
-    padding-left: 20px;
-    margin-top: -20px;
-    color: var(--green);
+.schedule-appointment select:focus {
+  border-radius: 6px 6px 0px 0px;
+  border-bottom: none;
+}
+
+.schedule-appointment select option {
+  background-color: var(--ash);
+  font-size: 1rem;
+  text-align: center;
+  padding: 10px;
+  min-height: 1em;
+}
+
+.schedule-appointment-info {
+  padding-left: 20px;
+  margin-top: -20px;
+  color: var(--green);
+}
+
+.schedule-container footer button {
+  background-color: var(--green);
+  border: none;
+  color: var(--grey);
+  border-radius: 10px;
+  font-size: 1rem;
+  width: 100%;
+  padding: 10px;
 }

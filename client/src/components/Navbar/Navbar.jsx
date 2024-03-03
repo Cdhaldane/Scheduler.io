@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "../Modal/Modal";
 import "./Navbar.css"; // Import the CSS file
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+
+  const getItem = (icon, text, onClick) => {
+    return (
+      <li>
+        <a
+          onClick={() => {
+            onClick();
+            console.log("clicked");
+          }}
+        >
+          <i class={`fa-solid fa-${icon}`}></i>
+          {/* {text} */}
+        </a>
+      </li>
+    );
+  };
 
   return (
     <nav className="navbar">
@@ -18,32 +36,21 @@ const Navbar = () => {
           </button>
         </div>
         <ul>
-          <li>
-            <a onClick={() => navigate("/")}>
-              <i class="fa-solid fa-house"></i>
-              {/* Home */}
-            </a>
-          </li>
-          <li>
-            <a onClick={() => navigate()}>
-              <i class="fa-solid fa-circle-info"></i>
-              {/* Info */}
-            </a>
-          </li>
-          <li>
-            <a onClick={() => navigate()}>
-              <i class="fa-solid fa-message"></i>
-              {/* Contact */}
-            </a>
-          </li>
-          <li>
-            <a onClick={() => navigate("login")}>
-              <i class="fa-solid fa-right-to-bracket"></i>
-              {/* Sign-in */}
-            </a>
-          </li>
+          {getItem("house", "Home", () => navigate("/"))}
+          {getItem("circle-info", "Info", () => navigate("/info"))}
+          {getItem("message", "Contact", () => setIsOpen(true))}
+
+          {sessionStorage.isAdmin === "true"
+            ? getItem("user", "Admin", () =>
+                sessionStorage.setItem("isAdmin", "false")
+              )
+            : getItem("right-to-bracket", "Login", () => {
+                sessionStorage.setItem("isAdmin", "false");
+                navigate("/login");
+              })}
         </ul>
       </div>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} type="message" />
     </nav>
   );
 };

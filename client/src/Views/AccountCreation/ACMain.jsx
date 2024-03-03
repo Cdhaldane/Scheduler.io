@@ -12,6 +12,7 @@ const ACMain = () => {
   useEffect(() => {
     if (sessionStorage.introFinished) {
       if (sessionStorage.introFinished === "true") {
+        sessionStorage.setItem("isAdmin", "true");
         navigate("/admin");
       }
     }
@@ -22,6 +23,7 @@ const ACMain = () => {
       <AC
         onFinish={() => {
           sessionStorage.setItem("introFinished", true);
+          sessionStorage.setItem("isAdmin", "true");
           navigate("/admin");
         }}
       />

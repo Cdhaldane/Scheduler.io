@@ -54,35 +54,41 @@ const PuzzleContainer = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div
-      ref={drop}
-      className="puzzle-container"
-      style={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: isOver && canDrop ? "lightblue" : "#2D2D2A",
-        position: "relative",
-      }}
-    >
-      <Calendar
-        personID={personID}
-        handleSelectedSlot={(e) => handleSelectedSlot(e)}
-        puzzlePieces={puzzlePieces}
-      />
-      <div className="pieces-container">
-        {puzzlePieces.map((piece, index) => (
-          <PuzzlePiece key={index} piece={piece} />
-        ))}
-        <div className="puzzle-piece btn-piece" onClick={() => setIsOpen(true)}>
-          Add Service
+    <>
+      <div
+        ref={drop}
+        className="puzzle-container"
+        style={{
+          width: "100%",
+          height: "100%",
+          backgroundColor: isOver && canDrop ? "lightblue" : "#2D2D2A",
+          position: "relative",
+        }}
+      >
+        <Calendar
+          personID={personID}
+          handleSelectedSlot={(e) => handleSelectedSlot(e)}
+          puzzlePieces={puzzlePieces}
+        />
+        <div className="pieces-container">
+          {puzzlePieces.map((piece, index) => (
+            <PuzzlePiece key={index} piece={piece} />
+          ))}
+          <div
+            className="puzzle-piece btn-piece"
+            onClick={() => setIsOpen(true)}
+          >
+            Add Service
+          </div>
         </div>
       </div>
       <Modal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         onAddService={onAddService}
+        type={"service"}
       />
-    </div>
+    </>
   );
 };
 
