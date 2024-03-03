@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDrop } from "react-dnd";
 import Cell from "./Cell";
+import GarbageBin from "./GarbageBin";
 import "./calendar.css";
 
+const SERVICE = 'service';
 const Calendar = (props) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -247,18 +249,31 @@ const Calendar = (props) => {
     );
   };
   
-  const [{ isOver, trashBinDrop }, drop] = useDrop({
-    accept: "service",
-    drop: (item, monitor) => {
-      setScheduledSlots((prev) => 
-        prev.filter(slot => slot.id !== item.id));
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-      //canDrop: monitor.canDrop(),
-    }),
-  });
+  // const [{ isOver, trashBinDrop }, drop] = useDrop({
+  //   accept: SERVICE,
+  //   drop: (item, monitor) => {
+  //     setScheduledSlots((prev) => 
+  //       prev.filter(slot => slot.id !== item.id));
+  //   },
+  //   collect: (monitor) => ({
+  //     isOver: !!monitor.isOver(),
+  //     //canDrop: monitor.canDrop(),
+  //   }),
+  // });
 
+  const [{ isOver }, drop] = useDrop({
+    accept: SERVICE, // Make sure to use the correct type
+    drop: (item, monitor) => {
+      const didDrop = monitor.didDrop();
+      if (didDrop) {
+        return;
+      }
+      // Perform the cancellation logic here
+      setScheduledSlots((prevSlots) =>
+        prevSlots.filter(slot => slot.id !== item.id));
+    },
+    
+  });
   // Render the body of the calendar with times and cells
   const renderBody = () => {
     return hoursInDay.map((hour, index) => (
@@ -304,6 +319,7 @@ const Calendar = (props) => {
         <div className="body">
           {renderBody()}
         </div>
+        <GarbageBin ref={drop} />
       </div>
     </div>
   );

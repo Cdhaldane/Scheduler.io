@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useDrop, useDrag } from "react-dnd";
 import ScheduleForm from "../schedule-form/schedule-form";
 import PuzzleContainer from "../Puzzle/PuzzleContainer";
-import { type } from "@testing-library/user-event/dist/type";
+
+
 
 const ResizeIndicator = ({ direction, onResize, name }) => {
   const [, drag] = useDrag({
@@ -39,23 +40,40 @@ const Cell = ({
   onDropService,
 }) => {
   const SERVICE = 'service';
+
   const matchingSlot = scheduledSlots.find(slot => {
     const slotStart = new Date(slot.start);
     return slotStart.getHours() === hour && slotStart.toDateString() === day.toDateString();
   });
-  const [{isDragging}, drag] = useDrag({
+
+  const ref = useRef(null);
+  // const [{isDragging}, drag] = useDrag({
+  //   type: SERVICE,
+  //   item: {type: SERVICE, day, hour, ...matchingSlot ?.item},
+  //   canDrag: !!matchingSlot,
+  //   collect: (monitor) => ({
+  //     isDragging: !!monitor.isDragging(),
+  //   }),
+  //   end:(item, monitor) => {
+  //     const dropResult = monitor.getDropResult();
+  //     if(!dropResult){
+  //       setScheduledSlots((prev) => prev.filter(slot => slot.id !== item.id));
+  //     }
+  //   }
+  // });
+  const [{ isDragging }, drag] = useDrag({
     type: SERVICE,
-    item: {type: SERVICE, day, hour, ...matchingSlot ?.item},
+    item: matchingSlot ? { type: SERVICE, id: matchingSlot.id } : undefined,
     canDrag: !!matchingSlot,
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+      isDragging: monitor.isDragging(),
     }),
-    end:(item, monitor) => {
+    end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
-      if(!dropResult){
+       if(!dropResult){
         setScheduledSlots((prev) => prev.filter(slot => slot.id !== item.id));
-      }
-    }
+        }
+    },
   });
 
   const [{ isOver, canDrop }, drop] = useDrop({
@@ -146,7 +164,7 @@ const Cell = ({
     (piece) => piece?.name === serviceName
   )?.color;
 
-  const ref = useRef(null);
+  // const ref = useRef(null);
   drag(drop(ref));
   return (
 
