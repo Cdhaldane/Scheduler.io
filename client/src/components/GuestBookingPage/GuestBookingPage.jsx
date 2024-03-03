@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "../Alert/AlertProvider";
 
 import "./GuestBookingPage.css";
 
@@ -10,6 +11,8 @@ const GuestBookingPage = () => {
   const [confirmPhoneNumber, setConfirmPhoneNumber] = useState("");
   const [errorMessages, setErrorMessage] = useState([]);
   const [nameErrorMessage, setNameErrorMessage] = useState("");
+
+  const alert = useAlert();
   const navigate = useNavigate();
 
   const handleNameChange = (e) => {
@@ -38,23 +41,13 @@ const GuestBookingPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent default form submission
-    const newErrorMessages = [];
     const phoneNumberPattern = /^\d{10}$/; // Regular expression for exactly 10 digits
 
     if (!phoneNumberPattern.test(phoneNumber)) {
-      newErrorMessages.push("Phone number must be exactly 10 digits.");
-    }
-    if (phoneNumber !== confirmPhoneNumber) {
-      newErrorMessages.push("Phone numbers do not match.");
-    }
-
-    if (newErrorMessages.length > 0) {
-      setErrorMessage(newErrorMessages);
+      alert.showAlert("error", "Phone number must be exactly 10 digits.");
+    } else if (phoneNumber !== confirmPhoneNumber) {
+      alert.showAlert("error", "Phone numbers do not match.");
     } else {
-      setErrorMessage([]);
-      // Perform any additional form submission logic here
-
-      // Navigate to the desired page
       navigate("/successfully-bookingPage", {
         state: { name, phoneNumber, email },
       }); // Replace '/next-page' with the path of the page you want to navigate to
@@ -62,7 +55,7 @@ const GuestBookingPage = () => {
   };
 
   return (
-    <div className="guestbooking-container">
+    <div className="guestbooking-container app">
       <div className="guest-booking">
         <h1>Guest Booking</h1>
         <div className="info-display">
@@ -70,49 +63,48 @@ const GuestBookingPage = () => {
         </div>
         <h2>Enter your information to book an appointment</h2>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={handleNameChange}
-          />
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={handleEmailChange}
-          />
-          <label htmlFor="tel">Telephone:</label>
-          <input
-            type="tel"
-            placeholder="Phone Number"
-            value={phoneNumber}
-            onChange={handlePhoneNumberChange}
-            title="Phone number must be exactly 10 digits."
-          />
-          <input
-            type="tel"
-            placeholder="Confirm Phone Number"
-            value={confirmPhoneNumber}
-            onChange={handleConfirmPhoneNumberChange}
-            title="Phone number must be exactly 10 digits."
-          />
+          <label htmlFor="name">
+            Name:{" "}
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={handleNameChange}
+            />
+          </label>
+
+          <label htmlFor="email">
+            Email:{" "}
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          </label>
+
+          <label htmlFor="tel">
+            Telephone:{" "}
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              value={phoneNumber}
+              onChange={handlePhoneNumberChange}
+              title="Phone number must be exactly 10 digits."
+            />
+            <input
+              type="tel"
+              placeholder="Confirm Phone Number"
+              value={confirmPhoneNumber}
+              onChange={handleConfirmPhoneNumberChange}
+              title="Phone number must be exactly 10 digits."
+            />
+          </label>
+
           <button type="submit" className="submit-booking-button">
             Submit
           </button>
         </form>
-        {nameErrorMessage && (
-          <div className="error-messages">{nameErrorMessage}</div>
-        )}
-        {errorMessages.length > 0 && (
-          <div className="error-messages">
-            {errorMessages.map((message, index) => (
-              <div key={index}>{message}</div>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

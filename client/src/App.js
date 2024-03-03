@@ -21,6 +21,8 @@ import CustomerRegister from "./Components/Customer/CustomerRegister/CustomerReg
 import CustomerBookingPage from "./Components/Customer/CustomerLoginBooking/CustomerBookingPage";
 import CustomerSubmitPage from "./Components/Customer/CustomerSubmitPage/CustomerSubmitPage";
 import CustomerRegisterSubmitPage from "./Components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage";
+import AlertProvider from "./Components/Alert/AlertProvider";
+import Alert from "./Components/Alert/Alert";
 import Info from "./Views/Info";
 
 function App() {
@@ -29,36 +31,42 @@ function App() {
   const shouldRenderNavbarAndFooter = location.pathname !== "/create-account";
 
   return (
-    <div className="app">
-      {shouldRenderNavbarAndFooter && <Navbar />}
-      <div className="app-main">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/info" element={<Info />} />
-          <Route path="/create-account" element={<ACMain />} />
-          <Route path="/booking" element={<BookingPage />} />
-          <Route path="/guest-booking" element={<GuestBookingPage />} />
-          <Route
-            path="/successfully-bookingPage"
-            element={<SuccessfullyBookingPage />}
-          />
-          <Route path="/customer-login" element={<CustomerLogin />} />
-          <Route path="/customer-register" element={<CustomerRegister />} />
-          <Route
-            path="/customer-bookingPage"
-            element={<CustomerBookingPage />}
-          />
-          <Route path="/customer-submitPage" element={<CustomerSubmitPage />} />
-          <Route
-            path="/customer-register-submitPage"
-            element={<CustomerRegisterSubmitPage />}
-          />
-        </Routes>
+    <AlertProvider>
+      <Alert />
+      <div className="app">
+        {shouldRenderNavbarAndFooter && <Navbar />}
+        <div className="app-main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/info" element={<Info />} />
+            <Route path="/create-account" element={<ACMain />} />
+            <Route path="/booking" element={<BookingPage />} />
+            <Route path="/guest-booking" element={<GuestBookingPage />} />
+            <Route
+              path="/successfully-bookingPage"
+              element={<SuccessfullyBookingPage />}
+            />
+            <Route path="/customer-login" element={<CustomerLogin />} />
+            <Route path="/customer-register" element={<CustomerRegister />} />
+            <Route
+              path="/customer-bookingPage"
+              element={<CustomerBookingPage />}
+            />
+            <Route
+              path="/customer-submitPage"
+              element={<CustomerSubmitPage />}
+            />
+            <Route
+              path="/customer-register-submitPage"
+              element={<CustomerRegisterSubmitPage />}
+            />
+          </Routes>
+        </div>
+        {shouldRenderNavbarAndFooter && <Footer />}
       </div>
-      {shouldRenderNavbarAndFooter && <Footer />}
-    </div>
+    </AlertProvider>
   );
 }
 

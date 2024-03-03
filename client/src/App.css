@@ -5,6 +5,10 @@
   --blue: #3f5e5a;
   --ash: #9dc0bc;
   --white: #f7f7f7;
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #dc3545;
   --font-main: "Archivo Narrow", sans-serif;
   --font-secondary: "Julius Sans One", sans-serif;
   --sidebar-width: 300px;

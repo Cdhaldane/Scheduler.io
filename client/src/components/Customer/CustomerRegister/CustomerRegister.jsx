@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 import "./CustomerRegister.css";
 
 const CustomerRegister = () => {
@@ -13,15 +12,17 @@ const CustomerRegister = () => {
   const [errorMessages, setErrorMessage] = useState([]);
   const [homeAddress, setHomeAddress] = useState("");
   const navigate = useNavigate();
-  
+
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
   const isPhoneNumberValid = (phoneNumber) => /^\d{10}$/.test(phoneNumber);
-  const doPasswordsMatch = (password, verifiedPassword) => password === verifiedPassword;
-
+  const doPasswordsMatch = (password, verifiedPassword) =>
+    password === verifiedPassword;
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setErrorMessage((preErrorMessages) => preErrorMessages.filter((message) => message !== "Invalid email format."));
+    setErrorMessage((preErrorMessages) =>
+      preErrorMessages.filter((message) => message !== "Invalid email format.")
+    );
   };
 
   const handlePasswordChange = (e) => {
@@ -30,7 +31,7 @@ const CustomerRegister = () => {
 
   const handleVerifiedPasswordChange = (e) => {
     setVerifiedPassword(e.target.value);
-  }
+  };
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -39,10 +40,18 @@ const CustomerRegister = () => {
   const handlePhoneNumberChange = (e) => {
     const newPhoneNumber = e.target.value;
     setPhoneNumber(newPhoneNumber);
-    setErrorMessage((preErrorMessages) => preErrorMessages.filter((message) => message !== "Phone number cannot be empty."));
+    setErrorMessage((preErrorMessages) =>
+      preErrorMessages.filter(
+        (message) => message !== "Phone number cannot be empty."
+      )
+    );
 
     if (/^\d{10}$/.test(newPhoneNumber)) {
-      setErrorMessage((prevErrorMessages) => prevErrorMessages.filter((message) => !message.includes("Phone number must be 10 digits.")));
+      setErrorMessage((prevErrorMessages) =>
+        prevErrorMessages.filter(
+          (message) => !message.includes("Phone number must be 10 digits.")
+        )
+      );
     }
   };
 
@@ -52,35 +61,42 @@ const CustomerRegister = () => {
 
   const handleRegister = () => {
     const newErrorMessages = [];
-    if(!email) {
+    if (!email) {
       newErrorMessages.push("Please enter a valid email"); //no email is entered
-    }else if(!validateEmail(email)) {
+    } else if (!validateEmail(email)) {
       newErrorMessages.push("Invalid email format."); //invalid email format
     }
-    if(!password) {
+    if (!password) {
       newErrorMessages.push("Password cannot be empty."); //no password is entered
     }
-    if(!doPasswordsMatch(password, verifiedPassword) || !verifiedPassword) {
+    if (!doPasswordsMatch(password, verifiedPassword) || !verifiedPassword) {
       newErrorMessages.push("Passwords do not match."); //verify password is empty or does not match
     }
 
-    if(!phoneNumber) {
+    if (!phoneNumber) {
       newErrorMessages.push("Please enter a phone number"); //no phone number is entered
-    }else if(!isPhoneNumberValid(phoneNumber)) {
+    } else if (!isPhoneNumberValid(phoneNumber)) {
       newErrorMessages.push("Phone number must be 10 digits."); //Phone number is not valid
     }
 
-    if(newErrorMessages.length > 0) {
+    if (newErrorMessages.length > 0) {
       setErrorMessage(newErrorMessages);
-      return
+      return;
     }
-    console.log("Registering in...",{email, password, name, phoneNumber, homeAddress});
-    navigate('/customer-register-submitPage', {state: {email, password, name, phoneNumber, homeAddress}});
+    console.log("Registering in...", {
+      email,
+      password,
+      name,
+      phoneNumber,
+      homeAddress,
+    });
+    navigate("/customer-register-submitPage", {
+      state: { email, password, name, phoneNumber, homeAddress },
+    });
   };
 
-
   return (
-    <div className="customer-register-container">
+    <div className="customer-register-container app">
       <h2>Register</h2>
       <div>
         <h3>Please enter your account information:</h3>
@@ -127,7 +143,9 @@ const CustomerRegister = () => {
         ))}
       </div>
       <span>
-        <button className= "button" onClick={handleRegister}>Register</button>
+        <button className="button" onClick={handleRegister}>
+          Register
+        </button>
       </span>
     </div>
   );
