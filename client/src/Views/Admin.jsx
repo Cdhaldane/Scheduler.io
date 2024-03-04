@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "../Components/Sidebar/sidebar";
+import Sidebar from "../Components/Sidebar/Sidebar";
 import Calendar from "../Components/Calendar/calendar";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import { useNavigate } from "react-router-dom";
@@ -8,12 +8,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 const Admin = () => {
   const [personID, setPersonID] = useState(0);
-  const [selectedSlot, setSelectedSlot] = useState(0);
   const navigate = useNavigate();
-
-  const handleSelectedSlot = (e) => {
-    setSelectedSlot({ day: e.day, hour: e.hour });
-  };
 
   const puzzlePieces = [
     { id: 1, duration: 1, price: 50, name: "Piece 1", color: "#3F5E5A" },
@@ -43,7 +38,6 @@ const Admin = () => {
         puzzlePieces={puzzlePieces}
         onDrop={handleDrop}
         personID={personID}
-        handleSelectedSlot={handleSelectedSlot}
         onAddService={onAddService}
       />
     </DndProvider>

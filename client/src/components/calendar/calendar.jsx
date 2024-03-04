@@ -62,7 +62,6 @@ const Calendar = (props) => {
     let daySlots = scheduledSlots.filter((slot) => slot.day === day);
     daySlots = daySlots.filter((slot) => slot.item.name === name);
     daySlots.sort((a, b) => a.start - b.start);
-    console.log(daySlots);
     const slotIndex = daySlots.findIndex((slot) => slot.start === hour);
     if (slotIndex === -1) return false;
 
@@ -76,13 +75,16 @@ const Calendar = (props) => {
   };
 
   const handleSlotClick = (day, hour, slots) => {
+    if (!day || !hour) {
+      setSelectedSlot(null);
+      return;
+    }
     let allSlots = scheduledSlots;
     if (slots) allSlots = slots;
     const clickedSlot = allSlots.find(
       (slot) => slot.day === day && hour >= slot.start && hour < slot.end
     );
     if (clickedSlot) {
-      console.log(clickedSlot.item);
       const slotsGroupedByDay = groupSlotsByDay(allSlots);
       const connectedGrouping = findConnectedGrouping(
         slotsGroupedByDay[day],
@@ -99,8 +101,6 @@ const Calendar = (props) => {
     } else {
       setSelectedSlot({ day, hour });
     }
-
-    props.handleSelectedSlot({ day, hour });
   };
 
   const findConnectedGrouping = (slots, clickedDay, clickedHour) => {
@@ -195,7 +195,26 @@ const Calendar = (props) => {
     if (grouping?.end - 1 === grouping?.start) {
       return false;
     }
+    if (!grouping) return true;
     return grouping && hour === grouping.end - 1;
+  };
+
+  const handleScheduledSlotDelete = (day, hour) => {
+    console.log("delete");
+    let connectedGrouping = findConnectedGrouping(scheduledSlots, day, hour);
+    deleteHelper(day, hour, connectedGrouping);
+    setSelectedSlot(null);
+  };
+
+  const deleteHelper = (day, hour, connectedGrouping) => {
+    let updatedSlots = scheduledSlots.filter((slot) => {
+      return (
+        slot.day !== day ||
+        slot.end <= connectedGrouping.start ||
+        slot.start > connectedGrouping.end
+      );
+    });
+    setScheduledSlots(updatedSlots);
   };
 
   const renderCalendar = () => {
@@ -219,8 +238,10 @@ const Calendar = (props) => {
                   day={day}
                   hour={hour}
                   handleSlotClick={handleSlotClick}
+                  handleScheduledSlotDelete={handleScheduledSlotDelete}
                   handlePieceDrop={handlePieceDrop}
                   selectedSlot={selectedSlot}
+                  setSelectedSlot={setSelectedSlot}
                   isSlotScheduled={isSlotScheduled}
                   isSlotEdge={isSlotEdge}
                   handlePieceExpand={handlePieceExpand}
@@ -239,7 +260,6 @@ const Calendar = (props) => {
               ))}
             </div>
           ))}
-
         </div>
       </div>
     );

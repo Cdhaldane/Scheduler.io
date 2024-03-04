@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "../Components/Sidebar/sidebar";
+import Sidebar from "../Components/Sidebar/Sidebar";
 import Calendar from "../Components/Calendar/calendar";
 import ScheduleForm from "../Components/Schedule-form/Schedule-form";
 import { useNavigate } from "react-router-dom";

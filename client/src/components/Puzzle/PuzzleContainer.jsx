@@ -5,6 +5,54 @@ import Modal from "../Modal/Modal";
 
 import "./Puzzle.css";
 
+const ServiceForm = ({ onAdd, onClose }) => {
+  const [serviceName, setServiceName] = useState("");
+  const [duration, setDuration] = useState(0);
+  const [price, setPrice] = useState(0);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onAdd({ serviceName, duration, price });
+    onClose(); // Close modal after adding
+  };
+
+  return (
+    <>
+      <h2>Add a Service</h2>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="name">Service Name:</label>
+        <input
+          type="text"
+          id="name"
+          value={serviceName}
+          onChange={(e) => setServiceName(e.target.value)}
+          required
+        />
+
+        <label htmlFor="duration">Duration (hrs):</label>
+        <input
+          type="number"
+          id="duration"
+          value={duration}
+          onChange={(e) => setDuration(e.target.value)}
+          required
+        />
+
+        <label htmlFor="price">Price ($):</label>
+        <input
+          type="number"
+          id="price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          required
+        />
+
+        <button type="submit">Add Service</button>
+      </form>
+    </>
+  );
+};
+
 const PuzzlePiece = ({ piece }) => {
   // Use `useDrag` hook from react-dnd to make this component draggable
   const [{ isDragging }, drag] = useDrag({
@@ -82,12 +130,9 @@ const PuzzleContainer = ({
           </div>
         </div>
       </div>
-      <Modal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        onAddService={onAddService}
-        type={"service"}
-      />
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ServiceForm onAdd={onAddService} onClose={() => setIsOpen(false)} />
+      </Modal>
     </>
   );
 };

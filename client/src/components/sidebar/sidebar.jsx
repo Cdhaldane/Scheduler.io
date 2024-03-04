@@ -1,54 +1,88 @@
 import React, { useState } from "react";
 import data from "../../personnelData.json";
+import Modal from "../Modal/Modal";
 
-import "./sidebar.css";
+import "./Sidebar.css";
+
+const AddPersonForm = ({ onAdd, onClose }) => {
+  const [personName, setPersonName] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onAdd(personName);
+    onClose(); // Close modal after adding
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="personName">Person Name:</label>
+      <input
+        id="personName"
+        type="text"
+        value={personName}
+        onChange={(e) => setPersonName(e.target.value)}
+        required
+      />
+      <button type="submit">Add</button>
+    </form>
+  );
+};
 
 const Sidebar = (props) => {
   const [personID, setPersonID] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const isAdmin = sessionStorage.getItem("isAdmin");
 
   const handleSelect = (id) => {
     setPersonID(id);
     props.setPersonID(id);
   };
 
+  const handleAddPerson = (personName) => {
+    const newPerson = { name: personName };
+    data.personnel.push(newPerson);
+    // Update state or perform additional actions as necessary
+  };
+
   const getPersons = () => {
-    let out = [];
-
-    let persons = data.personnel;
-
-    for (let i = 0; i < persons.length; i++) {
-      const person = persons[i];
-      out.push(
+    return data.personnel
+      .map((person, index) => (
         <div
-          key={i}
-          className={`sidebar-item ${personID === i ? "selected" : "none"}`}
+          key={index}
+          className={`sidebar-item ${personID === index ? "selected" : ""}`}
+          onClick={() => handleSelect(index)}
         >
-          <div className="sidebar-item-header" onClick={() => handleSelect(i)}>
-            {person.name}
-          </div>
-          {/* <div className={`sidebar-item-body ${personID === i ? 'selected' : 'none'}`}>
-                            <div className="sidebar-item-row">
-                                <div className="sidebar-item-label">Name</div>
-                                <div className="sidebar-item-value">{person.name}</div>
-                            </div>
-                            <div className="sidebar-item-row">
-                                <div className="sidebar-item-label">Email</div>
-                                <div className="sidebar-item-value">{person.email}</div>
-                            </div>
-                        </div> */}
+          <div className="sidebar-item-header">{person.name}</div>
         </div>
+      ))
+      .concat(
+        isAdmin === "true" && (
+          <div
+            key="addPerson"
+            className="sidebar-item add"
+            onClick={() => setIsOpen(true)}
+          >
+            <div className="sidebar-item-header admin">Add Personnel</div>
+          </div>
+        )
       );
-    }
-
-    return out;
   };
 
   return (
-    <div className="sidebar">
-      <div className="sidebar-header">Personnel</div>
-      {getPersons()}
-      {/* Add more sidebar items here */}
-    </div>
+    <>
+      <div className="sidebar">
+        <div className="sidebar-header">Personnel</div>
+        {getPersons()}
+      </div>
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+          <AddPersonForm
+            onAdd={handleAddPerson}
+            onClose={() => setIsOpen(false)}
+          />
+        </Modal>
+      )}
+    </>
   );
 };
 

@@ -57,11 +57,15 @@ button {
   width: 100%;
   padding: 10px;
   transition: all 0.3s ease-in-out;
-  margin: 0 10px;
 }
 button:hover {
   cursor: pointer;
   scale: 1.05;
+}
+
+input {
+  box-sizing: border-box;
+  padding-block: 0px;
 }
 
 ::-webkit-scrollbar {

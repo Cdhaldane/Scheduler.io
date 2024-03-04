@@ -1,0 +1,55 @@
+.custom-context-menu {
+  position: absolute;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: var(--ash);
+  border-radius: 5px;
+  margin: 0;
+  display: none;
+  list-style: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  animation: contextGrow 0.3s ease-in-out normal forwards;
+}
+
+.context-menu-option {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.context-menu-option:last-child {
+  border-radius: 0px 0px 5px 5px;
+}
+.context-menu-option:first-child {
+  border-radius: 5px 5px 0px 0px;
+}
+.context-menu-option:hover {
+  background-color: var(--green);
+  color: #fff;
+}
+
+@keyframes contextGrow {
+  0% {
+    display: none;
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes contextHide {
+  0% {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    display: none;
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}

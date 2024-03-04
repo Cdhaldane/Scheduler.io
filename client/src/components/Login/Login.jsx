@@ -19,6 +19,8 @@ const Login = () => {
   const handleLogin = () => {
     // Perform login logic here
     console.log("Logging in...");
+    navigate("/admin");
+    sessionStorage.setItem("isAdmin", "true");
   };
 
   const handleCreateAccount = () => {
