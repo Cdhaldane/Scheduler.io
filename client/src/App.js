@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -23,6 +25,7 @@ import CustomerSubmitPage from "./components/Customer/CustomerSubmitPage/Custome
 import CustomerRegisterSubmitPage from "./components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage";
 import CustomerLandingPage from "./components/Customer/CustomerLandingPage/CustomerLandingPage";
 import CustomerCommentPage from "./components/Customer/CustomerCommentPage/CustomerCommentPage";
+
 function App() {
   const location = useLocation() || "";
 

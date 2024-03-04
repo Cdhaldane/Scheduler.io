@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./CustomerRegister.css";
 
-const CustomerRegister = () => {
+const CustomerRegister = ({onClose}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verifiedPassword, setVerifiedPassword] = useState("");
@@ -75,7 +75,9 @@ const CustomerRegister = () => {
       return
     }
     console.log("Registering in...",{email, password, name, phoneNumber, homeAddress});
+    
     navigate('/customer-register-submitPage', {state: {email, password, name, phoneNumber, homeAddress}});
+    onClose();
   };
 
 

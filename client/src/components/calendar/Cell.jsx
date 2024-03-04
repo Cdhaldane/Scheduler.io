@@ -3,6 +3,8 @@ import { useDrop, useDrag } from "react-dnd";
 import ScheduleForm from "../schedule-form/schedule-form";
 import PuzzleContainer from "../Puzzle/PuzzleContainer";
 
+import { type } from "@testing-library/user-event";
+import "./Cell.css"
 
 
 const ResizeIndicator = ({ direction, onResize, name }) => {
@@ -178,6 +180,9 @@ const Cell = ({
           />
         </div>
       )}
+
+
+      {/*Scheduled slots */}
       {isScheduled(day, hour) && (
         <div className="scheduled-slot">
           {scheduledSlots.filter(slot => {

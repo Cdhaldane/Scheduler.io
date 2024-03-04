@@ -70,13 +70,13 @@ const GuestBookingPage = () => {
     <div className="guestbooking-container">
       <div className="guest-booking">
       <div>
-        <h1>Guest Booking</h1>
+        <h4>Guest Booking</h4>
       </div>
       <div className="info-display">
         This is the place to display service from booking page. 
       </div>
       <div className="guest-booking">
-        <h2>Enter your email and password to book an appointment</h2>
+        <h5>Enter your email and password to book an appointment</h5>
         <input
           type="text"
           placeholder="Name"
@@ -111,7 +111,7 @@ const GuestBookingPage = () => {
           </div>
         )}
         <div className="additional-comments">
-          <h2>Additional Comments</h2>
+          <h5>Additional Comments</h5>
           <textarea rows="4" cols="50" placeholder="Enter any additional comments here"></textarea>
         </div>
       </div>

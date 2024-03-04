@@ -23,31 +23,43 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 104%;
+  padding-right: 3%; /*required so the right arrow isnt hiding behind the puzzle pieces*/
 }
 
-
+.navigation-button:first-child{
+  flex: 0 0 1%;
+}
 .navigation-button {
-  flex: 0 0 4%; 
+  flex: 0 0 3.5%; 
   height: 30px; 
   border: none;
   background: transparent;
   cursor: pointer;
+  
 }
+
+
 
 
 .header-cell{
   flex: 1; 
+  width: 12%;
   margin: 0 1px; 
+  padding-left: 2.5%;
   border-top: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: left;
 }
 
-.header-cell:first-child,
+
 .header-cell:last-child {
-  padding: 0 2%; /* Adjust as needed */
+  padding: 0px 1%; /* Adjust as needed */
 }
+
 .cell {
-  width: 12%;
+  width: 25%;
   height: 30px;
   border: 1px solid var(--blue);
   display: flex;
@@ -107,7 +119,8 @@
 }
 
 .day.selected {
-  background-color: #61dafb;
+  background-color: solid #61dafb;
+
 }
 
 .expand-indicator {
