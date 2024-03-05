@@ -23,21 +23,21 @@ const Calendar = (props) => {
   ];
   const hoursInDay = Array.from({ length: 24 }, (_, i) => i);
 
-  useEffect(() => {
-    // let personID = props.personID;
-    // if (personID === null) return;
-    // let person = data.personnel[personID];
-    // let bookings = person.bookings;
-    // let slots = [];
-    // for (let i = 0; i < bookings.length; i++) {
-    //   const booking = bookings[i];
-    //   let start = parseInt(booking.startTime);
-    //   let end = parseInt(booking.endTime);
-    //   let day = booking.day;
-    //   slots.push({ day, start: start, end: end });
-    // }
-    // setScheduledSlots(slots);
-  }, [props]);
+  // useEffect(() => {
+  //   let personID = props.personID;
+  //   if (personID === null) return;
+  //   let person = data.personnel[personID];
+  //   let bookings = person.bookings;
+  //   let slots = [];
+  //   for (let i = 0; i < bookings.length; i++) {
+  //     const booking = bookings[i];
+  //     let start = parseInt(booking.startTime);
+  //     let end = parseInt(booking.endTime);
+  //     let day = booking.day;
+  //     slots.push({ day, start: start, end: end });
+  //   }
+  //   setScheduledSlots(slots);
+  // }, [props]);
 
   useEffect(() => {
     //event listener for click outside set selected slot to null
