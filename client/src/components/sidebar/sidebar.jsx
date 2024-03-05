@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import data from "../../personnelData.json";
 import Modal from "../Modal/Modal";
 
-import "./Sidebar.css";
+import "./sidebar.css";
 
 const AddPersonForm = ({ onAdd, onClose }) => {
   const [personName, setPersonName] = useState("");

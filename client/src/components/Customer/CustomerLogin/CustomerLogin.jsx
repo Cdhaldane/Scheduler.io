@@ -88,7 +88,10 @@ const CustomerLogin = () => {
       />
       {passwordError && <div className="error-message">{passwordError}</div>}
       <div className="forgot-password">
-        <a href="/forgot-password">Forgot password?</a>
+        <a href="#" onClick={(e) => {
+          e.preventDefault();
+          navigate("/forgot-password", {state: {email: email, phoneNumber: phoneNumber}});
+        }}>Forgot password?</a>
       </div>
       <div className="checkbox-container">
         <input 

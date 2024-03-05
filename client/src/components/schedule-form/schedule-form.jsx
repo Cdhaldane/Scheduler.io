@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import data from "../../personnelData.json";
 import { useNavigate } from "react-router-dom";
 
-import "./Schedule-form.css";
+import "./schedule-form.css";
 
 const ScheduleForm = (props) => {
   const [personID, setPersonID] = useState(props.personID);

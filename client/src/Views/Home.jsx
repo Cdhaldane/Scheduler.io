@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Sidebar from "../Components/Sidebar/Sidebar";
-import Calendar from "../Components/Calendar/calendar";
-import ScheduleForm from "../Components/Schedule-form/Schedule-form";
+import Sidebar from "../components/sidebar/sidebar.jsx";
+import Calendar from "../components/calendar/calendar.jsx";
+import ScheduleForm from "../components/schedule-form/schedule-form.jsx";
 import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";

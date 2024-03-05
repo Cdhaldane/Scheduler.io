@@ -9,21 +9,22 @@ import {
 import "./App.css";
 import Home from "./Views/Home";
 import Admin from "./Views/Admin";
-import Navbar from "./Components/Navbar/Navbar";
-import Footer from "./Components/Footer/Footer";
-import Login from "./Components/Login/Login";
+import Navbar from "./components/Navbar/Navbar.jsx";
+import Footer from "./components/Footer/Footer.jsx";
+import Login from "./components/Login/Login.jsx";
 import ACMain from "./Views/AccountCreation/ACMain";
-import BookingPage from "./Components/BookingPage/BookingPage";
-import GuestBookingPage from "./Components/GuestBookingPage/GuestBookingPage";
-import SuccessfullyBookingPage from "./Components/SuccessfullyBookingPage/SuccessfullyBookingPage";
-import CustomerLogin from "./Components/Customer/CustomerLogin/CustomerLogin";
-import CustomerRegister from "./Components/Customer/CustomerRegister/CustomerRegister";
-import CustomerBookingPage from "./Components/Customer/CustomerLoginBooking/CustomerBookingPage";
-import CustomerSubmitPage from "./Components/Customer/CustomerSubmitPage/CustomerSubmitPage";
-import CustomerRegisterSubmitPage from "./Components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage";
-import AlertProvider from "./Components/Alert/AlertProvider";
-import Alert from "./Components/Alert/Alert";
-import Info from "./Views/Info";
+import BookingPage from "./components/BookingPage/BookingPage.jsx";
+import GuestBookingPage from "./components/GuestBookingPage/GuestBookingPage.jsx";
+import SuccessfullyBookingPage from "./components/SuccessfullyBookingPage/SuccessfullyBookingPage.jsx";
+import CustomerLogin from "./components/Customer/CustomerLogin/CustomerLogin.jsx";
+import ForgotPassword from "./components/Customer/CustomerLogin/ForgotPassword.jsx";
+import CustomerRegister from "./components/Customer/CustomerRegister/CustomerRegister.jsx";
+import CustomerBookingPage from "./components/Customer/CustomerLoginBooking/CustomerBookingPage.jsx";
+import CustomerSubmitPage from "./components/Customer/CustomerSubmitPage/CustomerSubmitPage.jsx";
+import CustomerRegisterSubmitPage from "./components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage.jsx";
+import AlertProvider from "./components/Alert/AlertProvider.jsx";
+import Alert from "./components/Alert/Alert.jsx";
+import Info from "./Views/Info.jsx";
 
 function App() {
   const location = useLocation() || "";
@@ -49,6 +50,7 @@ function App() {
               element={<SuccessfullyBookingPage />}
             />
             <Route path="/customer-login" element={<CustomerLogin />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/customer-register" element={<CustomerRegister />} />
             <Route
               path="/customer-bookingPage"
