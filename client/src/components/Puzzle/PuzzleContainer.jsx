@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDrop, useDrag } from "react-dnd";
-import Calendar from "../Calendar/calendar";
+import Calendar from "../Calendar/Calendar";
 import Modal from "../Modal/Modal";
 
 import "./Puzzle.css";

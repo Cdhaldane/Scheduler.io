@@ -26,6 +26,13 @@ import Alert from "./Components/Alert/Alert";
 import Info from "./Views/Info";
 import DevTools from "./Components/DevTools/DevTools";
 
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  "https://mydmcdgmioyieammrakm.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZG1jZGdtaW95aWVhbW1yYWttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk1ODM2MDIsImV4cCI6MjAyNTE1OTYwMn0.X7r9Q0cnvPg5tW5EOj7CO0S0h1gMLvpKQv-oLHG26fM"
+);
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(true);

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDrop } from "react-dnd";
 import Cell from "./Cell";
 import GarbageBin from "./GarbageBin";
-import "./calendar.css";
+import "./Calendar.css";
 
 const SERVICE = "service";
 const Calendar = (props) => {

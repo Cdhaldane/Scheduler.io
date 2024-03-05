@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar";
-import Calendar from "../Components/Calendar/calendar";
+import Calendar from "../Components/Calendar/Calendar";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
