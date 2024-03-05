@@ -1,56 +1,43 @@
-import React, { useState, useEffect } from "react";
-import data from "../../personnelData.json";
+import React, { useState, useEffect, useRef } from "react";
 import { useDrop } from "react-dnd";
 import Cell from "./Cell";
-import { useNavigate } from "react-router-dom";
+import GarbageBin from "./GarbageBin";
 import "./calendar.css";
-import { Route } from "react-router-dom";
 
+const SERVICE = "service";
 const Calendar = (props) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [scheduledSlots, setScheduledSlots] = useState([]);
   const [timeRange, setTimeRange] = useState([]);
-  const navigate = useNavigate();
-
-  const daysOfWeek = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  const hoursInDay = Array.from({ length: 24 }, (_, i) => i);
-
-  // useEffect(() => {
-  //   let personID = props.personID;
-  //   if (personID === null) return;
-  //   let person = data.personnel[personID];
-  //   let bookings = person.bookings;
-  //   let slots = [];
-  //   for (let i = 0; i < bookings.length; i++) {
-  //     const booking = bookings[i];
-  //     let start = parseInt(booking.startTime);
-  //     let end = parseInt(booking.endTime);
-  //     let day = booking.day;
-  //     slots.push({ day, start: start, end: end });
-  //   }
-  //   setScheduledSlots(slots);
-  // }, [props]);
 
   useEffect(() => {
-    //event listener for click outside set selected slot to null
-    const handleClickOutside = (e) => {
-      if (!e.target.className.includes("cell")) {
-        setSelectedSlot(null);
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [selectedSlot]);
+    console.log("Scheduled slots", scheduledSlots);
+  }, [scheduledSlots]);
+
+  const getStartOfWeek = (date) => {
+    const start = new Date(date);
+    start.setDate(start.getDate() - start.getDay());
+    start.setHours(0, 0, 0, 0);
+    return start;
+  };
+
+  // This will generate an array of dates representing the current week
+  const daysOfWeek = Array.from({ length: 7 }, (_, index) => {
+    const startOfWeek = getStartOfWeek(currentDate);
+    return new Date(startOfWeek.setDate(startOfWeek.getDate() + index));
+  });
+
+  const hoursInDay = Array.from({ length: 24 }, (_, i) => i);
+
+  // Handlers for navigating weeks
+  const goToPreviousWeek = () => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(newDate.getDate() - 7);
+      return newDate;
+    });
+  };
 
   const isSlotScheduled = (day, hour) => {
     return scheduledSlots.some((slot) => {
@@ -139,12 +126,36 @@ const Calendar = (props) => {
   };
 
   const handlePieceDrop = (day, hour, item) => {
-    if (isSlotScheduled(day, hour)) return;
-    setScheduledSlots((prev) => [
-      ...prev,
-      { day, start: hour, end: hour + 1, item },
-    ]);
-    setSelectedSlot({ day, hour });
+    console.log("Received day:", day);
+
+    const startTime = new Date(day.setHours(hour, 0, 0, 0));
+    const endTime = new Date(day.setHours(hour + 1, 0, 0, 0));
+
+    const newSlot = {
+      id: `${day.toISOString()}_${hour}`,
+      day: day.toISOString(),
+      start: startTime.toISOString(),
+      end: endTime.toISOString(),
+      item: {
+        type: item.type,
+        id: item.id,
+        service: item.service,
+        name: personalbar.name,
+        duration: item.duration,
+        price: item.price,
+      },
+    };
+    // if (isSlotScheduled(day, hour)){
+    //   console.log('Slot already scheduled');
+    //   return;
+    // }
+
+    if (scheduledSlots.some((slot) => slot.id === newSlot.id)) {
+      console.log("Slot already scheduled");
+      return;
+    }
+    setScheduledSlots((prev) => [...prev, newSlot]);
+    setSelectedSlot(newSlot);
   };
 
   const groupSlotsByDay = (scheduledSlots) => {
@@ -217,55 +228,104 @@ const Calendar = (props) => {
     setScheduledSlots(updatedSlots);
   };
 
-  const renderCalendar = () => {
+  const [{ isOver, trashBinDrop }, drop] = useDrop({
+    accept: SERVICE,
+    drop: (item, monitor) => {
+      setScheduledSlots((prev) => prev.filter((slot) => slot.id !== item.id));
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      //canDrop: monitor.canDrop(),
+    }),
+  });
+
+  const goToNextWeek = () => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(newDate.getDate() + 7);
+      return newDate;
+    });
+  };
+
+  const renderHeader = () => {
+    const startOfWeek = getStartOfWeek(currentDate);
+    const weekDays = Array.from({ length: 7 }, (_, index) => {
+      const day = new Date(startOfWeek);
+      day.setDate(day.getDate() + index);
+      return day;
+    });
+
     return (
-      <div className="calendar">
-        <div className="header">
-          <div key={0} className="cell empty"></div>
-          {daysOfWeek.map((day) => (
-            <div key={day} className="header-cell">
-              {day}
-            </div>
-          ))}
+      <>
+        <button
+          className="navigation-button nb-left"
+          onClick={goToPreviousWeek}
+        >
+          <i className="fa-solid fa-arrow-left" />
+        </button>
+        <div className="cell empty">
+          {currentDate.toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+          })}
         </div>
-        <div className="body">
-          {hoursInDay.map((hour) => (
-            <div key={hour} className="row">
-              <div className={`cell hours`}>{hour}:00</div>
-              {daysOfWeek.map((day) => (
-                <Cell
-                  key={day + hour}
-                  day={day}
-                  hour={hour}
-                  handleSlotClick={handleSlotClick}
-                  handleScheduledSlotDelete={handleScheduledSlotDelete}
-                  handlePieceDrop={handlePieceDrop}
-                  selectedSlot={selectedSlot}
-                  setSelectedSlot={setSelectedSlot}
-                  isSlotScheduled={isSlotScheduled}
-                  isSlotEdge={isSlotEdge}
-                  handlePieceExpand={handlePieceExpand}
-                  serviceName={
-                    scheduledSlots.find(
-                      (slot) =>
-                        slot.day === day &&
-                        hour >= slot.start &&
-                        hour < slot.end
-                    )?.item?.name
-                  }
-                  scheduledSlots={scheduledSlots}
-                  isLastInGroup={isLastInGroup}
-                  puzzlePieces={props.puzzlePieces}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
+        {weekDays.map((day, index) => (
+          <div key={index} className="header-cell">
+            {day.toLocaleDateString("en-US", { weekday: "long" })}
+            {/* {day.toLocaleDateString("en-US", {
+              month: "numeric",
+              day: "numeric",
+            })} */}
+          </div>
+        ))}
+        <button className="navigation-button nb-right" onClick={goToNextWeek}>
+          <i className="fa-solid fa-arrow-right" />
+        </button>
+      </>
     );
   };
 
-  return <div className="main-calendar">{renderCalendar()}</div>;
+  // Render the body of the calendar with times and cells
+  const renderBody = () => {
+    return hoursInDay.map((hour, index) => (
+      <div key={index} className="row">
+        <div className="cell hours">{`${hour}:00`}</div>
+        {daysOfWeek.map((day) => (
+          <Cell
+            key={day + hour}
+            day={day}
+            hour={hour}
+            handleSlotClick={handleSlotClick}
+            handlePieceDrop={handlePieceDrop}
+            selectedSlot={selectedSlot}
+            isSlotScheduled={isSlotScheduled}
+            isSlotEdge={isSlotEdge}
+            handlePieceExpand={handlePieceExpand}
+            serviceName={
+              scheduledSlots.find(
+                (slot) =>
+                  slot.day === day && hour >= slot.start && hour < slot.end
+              )?.item?.name
+            }
+            scheduledSlots={scheduledSlots}
+            setScheduledSlots={setScheduledSlots}
+            isLastInGroup={isLastInGroup}
+            puzzlePieces={props.puzzlePieces}
+          />
+        ))}
+      </div>
+    ));
+  };
+
+  return (
+    <div className="main-calendar">
+      <div className="calendar">
+        <div className="header">{renderHeader()}</div>
+        <div className="body">{renderBody()}</div>
+        <GarbageBin ref={drop} />
+      </div>
+    </div>
+  );
 };
 
 export default Calendar;

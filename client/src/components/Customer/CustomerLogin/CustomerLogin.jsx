@@ -3,6 +3,23 @@ import { useNavigate } from "react-router-dom";
 
 import "./CustomerLogin.css";
 
+/******************************************
+*
+*THIS PAGE IS OBSOLETE, IT HAS BEEN INCORPORATED INTO: navbar modal for log in code has been copied to Login.jsx
+*
+*
+*
+*
+*DO NOT UPDATE THIS PAGE AS IT IS UNOBTAINABLE
+*
+*
+*
+*
+*
+*********************************/
+
+
+
 const CustomerLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

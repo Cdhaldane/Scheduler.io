@@ -1,10 +1,32 @@
 /* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/Navbar/Navbar.css */
 
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 2000ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
 .navbar {
   background-color: #333;
   color: #fff;
   width: calc(100% - 300px);
   margin-left: 300px;
+  z-index: 1;
+}
+
+.admin-navbar {
+  display: flex;
+}
+
+.loggedin-navbar {
+  display: flex;
 }
 
 .navbar-content {

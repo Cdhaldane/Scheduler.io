@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./CustomerRegister.css";
 
-const CustomerRegister = () => {
+const CustomerRegister = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verifiedPassword, setVerifiedPassword] = useState("");
@@ -93,6 +93,8 @@ const CustomerRegister = () => {
     navigate("/customer-register-submitPage", {
       state: { email, password, name, phoneNumber, homeAddress },
     });
+
+    onClose();
   };
 
   return (

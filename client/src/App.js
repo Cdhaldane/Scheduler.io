@@ -15,7 +15,7 @@ import Login from "./Components/Login/Login";
 import ACMain from "./Views/AccountCreation/ACMain";
 import BookingPage from "./Components/BookingPage/BookingPage";
 import GuestBookingPage from "./Components/GuestBookingPage/GuestBookingPage";
-import SuccessfullyBookingPage from "./Components/SuccessfullyBookingPage/SuccessfullyBookingPage";
+import SuccessfullyBookingPage from "./Components/Guest/SuccessfullyBookingPage/SuccessfullyBookingPage";
 import CustomerLogin from "./Components/Customer/CustomerLogin/CustomerLogin";
 import CustomerRegister from "./Components/Customer/CustomerRegister/CustomerRegister";
 import CustomerBookingPage from "./Components/Customer/CustomerLoginBooking/CustomerBookingPage";

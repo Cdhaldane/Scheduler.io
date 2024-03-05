@@ -1,3 +1,14 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 300px);
+  height: calc(100%);
+  margin-left: 300px;
+  border-radius: 10px 0px 0px 10px;
+  animation: slideInTop 0.5s ease-in-out normal forwards;
+  background-color: var(--grey);
+}
+
 .center {
   display: flex;
   justify-content: center;

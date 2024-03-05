@@ -4,7 +4,7 @@
   --olive: #38423b;
   --blue: #3f5e5a;
   --ash: #9dc0bc;
-  --white: #f7f7f7;
+  --white: #d8d8d8;
   --success: #28a745;
   --info: #17a2b8;
   --warning: #ffc107;
@@ -12,6 +12,7 @@
   --font-main: "Archivo Narrow", sans-serif;
   --font-secondary: "Julius Sans One", sans-serif;
   --sidebar-width: 300px;
+  --nav-padding: 40px;
 }
 
 body {
@@ -31,16 +32,6 @@ body {
 .app {
   min-height: 100vh;
   min-width: 100vh;
-}
-
-.main {
-  display: flex;
-  width: calc(100% - 300px);
-  height: calc(100%);
-  margin-left: 300px;
-  border-radius: 10px 0px 0px 10px;
-  animation: slideInTop 0.5s ease-in-out normal forwards;
-  background-color: var(--grey);
 }
 
 .row {

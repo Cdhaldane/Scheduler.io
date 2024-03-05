@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useDrop, useDrag } from "react-dnd";
+import ScheduleForm from "../Schedule-form/Schedule-form";
 import PuzzleContainer from "../Puzzle/PuzzleContainer";
 import ContextMenu from "./ConntextMenu/ContextMenu";
+
+import { type } from "@testing-library/user-event";
+import "./Cell.css";
 
 const ResizeIndicator = ({ direction, onResize, name }) => {
   const [, drag] = useDrag({
@@ -17,6 +21,10 @@ const ResizeIndicator = ({ direction, onResize, name }) => {
   return <div ref={drag} className={`expand-indicator ${direction}`}></div>;
 };
 
+// const onDropService = (item, day, hour) => {
+//   console.log("Dropped service", item, day, hour);
+// }
+
 const Cell = ({
   day,
   hour,
@@ -26,28 +34,53 @@ const Cell = ({
   handlePieceExpand,
   selectedSlot,
   setSelectedSlot,
-  isSlotScheduled,
   isSlotEdge,
   serviceName,
   scheduledSlots,
+  setScheduledSlots,
   isLastInGroup,
   handleScheduledSlotDelete,
   puzzlePieces,
+  onDropService,
 }) => {
-  const [{ isOver, canDrop }, drop] = useDrop({
-    accept: ["service", "resize"],
-    drop: (item, monitor) => {
-      if (item.type === "resize") {
-        console.log(item);
-        handlePieceExpand(day, hour, item);
-      } else if (canDrop) {
-        handlePieceDrop(day, hour, item);
+  const SERVICE = "service";
+
+  const matchingSlot = scheduledSlots.find((slot) => {
+    const slotStart = new Date(slot.start);
+    return (
+      slotStart.getHours() === hour &&
+      slotStart.toDateString() === day.toDateString()
+    );
+  });
+
+  const ref = useRef(null);
+  // const [{isDragging}, drag] = useDrag({
+  //   type: SERVICE,
+  //   item: {type: SERVICE, day, hour, ...matchingSlot ?.item},
+  //   canDrag: !!matchingSlot,
+  //   collect: (monitor) => ({
+  //     isDragging: !!monitor.isDragging(),
+  //   }),
+  //   end:(item, monitor) => {
+  //     const dropResult = monitor.getDropResult();
+  //     if(!dropResult){
+  //       setScheduledSlots((prev) => prev.filter(slot => slot.id !== item.id));
+  //     }
+  //   }
+  // });
+  const [{ isDragging }, drag] = useDrag({
+    type: SERVICE,
+    item: matchingSlot ? { type: SERVICE, id: matchingSlot.id } : undefined,
+    canDrag: !!matchingSlot,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult();
+      if (!dropResult) {
+        setScheduledSlots((prev) => prev.filter((slot) => slot.id !== item.id));
       }
     },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
   });
 
   const [contextMenu, setContextMenu] = useState({
@@ -95,6 +128,57 @@ const Cell = ({
     { label: "Copy", onClick: () => console.log("Option 2 clicked") },
     // Add more options as needed
   ];
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: SERVICE,
+    drop: (item, monitor) => {
+      if (onDropService) {
+        onDropService(item, monitor, day, hour);
+      }
+      handlePieceDrop(day, hour, item);
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop(),
+    }),
+  });
+
+  const isSlotScheduled = useCallback(
+    (day, hour) => {
+      return scheduledSlots.some((slot) => {
+        const slotStart = new Date(slot.start);
+        const slotEnd = new Date(slot.end);
+        return (
+          slotStart.getHours() === hour &&
+          slotStart.toDateString() === day.toDateString()
+        );
+      });
+    },
+    [scheduledSlots]
+  );
+
+  const isScheduled = useCallback(
+    (day, hour) => {
+      return scheduledSlots.some((slot) => {
+        const slotStart = new Date(slot.start);
+        return (
+          slotStart.getHours() === hour &&
+          slotStart.toDateString() === day.toDateString()
+        );
+      });
+    },
+    [scheduledSlots]
+  );
+
+  let cellClass = "cell";
+  if (isScheduled) {
+    cellClass += " scheduled";
+  }
+  if (selectedSlot && selectedSlot.day === day && selectedSlot.hour === hour) {
+    cellClass += " selected";
+  }
+  if (isOver && canDrop) {
+    cellClass += " over";
+  }
 
   const handleSelectedSlot = () => {
     return selectedSlot?.hour === hour;
@@ -116,7 +200,6 @@ const Cell = ({
   const lastInGroup = isLastInGroup(day, hour);
 
   const handleResize = (direction, dropResult) => {
-    // Implement the logic to adjust the cell's size or duration based on the resize direction
     console.log(`Resizing ${direction} at ${day} ${hour}`);
   };
 
@@ -134,9 +217,13 @@ const Cell = ({
 
     handleSlotClick(day, hour);
   };
+
   const color = puzzlePieces?.find(
     (piece) => piece?.name === serviceName
   )?.color;
+
+  // const ref = useRef(null);
+  drag(drop(ref));
   return (
     <div
       ref={drop}
@@ -155,6 +242,7 @@ const Cell = ({
         handleContextMenu(e, day, hour);
       }}
     >
+      {/* <div ref={ref} className={cellClass} onClick={(e) => handleCellClick(day, hour, e)}> */}
       {groupSelect && isSlotEdge(day, hour, serviceName) && (
         <div className="group-select">
           <ResizeIndicator
@@ -162,6 +250,39 @@ const Cell = ({
             onResize={handleResize}
             name={serviceName}
           />
+        </div>
+      )}
+
+      {/*Scheduled slots */}
+      {isScheduled(day, hour) && (
+        <div className="scheduled-slot">
+          {scheduledSlots
+            .filter((slot) => {
+              const slotDay = new Date(slot.day).toDateString();
+              const slotHour = new Date(slot.start).getHours();
+              return slotDay === day.toDateString() && slotHour === hour;
+            })
+            .map((slot, index) => (
+              <div key={index} className="scheduled-service-info">
+                <div className="service-name">{slot.item.serviceName}</div>
+                <div className="person-name">{slot.item.personName}</div>
+                <div className="appointment-type">
+                  {slot.item.appointmentType}
+                </div>
+                <div className="duration">{`Duration: ${
+                  slot.item.duration || "N/A"
+                } hours`}</div>
+                <div className="price">{`Price: $${slot.item.price}`}</div>
+                <div className="start-time">{`Start: ${new Date(
+                  slot.start
+                ).toLocaleTimeString()}`}</div>
+                <div className="end-time">{`End: ${new Date(
+                  slot.end
+                ).toLocaleTimeString()}`}</div>
+              </div>
+            ))}
+          {lastInGroup ? `${hour + 1}:00 ` : `${hour}:00 `}
+          {serviceName}
         </div>
       )}
       {isSelected && isSlotScheduled(day, hour) ? (

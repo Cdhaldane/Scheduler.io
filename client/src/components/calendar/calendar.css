@@ -2,88 +2,82 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 95%;
+  width: 70%;
+  margin: 0 2%;
   color: var(--green);
-  padding: 20px 0px;
-  border-radius: 10px 0px 0px 10px;
+  border-radius: 10px 0 0 10px;
   background-color: var(--grey);
 }
 
 .calendar {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  border-radius: 10px;
-  width: 100%;
+  width: 95%;
   min-width: fit-content;
-}
-
-.header {
-  display: flex;
-  width: 100%;
-}
-
-.header-cell {
-  border-top: var(--green);
-}
-
-.header-cell,
-.cell {
-  width: 12%;
-  height: 30px;
-  border: 1px solid var(--blue);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--green);
-  background-color: var(--grey);
-  transition: all 0.1s ease-in-out;
-}
-
-.empty {
-  border: none !important;
-  width: 8%;
-  height: 30px;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .body {
-  width: 100%;
+  width: 100%; /* Adjusted to fill the parent container */
 }
 
 .body .row {
   display: flex;
-  position: relative;
+  width: 100%; /* Ensure rows fill the container */
 }
 
 .cell {
-  position: relative;
-  cursor: pointer;
-  background-color: var(--grey);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Adjusted for 7 days + 1 hour column */
+  height: 30px;
+  border: 1px solid var(--blue);
+  color: var(--green);
+  transition: all 0.1s ease-in-out;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(
+    100% + 2 * var(--nav-padding)
+  ); /* Adjusted for the navigation buttons */
+}
+
+.header-cell {
+  width: calc((100%)); /* Adjusted for the navigation buttons */
+  text-align: center; /* Center the text */
+}
+
+.empty {
+  width: 50%; /* Adjusted for 7 days + 1 hour column */
+  border: none;
+  color: var(--ash);
 }
 
 .cell.hours {
-  color: #999;
-  background-color: transparent;
-  border: none;
-  width: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Align hour text to the right */
+  width: 50%;
+  text-align: center; /* Align hour text to the right */
 }
 
 .cell.scheduled {
-  background-color: inherit;
-  color: var(--white);
-  border: 1px solid inherit;
+  background-color: var(
+    --light-grey
+  ); /* Use a lighter shade for scheduled cells */
+  color: var(--dark-grey); /* Dark text for contrast */
 }
 
-.cell.selected {
-  background-color: var(--green) !important;
-  border: 1px solid var(--green) !important;
-}
-
+.cell.selected,
 .cell.group-selected {
-  background-color: var(--green) !important ;
-  border: 1px solid var(--green) !important;
+  background-color: var(--green);
+  border-color: var(--green);
 }
 
 .cell.over {
@@ -95,43 +89,54 @@
 }
 
 .expand-indicator {
-  position: absolute;
-  left: 44%;
-  z-index: 1;
-  cursor: -webkit-grab;
-  animation: pulse 1s infinite;
+  left: 50%; /* Center the indicator */
+  transform: translateX(-50%); /* Adjust positioning to truly center */
+}
+
+.expand-indicator.top,
+.expand-indicator.bottom {
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
 }
 
 .expand-indicator.top {
-  top: -15px; /* Adjust based on the cell's border and desired appearance */
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
   border-bottom: 10px solid var(--green);
 }
 
 .expand-indicator.bottom {
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-
   border-top: 10px solid var(--green);
-  bottom: -15px; /* Adjust based on the cell's border and desired appearance */
 }
 
 .scheduled-slot {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-  pointer-events: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.navigation-button {
+  width: var(--nav-padding) !important;
+  height: 30px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--white);
+  padding: 10px 20px;
+}
+
+.navigation-button.nb-right {
+  float: right;
+}
+
+.navigation-button.nb-left {
+  float: left;
 }
 
 @keyframes pulse {
-  0% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
     transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
   }
 }

@@ -35,7 +35,7 @@ const GuestBookingPage = () => {
   const handleSubmit = () => {
     let formIsValid = true;
     const newErrorMessages = [];
-    const phoneNumberPattern = /^\d{9}$/; // Regular expression for exactly 9 digits
+    const phoneNumberPattern = /^\d{10}$/; // Regular expression for exactly 10 digits
   
     if(!name.trim()) {
       newErrorMessages.push("Name cannot be empty.");
@@ -45,7 +45,7 @@ const GuestBookingPage = () => {
       newErrorMessages.push("Phone number cannot be empty.");
       formIsValid = false;
     }else if (!phoneNumberPattern.test(phoneNumber)) {
-      newErrorMessages.push("Phone number must be exactly 9 digits.");
+      newErrorMessages.push("Phone number must be exactly 10 digits.");
       formIsValid = false;
     } 
     
@@ -70,13 +70,13 @@ const GuestBookingPage = () => {
     <div className="guestbooking-container">
       <div className="guest-booking">
       <div>
-        <h1>Guest Booking</h1>
+        <h4>Guest Booking</h4>
       </div>
       <div className="info-display">
         This is the place to display service from booking page. 
       </div>
       <div className="guest-booking">
-        <h2>Enter your email and password to book an appointment</h2>
+        <h5>Enter your email and password to book an appointment</h5>
         <input
           type="text"
           placeholder="Name"
@@ -91,8 +91,8 @@ const GuestBookingPage = () => {
           placeholder="Phone Number"
           value={phoneNumber}
           onChange={handlePhoneNumberChange}
-          pattern="\d{9}"
-          title="Phone number must be exactly 9 digits."
+          pattern="\d{10}"
+          title="Phone number must be exactly 10 digits."
         />
 
         <input
@@ -100,8 +100,8 @@ const GuestBookingPage = () => {
           placeholder="Confirm Phone Number"
           value={confirmPhoneNumber}
           onChange={handleConfirmPhoneNumberChange}
-          pattern="\d{9}"
-          title="Phone number must be exactly 9 digits."
+          pattern="\d{10}"
+          title="Phone number must be exactly 10 digits."
         />
         {errorMessages.length >0 &&(
           <div className="error-messages">
@@ -111,7 +111,7 @@ const GuestBookingPage = () => {
           </div>
         )}
         <div className="additional-comments">
-          <h2>Additional Comments</h2>
+          <h5>Additional Comments</h5>
           <textarea rows="4" cols="50" placeholder="Enter any additional comments here"></textarea>
         </div>
       </div>

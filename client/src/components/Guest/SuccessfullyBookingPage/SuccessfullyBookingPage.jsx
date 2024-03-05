@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useLocation} from "react-router-dom";
-import {useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./SuccessfullyBookingPage.css";
 
@@ -16,13 +16,18 @@ const SuccessfullyBookingPage = () => {
           <h1>Successfully Booking</h1>
         </div>
         <div className="info-display">
-          This is the place to display service from booking page. 
+          This is the place to display service from booking page.
         </div>
         <div>
-          <p>Thank you for booking, {name}! We will contact you at {phoneNumber} to confirm your appointment.</p>
+          <p>
+            Thank you for booking, {name}! We will contact you at {phoneNumber}{" "}
+            to confirm your appointment.
+          </p>
         </div>
         <div className="back-to-home">
-          <button onClick={() => navigate('/')} className="button">Back to Home</button>
+          <button onClick={() => navigate("/")} className="button">
+            Back to Home
+          </button>
         </div>
       </div>
     </div>
