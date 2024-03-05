@@ -26,7 +26,13 @@ const Alert = () => {
   return (
     <div className={`alert ${alertClass}`}>
       <i className="fas fa-exclamation-circle"></i>
-      {alert.message}
+      <div className="alert-body">
+        {Array.isArray(alert.message) ? (
+          alert.message.map((message, index) => <p key={index}>{message}</p>)
+        ) : (
+          <p>{alert.message}</p>
+        )}
+      </div>
     </div>
   );
 };

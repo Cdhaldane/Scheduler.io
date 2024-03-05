@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAlert } from "../../Alert/AlertProvider";
 import { useNavigate } from "react-router-dom";
 
 import "./CustomerRegister.css";
@@ -11,6 +12,7 @@ const CustomerRegister = ({ onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [errorMessages, setErrorMessage] = useState([]);
   const [homeAddress, setHomeAddress] = useState("");
+  const alert = useAlert();
   const navigate = useNavigate();
 
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
@@ -20,9 +22,6 @@ const CustomerRegister = ({ onClose }) => {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setErrorMessage((preErrorMessages) =>
-      preErrorMessages.filter((message) => message !== "Invalid email format.")
-    );
   };
 
   const handlePasswordChange = (e) => {
@@ -40,19 +39,6 @@ const CustomerRegister = ({ onClose }) => {
   const handlePhoneNumberChange = (e) => {
     const newPhoneNumber = e.target.value;
     setPhoneNumber(newPhoneNumber);
-    setErrorMessage((preErrorMessages) =>
-      preErrorMessages.filter(
-        (message) => message !== "Phone number cannot be empty."
-      )
-    );
-
-    if (/^\d{10}$/.test(newPhoneNumber)) {
-      setErrorMessage((prevErrorMessages) =>
-        prevErrorMessages.filter(
-          (message) => !message.includes("Phone number must be 10 digits.")
-        )
-      );
-    }
   };
 
   const handleHomeAddressChange = (e) => {
@@ -80,7 +66,8 @@ const CustomerRegister = ({ onClose }) => {
     }
 
     if (newErrorMessages.length > 0) {
-      setErrorMessage(newErrorMessages);
+      console.log("Error messages", newErrorMessages);
+      alert.showAlert("error", newErrorMessages);
       return;
     }
     console.log("Registering in...", {
@@ -98,7 +85,7 @@ const CustomerRegister = ({ onClose }) => {
   };
 
   return (
-    <div className="customer-register-container app">
+    <div className="customer-register-container">
       <h2>Register</h2>
       <div>
         <h3>Please enter your account information:</h3>
@@ -139,11 +126,7 @@ const CustomerRegister = ({ onClose }) => {
         value={homeAddress}
         onChange={handleHomeAddressChange}
       />
-      <div className="error-messages">
-        {errorMessages.map((message, index) => (
-          <p key={index}>{message}</p>
-        ))}
-      </div>
+
       <span>
         <button className="button" onClick={handleRegister}>
           Register

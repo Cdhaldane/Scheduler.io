@@ -1,179 +1,112 @@
 import React, { useState } from "react";
-import LoginForm from "../Login/Login.jsx";
-import BookingPage from "../Customer/CustomerLoginBooking/CustomerBookingPage.jsx";
-import RegisterAccount from "../Customer/CustomerRegister/CustomerRegister.jsx";
 import { useNavigate } from "react-router-dom";
-import "./Navbar.css"; // Import the CSS file
-import GuestBookingPage from "../Guest/GuestBookingPage/GuestBookingPage.jsx";
+import LoginForm from "../Login/Login";
+import RegisterAccount from "../Customer/CustomerRegister/CustomerRegister.jsx";
+import Modal from "../Modal/Modal";
+import "./Navbar.css"; // Import the CSS file for styling
 
-const AdminNavbar = ({ isAdmin }) => {
+const NavbarItem = ({ icon, route, action }) => {
   const navigate = useNavigate();
-
-  {
-    /* if the user is an Admin only show them these icons on the navbar*/
-  }
+  const onClick = action ? action : () => navigate(route);
   return (
-    <div>
-      {isAdmin && (
-        <div className="admin-navbar">
-          <li>
-            {/* Info */}
-            <a onClick={() => navigate("/admin")}>
-              <i className="fa-solid fa-clipboard"></i>
-            </a>
-          </li>
-
-          <li>
-            {/* Contact */}
-            <a onClick={() => navigate("/admin")}>
-              <i className="fa-solid fa-plus"></i>
-            </a>
-          </li>
-          <li>
-            {/* Sign-in */}
-            <a onClick={() => navigate("login")}>
-              <i className="fa-regular fa-user"></i>
-            </a>
-          </li>
-        </div>
-      )}
-    </div>
+    <li onClick={onClick} className="navbar-item">
+      <i className={icon}></i>
+    </li>
   );
 };
 
-{
-  /* if the user is logged in as a customer ONLY, show them these icons on the navbar*/
-}
-const LoggedInNavbar = ({ isLoggedIn }) => {
-  const navigate = useNavigate();
-
-  {
-    /*Dashboard page*/
-  }
-  return (
-    <div>
-      {isLoggedIn && (
-        <div className="loggedin-navbar">
-          <li>
-            {/* Contact */}
-            <a onClick={() => navigate("customer-commentpage")}>
-              <i className="fa-solid fa-message"></i>
-            </a>
-          </li>
-          <li>
-            {/* Sign-in */}
-            <a onClick={() => navigate("customer-landingpage")}>
-              <i className="fa-solid fa-user"></i>
-            </a>
-          </li>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const Navbar = ({ isAdmin }) => {
-  const navigate = useNavigate();
+const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn }) => {
   const [showModal, setShowModal] = useState(false);
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  const [showLogin, setShowLogin] = useState(true);
-  const [showLoginForm, setShowLoginForm] = useState(true);
-  const [showRegister, setShowRegister] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
+  const navigate = useNavigate();
 
   const handleLoginSuccess = () => {
-    setLoggedIn(true);
     setShowModal(false);
-    setShowLogin(false);
-  };
-  const handleModalClose = () => {
-    setShowModal(false);
+    setIsLoggedIn(true);
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-content">
         <div className="navbar-header">
-          <img src={"./logo.png"} alt="website logo" />
-          {/*Click on the image and navigate to the admin side of the pages*/}
-          <h1 onClick={() => navigate("./admin")}>Time Slot</h1>
+          <img
+            src="./logo.png"
+            alt="website logo"
+            className="navbar-logo"
+            onClick={() => navigate("/admin")}
+          />
+          <h1>Time Slot</h1>
         </div>
         <ul>
-          <li>
-            {/*Open the log in Modal, Dissapear when logged in*/}
-            {showLogin && (
-              <a href="#" onClick={() => setShowModal(true)}>
-                <i className="fa-solid fa-arrow-right-to-bracket"></i>
-              </a>
-            )}
-          </li>
-          {/*Conditionally render items based on booleans from AdminNavbar and isLoggedIn navbar */}
-          <AdminNavbar isAdmin={isAdmin} />
-          <LoggedInNavbar isLoggedIn={isLoggedIn} />
+          {!isLoggedIn && !isAdmin && (
+            <NavbarItem
+              icon="fa-solid fa-arrow-right-to-bracket"
+              route="#"
+              action={() => setShowModal(true)}
+            />
+          )}
+          {isAdmin && (
+            <>
+              <NavbarItem
+                icon="fa-solid fa-clipboard"
+                route="/admin/dashboard"
+              />
+              <NavbarItem icon="fa-solid fa-plus" route="/admin/add" />
+              <NavbarItem icon="fa-regular fa-user" route="/admin/profile" />
+            </>
+          )}
+          {isLoggedIn && !isAdmin && (
+            <>
+              <NavbarItem
+                icon="fa-solid fa-message"
+                action={() => setIsOpen(true)}
+              />
+              <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
+            </>
+          )}
         </ul>
-
-        {/*Log in pop up page (modal)*/}
-        <div
-          className="modal fade top-centered"
-          id="exampleModal"
-          tabIndex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-          style={{ display: showModal ? "block" : "none" }}
-        >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <button
-                type="button"
-                className="close"
-                onClick={() => setShowModal(false)}
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <div
-                className="modal-body"
-                style={{ maxHeight: "80vh", overflowY: "auto" }}
-              >
-                {/* Render dynamic content based on modalContent */}
-                {(showRegister && (
-                  <RegisterAccount onClose={handleModalClose} />
-                )) ||
-                  (showLoginForm && (
-                    <LoginForm
-                      onLoginSuccess={handleLoginSuccess}
-                      onClose={handleModalClose}
-                    />
-                  ))}
-              </div>
-              <div className="modal-footer">
-                {/* Additional modal footer content if needed */}
-                {showRegister ? (
-                  <>
-                    <button
-                      onClick={() => {
-                        setShowRegister(false);
-                        setShowLoginForm(true);
-                      }}
-                    >
-                      Back to Login
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => {
-                      setShowRegister(true);
-                      setShowLoginForm(false);
-                    }}
-                  >
-                    Want to create an account?
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        {/*End Modal*/}
       </div>
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+        <>
+          <div className="modal-body">
+            {isRegistering ? (
+              <RegisterAccount onClose={() => setShowModal(false)} />
+            ) : (
+              <LoginForm onLoginSuccess={handleLoginSuccess} />
+            )}
+          </div>
+          <div className="modal-footer">
+            {isRegistering ? (
+              <button onClick={() => setIsRegistering(false)}>
+                Back to Login
+              </button>
+            ) : (
+              <button onClick={() => setIsRegistering(true)}>
+                Want to create an account?
+              </button>
+            )}
+          </div>
+        </>
+      </Modal>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <div className="message-modal">
+          <h1>Contact</h1>
+          <form>
+            <label htmlFor="name">Name:</label>
+            <input type="text" id="name" required />
+            <label htmlFor="email">Email:</label>
+            <input type="email" id="email" required />
+            <label htmlFor="message">Message:</label>
+            <textarea id="message" required />
+            <button type="submit">Send</button>
+          </form>
+          <p>
+            If you have any questions or concerns, please contact us at{" "}
+            <a>timeslot@gmail.com</a>
+          </p>
+        </div>
+      </Modal>
     </nav>
   );
 };

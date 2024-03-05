@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "../Alert/AlertProvider";
 
 import "./Login.css";
 
@@ -13,11 +14,12 @@ const Login = ({ onLoginSuccess, onClose }) => {
   const [phoneNumberError, setPhoneNumberError] = useState("");
   const [isLoggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const alert = useAlert();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    if (emailError) {
-      setEmailError("");
+    if (!validateEmail(e.target.value)) {
+      setEmailError(true);
     }
   };
 
@@ -38,8 +40,8 @@ const Login = ({ onLoginSuccess, onClose }) => {
 
   const handlePhoneNumberChange = (e) => {
     setPhoneNumber(e.target.value);
-    if (phoneNumberError) {
-      setPhoneNumberError("");
+    if (!/^\d{10}$/.test(e.target.value)) {
+      setPhoneNumberError(true);
     }
   };
 
@@ -49,34 +51,19 @@ const Login = ({ onLoginSuccess, onClose }) => {
     navigate("/admin");
     sessionStorage.setItem("isAdmin", "true");
 
-    setEmailError("");
-    setPasswordError("");
-    setPhoneNumberError("");
+    let errors = [];
 
-    if (!validateEmail(email)) {
-      setEmailError("Invalid email address.");
+    if (!validateEmail(email)) errors.push("Invalid email.");
+
+    if (!password) errors.push("Password is required.");
+
+    // if (!/^\d{10}$/.test(phoneNumber)) errors.push("Invalid phone number.");
+
+    if (errors.length > 0) {
+      alert.showAlert("error", errors);
       return;
     }
-
-    if (!password) {
-      setPasswordError("Password is required.");
-      return;
-    }
-
-    if (!/^\d{10}$/.test(phoneNumber)) {
-      setPhoneNumberError("Phone number must be exactly 10 digits.");
-      return;
-    }
-
-    console.log("Logging in...", {
-      email,
-      password,
-      phoneNumber,
-      stayLoggedIn,
-      isLoggedIn,
-    });
     onLoginSuccess();
-    onClose();
   };
 
   return (
@@ -89,16 +76,13 @@ const Login = ({ onLoginSuccess, onClose }) => {
         onChange={handleEmailChange}
         className={emailError ? "input-error" : ""}
       />
-      {emailError && <div className="error-message">{emailError}</div>}
-      <input
+      {/* <input
         type="tel"
         placeholder="Phone Number (10 digits)"
         onChange={handlePhoneNumberChange}
         className={phoneNumberError ? "input-error" : ""}
-      />
-      {phoneNumberError && (
-        <div className="error-message">{phoneNumberError}</div>
-      )}
+      /> */}
+
       <input
         type="password"
         placeholder="Password"
@@ -106,7 +90,6 @@ const Login = ({ onLoginSuccess, onClose }) => {
         onChange={handlePasswordChange}
         className={passwordError ? "input-error" : ""}
       />
-      {passwordError && <div className="error-message">{passwordError}</div>}
       <div className="forgot-password">
         <a href="/forgot-password">Forgot password?</a>
       </div>

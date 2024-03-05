@@ -24,8 +24,11 @@ import CustomerRegisterSubmitPage from "./Components/Customer/CustomerRegisterSu
 import AlertProvider from "./Components/Alert/AlertProvider";
 import Alert from "./Components/Alert/Alert";
 import Info from "./Views/Info";
+import DevTools from "./Components/DevTools/DevTools";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
   const location = useLocation() || "";
 
   const shouldRenderNavbarAndFooter = location.pathname !== "/create-account";
@@ -33,8 +36,15 @@ function App() {
   return (
     <AlertProvider>
       <Alert />
+      <DevTools />
       <div className="app">
-        {shouldRenderNavbarAndFooter && <Navbar />}
+        {shouldRenderNavbarAndFooter && (
+          <Navbar
+            isLoggedIn={isLoggedIn}
+            isAdmin={isAdmin}
+            setIsLoggedIn={(e) => setIsLoggedIn(e)}
+          />
+        )}
         <div className="app-main">
           <Routes>
             <Route path="/" element={<Home />} />

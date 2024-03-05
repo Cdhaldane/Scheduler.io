@@ -20,12 +20,12 @@
 }
 
 .body {
-  width: 100%; /* Adjusted to fill the parent container */
+  width: 100%;
 }
 
 .body .row {
   display: flex;
-  width: 100%; /* Ensure rows fill the container */
+  position: relative;
 }
 
 .cell {
@@ -37,12 +37,16 @@
   border: 1px solid var(--blue);
   color: var(--green);
   transition: all 0.1s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  background-color: var(--grey);
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: calc(
     100% + 2 * var(--nav-padding)
   ); /* Adjusted for the navigation buttons */
@@ -51,12 +55,15 @@
 .header-cell {
   width: calc((100%)); /* Adjusted for the navigation buttons */
   text-align: center; /* Center the text */
+  border: 1px solid var(--blue);
+  padding-top: 3px;
 }
 
 .empty {
   width: 50%; /* Adjusted for 7 days + 1 hour column */
   border: none;
   color: var(--ash);
+  border: 1px solid var(--blue);
 }
 
 .cell.hours {
@@ -68,16 +75,21 @@
 }
 
 .cell.scheduled {
-  background-color: var(
-    --light-grey
-  ); /* Use a lighter shade for scheduled cells */
-  color: var(--dark-grey); /* Dark text for contrast */
+  background-color: inherit;
+  color: var(--white);
+  border: 1px solid inherit;
 }
 
-.cell.selected,
+.cell.selected {
+  background-color: var(--green) !important;
+  border: 1px solid var(--green) !important;
+  color: var(--grey);
+}
+
 .cell.group-selected {
-  background-color: var(--green);
-  border-color: var(--green);
+  background-color: var(--green) !important ;
+  border: 1px solid var(--green) !important;
+  color: var(--grey);
 }
 
 .cell.over {
@@ -89,28 +101,33 @@
 }
 
 .expand-indicator {
-  left: 50%; /* Center the indicator */
-  transform: translateX(-50%); /* Adjust positioning to truly center */
-}
-
-.expand-indicator.top,
-.expand-indicator.bottom {
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
+  position: absolute;
+  left: 44%;
+  z-index: 1;
+  cursor: -webkit-grab;
+  animation: pulse 1s infinite;
 }
 
 .expand-indicator.top {
+  top: -15px; /* Adjust based on the cell's border and desired appearance */
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
   border-bottom: 10px solid var(--green);
 }
 
 .expand-indicator.bottom {
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
   border-top: 10px solid var(--green);
+  bottom: -15px; /* Adjust based on the cell's border and desired appearance */
 }
 
 .scheduled-slot {
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  pointer-events: none;
 }
 
 .navigation-button {
@@ -129,6 +146,7 @@
 
 .navigation-button.nb-left {
   float: left;
+  translate: -20% 0;
 }
 
 @keyframes pulse {

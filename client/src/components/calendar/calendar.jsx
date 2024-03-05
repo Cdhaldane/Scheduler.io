@@ -22,15 +22,35 @@ const Calendar = (props) => {
     return start;
   };
 
-  // This will generate an array of dates representing the current week
-  const daysOfWeek = Array.from({ length: 7 }, (_, index) => {
-    const startOfWeek = getStartOfWeek(currentDate);
-    return new Date(startOfWeek.setDate(startOfWeek.getDate() + index));
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const day = new Date(currentDate);
+    day.setDate(day.getDate() + i);
+    return day;
   });
+
+  const dayNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const getDaysOfWeek = (currentDate) => {
+    const startOfWeek = getStartOfWeek(currentDate);
+    return Array.from({ length: 7 }, (_, index) => {
+      const day = new Date(startOfWeek);
+      day.setDate(day.getDate() + index);
+      return day.toISOString().split("T")[0]; // Convert Date objects to string format to avoid React error
+    });
+  };
 
   const hoursInDay = Array.from({ length: 24 }, (_, i) => i);
 
-  // Handlers for navigating weeks
+  const daysOfWeek = getDaysOfWeek(new Date()); // Pass the current date or any specific date
+
   const goToPreviousWeek = () => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
@@ -125,37 +145,31 @@ const Calendar = (props) => {
     return { start, end, itemName };
   };
 
-  const handlePieceDrop = (day, hour, item) => {
-    console.log("Received day:", day);
-
-    const startTime = new Date(day.setHours(hour, 0, 0, 0));
-    const endTime = new Date(day.setHours(hour + 1, 0, 0, 0));
+  const handlePieceDrop = (date, hour, item) => {
+    console.log("handlePieceDrop", date, hour, item);
+    const year = date.split("-")[0];
+    const month = date.split("-")[1] - 1;
+    const tempDay = date.split("-")[2];
+    const day = new Date(year, month, tempDay, parseInt(hour));
 
     const newSlot = {
       id: `${day.toISOString()}_${hour}`,
-      day: day.toISOString(),
-      start: startTime.toISOString(),
-      end: endTime.toISOString(),
+      day: day.toISOString().split("T")[0],
+      start: hour,
+      end: hour + 1,
       item: {
         type: item.type,
         id: item.id,
         service: item.service,
-        name: personalbar.name,
+        name: item.name,
         duration: item.duration,
         price: item.price,
+        color: item.color,
       },
     };
-    // if (isSlotScheduled(day, hour)){
-    //   console.log('Slot already scheduled');
-    //   return;
-    // }
 
-    if (scheduledSlots.some((slot) => slot.id === newSlot.id)) {
-      console.log("Slot already scheduled");
-      return;
-    }
     setScheduledSlots((prev) => [...prev, newSlot]);
-    setSelectedSlot(newSlot);
+    setSelectedSlot({ day: dayNames[day.getDay()], hour });
   };
 
   const groupSlotsByDay = (scheduledSlots) => {
@@ -291,27 +305,30 @@ const Calendar = (props) => {
       <div key={index} className="row">
         <div className="cell hours">{`${hour}:00`}</div>
         {daysOfWeek.map((day) => (
-          <Cell
-            key={day + hour}
-            day={day}
-            hour={hour}
-            handleSlotClick={handleSlotClick}
-            handlePieceDrop={handlePieceDrop}
-            selectedSlot={selectedSlot}
-            isSlotScheduled={isSlotScheduled}
-            isSlotEdge={isSlotEdge}
-            handlePieceExpand={handlePieceExpand}
-            serviceName={
-              scheduledSlots.find(
-                (slot) =>
-                  slot.day === day && hour >= slot.start && hour < slot.end
-              )?.item?.name
-            }
-            scheduledSlots={scheduledSlots}
-            setScheduledSlots={setScheduledSlots}
-            isLastInGroup={isLastInGroup}
-            puzzlePieces={props.puzzlePieces}
-          />
+          <>
+            <Cell
+              key={day + hour}
+              day={day}
+              hour={hour}
+              handleSlotClick={handleSlotClick}
+              handleScheduledSlotDelete={handleScheduledSlotDelete}
+              handlePieceDrop={handlePieceDrop}
+              selectedSlot={selectedSlot}
+              setSelectedSlot={setSelectedSlot}
+              isSlotScheduled={isSlotScheduled}
+              isSlotEdge={isSlotEdge}
+              handlePieceExpand={handlePieceExpand}
+              serviceName={
+                scheduledSlots.find(
+                  (slot) =>
+                    slot.day === day && hour >= slot.start && hour < slot.end
+                )?.item?.name
+              }
+              scheduledSlots={scheduledSlots}
+              isLastInGroup={isLastInGroup}
+              puzzlePieces={props.puzzlePieces}
+            />
+          </>
         ))}
       </div>
     ));

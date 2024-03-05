@@ -1,7 +1,6 @@
 .alert {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   position: absolute;
   right: 20px;
   top: 0px;
@@ -11,6 +10,15 @@
   z-index: 1000;
 }
 
+.alert-body {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.alert p {
+  margin: 0;
+}
 .alert i {
   font-size: 1em;
   cursor: pointer;

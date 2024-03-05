@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useDrop } from 'react-dnd';
-import './GarbageBin.css';
+import React, { useState } from "react";
+import { useDrop } from "react-dnd";
+import "./GarbageBin.css";
 
 const ItemType = {
-  APPOINTMENT: 'appointment',
+  APPOINTMENT: "appointment",
 };
 
 // This is your GarbageBin component
@@ -15,11 +15,14 @@ const GarbageBin = ({ onDrop }) => {
     },
   });
 
+  const isEditMode = window.location.pathname.includes("admin") ? true : false;
+
+  if (!isEditMode) return null;
   return (
     <div className="garbage-bin-container">
-        <div ref={dropRef} className="garbage-bin">
+      <div ref={dropRef} className="garbage-bin">
         Drag appointments here to cancel
-        </div>
+      </div>
     </div>
   );
 };
