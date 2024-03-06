@@ -8,13 +8,6 @@
   overflow-x: hidden !important;
 }
 
-.dev-tools div pre {
-  width: 100% !important;
-  overflow-y: scroll !important;
-  overflow-x: hidden !important;
-  word-wrap: break-word;
-}
-
 .dev-tools.collapsed {
   max-height: 30px;
   overflow: hidden;
@@ -55,4 +48,16 @@
 .dev-tools button:hover {
   background: #444;
   scale: none;
+}
+
+.dev-tools-pretty {
+  display: flex;
+  margin-left: 50px;
+  white-space: none;
+}
+
+.dev-tools-pretty pre {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }

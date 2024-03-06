@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../Login/Login";
 import RegisterAccount from "../Customer/CustomerRegister/CustomerRegister.jsx";
 import Modal from "../Modal/Modal";
+import Dropdown from "../Dropdown/Dropdown.jsx";
 import "./Navbar.css"; // Import the CSS file for styling
 
 const NavbarItem = ({ icon, route, action }) => {
@@ -15,16 +16,39 @@ const NavbarItem = ({ icon, route, action }) => {
   );
 };
 
-const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn }) => {
+const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+
+  const ProfilePic = () => {
+    return (
+      <li className="navbar-item">
+        <img
+          src={session.user.user_metadata.avatar_url}
+          alt="profile"
+          className="profile-pic"
+        />
+      </li>
+    );
+  };
+
   const navigate = useNavigate();
 
   const handleLoginSuccess = () => {
     setShowModal(false);
     setIsLoggedIn(true);
   };
+
+  const handleDropdownClick = (e) => {};
+
+  useEffect(() => {
+    console.log("Session:", session);
+    if (session) {
+      setIsLoggedIn(true);
+      setShowModal(false);
+    }
+  }, [session]);
 
   return (
     <nav className="navbar">
@@ -63,6 +87,13 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn }) => {
                 action={() => setIsOpen(true)}
               />
               <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
+              <Dropdown
+                children={<ProfilePic />}
+                label={session.user.user_metadata.name}
+                options={["Signout"]}
+                onClick={(e) => handleDropdownClick(e)}
+                direction="left"
+              />
             </>
           )}
         </ul>
@@ -76,7 +107,7 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn }) => {
               <LoginForm onLoginSuccess={handleLoginSuccess} />
             )}
           </div>
-          <div className="modal-footer">
+          {/* <div className="modal-footer">
             {isRegistering ? (
               <button onClick={() => setIsRegistering(false)}>
                 Back to Login
@@ -86,7 +117,7 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn }) => {
                 Want to create an account?
               </button>
             )}
-          </div>
+          </div> */}
         </>
       </Modal>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>

@@ -1,31 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
-import data from "../../personnelData.json";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
 
 import "./Schedule-form.css";
 
-const ScheduleForm = (props) => {
-  const [personID, setPersonID] = useState(props.personID);
-  const [person, setPerson] = useState(data.personnel[personID]);
-  const [day, setDay] = useState(props.selectedSlot.day);
-  const [start, setStart] = useState(props.selectedSlot.hour);
+const ScheduleForm = ({ personID, selectedSlot, personnel }) => {
+  const [person, setPerson] = useState(personnel[personID]);
+  const [day, setDay] = useState(selectedSlot.day);
+  const [start, setStart] = useState(selectedSlot.hour);
   const navigate = useNavigate();
-  const [selectedSlot, setSelectedSlot] = useState(props.selectedSlot);
-  const [selectedService, setSelectedService] = useState(props.selectedService);
+  const [selectedService, setSelectedService] = useState();
+  const [typing, setTyping] = useState(false);
 
   useEffect(() => {
-    if (props.personID !== null) {
-      setPerson(data.personnel[props.personID]);
-      setDay(props.selectedSlot.day);
-      setStart(props.selectedSlot.hour);
+    if (personID !== null) {
+      setPerson(personnel[personID]);
+      setDay(selectedSlot.day);
+      setStart(selectedSlot.hour);
     }
-  }, [props]);
+  }, [personID, personnel, selectedSlot]);
+
+  useEffect(() => {
+    if (person?.first_name) {
+      // Start the typing effect
+      setTyping(true);
+
+      // Wait for the animation to finish before removing the class
+      const timer = setTimeout(() => {
+        setTyping(false);
+      }, 2000); // Duration should match the CSS animation
+
+      return () => clearTimeout(timer);
+    }
+  }, [person?.first_name]);
 
   //add a handler for the service change
   const handleServiceChange = (service) => {
-    console.log(service);
     setSelectedService(service);
   };
 
@@ -42,43 +53,6 @@ const ScheduleForm = (props) => {
     }),
   });
 
-  const useScheduleGrid = (initialDay = "Monday", initialStartHour = 3) => {
-    const [day, setDay] = useState(initialDay);
-    const [startHour, setStartHour] = useState(initialStartHour);
-
-    const changeDay = (newDay) => setDay(newDay);
-    const changeStartHour = (hour) => setStartHour(hour);
-
-    const ScheduleGridComponent = () => (
-      <div className="schedule-time">
-        <ul className="schedule-labels">
-          <li>
-            <h1>Day:</h1>
-          </li>
-          <li>
-            <h1>Start:</h1>
-          </li>
-          <li>
-            <h1>End:</h1>
-          </li>
-        </ul>
-        <ul className="schedule-values">
-          <li>
-            <h2>{day}</h2>
-          </li>
-          <li>
-            <h2>{startHour}:00</h2>
-          </li>
-          <li>
-            <h2>{startHour + 2}:00</h2>
-          </li>
-        </ul>
-      </div>
-    );
-
-    return { ScheduleGridComponent, changeDay, changeStartHour };
-  };
-
   return (
     <div className="schedule-container" ref={drag}>
       <div className="body">
@@ -86,7 +60,12 @@ const ScheduleForm = (props) => {
 
         <div className="schedule-appointment">
           <div className="schedule-header">
-            PERSONEL: <h2>{person.name}</h2>
+            PERSONEL:{" "}
+            <h2
+              className={`typing-animation ${typing ? "animate-typing" : ""}`}
+            >
+              {person?.first_name} {person?.last_name}
+            </h2>
           </div>
 
           {/* <select onChange={handleServiceChange} value={selectedService}>
@@ -97,7 +76,11 @@ const ScheduleForm = (props) => {
 
           <div className="schedule-appointment-info">
             <Dropdown
-              label={selectedService || "Service"}
+              children={
+                <button className="dropdown-toggle">
+                  {selectedService || "Select Service"}
+                </button>
+              }
               options={["Haircut", "Shave", "Haircut and Shave"]}
               onClick={(service) => handleServiceChange(service)}
             />

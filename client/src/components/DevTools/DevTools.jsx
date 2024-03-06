@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./DevTools.css"; // Ensure you have the corresponding CSS
+import "./DevTools.css"; // Make sure to create a corresponding CSS file for styling
 
 const DevTools = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -22,24 +22,23 @@ const DevTools = () => {
   }, []);
 
   useEffect(() => {
-    fetchStorageData();
-  }, []);
-
-  const fetchStorageData = () => {
+    // Collect and set localStorage data
     const localData = {};
-    for (let i = 2; i < localStorage.length; i++) {
+    for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      localData[key] = localStorage.getItem(key);
+      if (key !== "debug" || key !== "WP_CRX_STORAGE_SNAPSHOT_/")
+        localData[key] = localStorage.getItem(key);
     }
     setLocalStorageData(localData);
 
+    // Collect and set sessionStorage data
     const sessionData = {};
     for (let i = 0; i < sessionStorage.length; i++) {
       const key = sessionStorage.key(i);
       sessionData[key] = sessionStorage.getItem(key);
     }
     setSessionStorageData(sessionData);
-  };
+  }, []);
 
   const clearStorage = (type) => {
     if (type === "local") {
@@ -51,17 +50,33 @@ const DevTools = () => {
     }
   };
 
-  const handleStorageUpdate = (e, key, type) => {
-    const value = e.target.value;
-    if (type === "local") {
-      localStorage.setItem(key, value);
-      setLocalStorageData({ ...localStorageData, [key]: value });
-    } else {
-      sessionStorage.setItem(key, value);
-      setSessionStorageData({ ...sessionStorageData, [key]: value });
-    }
-  };
+  const getPretty = (data) => {
+    const parseValue = (value) => {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        return value;
+      }
+    };
 
+    const parsedData = Object.entries(data).reduce((acc, [key, value]) => {
+      acc[key] = typeof value === "string" ? parseValue(value) : value;
+      return acc;
+    }, {});
+
+    return (
+      <pre>
+        {Object.entries(parsedData).map(([key, value], index) => (
+          <div key={index} className="dev-tools-pretty">
+            {key}:{" "}
+            {typeof value === "object" && value !== null
+              ? getPretty(value)
+              : JSON.stringify(value)}
+          </div>
+        ))}
+      </pre>
+    );
+  };
   return (
     <div
       className={`dev-tools ${isCollapsed ? "collapsed" : ""}`}
@@ -77,34 +92,14 @@ const DevTools = () => {
             Local Storage{" "}
             <button onClick={() => clearStorage("local")}>CLEAR</button>
           </h4>
-          <div>
-            {Object.entries(localStorageData).map(([key, value]) => (
-              <div key={key}>
-                {key}:{" "}
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => handleStorageUpdate(e, key, "local")}
-                />
-              </div>
-            ))}
-          </div>
+          {/* <pre>{JSON.stringify(localStorageData, null, 2)}</pre> */}
+          {getPretty(localStorageData)}
           <h4>
             Session Storage{" "}
             <button onClick={() => clearStorage("session")}>CLEAR</button>
           </h4>
-          <div>
-            {Object.entries(sessionStorageData).map(([key, value]) => (
-              <div key={key}>
-                {key}:{" "}
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => handleStorageUpdate(e, key, "session")}
-                />
-              </div>
-            ))}
-          </div>
+          <pre>{JSON.stringify(sessionStorageData, null, 2)}</pre>
+          {/* Add any other information you find useful for development */}
         </div>
       )}
     </div>

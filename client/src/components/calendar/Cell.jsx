@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDrop, useDrag } from "react-dnd";
 import PuzzleContainer from "../Puzzle/PuzzleContainer";
-import ContextMenu from "./ConntextMenu/ContextMenu";
+import ContextMenu from "./CalendarContextMenu/ContextMenu";
 
 const ResizeIndicator = ({ direction, onResize, name }) => {
   const [, drag] = useDrag({

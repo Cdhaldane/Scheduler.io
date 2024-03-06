@@ -89,6 +89,30 @@
   border: 2px dashed var(--ash);
 }
 
+.sidebar-add-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: var(--green);
+}
+
+.sidebar-add-form label {
+  color: var(--green);
+  font-size: 20px;
+  margin-bottom: 10px;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-add-form input {
+  margin: 10px;
+  width: 70% !important;
+}
+
 @keyframes slide-down {
   0% {
     opacity: 0;

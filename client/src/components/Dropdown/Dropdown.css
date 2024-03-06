@@ -41,6 +41,7 @@
   left: 0;
   z-index: 1;
   width: 100%;
+  min-width: max-content;
   background-color: var(--grey);
   border: 2px solid var(--info);
   border-radius: 5px;
@@ -49,6 +50,11 @@
   visibility: hidden;
   transform: translateY(-20px);
   transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  font-size: 1em;
+}
+
+.dropdown-menu.left {
+  transform: translateX(-50%);
 }
 
 .dropdown-menu-enter {
@@ -69,7 +75,7 @@
   color: var(--white);
   text-decoration: none;
   transition: background-color 0.3s ease;
-  font-size: 2em;
+  font-size: 1rem;
 }
 
 .dropdown-item:hover {

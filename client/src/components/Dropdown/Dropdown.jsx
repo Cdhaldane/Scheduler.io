@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import "./Dropdown.css";
 
-const Dropdown = ({ label, options, onClick }) => {
+const Dropdown = ({ label, options, onClick, children, direction }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -16,7 +16,6 @@ const Dropdown = ({ label, options, onClick }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [dropdownRef]);
-
   const handleClick = (option) => {
     onClick(option);
     setIsOpen(false);
@@ -24,16 +23,14 @@ const Dropdown = ({ label, options, onClick }) => {
 
   return (
     <div className="dropdown" ref={dropdownRef}>
-      <button className="dropdown-toggle" onClick={() => setIsOpen(!isOpen)}>
-        {label}
-      </button>
+      <div onClick={() => setIsOpen(!isOpen)}>{children}</div>
       <CSSTransition
         in={isOpen}
         timeout={100}
         classNames="dropdown-menu"
         unmountOnExit
       >
-        <div className="dropdown-menu">
+        <div className={"dropdown-menu " + direction}>
           {options.map((option, index) => (
             <div
               key={index}

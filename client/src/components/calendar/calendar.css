@@ -45,6 +45,10 @@
   background-color: var(--grey);
 }
 
+.cell:hover {
+  border: 1px solid var(--green);
+}
+
 .header {
   display: flex;
   width: calc(

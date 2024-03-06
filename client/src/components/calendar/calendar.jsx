@@ -11,9 +11,7 @@ const Calendar = (props) => {
   const [scheduledSlots, setScheduledSlots] = useState([]);
   const [timeRange, setTimeRange] = useState([]);
 
-  useEffect(() => {
-    console.log("Scheduled slots", scheduledSlots);
-  }, [scheduledSlots]);
+  useEffect(() => {}, [scheduledSlots]);
 
   const getStartOfWeek = (date) => {
     const start = new Date(date);
@@ -302,33 +300,31 @@ const Calendar = (props) => {
   // Render the body of the calendar with times and cells
   const renderBody = () => {
     return hoursInDay.map((hour, index) => (
-      <div key={index} className="row">
-        <div className="cell hours">{`${hour}:00`}</div>
+      <div key={index + hour} className="row">
+        <div key={index + hour} className="cell hours">{`${hour}:00`}</div>
         {daysOfWeek.map((day) => (
-          <>
-            <Cell
-              key={day + hour}
-              day={day}
-              hour={hour}
-              handleSlotClick={handleSlotClick}
-              handleScheduledSlotDelete={handleScheduledSlotDelete}
-              handlePieceDrop={handlePieceDrop}
-              selectedSlot={selectedSlot}
-              setSelectedSlot={setSelectedSlot}
-              isSlotScheduled={isSlotScheduled}
-              isSlotEdge={isSlotEdge}
-              handlePieceExpand={handlePieceExpand}
-              serviceName={
-                scheduledSlots.find(
-                  (slot) =>
-                    slot.day === day && hour >= slot.start && hour < slot.end
-                )?.item?.name
-              }
-              scheduledSlots={scheduledSlots}
-              isLastInGroup={isLastInGroup}
-              puzzlePieces={props.puzzlePieces}
-            />
-          </>
+          <Cell
+            key={day + hour}
+            day={day}
+            hour={hour}
+            handleSlotClick={handleSlotClick}
+            handleScheduledSlotDelete={handleScheduledSlotDelete}
+            handlePieceDrop={handlePieceDrop}
+            selectedSlot={selectedSlot}
+            setSelectedSlot={setSelectedSlot}
+            isSlotScheduled={isSlotScheduled}
+            isSlotEdge={isSlotEdge}
+            handlePieceExpand={handlePieceExpand}
+            serviceName={
+              scheduledSlots.find(
+                (slot) =>
+                  slot.day === day && hour >= slot.start && hour < slot.end
+              )?.item?.name
+            }
+            scheduledSlots={scheduledSlots}
+            isLastInGroup={isLastInGroup}
+            puzzlePieces={props.puzzlePieces}
+          />
         ))}
       </div>
     ));
@@ -339,7 +335,7 @@ const Calendar = (props) => {
       <div className="calendar">
         <div className="header">{renderHeader()}</div>
         <div className="body">{renderBody()}</div>
-        <GarbageBin ref={drop} />
+        <GarbageBin />
       </div>
     </div>
   );

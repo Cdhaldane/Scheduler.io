@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import Calendar from "../Components/Calendar/Calendar";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { supabase, getPersonnel } from "../Database.jsx";
 
 const Admin = () => {
   const [personID, setPersonID] = useState(0);
+  const [personnel, setPersonnel] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getPersonnel();
+      console.log(data);
+      setPersonnel(data);
+    };
+    fetchData();
+  }, []);
 
   const puzzlePieces = [
     { id: 1, duration: 1, price: 50, name: "Piece 1", color: "#3F5E5A" },
@@ -33,7 +44,11 @@ const Admin = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Sidebar setPersonID={setPersonID} />
+      <Sidebar
+        setPersonID={setPersonID}
+        personID={personID}
+        personnel={personnel}
+      />
       <PuzzleContainer
         puzzlePieces={puzzlePieces}
         onDrop={handleDrop}

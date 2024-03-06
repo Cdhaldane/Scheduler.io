@@ -14,6 +14,7 @@ import Footer from "./Components/Footer/Footer";
 import Login from "./Components/Login/Login";
 import ACMain from "./Views/AccountCreation/ACMain";
 import BookingPage from "./Components/BookingPage/BookingPage";
+import Sidebar from "./Components/Sidebar/Sidebar";
 import GuestBookingPage from "./Components/GuestBookingPage/GuestBookingPage";
 import SuccessfullyBookingPage from "./Components/Guest/SuccessfullyBookingPage/SuccessfullyBookingPage";
 import CustomerLogin from "./Components/Customer/CustomerLogin/CustomerLogin";
@@ -25,33 +26,57 @@ import AlertProvider from "./Components/Alert/AlertProvider";
 import Alert from "./Components/Alert/Alert";
 import Info from "./Views/Info";
 import DevTools from "./Components/DevTools/DevTools";
+import * as db from "./Database";
+import "./index.css";
 
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  "https://mydmcdgmioyieammrakm.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZG1jZGdtaW95aWVhbW1yYWttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk1ODM2MDIsImV4cCI6MjAyNTE1OTYwMn0.X7r9Q0cnvPg5tW5EOj7CO0S0h1gMLvpKQv-oLHG26fM"
-);
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const location = useLocation() || "";
+  const [users, setUsers] = useState([]);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    db.supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = db.supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const shouldRenderNavbarAndFooter = location.pathname !== "/create-account";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await db.getUsers();
+      console.log(data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <AlertProvider>
       <Alert />
       <DevTools />
+
       <div className="app">
         {shouldRenderNavbarAndFooter && (
           <Navbar
             isLoggedIn={isLoggedIn}
             isAdmin={isAdmin}
             setIsLoggedIn={(e) => setIsLoggedIn(e)}
+            session={session}
           />
         )}
+
         <div className="app-main">
           <Routes>
             <Route path="/" element={<Home />} />

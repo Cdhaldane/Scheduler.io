@@ -67,12 +67,12 @@ const PuzzlePiece = ({ piece }) => {
     <div
       ref={drag}
       style={{
-        opacity: isDragging ? 0.5 : 1,
+        opacity: isDragging ? 1 : 1,
         cursor: "grab",
         backgroundColor: piece.color,
         borderColor: piece.color,
       }}
-      className="puzzle-piece"
+      className={isDragging ? "puzzle-piece isDragging" : "puzzle-piece"}
     >
       <h1>{piece.name}</h1>
       {/* <p>{piece.duration} hrs</p>

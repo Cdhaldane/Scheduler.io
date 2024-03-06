@@ -48,12 +48,11 @@
 }
 
 .navbar ul li:hover {
-  text-decoration: underline;
   transform: scale(1.1);
 }
 
 .navbar-header {
-  margin-left: 25% !important;
+  margin: 0 auto;
   display: flex;
   align-items: center;
 }
@@ -79,6 +78,17 @@
   height: 50px;
   border-radius: 50%;
   margin-right: 10px;
+}
+
+.navbar-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profile-pic {
+  height: 40px;
+  border-radius: 50%;
 }
 
 .flipped {
