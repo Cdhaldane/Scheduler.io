@@ -1,0 +1,59 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.input-container label {
+  position: absolute;
+  margin-top: 5%;
+  margin-left: 2%;
+  color: var(--light-grey);
+  font-size: 1em;
+  transition: all 0.3s ease-in-out;
+}
+
+.input-container input {
+  padding: 20px;
+  border: 1px solid var(--light-grey);
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+  background-color: var(--grey) !important;
+  color: var(--green) !important;
+  font-size: 1.5em;
+}
+
+.input-container input:hover {
+  border-color: var(--green);
+}
+
+.input-container.active label {
+  margin-top: 2%;
+}
+
+.input-container.active input {
+  animation: paddingTop 0.3s ease-in-out forwards;
+}
+
+.input-container.did-leave input {
+  animation: paddingBot 0.3s ease-in-out forwards;
+}
+
+@keyframes paddingTop {
+  0% {
+    padding-top: 20px;
+  }
+  100% {
+    padding-top: 30px;
+  }
+}
+
+@keyframes paddingBot {
+  0% {
+    padding-top: 30px;
+  }
+  100% {
+    padding-top: 20px;
+  }
+}

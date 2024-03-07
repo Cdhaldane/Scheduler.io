@@ -1,6 +1,7 @@
 :root {
   --green: #20fc8f;
   --grey: #2d2d2a;
+  --light-grey: #9c9c9c;
   --olive: #38423b;
   --blue: #3f5e5a;
   --red: #e94343;
@@ -49,7 +50,7 @@ button {
   font-size: 1rem;
   width: 100%;
   padding: 10px;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 button:hover {
   cursor: pointer;

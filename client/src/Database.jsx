@@ -1,19 +1,19 @@
 import { createClient } from "@supabase/supabase-js";
 
 export const supabase = createClient(
-  "https://mydmcdgmioyieammrakm.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZG1jZGdtaW95aWVhbW1yYWttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk1ODM2MDIsImV4cCI6MjAyNTE1OTYwMn0.X7r9Q0cnvPg5tW5EOj7CO0S0h1gMLvpKQv-oLHG26fM"
+  process.env.REACT_APP_SUPABASE_URL,
+  process.env.REACT_APP_SUPABASE_KEY,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
 );
 
 export const loginWithGoogle = async () => {
   await supabase.auth.signInWithOAuth({
     provider: "google",
-    options: {
-      queryParams: {
-        access_type: "offline",
-        prompt: "consent",
-      },
-    },
   });
 };
 
@@ -52,11 +52,16 @@ export const deletePersonnel = async (id) => {
 // USERS HANDLERS
 
 export const getUsers = async () => {
-  const { data, error } = await supabase.from("users").select();
+  const {
+    data: { users },
+    error,
+  } = await supabase.auth.admin.listUsers();
+
   if (error) {
     console.log("Error fetching users:", error);
   }
-  return data;
+
+  return users;
 };
 
 export const addUser = async (newUser) => {

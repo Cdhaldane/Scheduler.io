@@ -8,6 +8,7 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto;
+  gap: 16px;
 }
 
 .login-container > div {
@@ -32,85 +33,48 @@
   margin-block-end: 0px;
 }
 
-.login-super-container {
+.login-form {
   display: flex;
-}
-
-.login-super-container > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
 }
 
-.login-divider {
-  display: none;
+.login-form > a {
+  color: var(--light-grey);
+  text-decoration: underline;
+  margin: 5px auto;
 }
 
-#auth-sign-in > div > div {
+.login-form > button {
+  height: 50px;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  font-weight: 400;
+}
+
+.login-buttons {
   display: flex;
-  flex-direction: column !important;
+  justify-content: space-between;
+  width: 100%;
+  gap: 16px;
 }
 
-#auth-sign-in > div > div > div {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column !important;
+.login-buttons button {
+  background-color: var(--grey);
+  border: 1px solid var(--light-grey);
 }
 
-#auth-sign-in > div > button {
-  font-size: 1em !important;
-  width: 100% !important;
-  background-color: var(--green) !important;
-  color: var(--grey) !important;
+.login-buttons svg {
+  width: 50px;
+  height: 50px;
 }
 
-.login-input {
-  background-color: var(--grey) !important;
-  background: var(--grey) !important;
-  border: 0.1px solid var(--white) !important;
-  padding: 15px 15px !important;
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0px 1000px var(--grey) inset !important;
-  transition: background-color 0s 600000s, color 0s 600000s !important;
-}
-
-.login-button {
-  width: 32% !important;
-  padding: 15px !important;
-  background-color: var(--grey) !important;
-  border: 0.1px solid var(--white);
-  color: var(--white) !important;
-  border-radius: 10px;
-  transition: all 0.3s ease-in-out;
-  font: 0em sans-serif;
-}
-
-.login-button svg {
-  width: 30px;
-  height: 30px;
-}
-
-#stay-logged-in {
-  margin-left: 8px;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  margin: 5px;
-}
-
-@keyframes borderPulse {
-  0% {
-    border-color: red;
-  }
-  50% {
-    border-color: #fff;
-  }
-  100% {
-    border-color: red;
-  }
+.login-error {
+  color: var(--danger);
+  font-size: 1.2em;
+  text-align: center;
+  background-color: var(--grey);
+  border: 1px solid var(--danger);
+  border-radius: 5px;
+  margin-bottom: 20px !important;
 }

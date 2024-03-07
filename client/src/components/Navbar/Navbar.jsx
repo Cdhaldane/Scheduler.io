@@ -4,6 +4,7 @@ import LoginForm from "../Login/Login";
 import RegisterAccount from "../Customer/CustomerRegister/CustomerRegister.jsx";
 import Modal from "../Modal/Modal";
 import Dropdown from "../Dropdown/Dropdown.jsx";
+import { supabase } from "../../Database";
 import "./Navbar.css"; // Import the CSS file for styling
 
 const NavbarItem = ({ icon, route, action }) => {
@@ -40,10 +41,15 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
     setIsLoggedIn(true);
   };
 
-  const handleDropdownClick = (e) => {};
+  const handleDropdownClick = (e) => {
+    console.log("Dropdown Click:", e);
+    if (e) {
+      setShowModal(false);
+      supabase.auth.signOut();
+    }
+  };
 
   useEffect(() => {
-    console.log("Session:", session);
     if (session) {
       setIsLoggedIn(true);
       setShowModal(false);
@@ -89,7 +95,7 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
               <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
               <Dropdown
                 children={<ProfilePic />}
-                label={session.user.user_metadata.name}
+                label={session?.user.user_metadata.name}
                 options={["Signout"]}
                 onClick={(e) => handleDropdownClick(e)}
                 direction="left"

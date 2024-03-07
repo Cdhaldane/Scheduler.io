@@ -49,15 +49,23 @@ function App() {
       setSession(session);
     });
 
+    console.log("Session:", session);
+
     return () => subscription.unsubscribe();
   }, []);
 
   const shouldRenderNavbarAndFooter = location.pathname !== "/create-account";
 
   useEffect(() => {
+    const adminAuthClient = db.supabase.auth.admin;
+
+    console.log("Admin Auth Client:", adminAuthClient);
     const fetchData = async () => {
-      const data = await db.getUsers();
-      console.log(data);
+      const {
+        data: { users },
+        error,
+      } = await db.supabase.auth.admin.listUsers();
+      console.log(users);
     };
     fetchData();
   }, []);
