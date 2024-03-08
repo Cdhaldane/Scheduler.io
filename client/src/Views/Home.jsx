@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Sidebar from "../Components/Sidebar/Sidebar.jsx";
-import Calendar from "../Components/Calendar/Calendar.jsx";
+import Sidebar from "../Components/Sidebar/Sidebar";
+import Calendar from "../Components/Calendar/Calendar";
 import ScheduleForm from "../Components/Schedule-form/Schedule-form";
 import GuestBooking from "../Components/GuestBookingPage/GuestBookingPage.jsx";
 import { useNavigate } from "react-router-dom";
@@ -9,16 +9,16 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 import "./Home.css";
 
-const Home = () => {
+const Home = (props) => {
   const [personID, setPersonID] = useState(0);
-  const [selectedSlot, setSelectedSlot] = useState(0);
+  const [selectedSlot, setSelectedSlot] = useState(props.selectedSlot);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const handleSelectedSlot = (e) => {
-    setSelectedSlot({ day: e.day, hour: e.hour });
+    setSelectedSlot({ day: e.day, start:e.start,end:e.end});
   };
-
+  
   return (
     <DndProvider backend={HTML5Backend}>
       <Sidebar setPersonID={setPersonID} />

@@ -131,8 +131,7 @@ const Cell = ({
       console.log("deselect");
       return;
     }
-
-    handleSlotClick(day, hour);
+    handleSlotClick({day, hour});
   };
   const color = puzzlePieces?.find(
     (piece) => piece?.name === serviceName
