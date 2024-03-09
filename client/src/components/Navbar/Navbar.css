@@ -1,11 +1,11 @@
 /* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/Navbar/Navbar.css */
 
 .navbar {
-  background-color: #333;
+  background-color: var(--bg-secondary);
   color: #fff;
   width: calc(100% - 300px);
   margin-left: 300px;
-  height: 60px;
+  height: var(--nav-height);
 }
 
 .admin-navbar {
@@ -52,13 +52,19 @@
 }
 
 .navbar-header {
-  margin: 0 auto;
+  margin-left: 35%;
   display: flex;
   align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-header:hover {
+  transform: scale(1.1);
 }
 
 .navbar-header > h1 {
-  color: var(--green);
+  color: var(--primary);
   font-family: var(--font-secondary);
   font-weight: 800;
   white-space: nowrap;
@@ -93,4 +99,8 @@
 
 .flipped {
   transform: rotateY(180deg);
+}
+
+.fa-user {
+  margin: 5px;
 }

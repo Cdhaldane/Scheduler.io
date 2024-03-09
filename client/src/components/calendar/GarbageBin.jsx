@@ -8,21 +8,26 @@ const ItemType = {
 
 // This is your GarbageBin component
 const GarbageBin = ({ onDrop }) => {
-  const [, dropRef] = useDrop({
-    accept: ItemType.APPOINTMENT,
+  const [{ isOver, canDrop }, dropRef] = useDrop({
+    accept: ["service"],
     drop: (item, monitor) => {
-      onDrop(item.id); // Assuming each appointment has a unique id
+      onDrop(item);
     },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
   });
 
-  const isEditMode = window.location.pathname.includes("admin") ? true : false;
+  // const isEditMode = window.location.pathname.includes("admin") ? true : false;
 
-  if (!isEditMode) return null;
   return (
-    <div className="garbage-bin-container">
-      <div ref={dropRef} className="garbage-bin">
-        Drag appointments here to cancel
-      </div>
+    <div
+      ref={dropRef}
+      id="garbage-bin"
+      className={`${isOver ? "is-over" : ""}`}
+    >
+      <i class="fa-regular fa-trash-can"></i>
     </div>
   );
 };

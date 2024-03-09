@@ -1,0 +1,96 @@
+/* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/BookingPage/BookingPage.css */
+
+.booking-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  animation: slideUp 0.5s ease-in-out forwards;
+  width: 100%;
+  min-height: calc(var(--main-height) - 40px);
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.book-info {
+  width: 50%;
+  font-size: 24px;
+  text-align: center;
+  color: #fff;
+  gap: 10px;
+  height: 95%;
+}
+
+.book-info a {
+  font-size: 1.5em;
+  text-decoration: none;
+}
+
+.book-info-display {
+  font-size: 1em;
+  border-radius: 10px;
+  background-color: #eaeef2;
+  color: #0e0d0d;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+.book-info-display p {
+  margin: 0px;
+}
+.book-info-display var {
+  font-size: 1.2em;
+  color: var(--blue);
+  font-style: normal;
+}
+
+.book-info > button {
+  height: 60px;
+  width: 50%;
+}
+
+.book-form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+}
+
+.book-form h1 {
+  margin-bottom: 10px;
+}
+
+.book-form > span {
+  display: flex;
+  gap: 10px;
+}
+
+.book-input > input,
+.book-input > textarea {
+  background-color: var(--bg-secondary) !important;
+}
+
+.book-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  animation: appear 0.5s ease-in-out forwards;
+  margin-bottom: 20px;
+}
+
+.book-message p {
+  margin: 0px;
+}
+
+@keyframes slideUp {
+  0% {
+    background-color: var(--bg-secondary);
+    transform: translateY(100%);
+  }
+  100% {
+    background-color: var(--bg-primary);
+    transform: translateY(0);
+  }
+}

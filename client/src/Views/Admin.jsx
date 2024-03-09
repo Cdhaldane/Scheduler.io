@@ -5,58 +5,14 @@ import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { supabase, getPersonnel } from "../Database.jsx";
+import {
+  supabase,
+  getPersonnel,
+  getServices,
+  deleteService,
+  addService,
+} from "../Database.jsx";
 
-const Admin = () => {
-  const [personID, setPersonID] = useState(0);
-  const [personnel, setPersonnel] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getPersonnel();
-      console.log(data);
-      setPersonnel(data);
-    };
-    fetchData();
-  }, []);
-
-  const puzzlePieces = [
-    { id: 1, duration: 1, price: 50, name: "Piece 1", color: "#3F5E5A" },
-    { id: 2, duration: 4, price: 200, name: "Piece 2", color: "#9DC0BC" },
-    { id: 3, duration: 0.5, price: 20, name: "Piece 3", color: "#2D2D2A" },
-  ];
-
-  const handleDrop = (item) => {
-    // Logic to add the dropped service to the scheduledSlots or any other state you're maintaining
-    // Update your state here
-  };
-
-  const onAddService = (service) => {
-    let newService = {
-      id: puzzlePieces.length + 1,
-      duration: parseFloat(service.duration),
-      price: parseFloat(service.price),
-      name: service.serviceName,
-    };
-    puzzlePieces.push(newService);
-  };
-
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <Sidebar
-        setPersonID={setPersonID}
-        personID={personID}
-        personnel={personnel}
-      />
-      <PuzzleContainer
-        puzzlePieces={puzzlePieces}
-        onDrop={handleDrop}
-        personID={personID}
-        onAddService={onAddService}
-      />
-    </DndProvider>
-  );
-};
+const Admin = ({ session }) => {};
 
 export default Admin;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAlert } from "../../Alert/AlertProvider";
+import { useAlert } from "../../Providers/Alert";
 import { useNavigate } from "react-router-dom";
 
 import "./CustomerRegister.css";

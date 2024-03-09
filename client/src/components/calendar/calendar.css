@@ -1,31 +1,45 @@
 .main-calendar {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 70%;
-  margin: 0 2%;
-  color: var(--green);
+  width: calc(70% - 30px);
+  min-height: calc(var(--main-height));
+  color: var(--primary);
   border-radius: 10px 0 0 10px;
-  background-color: var(--grey);
+  background-color: var(--bg-primary);
 }
 
 .calendar {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 95%;
-  min-width: fit-content;
-  padding: 20px;
   border-radius: 10px;
+  perspective: 2000px; /* Add perspective to enhance the 3D effect */
 }
 
-.body {
-  width: 100%;
+.calendar > .body {
+  transform-style: preserve-3d; /* Preserve 3D transformations */
+  position: relative; /* Position it directly under the current page */
+  top: 32px;
+  width: 100%; /* Adjusted for the navigation buttons */
 }
 
-.body .row {
+.next-page {
+  transform-style: preserve-3d; /* Preserve 3D transformations */
+  position: absolute !important; /* Position it directly under the current page */
+  width: 100%; /* Match the width of the current page */
+  z-index: -1;
+}
+
+.header {
+  position: absolute;
   display: flex;
-  position: relative;
+  width: calc(
+    100% + 2 * var(--nav-padding)
+  ); /* Adjusted for the navigation buttons */
+  white-space: nowrap;
+  z-index: 2;
 }
 
 .cell {
@@ -34,32 +48,25 @@
   justify-content: center;
   width: 100%; /* Adjusted for 7 days + 1 hour column */
   height: 30px;
-  border: 1px solid var(--blue);
-  color: var(--green);
+  border: 1px solid var(--light-grey);
+  color: var(--primary);
   transition: all 0.1s ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
-  background-color: var(--grey);
+  background-color: var(--bg-primary);
 }
 
 .cell:hover {
-  border: 1px solid var(--green);
-}
-
-.header {
-  display: flex;
-  width: calc(
-    100% + 2 * var(--nav-padding)
-  ); /* Adjusted for the navigation buttons */
+  border: 1px solid var(--primary);
 }
 
 .header-cell {
   width: calc((100%)); /* Adjusted for the navigation buttons */
   text-align: center; /* Center the text */
-  border: 1px solid var(--blue);
+  border: 1px solid var(--light-grey);
   padding-top: 3px;
 }
 
@@ -67,7 +74,8 @@
   width: 50%; /* Adjusted for 7 days + 1 hour column */
   border: none;
   color: var(--ash);
-  border: 1px solid var(--blue);
+  border: 1px solid var(--light-grey);
+  font-size: 0.8em;
 }
 
 .cell.hours {
@@ -85,19 +93,19 @@
 }
 
 .cell.selected {
-  background-color: var(--green) !important;
-  border: 1px solid var(--green) !important;
-  color: var(--grey);
+  background-color: var(--primary) !important;
+  border: 1px solid var(--primary) !important;
+  color: var(--bg-primary);
 }
 
 .cell.group-selected {
-  background-color: var(--green) !important ;
-  border: 1px solid var(--green) !important;
-  color: var(--grey);
+  background-color: var(--primary) !important ;
+  border: 1px solid var(--primary) !important;
+  color: var(--bg-primary);
 }
 
 .cell.over {
-  background-color: var(--blue);
+  background-color: var(--light-grey);
 }
 
 .day.selected {
@@ -116,14 +124,14 @@
   top: -15px; /* Adjust based on the cell's border and desired appearance */
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 10px solid var(--green);
+  border-bottom: 10px solid var(--primary);
 }
 
 .expand-indicator.bottom {
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
 
-  border-top: 10px solid var(--green);
+  border-top: 10px solid var(--primary);
   bottom: -15px; /* Adjust based on the cell's border and desired appearance */
 }
 
@@ -146,11 +154,52 @@
 
 .navigation-button.nb-right {
   float: right;
+  translate: -30% 0;
 }
 
 .navigation-button.nb-left {
   float: left;
-  translate: -20% 0;
+  translate: -10% 0;
+}
+
+.flip-left {
+  animation: flipPageLeft 0.6s ease-in-out;
+  transform-style: preserve-3d; /* Preserve 3D transformations */
+  z-index: 2; /* Ensure current page is above the next page */
+}
+
+.flip-right {
+  animation: flipPageRight 0.6s ease-in-out;
+  transform-style: preserve-3d; /* Preserve 3D transformations */
+  z-index: 2; /* Ensure current page is above the next page */
+}
+
+@keyframes flipPageRight {
+  0% {
+    transform: rotateY(0deg);
+    transform-origin: left;
+    opacity: 1;
+  }
+  100% {
+    transform: rotateY(-180deg);
+    scale: 0.1;
+    transform-origin: left;
+    opacity: 0;
+  }
+}
+
+@keyframes flipPageLeft {
+  0% {
+    transform: rotateY(-180deg);
+    scale: 0.1;
+    transform-origin: left;
+    opacity: 1;
+  }
+  100% {
+    transform: rotateY(0deg);
+    transform-origin: left;
+    opacity: 0.3;
+  }
 }
 
 @keyframes pulse {

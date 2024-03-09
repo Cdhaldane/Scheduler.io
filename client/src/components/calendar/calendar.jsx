@@ -5,11 +5,11 @@ import GarbageBin from "./GarbageBin";
 import "./Calendar.css";
 
 const SERVICE = "service";
-const Calendar = (props) => {
+const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [scheduledSlots, setScheduledSlots] = useState([]);
-  const [timeRange, setTimeRange] = useState([]);
+  const [flipAnimation, setFlipAnimation] = useState("");
 
   useEffect(() => {}, [scheduledSlots]);
 
@@ -55,6 +55,22 @@ const Calendar = (props) => {
       newDate.setDate(newDate.getDate() - 7);
       return newDate;
     });
+    setFlipAnimation("flip-left");
+    setTimeout(() => {
+      setFlipAnimation("");
+    }, 1000);
+  };
+
+  const goToNextWeek = () => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(newDate.getDate() + 7);
+      return newDate;
+    });
+    setFlipAnimation("flip-right");
+    setTimeout(() => {
+      setFlipAnimation("");
+    }, 1000);
   };
 
   const isSlotScheduled = (day, hour) => {
@@ -80,6 +96,7 @@ const Calendar = (props) => {
   };
 
   const handleSlotClick = (day, hour, slots) => {
+    let slot = {};
     if (!day || !hour) {
       setSelectedSlot(null);
       return;
@@ -96,16 +113,22 @@ const Calendar = (props) => {
         day,
         hour
       );
-      setSelectedSlot({
+      slot = {
         day,
         hour: connectedGrouping?.end - 1,
         item: clickedSlot.item,
         start: connectedGrouping?.start,
         end: connectedGrouping?.end - 1,
-      });
+      };
     } else {
-      setSelectedSlot({ day, hour });
+      slot = {
+        day,
+        hour,
+      };
     }
+
+    setSelectedSlot(slot);
+    handleSelectedSlot(slot);
   };
 
   const findConnectedGrouping = (slots, clickedDay, clickedHour) => {
@@ -251,14 +274,6 @@ const Calendar = (props) => {
     }),
   });
 
-  const goToNextWeek = () => {
-    setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setDate(newDate.getDate() + 7);
-      return newDate;
-    });
-  };
-
   const renderHeader = () => {
     const startOfWeek = getStartOfWeek(currentDate);
     const weekDays = Array.from({ length: 7 }, (_, index) => {
@@ -276,7 +291,7 @@ const Calendar = (props) => {
           <i className="fa-solid fa-arrow-left" />
         </button>
         <div className="cell empty">
-          {currentDate.toLocaleDateString("en-US", {
+          {startOfWeek.toLocaleDateString("en-US", {
             month: "long",
             day: "numeric",
           })}
@@ -298,7 +313,7 @@ const Calendar = (props) => {
   };
 
   // Render the body of the calendar with times and cells
-  const renderBody = () => {
+  const renderWeek = () => {
     return hoursInDay.map((hour, index) => (
       <div key={index + hour} className="row">
         <div key={index + hour} className="cell hours">{`${hour}:00`}</div>
@@ -323,7 +338,7 @@ const Calendar = (props) => {
             }
             scheduledSlots={scheduledSlots}
             isLastInGroup={isLastInGroup}
-            puzzlePieces={props.puzzlePieces}
+            puzzlePieces={puzzlePieces}
           />
         ))}
       </div>
@@ -334,8 +349,8 @@ const Calendar = (props) => {
     <div className="main-calendar">
       <div className="calendar">
         <div className="header">{renderHeader()}</div>
-        <div className="body">{renderBody()}</div>
-        <GarbageBin />
+        <div className={`body ${flipAnimation}`}>{renderWeek("current")}</div>
+        <div className="body next-page">{renderWeek("next")}</div>
       </div>
     </div>
   );

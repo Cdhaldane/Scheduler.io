@@ -6,7 +6,25 @@
   margin-left: 300px;
   border-radius: 10px 0px 0px 10px;
   animation: slideInTop 0.5s ease-in-out normal forwards;
-  background-color: var(--grey);
+  background-color: var(--bg-primary);
+}
+
+.main-body {
+  width: calc(100% - var(--sidebar-width)) !important;
+  height: 100%;
+  position: relative;
+  display: flex;
+  background-color: var(--bg-primary);
+  border-radius: 10px 0px 0px 10px;
+  margin-left: var(--sidebar-width);
+  padding: 30px 0px 30px 50px;
+}
+
+.main-right {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  min-height: calc(var(--main-height) - 60px);
 }
 
 .center {
@@ -27,7 +45,7 @@
   margin-top: 20px;
   position: relat;
   background-color: var(--olive);
-  color: var(--green);
+  color: var(--primary);
   bottom: 10%;
   left: 10%;
   height: 40px;
@@ -41,6 +59,47 @@
   justify-content: center;
   flex-direction: column;
   padding: 0% 5%;
-  background-color: var(--grey);
-  color: var(--green);
+  background-color: var(--bg-primary);
+  color: var(--primary);
+  padding-bottom: 2%;
+  animation: slideInBottom 0.5s ease-in-out normal forwards;
+}
+
+.info-page h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  font-family: var(--font-secondary);
+}
+
+.info-page h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-family: var(--font-secondary);
+}
+
+.info-page p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--white);
+  display: inline-block;
+}
+
+.info-page ul li {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--white);
+}
+
+.admin-button {
+  position: fixed;
+  bottom: 10px;
+  left: 100px;
+  z-index: 1000000;
+  background-color: var(--secondary);
+  color: var(--bg-primary);
+  border-radius: 10px;
+  font-size: 1rem;
+  width: 100px;
+  padding: 10px;
+  transition: all 0.1s ease-in-out;
 }

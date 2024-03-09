@@ -2,75 +2,12 @@ import React, { useEffect, useState } from "react";
 import data from "../../personnelData.json";
 import Modal from "../Modal/Modal";
 import { supabase } from "../../Database";
-import { useAlert } from "../Alert/AlertProvider";
+import { useAlert } from "../Providers/Alert";
 import { addPersonnel, deletePersonnel } from "../../Database";
+import Input from "../Input/Input";
 import ContextMenu from "../ContextMenu/ContextMenu";
 
 import "./Sidebar.css";
-
-const AddPersonForm = ({ onClose }) => {
-  const [first_name, setFirst_name] = useState("");
-  const [last_name, setLast_name] = useState("");
-  const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const alert = useAlert();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const newPersonnel = {
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      start_date: new Date(),
-    };
-
-    const { data, error } = await addPersonnel(newPersonnel);
-
-    if (error) alert.showAlert("error", error.details);
-    else onClose(newPersonnel); // Close modal after successful addition
-
-    setIsLoading(false);
-  };
-
-  return (
-    <form className="sidebar-add-form" onSubmit={handleSubmit}>
-      <h2>Add Personnel</h2>
-      <label>
-        First Name:
-        <input
-          type="text"
-          value={first_name}
-          onChange={(e) => setFirst_name(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Last Name:
-        <input
-          type="text"
-          value={last_name}
-          onChange={(e) => setLast_name(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Email:
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </label>
-
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? "Adding..." : "Add"}
-      </button>
-    </form>
-  );
-};
 
 const Sidebar = ({ personID, setPersonID, personnel }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -146,7 +83,10 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
           }}
         >
           <div className="sidebar-item-header">
-            {person.first_name} {person.last_name}
+            <i className="fa-solid fa-user"></i>
+            <h1>
+              {person.first_name} {person.last_name}
+            </h1>
           </div>
         </div>
       ))
@@ -157,7 +97,10 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
             className="sidebar-item add"
             onClick={() => setIsOpen(true)}
           >
-            <div className="sidebar-item-header admin">Add Personnel</div>
+            <div className="sidebar-item-header">
+              <i className="fa-solid fa-plus"></i>
+              <h1>Add Personnel</h1>
+            </div>
           </div>
         )
       );
@@ -185,6 +128,58 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
         onRequestClose={handleCloseContextMenu}
       />
     </>
+  );
+};
+
+const AddPersonForm = ({ onClose }) => {
+  const [first_name, setFirst_name] = useState("");
+  const [last_name, setLast_name] = useState("");
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const alert = useAlert();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const newPersonnel = {
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      start_date: new Date(),
+    };
+
+    const { data, error } = await addPersonnel(newPersonnel);
+
+    if (error) alert.showAlert("error", error.details);
+    else onClose(newPersonnel); // Close modal after successful addition
+
+    setIsLoading(false);
+  };
+
+  return (
+    <form className="sidebar-add-form" onSubmit={handleSubmit}>
+      <h2 className="modal-title">Add Personnel</h2>
+      <Input
+        label="First Name"
+        value={first_name}
+        onInputChange={(newValue) => setFirst_name(newValue)}
+      />
+      <Input
+        label="Last Name"
+        value={last_name}
+        onInputChange={(newValue) => setLast_name(newValue)}
+      />
+      <Input
+        label="Email"
+        value={email}
+        onInputChange={(newValue) => setEmail(newValue)}
+      />
+
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? "Adding..." : "Add"}
+      </button>
+    </form>
   );
 };
 

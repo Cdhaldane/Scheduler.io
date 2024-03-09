@@ -42,7 +42,7 @@ const AC = ({ onFinish }) => {
           exitTrigger={animation}
         />
 
-        <div class="typewriter">
+        <div className="typewriter">
           <h1>Hi! Welcome to TimeSlot!</h1>
         </div>
       </div>
@@ -71,7 +71,7 @@ const AC = ({ onFinish }) => {
         </div>
         <div className="ac-2-main">
           <div>
-            <div class="typewriter">
+            <div className="typewriter">
               <h1>Your business organization system</h1>
             </div>
             <div className="ac-2-content">

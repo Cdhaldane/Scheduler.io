@@ -6,27 +6,89 @@ import GuestBooking from "../Components/GuestBookingPage/GuestBookingPage.jsx";
 import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { supabase, getPersonnel } from "../Database.jsx";
+import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
+import { useAlert } from "../Components/Providers/Alert.jsx";
+import {
+  supabase,
+  getPersonnel,
+  getServices,
+  deleteService,
+  addService,
+} from "../Database.jsx";
 
 import "./Home.css";
 
-const Home = () => {
+const Home = ({ session, type }) => {
   const [personID, setPersonID] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState(0);
-  const [showModal, setShowModal] = useState(false);
   const [personnel, setPersonnel] = useState([]);
+  const [services, setServices] = useState([]);
+  const [deletedService, setDeletedService] = useState(null);
+  const [addedService, setAddedService] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const adminMode = type === "admin";
+  const alert = useAlert();
   const navigate = useNavigate();
 
+  const onDrop = (item) => {
+    console.log("dropped", item);
+  };
+
+  const fetchData = async () => {
+    const personnel = await getPersonnel();
+    if (personnel) setPersonnel(personnel);
+
+    const data = await getServices();
+    if (data) setServices(data);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getPersonnel();
-      setPersonnel(data);
-    };
     fetchData();
   }, []);
 
+  const onDeleteService = async (item) => {
+    setDeletedService(item);
+    setTimeout(() => {
+      deleteService(item.id).then((res) => {
+        if (res.error) {
+          alert.showAlert("error", res.error.message);
+        } else {
+          alert.showAlert("warning", "Service deleted");
+        }
+      });
+      fetchData();
+    }, 500);
+  };
+
+  const onAddService = async (service) => {
+    await addService(service).then((res) => {
+      if (res.error) {
+        alert.showAlert("error", res.error.message);
+      } else {
+        setAddedService(res.data);
+        fetchData();
+
+        alert.showAlert("success", "Service added");
+      }
+    });
+
+    setTimeout(() => {}, 1000);
+  };
+
   const handleSelectedSlot = (e) => {
     setSelectedSlot({ day: e.day, hour: e.hour });
+  };
+
+  const calendarProps = {
+    personID,
+    onAddService,
+    session,
+    handleSelectedSlot,
+    deletedService,
+    addedService,
+    puzzlePieces: services,
+    fetchData,
+    onDeleteService,
   };
 
   return (
@@ -36,48 +98,27 @@ const Home = () => {
         personID={personID}
         personnel={personnel}
       />
-      {/* <div className="main-header">
-        <h1 onClick={() => navigate("./admin")}>Scheduler.io {personID}</h1>
-      </div> */}
-      <div className="main">
-        <Calendar
-          personID={personID}
-          handleSelectedSlot={(e) => handleSelectedSlot(e)}
-        />
+      <button className="admin-button" onClick={() => navigate("/admin")}>
+        ADMIN
+      </button>
 
-        {/*Guest booking modal pop up*/}
-        <div
-          className="modal fade"
-          id="exampleModal"
-          tabIndex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-          style={{ display: showModal ? "block" : "none" }}
-        >
-          <div className="modal-dialog  modal-dialog-scrollable">
-            <div className="modal-content">
-              <button
-                type="button"
-                className="close"
-                onClick={() => setShowModal(false)}
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <div className="modal-body">
-                <GuestBooking />
-              </div>
-              <div className="modal-footer"></div>
-            </div>
-          </div>
-        </div>
-        {/*End modal*/}
-        <ScheduleForm
-          personID={personID}
-          selectedSlot={selectedSlot}
-          personnel={personnel}
+      {adminMode ? (
+        <PuzzleContainer
+          puzzlePieces={services}
+          onDrop={onDrop}
+          {...calendarProps}
         />
-      </div>
+      ) : (
+        <div className="main-body">
+          <Calendar {...calendarProps} />
+          <ScheduleForm
+            personID={personID}
+            selectedSlot={selectedSlot}
+            personnel={personnel}
+            session={session}
+          />
+        </div>
+      )}
     </DndProvider>
   );
 };

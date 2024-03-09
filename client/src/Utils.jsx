@@ -67,29 +67,17 @@ export const useMediaQuery = (query) => {
 };
 
 //Custom keyFrames Hook
-function createKeyframeStyleSheet() {
-  const styleSheet = document.createElement("style");
-  styleSheet.type = "text/css";
-  document.head.appendChild(styleSheet);
-  return styleSheet.sheet;
-}
-export const createKeyframes = (keyframeName, fromHeight, toHeight) => {
+export const createKeyframes = (keyframeName, keyframeCSS) => {
+  function createKeyframeStyleSheet() {
+    const styleSheet = document.createElement("style");
+    styleSheet.type = "text/css";
+    document.head.appendChild(styleSheet);
+    return styleSheet.sheet;
+  }
   const sheet = createKeyframeStyleSheet();
 
   sheet.insertRule(
-    `
-    @keyframes ${keyframeName} {
-      from {
-        max-height: ${fromHeight}px;
-        visibility: visible;
-        
-      }
-      to {
-        max-height: ${toHeight}px;
-        visibility: ${toHeight > 0 ? "visible" : "hidden"};
-      }
-    }
-  `,
+    `@keyframes ${keyframeName} ${keyframeCSS}`,
     sheet.cssRules.length
   );
 };
@@ -111,6 +99,14 @@ export const useDeviceType = () => {
   }, []);
 
   return isMobile;
+};
+
+export const getOffset = (el) => {
+  const rect = el.getBoundingClientRect();
+  return {
+    left: rect.left + window.scrollX,
+    top: rect.top + window.scrollY,
+  };
 };
 
 export const useDidMountEffect = (func, deps) => {

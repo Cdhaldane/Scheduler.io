@@ -2,16 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
+import { useAlert } from "../Providers/Alert";
 
 import "./Schedule-form.css";
 
-const ScheduleForm = ({ personID, selectedSlot, personnel }) => {
+const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
   const [person, setPerson] = useState(personnel[personID]);
   const [day, setDay] = useState(selectedSlot.day);
   const [start, setStart] = useState(selectedSlot.hour);
-  const navigate = useNavigate();
   const [selectedService, setSelectedService] = useState();
+  const [duration, setDuration] = useState(2);
+  const [price, setPrice] = useState(20);
+
+  const navigate = useNavigate();
   const [typing, setTyping] = useState(false);
+  const alert = useAlert();
 
   useEffect(() => {
     if (personID !== null) {
@@ -29,7 +34,7 @@ const ScheduleForm = ({ personID, selectedSlot, personnel }) => {
       // Wait for the animation to finish before removing the class
       const timer = setTimeout(() => {
         setTyping(false);
-      }, 2000); // Duration should match the CSS animation
+      }, 1000); // Duration should match the CSS animation
 
       return () => clearTimeout(timer);
     }
@@ -53,8 +58,34 @@ const ScheduleForm = ({ personID, selectedSlot, personnel }) => {
     }),
   });
 
+  const handleBookAppointment = () => {
+    if (!selectedService)
+      return alert.showAlert("error", "Please select a service");
+    if (!day) return alert.showAlert("error", "Please select a day");
+
+    const appointment = {
+      personnel: person,
+      day: day,
+      start: start,
+      end: start + 2,
+      service: selectedService,
+      duration: duration,
+      price: price,
+    };
+    if (session) {
+      const user = session?.user.user_metadata;
+      navigate("/booking-submit", {
+        state: { user, appointment },
+      });
+    } else {
+      navigate("/booking", {
+        state: { appointment },
+      });
+    }
+  };
+
   return (
-    <div className="schedule-container" ref={drag}>
+    <div className="main-right schedule-container" ref={drag}>
       <div className="body">
         <h1>APPOINTMENT</h1>
 
@@ -86,44 +117,34 @@ const ScheduleForm = ({ personID, selectedSlot, personnel }) => {
             />
             <span>
               <h1>Duration:</h1>
-              <h2> 2 hours</h2>
+              <h2> {duration} hours</h2>
             </span>
             <span>
               <h1>Price:</h1>
-              <h2> $20</h2>
+              <h2> ${price}</h2>
             </span>
           </div>
           <div className="schedule-time">
-            <ul className="schedule-labels">
-              <li>
-                <h1>Day</h1>
-              </li>
-              <li>
-                <h1>Start</h1>
-              </li>
-              <li>
-                <h1>End</h1>
-              </li>
-            </ul>
-            <ul className="schedule-values">
-              <li>
-                <h2>{day || "Monday"}</h2>
-              </li>
-              <li>
-                <h2>{start || 2}:00</h2>
-              </li>
-              <li>
-                <h2>{start + 2 || 5}:00</h2>
-              </li>
-            </ul>
+            <p>
+              Your appointment is on <var>{day}</var>
+            </p>
+            <p>
+              Starting at{" "}
+              <var>
+                {start}:00{start <= 12 ? "AM" : "PM"}
+              </var>{" "}
+            </p>
+            <p>
+              Ending at{" "}
+              <var>
+                {start + 2}:00 {start + 2 <= 12 ? "AM" : "PM"}
+              </var>
+            </p>
           </div>
         </div>
       </div>
       <footer>
-        <button
-          className="book-appointment"
-          onClick={() => navigate("booking")}
-        >
+        <button className="book-appointment" onClick={handleBookAppointment}>
           Book Appointment
         </button>
       </footer>

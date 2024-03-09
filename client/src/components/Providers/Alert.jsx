@@ -1,10 +1,33 @@
-import React from "react";
-import { useAlert } from "./AlertProvider"; // Import the context
+import React, { createContext, useContext, useState } from "react";
 
-import "./Alert.css";
+import "./Provider.css";
+
+const AlertContext = createContext();
+
+export const useAlert = () => {
+  return useContext(AlertContext);
+};
+
+export const AlertProvider = ({ children }) => {
+  const [alert, setAlert] = useState(null);
+
+  // Function to show the alert
+  const showAlert = (type, message) => {
+    setAlert({ type, message });
+    setTimeout(() => {
+      setAlert(null); // Hide the alert after 5 seconds
+    }, 5000);
+  };
+
+  return (
+    <AlertContext.Provider value={{ alert, showAlert }}>
+      {children}
+    </AlertContext.Provider>
+  );
+};
 
 const Alert = () => {
-  const { alert } = useAlert();
+  const { alert } = useContext(AlertContext);
 
   if (!alert) return null;
 

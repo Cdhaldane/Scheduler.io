@@ -43,6 +43,7 @@
   color: var(--light-grey);
   text-decoration: underline;
   margin: 5px auto;
+  cursor: pointer !important;
 }
 
 .login-form > button {
@@ -60,7 +61,7 @@
 }
 
 .login-buttons button {
-  background-color: var(--grey);
+  background-color: var(--bg-primary);
   border: 1px solid var(--light-grey);
 }
 
@@ -69,12 +70,14 @@
   height: 50px;
 }
 
-.login-error {
+.login-error p {
   color: var(--danger);
   font-size: 1.2em;
   text-align: center;
-  background-color: var(--grey);
+  background-color: var(--bg-primary);
   border: 1px solid var(--danger);
   border-radius: 5px;
   margin-bottom: 20px !important;
+  margin-top: 0px !important;
+  padding: 10px;
 }

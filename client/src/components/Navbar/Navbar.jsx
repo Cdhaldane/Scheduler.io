@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../Login/Login";
 import RegisterAccount from "../Customer/CustomerRegister/CustomerRegister.jsx";
 import Modal from "../Modal/Modal";
 import Dropdown from "../Dropdown/Dropdown.jsx";
-import { supabase } from "../../Database";
+import { InputForm } from "../Input/Input.jsx";
+import { sendEmail, supabase } from "../../Database";
+import { useAlert } from "../Providers/Alert.jsx";
 import "./Navbar.css"; // Import the CSS file for styling
 
 const NavbarItem = ({ icon, route, action }) => {
@@ -25,11 +27,15 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
   const ProfilePic = () => {
     return (
       <li className="navbar-item">
-        <img
-          src={session.user.user_metadata.avatar_url}
-          alt="profile"
-          className="profile-pic"
-        />
+        {session?.user.user_metadata.avatar_url ? (
+          <img
+            src={session?.user.user_metadata.avatar_url}
+            alt="profile"
+            className="profile-pic"
+          />
+        ) : (
+          <i className="fa-solid fa-user"></i>
+        )}
       </li>
     );
   };
@@ -42,10 +48,10 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
   };
 
   const handleDropdownClick = (e) => {
-    console.log("Dropdown Click:", e);
     if (e) {
       setShowModal(false);
       supabase.auth.signOut();
+      setIsLoggedIn(false);
     }
   };
 
@@ -66,7 +72,7 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
             className="navbar-logo"
             onClick={() => navigate("/admin")}
           />
-          <h1>Time Slot</h1>
+          <h1 onClick={() => navigate("/")}>Time Slot</h1>
         </div>
         <ul>
           {!isLoggedIn && !isAdmin && (
@@ -127,22 +133,25 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
         </>
       </Modal>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <div className="message-modal">
-          <h1>Contact</h1>
-          <form>
-            <label htmlFor="name">Name:</label>
-            <input type="text" id="name" required />
-            <label htmlFor="email">Email:</label>
-            <input type="email" id="email" required />
-            <label htmlFor="message">Message:</label>
-            <textarea id="message" required />
-            <button type="submit">Send</button>
-          </form>
-          <p>
+        <InputForm
+          id="contact"
+          states={[
+            { id: "Name", type: "name", label: "Name" },
+            { id: "Email", type: "email", label: "Email" },
+            { id: "Message", type: "textarea", label: "Message" },
+          ]}
+          onClose={() => setIsOpen(false)}
+          onSubmit={async (states) => {
+            return sendEmail(states.name, states.email, states.message);
+          }}
+          buttonLabel="Send"
+        >
+          <p className="text-center">
+            {" "}
             If you have any questions or concerns, please contact us at{" "}
             <a>timeslot@gmail.com</a>
           </p>
-        </div>
+        </InputForm>
       </Modal>
     </nav>
   );

@@ -3,7 +3,7 @@ import "./Modal.css";
 
 // Modal component
 function Modal({ isOpen, onClose, children }) {
-  const modalRef = useRef();
+  const modalRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {

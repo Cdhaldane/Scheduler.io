@@ -36,7 +36,7 @@
 }
 
 .dev-tools button {
-  background: #333;
+  background: var(--bg-secondary);
   color: #fff;
   border: none;
   padding: 5px 10px;

@@ -1,13 +1,71 @@
-/* PuzzleStyles.css */
-
 .puzzle-container {
   width: calc(100% - var(--sidebar-width)) !important;
   height: 100%;
   position: relative;
   display: flex;
-  background-color: var(--grey);
+  background-color: var(--bg-primary);
   border-radius: 10px 0px 0px 10px;
   margin-left: var(--sidebar-width);
+  padding: 30px 0px 30px 50px;
+}
+
+.puzzle-piece.isDragging {
+  opacity: 1 !important;
+}
+.puzzle-piece:hover {
+  scale: 1.05;
+}
+
+.pieces-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 25%;
+  margin-left: 1%;
+  max-height: calc(var(--main-height));
+  background-color: var(--bg-primary);
+  border: 2px solid var(--light-grey);
+  border-radius: 6px 0px 0px 6px;
+}
+
+.pieces-main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  width: 100%;
+  height: 80%;
+  z-index: 1;
+  align-content: flex-start;
+  padding-top: 20px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.puzzle-piece {
+  position: relative;
+  right: 0px;
+  bottom: 0px;
+  cursor: grab;
+  width: 50%;
+  height: fit-content;
+}
+
+.puzzle-content {
+  position: absolute;
+  left: 15%;
+  top: 28%;
+  font-size: 1.7em;
+  width: 70%;
+  text-align: center;
+}
+
+.puzzle-content h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 0.8em;
 }
 
 .puzzle-container.isOver {
@@ -16,72 +74,6 @@
 
 .puzzle-container.default {
   background-color: white;
-}
-
-.puzzle-piece {
-  position: relative;
-  cursor: grab;
-  border-radius: 10px;
-  margin: 20px;
-  color: var(--white);
-  width: 150px !important;
-  height: 150px;
-  padding: 0px 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.3s ease-in-out;
-  border: 3px solid var(--blue);
-}
-.puzzle-piece::before {
-  content: "";
-  position: absolute;
-  top: 37%;
-  left: -15%;
-  width: 22px;
-  height: 45px;
-  background-color: inherit;
-  z-index: 1;
-  border-radius: 30px 0px 0px 30px;
-  border: 3px solid inherit;
-}
-.puzzle-piece.isDragging {
-  opacity: 1 !important;
-  border: 2px solid red;
-}
-.puzzle-piece:hover {
-  scale: 1.05;
-}
-.puzzle-piece h1 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin: 0;
-  padding: 0;
-  z-index: 2;
-}
-.puzzle-piece p {
-  font-size: 1rem;
-  font-weight: 400;
-  margin: 0;
-  padding: 10px;
-  z-index: 2;
-}
-
-.pieces-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  align-items: center;
-  justify-content: center;
-  width: 30%;
-  padding-left: 20px;
-  background-color: var(--olive);
-  margin: 50px 50px 50px 0px;
-  border-radius: 10px;
-  color: var(--green);
-  z-index: 1;
 }
 
 .btn-piece {
@@ -93,4 +85,95 @@
   background-color: var(--olive);
   border: 3px dashed var(--blue);
   border-right: none;
+}
+
+.pieces-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 90%;
+  height: 15%;
+  z-index: 1;
+  gap: 20px;
+}
+
+.pieces-footer > div {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80%;
+  width: 100%;
+  padding: 0px 20px;
+  color: var(--secondary);
+  font-size: 3rem;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  background-color: var(--bg-primary) !important;
+  border: 2px solid var(--bg-secondary) !important;
+}
+
+.pieces-footer > div::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 30%;
+  height: 20%;
+  border-left: 2px solid;
+  border-top: 2px solid;
+  border-radius: 1px 0px;
+}
+
+.pieces-footer > div::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 40%;
+  height: 50%;
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+  border-radius: 1px 0px;
+}
+
+.pieces-footer > div:hover:after,
+.pieces-footer > div.is-over:after {
+  animation: fillBorder 0.3s ease-in-out forwards;
+}
+.pieces-footer > div:hover:before,
+.pieces-footer > div.is-over:before {
+  animation: fillBorder 0.3s ease-in-out forwards;
+}
+
+/* #add-bin {
+  width: 40%;
+}
+
+#garbage-bin {
+  width: 40%;
+} */
+
+.animate-delete {
+  z-index: 10;
+  animation: fadeToGarbageBin 1s forwards;
+}
+
+.animate-add {
+  z-index: 10;
+  animation: fadeFromGarbageBin 1s forwards;
+}
+
+@keyframes fillBorder {
+  0% {
+    width: 0%;
+    height: 0%;
+  }
+  100% {
+    width: 100%;
+    height: 100%;
+    border: 2px solid;
+  }
 }

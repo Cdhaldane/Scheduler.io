@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAlert } from "../Alert/AlertProvider";
+import { useAlert } from "../Providers/Alert";
 
 import "./GuestBookingPage.css";
 

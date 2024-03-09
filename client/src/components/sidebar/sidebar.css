@@ -4,23 +4,26 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #333; /* Dark background */
+  background-color: var(--bg-secondary); /* Dark background */
   padding-top: 20px;
+  animation: slideInLeft 0.5s ease-in-out normal forwards;
+  z-index: 10;
 }
 
 .sidebar-item {
   padding: 10px 15px;
   text-align: left;
-  color: white;
+  color: var(--light-grey);
   border: 2px solid #555; /* Lighter line for each item */
   cursor: pointer;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.3s ease-in-out;
   width: 80%;
   margin: 10px auto;
 }
 
 .sidebar-item.selected {
-  background-color: var(--blue); /* Add a darker background color on hover */
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
 }
 
 .sidebar-item.none {
@@ -28,14 +31,28 @@
 }
 
 .sidebar-item:hover {
-  background-color: var(--blue); /* Lighter background on hover */
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
 }
 
 .sidebar-item.add {
   border: 2px dashed #555 !important;
   margin-top: 10px;
+  color: var(--light-grey);
 }
 
+.sidebar-item.add:hover {
+  background-color: var(--bg-secondary) !important;
+  color: var(--white) !important;
+}
+
+.sidebar-item:hover h1 {
+  margin-left: 10px;
+}
+
+.sidebar-item:hover i {
+  scale: 1.3;
+}
 .sidebar-header {
   padding: 10px 15px;
   color: white;
@@ -44,14 +61,26 @@
 
 .sidebar-item-header {
   text-align: left;
-  color: var(--green);
   font-size: 20px;
+  display: flex;
+  align-items: center;
+  font: 0.7em sans-serif;
+}
+
+.sidebar-item-header > i {
+  font-size: 2em;
+  margin-right: 10px;
+  transition: scale 0.3s ease-in-out;
+}
+
+.sidebar-item-header > h1 {
+  transition: margin-left 0.3s ease-in-out;
 }
 
 .sidebar-item-body {
   padding-left: 10px;
   text-align: left;
-  color: white;
+  color: var(--blue);
   font-size: 16px;
   font-family: var(--font-secondary);
   transition: all 0.3s ease-in-out;
@@ -70,7 +99,7 @@
   text-align: left;
   color: white;
   font-size: 16px;
-  color: var(--green);
+  color: var(--primary);
 }
 
 .sidebar-item-value {
@@ -82,35 +111,7 @@
 }
 
 .admin {
-  color: var(--ash);
-}
-
-.admin > div {
-  border: 2px dashed var(--ash);
-}
-
-.sidebar-add-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  color: var(--green);
-}
-
-.sidebar-add-form label {
-  color: var(--green);
-  font-size: 20px;
-  margin-bottom: 10px;
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sidebar-add-form input {
-  margin: 10px;
-  width: 70% !important;
+  color: var(--blue);
 }
 
 @keyframes slide-down {
@@ -123,5 +124,14 @@
     height: 70px;
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
   }
 }

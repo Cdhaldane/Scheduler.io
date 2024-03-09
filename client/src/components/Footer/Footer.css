@@ -1,13 +1,16 @@
 /* Footer.css */
 .footer {
   position: relative;
-  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   bottom: 0px;
   width: 100%;
-  background-color: #333;
+  background-color: var(--bg-secondary);
   color: white;
   text-align: center;
-  padding: 10px 0;
+  font-family: var(--font-secondary);
+  height: 60px;
 }
 
 .footer-content {

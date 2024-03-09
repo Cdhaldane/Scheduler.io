@@ -1,24 +1,27 @@
 .modal {
   position: fixed !important;
-  z-index: 10000 !important;
+  z-index: 1000 !important;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
   position: relative;
-  background-color: #333;
-  margin: 5% auto;
-  padding: 30px 40px;
+  background-color: var(--bg-secondary);
+  padding: 20px 30px;
   width: 80%;
   max-width: 500px; /* Adjust width for smaller screens */
-  max-height: calc(100vh - 300px) !important;
-  overflow-y: auto;
+  max-height: calc(80%) !important;
   color: var(--white);
+  overflow: hidden;
   border-radius: 10px;
+  animation: appear 0.2s ease-in-out normal forwards;
 }
 
 .close {
@@ -46,14 +49,6 @@
   margin-top: 10px;
 } */
 
-.modal-content input {
-  padding: 8px;
-  margin-top: 5px;
-  background-color: var(--white);
-  border: none;
-  border-radius: 4px;
-}
-
 .modal-content button[type="submit"] {
   /* margin-top: 20px; */
   padding: 10px;
@@ -68,12 +63,22 @@ button[type="submit"]:hover {
   background-color: #45a049;
 }
 
-.message-modal h1 {
-  margin-bottom: 0px;
+.modal-title {
+  margin-bottom: 10px;
+  margin-top: 5px;
+  color: var(--primary);
+  font-size: 2em;
 }
 .message-modal a {
-  color: var(--green);
+  color: var(--primary);
   text-decoration: none;
+}
+
+.message-modal a:hover {
+  text-decoration: underline;
+}
+
+.message-modal button {
 }
 
 .modal-footer {

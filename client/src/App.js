@@ -13,19 +13,19 @@ import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
 import Login from "./Components/Login/Login";
 import ACMain from "./Views/AccountCreation/ACMain";
-import BookingPage from "./Components/BookingPage/BookingPage";
+import BookingPage from "./Components/Bookings/BookingPage";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import GuestBookingPage from "./Components/GuestBookingPage/GuestBookingPage";
-import SuccessfullyBookingPage from "./Components/Guest/SuccessfullyBookingPage/SuccessfullyBookingPage";
+import BookingSubmit from "./Components/Bookings/BookingSubmit";
 import CustomerLogin from "./Components/Customer/CustomerLogin/CustomerLogin";
 import CustomerRegister from "./Components/Customer/CustomerRegister/CustomerRegister";
 import CustomerBookingPage from "./Components/Customer/CustomerLoginBooking/CustomerBookingPage";
 import CustomerSubmitPage from "./Components/Customer/CustomerSubmitPage/CustomerSubmitPage";
 import CustomerRegisterSubmitPage from "./Components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage";
-import AlertProvider from "./Components/Alert/AlertProvider";
-import Alert from "./Components/Alert/Alert";
+import Alert from "./Components/Providers/Alert";
 import Info from "./Views/Info";
 import DevTools from "./Components/DevTools/DevTools";
+import { FlexBoxWrapper } from "./Utils";
 import * as db from "./Database";
 import "./index.css";
 
@@ -49,8 +49,6 @@ function App() {
       setSession(session);
     });
 
-    console.log("Session:", session);
-
     return () => subscription.unsubscribe();
   }, []);
 
@@ -59,19 +57,17 @@ function App() {
   useEffect(() => {
     const adminAuthClient = db.supabase.auth.admin;
 
-    console.log("Admin Auth Client:", adminAuthClient);
     const fetchData = async () => {
       const {
         data: { users },
         error,
       } = await db.supabase.auth.admin.listUsers();
-      console.log(users);
     };
     fetchData();
   }, []);
 
   return (
-    <AlertProvider>
+    <>
       <Alert />
       <DevTools />
 
@@ -87,17 +83,20 @@ function App() {
 
         <div className="app-main">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route
+              path="/"
+              element={<Home session={session} isAdmin={isAdmin} />}
+            />
+            <Route
+              path="/admin"
+              element={<Home session={session} type="admin" />}
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/info" element={<Info />} />
             <Route path="/create-account" element={<ACMain />} />
             <Route path="/booking" element={<BookingPage />} />
             <Route path="/guest-booking" element={<GuestBookingPage />} />
-            <Route
-              path="/successfully-bookingPage"
-              element={<SuccessfullyBookingPage />}
-            />
+            <Route path="/booking-submit" element={<BookingSubmit />} />
             <Route path="/customer-login" element={<CustomerLogin />} />
             <Route path="/customer-register" element={<CustomerRegister />} />
             <Route
@@ -116,7 +115,7 @@ function App() {
         </div>
         {shouldRenderNavbarAndFooter && <Footer />}
       </div>
-    </AlertProvider>
+    </>
   );
 }
 
