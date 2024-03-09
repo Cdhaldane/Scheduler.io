@@ -190,15 +190,7 @@ const PuzzleContainer = ({
               <div
                 className="green"
                 id="add-bin"
-                onClick={() =>
-                  onAddService({
-                    name: "Service Name",
-                    duration: 1,
-                    price: 50,
-                    backgroundColor: "#17a2b8",
-                    description: "Description",
-                  })
-                }
+                onClick={() => setIsOpen(true)}
               >
                 <i className="fas fa-plus"></i>
               </div>
