@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDrop } from "react-dnd";
 import Cell from "./Cell";
 import GarbageBin from "./GarbageBin";
+import ScheduleForm from "../Schedule-form/Schedule-form";
 import "./Calendar.css";
 import Modal from "../Modal/Modal";
+
+
 
 const SERVICE = "service";
 const Calendar = (props) => {
@@ -14,7 +17,8 @@ const Calendar = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const realCurrentDate = new Date();
 
-  useEffect(() => {}, [scheduledSlots]);
+  useEffect(() => {
+  }, [scheduledSlots]);
 
   const getStartOfWeek = (date) => {
     const start = new Date(date);
@@ -23,11 +27,11 @@ const Calendar = (props) => {
     return start;
   };
 
-  const weekDays = Array.from({ length: 7 }, (_, i) => {
-    const day = new Date(currentDate);
-    day.setDate(day.getDate() + i);
-    return day;
-  });
+  // const weekDays = Array.from({ length: 7 }, (_, i) => {
+  //   const day = new Date(currentDate);
+  //   day.setDate(day.getDate() + i);
+  //   return day;
+  // });
 
   const dayNames = [
     "Sunday",
@@ -197,54 +201,12 @@ const Calendar = (props) => {
     return { start, end, itemName };
   };
 
-  // const handleSlotClick = (day, hour, slots) => {
-  //   console.log('Inside handleSlotClick with:', { day, hour });
-  //   if (!day || !hour) return;
-  //   const allSlots = slots || scheduledSlots;
-  //   const clickedSlot = allSlots.find(
-  //     (slot) => slot.day === day && hour >= slot.start && hour < slot.end
-  //   );
-
-  //   if (clickedSlot && (!selectedSlot || (selectedSlot && (
-  //     clickedSlot.day !== selectedSlot.day ||
-  //     clickedSlot.start !== selectedSlot.start ||
-  //     clickedSlot.end !== selectedSlot.end
-  //   )))) {
-  //     setSelectedSlot({ ...clickedSlot });
-  //   } else {
-  //     setSelectedSlot({ ...clickedSlot });
-  //   }
-   
-  // if (!clickedSlot) {
-  //   setSelectedSlot(null);
-  // }
-  //   const slotsGroupedByDay = groupSlotsByDay(allSlots);
-  //   if (!Array.isArray(slotsGroupedByDay[day])) {
-  //     console.error(`Expected an array for day, but got:`, slotsGroupedByDay[day]);
-  //     // Handle this case, perhaps by initializing an empty array for the day
-  //     slotsGroupedByDay[day] = [];
-  //   }
-  //   const connectedGrouping = findConnectedGrouping(
-  //     slotsGroupedByDay[day],
-  //     day,
-  //     hour
-  //   );
-    
-  //   setSelectedSlot({
-  //     ...selectedSlot,
-  //     day,
-  //     start: connectedGrouping?.start,
-  //     end: connectedGrouping?.end,
-  //     item: clickedSlot.item,
-  //   });
-  // };
   //2024-03-07: edit the selected slot to updated date, start and end time 
   useEffect(() => {
-    props.handleSelectedSlot(selectedSlot || { day: "Nothing selected", start: "Nothing selected", end: "Nothing selected" });
+    props.handleSelectedSlot(selectedSlot||("Nothing selected","Nothing selected"));
   },[selectedSlot]);
 
   const handlePieceDrop = (date, hour, item) => {
-    console.log("handlePieceDrop", date, hour, item);
     const year = date.split("-")[0];
     const month = date.split("-")[1] - 1;
     const tempDay = date.split("-")[2];
@@ -276,8 +238,9 @@ const Calendar = (props) => {
     };
 
     setScheduledSlots((prev) => [...prev, newSlot]);
-    setSelectedSlot({ day: dayNames[day.getDay()], hour });
+    setSelectedSlot({ day: dayNames[day.getDay()], start: newSlot.start,end: newSlot.end });
   };
+
 
   const groupSlotsByDay = (scheduledSlots) => {
     return scheduledSlots.reduce((acc, slot) => {
@@ -333,7 +296,6 @@ const Calendar = (props) => {
   };
 
   const handleScheduledSlotDelete = (day, hour) => {
-    console.log("delete");
     let connectedGrouping = findConnectedGrouping(scheduledSlots, day, hour);
     deleteHelper(day, hour, connectedGrouping);
     setSelectedSlot(null);
@@ -377,7 +339,6 @@ const Calendar = (props) => {
       day.setDate(day.getDate() + index);
       return day;
     });
-
     return (
       <>
         <button
@@ -386,20 +347,26 @@ const Calendar = (props) => {
         >
           <i className="fa-solid fa-arrow-left" />
         </button>
+        {/* add empty cell to display current date to match with columns */}
         <div className="cell empty">
-          {realCurrentDate.toLocaleDateString("en-US", {
+          {currentDate.toLocaleDateString("en-US", {
             year: "numeric",
             month: "numeric",
             day: "numeric",
-          })}
+              })}
         </div>
+        {/* add date into header display under weekday name */}
         {weekDays.map((day, index) => (
           <div key={index} className="header-cell">
-            {day.toLocaleDateString("en-US", { weekday: "long" })}
-            {day.toLocaleDateString("en-US", {
-              month: "numeric",
-              day: "numeric",
-            })}
+            <div className="weekday-name">
+              {day.toLocaleDateString("en-US", { weekday: "long" })}
+            </div>
+            <div className="date-number">
+              {day.toLocaleDateString("en-US", {
+                month: "numeric",
+                day: "numeric",
+              })}
+            </div>
           </div>
         ))}
         <button className="navigation-button nb-right" onClick={goToNextWeek}>
@@ -441,7 +408,7 @@ const Calendar = (props) => {
       </div>
     ));
   };
-
+  
   return (
     <div className="main-calendar">
       <div className="calendar">

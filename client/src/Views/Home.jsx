@@ -10,9 +10,9 @@ import { supabase, getPersonnel } from "../Database.jsx";
 
 import "./Home.css";
 
-const Home = () => {
+const Home = (props) => {
   const [personID, setPersonID] = useState(0);
-  const [selectedSlot, setSelectedSlot] = useState(0);
+  const [selectedSlot, setSelectedSlot] = useState(props.selectedSlot);
   const [showModal, setShowModal] = useState(false);
   const [personnel, setPersonnel] = useState([]);
   const navigate = useNavigate();
@@ -26,9 +26,9 @@ const Home = () => {
   }, []);
 
   const handleSelectedSlot = (e) => {
-    setSelectedSlot({ day: e.day, hour: e.hour });
+    setSelectedSlot({ day: e.day, start:e.start,end:e.end});
   };
-
+  
   return (
     <DndProvider backend={HTML5Backend}>
       <Sidebar

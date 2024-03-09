@@ -66,6 +66,7 @@
 .empty {
   width: 50%; /* Adjusted for 7 days + 1 hour column */
   border: none;
+  height: 50px;
   color: var(--ash);
   border: 1px solid var(--blue);
 }
