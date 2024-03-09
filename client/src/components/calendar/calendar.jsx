@@ -3,6 +3,7 @@ import { useDrop } from "react-dnd";
 import Cell from "./Cell";
 import GarbageBin from "./GarbageBin";
 import "./Calendar.css";
+import Modal from "../Modal/Modal";
 
 const SERVICE = "service";
 const Calendar = (props) => {
@@ -10,6 +11,8 @@ const Calendar = (props) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [scheduledSlots, setScheduledSlots] = useState([]);
   const [timeRange, setTimeRange] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const realCurrentDate = new Date();
 
   useEffect(() => {}, [scheduledSlots]);
 
@@ -36,6 +39,7 @@ const Calendar = (props) => {
     "Saturday",
   ];
 
+  
   const getDaysOfWeek = (currentDate) => {
     const startOfWeek = getStartOfWeek(currentDate);
     return Array.from({ length: 7 }, (_, index) => {
@@ -55,6 +59,7 @@ const Calendar = (props) => {
       newDate.setDate(newDate.getDate() - 7);
       return newDate;
     });
+    setSelectedSlot(null);
   };
 
   const isSlotScheduled = (day, hour) => {
@@ -79,43 +84,92 @@ const Calendar = (props) => {
     return isFirst || isLast;
   };
 
+  // const handleSlotClick = (day, hour, slots) => {
+  //   if (!day || !hour) {
+  //     setSelectedSlot(null);
+  //     return;
+  //   }
+  //   let allSlots = scheduledSlots;
+  //   if (slots) allSlots = slots;
+  //   const clickedSlot = allSlots.find(
+  //     (slot) => slot.day === day && hour >= slot.start && hour < slot.end
+  //   );
+
+  //   if (clickedSlot && selectedSlot) {
+  //     if (clickedSlot.day === selectedSlot.day &&
+  //         clickedSlot.start === selectedSlot.start &&
+  //         clickedSlot.end === selectedSlot.end) {
+  //       return;
+  //     }
+  //   }
+
+  //   if (clickedSlot) {
+  //     const slotsGroupedByDay = groupSlotsByDay(allSlots);
+  //     const connectedGrouping = findConnectedGrouping(
+  //       slotsGroupedByDay[day],
+  //       day,
+  //       hour
+  //     );
+  //     setSelectedSlot({
+  //       day,
+  //       hour: connectedGrouping?.end - 1,
+  //       item: clickedSlot.item,
+  //       start: connectedGrouping?.start,
+  //       end: connectedGrouping?.end - 1,
+  //     });
+  //   } else {
+  //     setSelectedSlot({ day, hour });
+  //   }
+  // };
   const handleSlotClick = (day, hour, slots) => {
-    if (!day || !hour) {
-      setSelectedSlot(null);
-      return;
-    }
-    let allSlots = scheduledSlots;
-    if (slots) allSlots = slots;
+    if (!day || !hour) return;
+    const allSlots = slots || scheduledSlots;
     const clickedSlot = allSlots.find(
       (slot) => slot.day === day && hour >= slot.start && hour < slot.end
     );
-    if (clickedSlot) {
-      const slotsGroupedByDay = groupSlotsByDay(allSlots);
-      const connectedGrouping = findConnectedGrouping(
-        slotsGroupedByDay[day],
-        day,
-        hour
-      );
-      setSelectedSlot({
-        day,
-        hour: connectedGrouping?.end - 1,
-        item: clickedSlot.item,
-        start: connectedGrouping?.start,
-        end: connectedGrouping?.end - 1,
-      });
+
+    if (clickedSlot && (!selectedSlot || (selectedSlot && (
+      clickedSlot.day !== selectedSlot.day ||
+      clickedSlot.start !== selectedSlot.start ||
+      clickedSlot.end !== selectedSlot.end
+    )))) {
+      setSelectedSlot({ ...clickedSlot });
     } else {
-      setSelectedSlot({ day, hour });
+      setSelectedSlot({ ...clickedSlot });
     }
+   
+  if (!clickedSlot) {
+    setSelectedSlot(null);
+  }
+    const slotsGroupedByDay = groupSlotsByDay(allSlots);
+    const connectedGrouping = findConnectedGrouping(
+      slotsGroupedByDay[day],
+      day,
+      hour
+    );
+    
+    setSelectedSlot({
+      ...selectedSlot,
+      day,
+      start: connectedGrouping?.start,
+      end: connectedGrouping?.end,
+      item: clickedSlot.item,
+    });
   };
+  
 
   const findConnectedGrouping = (slots, clickedDay, clickedHour) => {
+    if (!Array.isArray(slots)) {
+      console.error('The variable is not an array:', slots);
+      return;
+    }
     const clickedSlotIndex = slots.findIndex(
       (slot) =>
         slot.day === clickedDay &&
         clickedHour >= slot.start &&
         clickedHour < slot.end
     );
-
+    
     if (clickedSlotIndex === -1) return null;
 
     const clickedSlot = slots[clickedSlotIndex];
@@ -143,12 +197,67 @@ const Calendar = (props) => {
     return { start, end, itemName };
   };
 
+  // const handleSlotClick = (day, hour, slots) => {
+  //   console.log('Inside handleSlotClick with:', { day, hour });
+  //   if (!day || !hour) return;
+  //   const allSlots = slots || scheduledSlots;
+  //   const clickedSlot = allSlots.find(
+  //     (slot) => slot.day === day && hour >= slot.start && hour < slot.end
+  //   );
+
+  //   if (clickedSlot && (!selectedSlot || (selectedSlot && (
+  //     clickedSlot.day !== selectedSlot.day ||
+  //     clickedSlot.start !== selectedSlot.start ||
+  //     clickedSlot.end !== selectedSlot.end
+  //   )))) {
+  //     setSelectedSlot({ ...clickedSlot });
+  //   } else {
+  //     setSelectedSlot({ ...clickedSlot });
+  //   }
+   
+  // if (!clickedSlot) {
+  //   setSelectedSlot(null);
+  // }
+  //   const slotsGroupedByDay = groupSlotsByDay(allSlots);
+  //   if (!Array.isArray(slotsGroupedByDay[day])) {
+  //     console.error(`Expected an array for day, but got:`, slotsGroupedByDay[day]);
+  //     // Handle this case, perhaps by initializing an empty array for the day
+  //     slotsGroupedByDay[day] = [];
+  //   }
+  //   const connectedGrouping = findConnectedGrouping(
+  //     slotsGroupedByDay[day],
+  //     day,
+  //     hour
+  //   );
+    
+  //   setSelectedSlot({
+  //     ...selectedSlot,
+  //     day,
+  //     start: connectedGrouping?.start,
+  //     end: connectedGrouping?.end,
+  //     item: clickedSlot.item,
+  //   });
+  // };
+  //2024-03-07: edit the selected slot to updated date, start and end time 
+  useEffect(() => {
+    props.handleSelectedSlot(selectedSlot || { day: "Nothing selected", start: "Nothing selected", end: "Nothing selected" });
+  },[selectedSlot]);
+
   const handlePieceDrop = (date, hour, item) => {
     console.log("handlePieceDrop", date, hour, item);
     const year = date.split("-")[0];
     const month = date.split("-")[1] - 1;
     const tempDay = date.split("-")[2];
     const day = new Date(year, month, tempDay, parseInt(hour));
+    
+    // const dropDate = new Date(date);
+    // dropDate.setHours(hour, 0, 0, 0);
+    
+    // realCurrentDate.setHours(0, 0, 0, 0);
+    // if (dropDate < realCurrentDate) {
+    //   setIsModalOpen(true);
+    //   return;
+    // }
 
     const newSlot = {
       id: `${day.toISOString()}_${hour}`,
@@ -183,6 +292,7 @@ const Calendar = (props) => {
   };
 
   const handlePieceExpand = (day, hour, item) => {
+
     let startingTime = Math.min(selectedSlot.hour, hour);
     let endingTime = Math.max(selectedSlot.hour, hour);
 
@@ -257,6 +367,7 @@ const Calendar = (props) => {
       newDate.setDate(newDate.getDate() + 7);
       return newDate;
     });
+    setSelectedSlot(null);
   };
 
   const renderHeader = () => {
@@ -276,18 +387,19 @@ const Calendar = (props) => {
           <i className="fa-solid fa-arrow-left" />
         </button>
         <div className="cell empty">
-          {currentDate.toLocaleDateString("en-US", {
-            month: "long",
+          {realCurrentDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "numeric",
             day: "numeric",
           })}
         </div>
         {weekDays.map((day, index) => (
           <div key={index} className="header-cell">
             {day.toLocaleDateString("en-US", { weekday: "long" })}
-            {/* {day.toLocaleDateString("en-US", {
+            {day.toLocaleDateString("en-US", {
               month: "numeric",
               day: "numeric",
-            })} */}
+            })}
           </div>
         ))}
         <button className="navigation-button nb-right" onClick={goToNextWeek}>
@@ -335,7 +447,10 @@ const Calendar = (props) => {
       <div className="calendar">
         <div className="header">{renderHeader()}</div>
         <div className="body">{renderBody()}</div>
-        <GarbageBin />
+        <GarbageBin ref={drop} />
+        {/* <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <p>You cannot book an appointment on past days.</p>
+        </Modal> */}
       </div>
     </div>
   );

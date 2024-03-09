@@ -120,20 +120,39 @@ const Cell = ({
     console.log(`Resizing ${direction} at ${day} ${hour}`);
   };
 
-  const handleCellClick = (day, hour, e) => {
-    if (selectedSlot?.start && selectedSlot?.end) {
-      if (selectedSlot.day === day)
-        if (hour >= selectedSlot.start && hour < selectedSlot.end) {
-          return;
-        }
-    }
-    if (selectedSlot?.hour === hour && selectedSlot?.day === day) {
-      console.log("deselect");
+  // const handleCellClick = (day, hour, e) => {
+  //   if (selectedSlot?.start && selectedSlot?.end) {
+  //     if (selectedSlot.day === day)
+  //       if (hour >= selectedSlot.start && hour < selectedSlot.end) {
+  //         return;
+  //       }
+  //   }
+  //   if (selectedSlot?.hour === hour && selectedSlot?.day === day) {
+  //     //console.log("deselect");
+  //     return;
+  //   }
+  //   handleSlotClick({day, hour});
+  // };
+  const handleCellClick = (day, hour,e) => {
+    if (selectedSlot?.day === day && selectedSlot?.hour === hour) {
+      console.log('Deselecting slot', selectedSlot);
+      setSelectedSlot(null);
       return;
     }
-
-    handleSlotClick(day, hour);
+    if (selectedSlot?.start !== undefined && selectedSlot?.end !== undefined) {
+      if (selectedSlot.day === day && hour >= selectedSlot.start && hour < selectedSlot.end) {
+        console.log('Click is within the selectedSlot range', { day, hour });
+        return;
+      }
+    }
+    console.log('handleSlotClick will be called with:', { day, hour });
+    const newSelectedSlot = { day, start: hour, end: hour + 1 };
+    setSelectedSlot(newSelectedSlot);
   };
+  
+
+  
+  
   const color = puzzlePieces?.find(
     (piece) => piece?.name === serviceName
   )?.color;

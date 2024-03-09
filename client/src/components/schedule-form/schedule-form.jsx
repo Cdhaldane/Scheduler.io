@@ -29,8 +29,7 @@ const ScheduleForm = ({ personID, selectedSlot, personnel }) => {
       // Wait for the animation to finish before removing the class
       const timer = setTimeout(() => {
         setTyping(false);
-      }, 2000); // Duration should match the CSS animation
-
+      }, 2000); 
       return () => clearTimeout(timer);
     }
   }, [person?.first_name]);
