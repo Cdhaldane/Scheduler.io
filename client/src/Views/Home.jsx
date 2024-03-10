@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar.jsx";
 import Calendar from "../Components/Calendar/Calendar.jsx";
-import ScheduleForm from "../Components/Schedule-form/Schedule-form";
+import ScheduleForm from "../Components/Schedule-form/Schedule-form.jsx";
 import GuestBooking from "../Components/GuestBookingPage/GuestBookingPage.jsx";
 import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";

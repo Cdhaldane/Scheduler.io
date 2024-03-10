@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDrop, useDrag } from "react-dnd";
-import Calendar from "../Calendar/Calendar";
+import Calendar from "../Calendar/Calendar.jsx";
 import Modal from "../Modal/Modal";
 import GarbageBin from "../Calendar/GarbageBin";
 import { createKeyframes, getOffset, FlexBoxWrapper } from "../../Utils.jsx";
