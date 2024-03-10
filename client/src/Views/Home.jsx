@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar.jsx";
 import Calendar from "../Components/Calendar/Calendar.jsx";
-import ScheduleForm from "../Components/Schedule-form/Schedule-form.jsx";
+import ScheduleForm from "../Components/Schedule-form/Schedule-form";
 import GuestBooking from "../Components/GuestBookingPage/GuestBookingPage.jsx";
 import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
@@ -75,8 +75,8 @@ const Home = ({ session, type }) => {
     setTimeout(() => {}, 1000);
   };
 
-  const handleSelectedSlot = (e) => {
-    setSelectedSlot({ day: e.day, hour: e.hour });
+  const handleSelectedSlot = (slot) => {
+    setSelectedSlot(slot);
   };
 
   const calendarProps = {

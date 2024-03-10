@@ -18,6 +18,8 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
   const [typing, setTyping] = useState(false);
   const alert = useAlert();
 
+  console.log(selectedSlot);
+
   useEffect(() => {
     if (personID !== null) {
       setPerson(personnel[personID]);
