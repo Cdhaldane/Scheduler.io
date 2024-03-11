@@ -22,6 +22,7 @@
   --nav-height: 60px;
   --footer-height: 60px;
   --main-height: calc(100vh - var(--nav-height) - var(--footer-height));
+  --puzzle-width: 180px;
 }
 
 body {

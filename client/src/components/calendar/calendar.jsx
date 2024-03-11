@@ -5,13 +5,22 @@ import GarbageBin from "./GarbageBin";
 import "./Calendar.css";
 
 const SERVICE = "service";
-const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
+const Calendar = ({
+  puzzlePieces,
+  personID,
+  handleSelectedSlot,
+  handlePersonnelServiceUpdate,
+  personnelServices,
+  selectedSlot,
+  setSelectedSlot,
+}) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedSlot, setSelectedSlot] = useState(null);
   const [scheduledSlots, setScheduledSlots] = useState([]);
   const [flipAnimation, setFlipAnimation] = useState("");
 
-  useEffect(() => {}, [scheduledSlots]);
+  useEffect(() => {
+    if (personnelServices) setScheduledSlots(personnelServices);
+  }, [personnelServices]);
 
   const getStartOfWeek = (date) => {
     const start = new Date(date);
@@ -98,7 +107,7 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
   const handleSlotClick = (day, hour, slots) => {
     let slot = {};
     if (!day || !hour) {
-      setSelectedSlot(null);
+      handleSelectedSlot(null);
       return;
     }
     let allSlots = scheduledSlots;
@@ -127,7 +136,6 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
       };
     }
 
-    setSelectedSlot(slot);
     handleSelectedSlot(slot);
   };
 
@@ -167,7 +175,6 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
   };
 
   const handlePieceDrop = (date, hour, item) => {
-    console.log("handlePieceDrop", date, hour, item);
     const year = date.split("-")[0];
     const month = date.split("-")[1] - 1;
     const tempDay = date.split("-")[2];
@@ -188,7 +195,6 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
         color: item.color,
       },
     };
-
     setScheduledSlots((prev) => [...prev, newSlot]);
     setSelectedSlot({ day: dayNames[day.getDay()], hour });
   };
@@ -263,16 +269,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     setScheduledSlots(updatedSlots);
   };
 
-  const [{ isOver, trashBinDrop }, drop] = useDrop({
-    accept: SERVICE,
-    drop: (item, monitor) => {
-      setScheduledSlots((prev) => prev.filter((slot) => slot.id !== item.id));
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-      //canDrop: monitor.canDrop(),
-    }),
-  });
+  useEffect(() => {
+    handlePersonnelServiceUpdate(scheduledSlots);
+  }, [scheduledSlots]);
 
   const renderHeader = () => {
     const startOfWeek = getStartOfWeek(currentDate);
@@ -313,6 +312,7 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
   };
 
   // Render the body of the calendar with times and cells
+
   const renderWeek = () => {
     return hoursInDay.map((hour, index) => (
       <div key={index + hour} className="row">
@@ -331,7 +331,7 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
             isSlotEdge={isSlotEdge}
             handlePieceExpand={handlePieceExpand}
             serviceName={
-              scheduledSlots.find(
+              scheduledSlots?.find(
                 (slot) =>
                   slot.day === day && hour >= slot.start && hour < slot.end
               )?.item?.name
@@ -346,12 +346,10 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
   };
 
   return (
-    <div className="main-calendar">
-      <div className="calendar">
-        <div className="header">{renderHeader()}</div>
-        <div className={`body ${flipAnimation}`}>{renderWeek("current")}</div>
-        <div className="body next-page">{renderWeek("next")}</div>
-      </div>
+    <div className="calendar">
+      <div className="header">{renderHeader()}</div>
+      <div className={`body ${flipAnimation}`}>{renderWeek("current")}</div>
+      {/* <div className="body next-page">{renderWeek("next")}</div> */}
     </div>
   );
 };

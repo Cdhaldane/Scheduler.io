@@ -83,11 +83,32 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
           }}
         >
           <div className="sidebar-item-header">
-            <i className="fa-solid fa-user"></i>
             <h1>
+              <i className="fa-solid fa-user"></i>
               {person.first_name} {person.last_name}
             </h1>
+            <i
+              class="fa-solid fa-cog"
+              onClick={(e) => {
+                e.preventDefault();
+                setContextMenu({
+                  x: e.clientX,
+                  y: e.clientY,
+                  visible: true,
+                });
+                setPersonID(index);
+              }}
+            ></i>
           </div>
+          <ul
+            className={`sidebar-item-body ${
+              personID === index && person?.services ? "" : "none"
+            }`}
+          >
+            {person?.services?.map((service, i) => {
+              return <li key={i}>{service.name}</li>;
+            })}
+          </ul>
         </div>
       ))
       .concat(
@@ -98,8 +119,10 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
             onClick={() => setIsOpen(true)}
           >
             <div className="sidebar-item-header">
-              <i className="fa-solid fa-plus"></i>
-              <h1>Add Personnel</h1>
+              <h1>
+                {" "}
+                <i className="fa-solid fa-plus"></i>Add Personnel
+              </h1>
             </div>
           </div>
         )

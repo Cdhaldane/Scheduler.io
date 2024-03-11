@@ -3,7 +3,7 @@ import { useDrop, useDrag } from "react-dnd";
 import PuzzleContainer from "../Puzzle/PuzzleContainer";
 import ContextMenu from "./CalendarContextMenu/ContextMenu";
 
-const ResizeIndicator = ({ direction, onResize, name }) => {
+const ResizeIndicator = ({ direction, onResize, name, color }) => {
   const [, drag] = useDrag({
     type: "resize",
     item: () => ({ direction, type: "resize", name }),
@@ -14,7 +14,13 @@ const ResizeIndicator = ({ direction, onResize, name }) => {
     },
   });
 
-  return <div ref={drag} className={`expand-indicator ${direction}`}></div>;
+  return (
+    <div
+      ref={drag}
+      className={`expand-indicator ${direction}`}
+      style={{ borderColor: color }}
+    ></div>
+  );
 };
 
 const Cell = ({
@@ -136,7 +142,7 @@ const Cell = ({
   };
   const color = puzzlePieces?.find(
     (piece) => piece?.name === serviceName
-  )?.color;
+  )?.backgroundColor;
 
   return (
     <div
@@ -162,6 +168,7 @@ const Cell = ({
             direction="top"
             onResize={handleResize}
             name={serviceName}
+            color={color}
           />
         </div>
       )}
@@ -172,6 +179,7 @@ const Cell = ({
               direction="top"
               onResize={handleResize}
               name={serviceName}
+              color={color}
             />
           )}
           {/* Cell content */}
@@ -182,6 +190,7 @@ const Cell = ({
               direction="bottom"
               onResize={handleResize}
               name={serviceName}
+              color={color}
             />
           )}
         </>

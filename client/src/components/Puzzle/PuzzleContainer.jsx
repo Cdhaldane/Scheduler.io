@@ -68,7 +68,6 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
       id={"piece" + piece.id}
       ref={drag}
       style={{
-        opacity: isDragging ? 1 : 1,
         cursor: "grab",
       }}
       className={pieceClass}
@@ -80,9 +79,9 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
         xmlns="http://www.w3.org/2000/svg"
         x="0px"
         y="0px"
-        viewBox="0,0,256,256"
+        viewBox="0,0,300,300"
       >
-        <g transform="translate(-32,-32) scale(1.25,1.25)">
+        <g transform="translate(-90,-40) scale(1.8,1.50)">
           <g fill="none">
             <g transform="translate(4.608,5.376) scale(2.56,2.56)">
               <path d="M21,64v16c0,2.761 2.239,5 5,5h48c2.761,0 5,-2.239 5,-5v-48c0,-2.761 -2.239,-5 -5,-5h-16.859v0c1.769,-1.803 2.859,-4.274 2.859,-7c0,-5.523 -4.477,-10 -10,-10c-5.523,0 -10,4.477 -10,10c0,2.725 1.09,5.196 2.859,7h-0.999h-15.86c-2.761,0 -5,2.239 -5,5v15v1.859c1.804,-1.769 4.274,-2.859 7,-2.859c5.523,0 10,4.477 10,10c0,5.523 -4.477,10 -10,10c-2.726,0 -5.196,-1.09 -7,-2.859z"></path>
@@ -104,19 +103,19 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
 };
 
 const PuzzleContainer = ({
-  onDrop,
   onDeleteService,
+  onDrop,
   personID,
   handleSelectedSlot,
   onAddService,
   deletedService,
   addedService,
   puzzlePieces,
-  fetchData,
-  session,
+  handlePersonnelServiceUpdate,
+  personnelServices,
 }) => {
   const [{ isOver, canDrop }, drop] = useDrop({
-    accept: "puzzlePiece",
+    accept: ["puzzlePiece"],
     drop: (item, monitor) => {
       onDrop(item); // Call the onDrop function passed as prop with the dropped item
     },
@@ -127,8 +126,8 @@ const PuzzleContainer = ({
   });
   const [animateDeleteId, setAnimateDeleteId] = useState(null);
   const [animateAddId, setAnimateAddId] = useState(null);
+  const [collapsed, setCollapsed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { showTooltip, hideTooltip } = useTooltip();
   const pieceRef = useRef(null);
 
   useEffect(() => {
@@ -143,15 +142,21 @@ const PuzzleContainer = ({
     }
   }, [addedService]);
 
-  const handleDropMiddle = (item) => {
-    onDeleteService(item);
-  };
+  const [{ isBinOver }, dropRef] = useDrop({
+    accept: ["service"],
+    drop: (item, monitor) => {
+      onDeleteService(item);
+    },
+    collect: (monitor) => ({
+      isBinOver: monitor.isOver(),
+    }),
+  });
 
   return (
     <>
       <div
         ref={drop}
-        className="main-body"
+        className={`main-body ${collapsed && "collapsed"}`}
         style={{
           width: "100%",
           height: "100%",
@@ -163,29 +168,39 @@ const PuzzleContainer = ({
           personID={personID}
           handleSelectedSlot={(e) => handleSelectedSlot(e)}
           puzzlePieces={puzzlePieces}
+          handlePersonnelServiceUpdate={(e) => handlePersonnelServiceUpdate(e)}
+          personnelServices={personnelServices}
         />
 
-        <div className="pieces-container">
+        <div className={`pieces-container`}>
+          <i
+            className={`fa-solid fa-chevron-${!collapsed ? "right" : "left"}`}
+            onClick={() => setCollapsed(!collapsed)}
+          ></i>
           <div className="pieces-main">
             {puzzlePieces?.map((piece, index) => (
-              <>
-                <PuzzlePiece
-                  puzzlePieces={puzzlePieces}
-                  key={index}
-                  piece={piece}
-                  animate={
-                    piece.id === animateDeleteId
-                      ? "animate-delete"
-                      : piece.id === animateAddId
-                      ? "animate-add"
-                      : null
-                  }
-                  pieceRef={pieceRef}
-                />
-              </>
+              // <Tooltip
+              //   tooltipText={piece.description}
+              //   theme={{ color: piece?.backgroundColor }}
+              //   direction="down"
+              // >
+              <PuzzlePiece
+                puzzlePieces={puzzlePieces}
+                key={index}
+                piece={piece}
+                animate={
+                  piece.id === animateDeleteId
+                    ? "animate-delete"
+                    : piece.id === animateAddId
+                    ? "animate-add"
+                    : null
+                }
+                pieceRef={pieceRef}
+              />
+              // </Tooltip>
             ))}
           </div>
-          <div className="pieces-footer">
+          <div className={`pieces-footer`}>
             <Tooltip tooltipText="Add Service" theme={{ color: "primary" }}>
               <div
                 className="green"
@@ -195,12 +210,18 @@ const PuzzleContainer = ({
                 <i className="fas fa-plus"></i>
               </div>
             </Tooltip>
-            <Tooltip
+            {/* <Tooltip
               tooltipText="Delete Service"
               theme={{ color: "secondary" }}
+            > */}
+            <div
+              id="garbage-bin"
+              className={`${isBinOver ? "is-over" : "no"}`}
+              ref={dropRef}
             >
-              <GarbageBin onDrop={(item) => handleDropMiddle(item)} />
-            </Tooltip>
+              <i class="fa-regular fa-trash-can"></i>
+            </div>
+            {/* </Tooltip> */}
           </div>
         </div>
       </div>
@@ -225,7 +246,7 @@ const PuzzleContainer = ({
               name: states.serviceName,
               duration: states.duration,
               price: states.price,
-              backgroundColor: states.color,
+              backgroundColor: states.backgroundColor,
               description: states.description,
             });
           }}

@@ -64,52 +64,47 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-content">
-        <div className="navbar-header">
-          <img
-            src="./logo.png"
-            alt="website logo"
-            className="navbar-logo"
-            onClick={() => navigate("/admin")}
-          />
-          <h1 onClick={() => navigate("/")}>Time Slot</h1>
-        </div>
-        <ul>
-          {!isLoggedIn && !isAdmin && (
-            <NavbarItem
-              icon="fa-solid fa-arrow-right-to-bracket"
-              route="#"
-              action={() => setShowModal(true)}
-            />
-          )}
-          {isAdmin && (
-            <>
-              <NavbarItem
-                icon="fa-solid fa-clipboard"
-                route="/admin/dashboard"
-              />
-              <NavbarItem icon="fa-solid fa-plus" route="/admin/add" />
-              <NavbarItem icon="fa-regular fa-user" route="/admin/profile" />
-            </>
-          )}
-          {isLoggedIn && !isAdmin && (
-            <>
-              <NavbarItem
-                icon="fa-solid fa-message"
-                action={() => setIsOpen(true)}
-              />
-              <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
-              <Dropdown
-                children={<ProfilePic />}
-                label={session?.user.user_metadata.name}
-                options={["Signout"]}
-                onClick={(e) => handleDropdownClick(e)}
-                direction="left"
-              />
-            </>
-          )}
-        </ul>
+      <div className="navbar-header">
+        <img
+          src="./logo.png"
+          alt="website logo"
+          className="navbar-logo"
+          onClick={() => navigate("/admin")}
+        />
+        <h1 onClick={() => navigate("/")}>Time Slot</h1>
       </div>
+      <ul>
+        {!isLoggedIn && !isAdmin && (
+          <NavbarItem
+            icon="fa-solid fa-arrow-right-to-bracket"
+            route="#"
+            action={() => setShowModal(true)}
+          />
+        )}
+        {isAdmin && (
+          <>
+            <NavbarItem icon="fa-solid fa-clipboard" route="/admin/dashboard" />
+            <NavbarItem icon="fa-solid fa-plus" route="/admin/add" />
+            <NavbarItem icon="fa-regular fa-user" route="/admin/profile" />
+          </>
+        )}
+        {isLoggedIn && !isAdmin && (
+          <>
+            <NavbarItem
+              icon="fa-solid fa-message"
+              action={() => setIsOpen(true)}
+            />
+            <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
+            <Dropdown
+              children={<ProfilePic />}
+              label={session?.user.user_metadata.name}
+              options={["Signout"]}
+              onClick={(e) => handleDropdownClick(e)}
+              direction="left"
+            />
+          </>
+        )}
+      </ul>
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <>
           <div className="modal-body">

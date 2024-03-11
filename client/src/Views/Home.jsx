@@ -14,6 +14,7 @@ import {
   getServices,
   deleteService,
   addService,
+  addPersonnelService,
 } from "../Database.jsx";
 
 import "./Home.css";
@@ -25,7 +26,10 @@ const Home = ({ session, type }) => {
   const [services, setServices] = useState([]);
   const [deletedService, setDeletedService] = useState(null);
   const [addedService, setAddedService] = useState(null);
+  const [personnelServices, setPersonnelServices] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [selectedService, setSelectedService] = useState();
+
   const adminMode = type === "admin";
   const alert = useAlert();
   const navigate = useNavigate();
@@ -36,7 +40,11 @@ const Home = ({ session, type }) => {
 
   const fetchData = async () => {
     const personnel = await getPersonnel();
-    if (personnel) setPersonnel(personnel);
+    if (personnel) {
+      setPersonnel(personnel);
+      // setPersonnelServices(personnel[personID + 1]?.services);
+    }
+    console.log("personnel", personnel);
 
     const data = await getServices();
     if (data) setServices(data);
@@ -45,6 +53,10 @@ const Home = ({ session, type }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    // setPersonnelServices(personnel[personID + 1]?.services);
+  }, [personID]);
 
   const onDeleteService = async (item) => {
     setDeletedService(item);
@@ -66,6 +78,7 @@ const Home = ({ session, type }) => {
         alert.showAlert("error", res.error.message);
       } else {
         setAddedService(res.data);
+        addPersonnelService(personID, res.data);
         fetchData();
 
         alert.showAlert("success", "Service added");
@@ -76,7 +89,26 @@ const Home = ({ session, type }) => {
   };
 
   const handleSelectedSlot = (slot) => {
-    setSelectedSlot(slot);
+    if (selectedService?.duration > 0) {
+      setSelectedSlot({
+        ...slot,
+        start: slot.hour,
+        end: slot.hour + selectedService?.duration,
+      });
+    } else {
+      setSelectedSlot(slot);
+    }
+  };
+
+  const handlePersonnelServiceUpdate = async (services) => {
+    console.log("services", services);
+    const allServices = await getServices();
+    const { data, error } = await addPersonnelService(personID, allServices);
+    if (error) {
+      alert.showAlert("error", error.message);
+    } else {
+      alert.showAlert("success", "Service added");
+    }
   };
 
   const calendarProps = {
@@ -89,6 +121,9 @@ const Home = ({ session, type }) => {
     puzzlePieces: services,
     fetchData,
     onDeleteService,
+    handlePersonnelServiceUpdate,
+    personnelServices,
+    selectedSlot,
   };
 
   return (
@@ -98,10 +133,6 @@ const Home = ({ session, type }) => {
         personID={personID}
         personnel={personnel}
       />
-      <button className="admin-button" onClick={() => navigate("/admin")}>
-        ADMIN
-      </button>
-
       {adminMode ? (
         <PuzzleContainer
           puzzlePieces={services}
@@ -116,6 +147,8 @@ const Home = ({ session, type }) => {
             selectedSlot={selectedSlot}
             personnel={personnel}
             session={session}
+            selectedService={selectedService}
+            setSelectedService={setSelectedService}
           />
         </div>
       )}

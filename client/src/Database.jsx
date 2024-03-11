@@ -177,3 +177,17 @@ export const deleteService = async (id) => {
   }
   return data;
 };
+
+// PERSONNEL SERVICES HANDLERS
+
+export const addPersonnelService = async (personnelId, newPersonnelService) => {
+  const { data, error } = await supabase
+    .from("personnel")
+    .update({ services: newPersonnelService })
+    .eq("id", personnelId)
+    .select();
+  if (error) {
+    console.log("Error adding personnel service:", error);
+  }
+  return { data, error };
+};

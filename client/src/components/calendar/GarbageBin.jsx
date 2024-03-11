@@ -19,13 +19,11 @@ const GarbageBin = ({ onDrop }) => {
     }),
   });
 
-  // const isEditMode = window.location.pathname.includes("admin") ? true : false;
-
   return (
     <div
       ref={dropRef}
       id="garbage-bin"
-      className={`${isOver ? "is-over" : ""}`}
+      className={`${isOver ? "is-over" : "no"}`}
     >
       <i class="fa-regular fa-trash-can"></i>
     </div>

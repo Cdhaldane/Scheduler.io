@@ -6,19 +6,25 @@ import { useAlert } from "../Providers/Alert";
 
 import "./Schedule-form.css";
 
-const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
+const ScheduleForm = ({
+  personID,
+  selectedSlot,
+  personnel,
+  session,
+  selectedService,
+  setSelectedService,
+}) => {
   const [person, setPerson] = useState(personnel[personID]);
   const [day, setDay] = useState(selectedSlot.day);
   const [start, setStart] = useState(selectedSlot.hour);
-  const [selectedService, setSelectedService] = useState();
-  const [duration, setDuration] = useState(2);
+
+  console.log(selectedService);
+
   const [price, setPrice] = useState(20);
 
   const navigate = useNavigate();
   const [typing, setTyping] = useState(false);
   const alert = useAlert();
-
-  console.log(selectedSlot);
 
   useEffect(() => {
     if (personID !== null) {
@@ -30,20 +36,21 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
 
   useEffect(() => {
     if (person?.first_name) {
-      // Start the typing effect
       setTyping(true);
 
-      // Wait for the animation to finish before removing the class
       const timer = setTimeout(() => {
         setTyping(false);
-      }, 1000); // Duration should match the CSS animation
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
   }, [person?.first_name]);
 
-  //add a handler for the service change
-  const handleServiceChange = (service) => {
+  const handleServiceChange = (serviceName) => {
+    let service = person.services.find(
+      (service) => service.name === serviceName
+    );
+
     setSelectedService(service);
   };
 
@@ -52,7 +59,7 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
     item: {
       type: "service",
       id: personID,
-      service: selectedService,
+      service: selectedService?.name,
       start: selectedSlot.hour,
     },
     collect: (monitor) => ({
@@ -70,8 +77,8 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
       day: day,
       start: start,
       end: start + 2,
-      service: selectedService,
-      duration: duration,
+      service: selectedService?.name,
+      duration: selectedService?.duration,
       price: price,
     };
     if (session) {
@@ -111,37 +118,34 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
             <Dropdown
               children={
                 <button className="dropdown-toggle">
-                  {selectedService || "Select Service"}
+                  {selectedService?.name || "Select Service"}
                 </button>
               }
-              options={["Haircut", "Shave", "Haircut and Shave"]}
+              options={person?.services?.map((service) => service.name) || []}
               onClick={(service) => handleServiceChange(service)}
             />
             <span>
               <h1>Duration:</h1>
-              <h2> {duration} hours</h2>
+              <h2> {selectedService?.duration} hours</h2>
             </span>
             <span>
               <h1>Price:</h1>
-              <h2> ${price}</h2>
+              <h2> ${selectedService?.price}</h2>
             </span>
           </div>
           <div className="schedule-time">
-            <p>
-              Your appointment is on <var>{day}</var>
-            </p>
-            <p>
-              Starting at{" "}
-              <var>
-                {start}:00{start <= 12 ? "AM" : "PM"}
-              </var>{" "}
-            </p>
-            <p>
-              Ending at{" "}
-              <var>
-                {start + 2}:00 {start + 2 <= 12 ? "AM" : "PM"}
-              </var>
-            </p>
+            <span>
+              <h1>Date:</h1>
+              <h2> {day} hours</h2>
+            </span>
+            <span>
+              <h1>Start:</h1>
+              <h2> {start}:00</h2>
+            </span>
+            <span>
+              <h1>End:</h1>
+              <h2> {start + selectedService?.duration}:00</h2>
+            </span>
           </div>
         </div>
       </div>
