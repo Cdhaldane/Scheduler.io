@@ -188,7 +188,6 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
         color: item.color,
       },
     };
-
     setScheduledSlots((prev) => [...prev, newSlot]);
     setSelectedSlot({ day: dayNames[day.getDay()], hour });
   };

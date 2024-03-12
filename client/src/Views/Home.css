@@ -93,9 +93,22 @@
 .admin-button {
   position: fixed;
   bottom: 10px;
-  left: 100px;
+  left: 80px;
   z-index: 1000000;
   background-color: var(--secondary);
+  color: var(--bg-primary);
+  border-radius: 10px;
+  font-size: 1rem;
+  width: 100px;
+  padding: 10px;
+  transition: all 0.1s ease-in-out;
+}
+.employee-button {
+  position: fixed;
+  bottom: 10px;
+  left: 190px;
+  z-index: 1000000;
+  background-color: var(--primary);
   color: var(--bg-primary);
   border-radius: 10px;
   font-size: 1rem;

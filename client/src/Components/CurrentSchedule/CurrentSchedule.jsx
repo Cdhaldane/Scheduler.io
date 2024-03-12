@@ -9,7 +9,7 @@ const CurrentSchedule = () => {
   ];
 
   return (
-    <div className="schedule-container">
+    <div className="main-right schedule-container">
       {dummyAppointments.map(appointment => (
         <div key={appointment.id} className="appointment">
           <div className="appointment-top">

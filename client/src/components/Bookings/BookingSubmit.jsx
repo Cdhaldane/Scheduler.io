@@ -9,11 +9,10 @@ const BookingSubmit = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, appointment } = location.state || {};
+  console.log("User:", user, "Appointment:", appointment);
   const alert = useAlert();
 
   const [booked, setBooked] = useState(false);
-
-  console.log("User:", user, "Appointment:", appointment);
 
   const handleBook = async () => {
     // Logic to book the appointment

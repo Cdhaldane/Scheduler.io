@@ -18,7 +18,7 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
   const [typing, setTyping] = useState(false);
   const alert = useAlert();
 
-  console.log(selectedSlot);
+  /*console.log(selectedSlot); */
 
   useEffect(() => {
     if (personID !== null) {
@@ -69,7 +69,7 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
       personnel: person,
       day: day,
       start: start,
-      end: start + 2,
+      end: start + duration,
       service: selectedService,
       duration: duration,
       price: price,
@@ -77,11 +77,11 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
     if (session) {
       const user = session?.user.user_metadata;
       navigate("/booking-submit", {
-        state: { user, appointment },
+        state: { user, appointment},
       });
     } else {
       navigate("/booking", {
-        state: { appointment },
+        state: {appointment},
       });
     }
   };
