@@ -1,0 +1,33 @@
+.schedule-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 20%;
+    margin: 0 auto;
+  }
+  
+  .appointment {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-bottom: 1px solid var(--bg-primary);
+  }
+  
+  .appointment-top {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+  }
+  
+  .appointment-service {
+    align-self: flex-start;
+    color: lightgrey;
+  }
+  
+  .appointment-description {
+    border: 1px solid var(--bg-primary);
+    padding: 10px;
+    margin-top: 10px;
+  }

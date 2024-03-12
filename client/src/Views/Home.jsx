@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar.jsx";
 import Calendar from "../Components/Calendar/Calendar.jsx";
-import ScheduleForm from "../Components/Schedule-form/Schedule-form";
+import ScheduleForm from "../Components/Schedule-form/Schedule-form.jsx";
 import GuestBooking from "../Components/GuestBookingPage/GuestBookingPage.jsx";
 import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
@@ -98,8 +98,12 @@ const Home = ({ session, type }) => {
         personID={personID}
         personnel={personnel}
       />
+
       <button className="admin-button" onClick={() => navigate("/admin")}>
         ADMIN
+      </button>
+      <button className="employee-button" onClick={() => navigate("/employee")}>
+        EMPLOYEE
       </button>
 
       {adminMode ? (

@@ -7,21 +7,22 @@ import {
 } from "react-router-dom";
 
 import "./App.css";
-import Home from "./Views/Home";
-import Admin from "./Views/Admin";
-import Navbar from "./Components/Navbar/Navbar";
-import Footer from "./Components/Footer/Footer";
-import Login from "./Components/Login/Login";
-import ACMain from "./Views/AccountCreation/ACMain";
-import BookingPage from "./Components/Bookings/BookingPage";
-import Sidebar from "./Components/Sidebar/Sidebar";
-import GuestBookingPage from "./Components/GuestBookingPage/GuestBookingPage";
-import BookingSubmit from "./Components/Bookings/BookingSubmit";
-import CustomerLogin from "./Components/Customer/CustomerLogin/CustomerLogin";
-import CustomerRegister from "./Components/Customer/CustomerRegister/CustomerRegister";
-import CustomerBookingPage from "./Components/Customer/CustomerLoginBooking/CustomerBookingPage";
-import CustomerSubmitPage from "./Components/Customer/CustomerSubmitPage/CustomerSubmitPage";
-import CustomerRegisterSubmitPage from "./Components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage";
+import Home from "./Views/Home.jsx";
+import Admin from "./Views/Admin.jsx";
+import Employee from "./Views/Employee.jsx";
+import Navbar from "./Components/Navbar/Navbar.jsx";
+import Footer from "./Components/Footer/Footer.jsx";
+import Login from "./Components/Login/Login.jsx";
+import ACMain from "./Views/AccountCreation/ACMain.jsx";
+import BookingPage from "./Components/Bookings/BookingPage.jsx";
+import Sidebar from "./Components/Sidebar/Sidebar.jsx";
+import GuestBookingPage from "./Components/GuestBookingPage/GuestBookingPage.jsx";
+import BookingSubmit from "./Components/Bookings/BookingSubmit.jsx";
+import CustomerLogin from "./Components/Customer/CustomerLogin/CustomerLogin.jsx";
+import CustomerRegister from "./Components/Customer/CustomerRegister/CustomerRegister.jsx";
+import CustomerBookingPage from "./Components/Customer/CustomerLoginBooking/CustomerBookingPage.jsx";
+import CustomerSubmitPage from "./Components/Customer/CustomerSubmitPage/CustomerSubmitPage.jsx";
+import CustomerRegisterSubmitPage from "./Components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage.jsx";
 import Alert from "./Components/Providers/Alert";
 import Info from "./Views/Info";
 import DevTools from "./Components/DevTools/DevTools";
@@ -90,6 +91,10 @@ function App() {
             <Route
               path="/admin"
               element={<Home session={session} type="admin" />}
+            />
+            <Route
+              path="/employee"
+              element={<Employee session={session} type="employee"/>}
             />
             <Route path="/login" element={<Login />} />
             <Route path="/info" element={<Info />} />
