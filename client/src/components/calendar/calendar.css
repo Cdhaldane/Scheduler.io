@@ -18,6 +18,7 @@
 
 .header {
   display: flex;
+  flex-direction: row !important;
   width: calc(
     100% + 2 * var(--nav-padding)
   ); /* Adjusted for the navigation buttons */
@@ -45,6 +46,14 @@
   border: 1px solid var(--primary);
 }
 
+.header-days {
+  display: flex;
+  width: 100%;
+  text-align: center; /* Center the text */
+  border: 1px solid var(--light-grey);
+  padding-top: 3px;
+}
+
 .header-cell {
   width: calc((100%)); /* Adjusted for the navigation buttons */
   text-align: center; /* Center the text */
@@ -69,24 +78,63 @@
 }
 
 .cell.scheduled {
-  background-color: inherit;
-  color: var(--white);
-  border: 1px solid inherit;
+  color: var(--text-white);
+  font-weight: bold;
+  font-family: var(--font-main);
 }
 
-.cell.selected {
-  border: 1px solid var(--primary);
-  background-color: var(--primary);
+.cell.booking {
+  background-color: var(--secondary) !important;
+  color: var(--bg-secondary) !important;
+  font-style: italic;
+  border: 1px solid var(--secondary) !important;
 }
 
-.cell.group-selected {
-  /* background-color: var(--primary) !important ;
-  border: 1px solid inherit !important;
-  color: var(--bg-primary); */
+.cell.single-select {
+  /* background-color: var(--primary); */
+  box-shadow: var(--bg-primary) 0px 54px 55px, var(--bg-primary) 0px -12px 30px,
+    var(--bg-primary) 0px 4px 6px, var(--bg-primary) 0px 12px 13px,
+    var(--bg-primary) 0px -3px 5px !important;
+  z-index: 100000;
+}
+
+.cell.group-select:not(.scheduled) {
+  background-color: var(--primary) !important ;
+  border: 1px solid transparent !important;
+  color: var(--bg-primary);
+  z-index: 10;
+}
+
+.cell.group-select.booking {
+  background-color: var(--secondary) !important;
+  border: 1px solid var(--bg-secondary) !important;
+  color: var(--bg-primary);
+}
+
+.cell.group-select.booking.start {
+  box-shadow: var(--bg-primary) 0px 54px 55px, var(--bg-primary) 0px -12px 30px,
+    var(--bg-primary) 0px 40px 60px, var(--bg-primary) 0px 12px 1px,
+    var(--bg-primary) 0px -3px 5px !important;
+  border-bottom: 1px solid transparent !important;
+}
+
+.cell.group-select.booking.middle {
+  box-shadow: var(--bg-primary) 0px 54px 55px, var(--bg-primary) 0px 20px 30px,
+    var(--bg-primary) 0px 4px 6px, var(--bg-primary) 0px 12px 13px,
+    var(--bg-primary) 0px 20px -1px !important;
+  border-top: 1px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
+}
+
+.cell.group-select.booking.end {
+  box-shadow: var(--bg-primary) 0px 54px 55px, var(--bg-primary) 0px 20px 30px,
+    var(--bg-primary) 0px 4px -6px, var(--bg-primary) 0px 12px 13px,
+    var(--bg-primary) 0px -3px 5px !important;
+  border-top: 1px solid transparent !important;
 }
 
 .cell.over {
-  background-color: var(--light-grey);
+  background-color: var(--light-grey) !important;
 }
 
 .day.selected {
@@ -99,20 +147,23 @@
   z-index: 1;
   cursor: -webkit-grab;
   animation: pulse 1s infinite;
+  border-color: inherit !important;
 }
 
 .expand-indicator.top {
   top: -15px; /* Adjust based on the cell's border and desired appearance */
+  border-bottom: 10px solid white !important;
+  border-color: inherit !important;
   border-left: 10px solid transparent !important;
   border-right: 10px solid transparent !important;
-  border-bottom: 10px solid var(--primary);
 }
 
 .expand-indicator.bottom {
+  border-top: 10px solid white !important;
+  border-color: inherit !important;
   border-left: 10px solid transparent !important;
   border-right: 10px solid transparent !important;
 
-  border-top: 10px solid var(--primary);
   bottom: -15px; /* Adjust based on the cell's border and desired appearance */
 }
 

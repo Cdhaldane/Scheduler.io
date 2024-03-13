@@ -1,220 +1,94 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDrop } from "react-dnd";
 import Cell from "./Cell";
-import GarbageBin from "./GarbageBin";
 import "./Calendar.css";
+import { getServiceFromId } from "../../Database";
+import Spinner from "../Spinner/Spinner.jsx";
+
+import {
+  getDaysOfWeek,
+  findConnectedGrouping,
+  changeWeek,
+  isSlotEdge,
+  deleteHelper,
+} from "./Utils";
 
 const SERVICE = "service";
 const Calendar = ({
   puzzlePieces,
-  personID,
   handleSelectedSlot,
-  handlePersonnelServiceUpdate,
-  personnelServices,
   selectedSlot,
-  setSelectedSlot,
+  bookings,
+  adminMode,
 }) => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentWeek, setCurrentWeek] = useState(getDaysOfWeek(new Date()));
   const [scheduledSlots, setScheduledSlots] = useState([]);
-  const [flipAnimation, setFlipAnimation] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (personnelServices) setScheduledSlots(personnelServices);
-  }, [personnelServices]);
+    const fetchData = async () => {
+      const slots = await Promise.all(
+        bookings.map(async (booking) => {
+          const service = await getServiceFromId(booking.service_id);
+          return {
+            id: booking.booking_id,
+            day: new Date(booking.booking_date).getUTCDate(),
+            start: parseInt(booking.booking_time),
+            end: parseInt(booking.booking_time) + service.duration,
+            item: service,
+            type: "booking",
+          };
+        })
+      );
+      setScheduledSlots(slots);
+    };
 
-  const getStartOfWeek = (date) => {
-    const start = new Date(date);
-    start.setDate(start.getDate() - start.getDay());
-    start.setHours(0, 0, 0, 0);
-    return start;
-  };
-
-  const weekDays = Array.from({ length: 7 }, (_, i) => {
-    const day = new Date(currentDate);
-    day.setDate(day.getDate() + i);
-    return day;
-  });
-
-  const dayNames = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
-  const getDaysOfWeek = (currentDate) => {
-    const startOfWeek = getStartOfWeek(currentDate);
-    return Array.from({ length: 7 }, (_, index) => {
-      const day = new Date(startOfWeek);
-      day.setDate(day.getDate() + index);
-      return day.toISOString().split("T")[0]; // Convert Date objects to string format to avoid React error
-    });
-  };
-
-  const hoursInDay = Array.from({ length: 24 }, (_, i) => i);
-
-  const daysOfWeek = getDaysOfWeek(new Date()); // Pass the current date or any specific date
-
-  const goToPreviousWeek = () => {
-    setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setDate(newDate.getDate() - 7);
-      return newDate;
-    });
-    setFlipAnimation("flip-left");
-    setTimeout(() => {
-      setFlipAnimation("");
-    }, 1000);
-  };
-
-  const goToNextWeek = () => {
-    setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setDate(newDate.getDate() + 7);
-      return newDate;
-    });
-    setFlipAnimation("flip-right");
-    setTimeout(() => {
-      setFlipAnimation("");
-    }, 1000);
-  };
+    if (adminMode === false) {
+      fetchData().then(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, [bookings]);
 
   const isSlotScheduled = (day, hour) => {
-    return scheduledSlots.some((slot) => {
-      return slot.day === day && hour >= slot.start && hour < slot.end;
+    let status = false;
+    scheduledSlots.some((slot) => {
+      if (slot.day === day && hour >= slot.start && hour < slot.end) {
+        if (slot.type === "booking") status = "booking";
+        else status = "scheduled";
+      }
     });
+    return status;
   };
 
-  const isSlotEdge = (day, hour, name) => {
-    let daySlots = scheduledSlots.filter((slot) => slot.day === day);
-    daySlots = daySlots.filter((slot) => slot.item.name === name);
-    daySlots.sort((a, b) => a.start - b.start);
-    const slotIndex = daySlots.findIndex((slot) => slot.start === hour);
-    if (slotIndex === -1) return false;
+  const handleSlotClick = (day, hour, date) => {
+    const isSelected = isSlotScheduled(day, hour);
+    console.log("isSelected", isSelected);
 
-    const isFirst = slotIndex === 0 || daySlots[slotIndex - 1].end !== hour;
+    const connectedBookings = findConnectedGrouping(scheduledSlots, day, hour);
 
-    const isLast =
-      slotIndex === daySlots.length - 1 ||
-      daySlots[slotIndex + 1].start !== daySlots[slotIndex].end;
-
-    return isFirst || isLast;
+    if (connectedBookings)
+      handleSelectedSlot(day, hour, date, connectedBookings);
+    else handleSelectedSlot(day, hour, date);
   };
 
-  const handleSlotClick = (day, hour, slots) => {
-    let slot = {};
-    if (!day || !hour) {
-      handleSelectedSlot(null);
-      return;
-    }
-    let allSlots = scheduledSlots;
-    if (slots) allSlots = slots;
-    const clickedSlot = allSlots.find(
-      (slot) => slot.day === day && hour >= slot.start && hour < slot.end
-    );
-    if (clickedSlot) {
-      const slotsGroupedByDay = groupSlotsByDay(allSlots);
-      const connectedGrouping = findConnectedGrouping(
-        slotsGroupedByDay[day],
-        day,
-        hour
-      );
-      slot = {
-        day,
-        hour: connectedGrouping?.end - 1,
-        item: clickedSlot.item,
-        start: connectedGrouping?.start,
-        end: connectedGrouping?.end - 1,
-      };
-    } else {
-      slot = {
-        day,
-        hour,
-      };
-    }
-
-    handleSelectedSlot(slot);
-  };
-
-  const findConnectedGrouping = (slots, clickedDay, clickedHour) => {
-    const clickedSlotIndex = slots.findIndex(
-      (slot) =>
-        slot.day === clickedDay &&
-        clickedHour >= slot.start &&
-        clickedHour < slot.end
-    );
-
-    if (clickedSlotIndex === -1) return null;
-
-    const clickedSlot = slots[clickedSlotIndex];
-    let start = clickedSlot.start;
-    let end = clickedSlot.end;
-    const itemName = clickedSlot.item.name;
-
-    // Traverse backward to find the earliest connected start time with the same item.name
-    for (let i = clickedSlotIndex - 1; i >= 0; i--) {
-      if (slots[i].end === start && slots[i].item.name === itemName) {
-        start = slots[i].start;
-      } else {
-        break; // Break if slots are not connected or names don't match
-      }
-    }
-
-    // Traverse forward to find the latest connected end time with the same item.name
-    for (let i = clickedSlotIndex + 1; i < slots.length; i++) {
-      if (slots[i].start === end && slots[i].item.name === itemName) {
-        end = slots[i].end;
-      } else {
-        break; // Break if slots are not connected or names don't match
-      }
-    }
-    return { start, end, itemName };
-  };
-
-  const handlePieceDrop = (date, hour, item) => {
-    const year = date.split("-")[0];
-    const month = date.split("-")[1] - 1;
-    const tempDay = date.split("-")[2];
-    const day = new Date(year, month, tempDay, parseInt(hour));
-
+  const handlePieceDrop = (day, hour, date, item) => {
     const newSlot = {
-      id: `${day.toISOString()}_${hour}`,
-      day: day.toISOString().split("T")[0],
+      id: date,
+      day: date.getUTCDate(),
       start: hour,
       end: hour + 1,
-      item: {
-        type: item.type,
-        id: item.id,
-        service: item.service,
-        name: item.name,
-        duration: item.duration,
-        price: item.price,
-        color: item.color,
-      },
+      item: { ...item, type: "scheduled" },
     };
+
     setScheduledSlots((prev) => [...prev, newSlot]);
-    setSelectedSlot({ day: dayNames[day.getDay()], hour });
+    handleSlotClick(day, hour, date);
   };
 
-  const groupSlotsByDay = (scheduledSlots) => {
-    return scheduledSlots.reduce((acc, slot) => {
-      if (!acc[slot.day]) {
-        acc[slot.day] = [];
-      }
-
-      acc[slot.day].push(slot);
-      acc[slot.day] = acc[slot.day].sort((a, b) => a.start - b.start);
-      return acc;
-    }, {});
-  };
-
-  const handlePieceExpand = (day, hour, item) => {
-    let startingTime = Math.min(selectedSlot.hour, hour);
-    let endingTime = Math.max(selectedSlot.hour, hour);
-
+  const handlePieceExpand = (day, hour, date, item) => {
+    let startingTime = Math.min(selectedSlot[0].hour, hour);
+    let endingTime = Math.max(selectedSlot[0].hour, hour);
+    console.log(selectedSlot);
     let updatedSlots = scheduledSlots.filter((slot) => {
       return (
         slot.day !== day || slot.end <= startingTime || slot.start > endingTime
@@ -223,133 +97,93 @@ const Calendar = ({
 
     let newSlots = [];
     for (let i = startingTime; i <= endingTime; i++) {
-      newSlots.push({ day, start: i, end: i + 1, item: item });
+      newSlots.push({ day, start: i, end: i + 1, item: item.item });
     }
     let connectedGrouping = findConnectedGrouping(
       [...updatedSlots, ...newSlots],
       day,
       hour
     );
-
     if ((item.direction === "bottom") & (hour < selectedSlot.hour)) {
       newSlots = [{ day, start: hour, end: hour + 1, item }];
     }
     if ((item.direction === "top") & (hour > connectedGrouping?.start)) {
       updatedSlots = updatedSlots.filter((slot) => slot.day !== day);
     }
-
+    console.log("newSlots", newSlots);
     setScheduledSlots([...updatedSlots, ...newSlots]);
     handleSlotClick(day, hour, [...updatedSlots, ...newSlots]);
   };
 
-  const isLastInGroup = (day, hour) => {
-    const grouping = findConnectedGrouping(scheduledSlots, day, hour);
-    if (grouping?.end - 1 === grouping?.start) {
-      return false;
-    }
-    if (!grouping) return true;
-    return grouping && hour === grouping.end - 1;
-  };
-
-  const handleScheduledSlotDelete = (day, hour) => {
-    console.log("delete");
+  const handleScheduledSlotDelete = (day, hour, e) => {
+    e.stopPropagation();
     let connectedGrouping = findConnectedGrouping(scheduledSlots, day, hour);
-    deleteHelper(day, hour, connectedGrouping);
-    setSelectedSlot(null);
-  };
-
-  const deleteHelper = (day, hour, connectedGrouping) => {
-    let updatedSlots = scheduledSlots.filter((slot) => {
-      return (
-        slot.day !== day ||
-        slot.end <= connectedGrouping.start ||
-        slot.start > connectedGrouping.end
-      );
-    });
-    setScheduledSlots(updatedSlots);
-  };
-
-  useEffect(() => {
-    handlePersonnelServiceUpdate(scheduledSlots);
-  }, [scheduledSlots]);
-
-  const renderHeader = () => {
-    const startOfWeek = getStartOfWeek(currentDate);
-    const weekDays = Array.from({ length: 7 }, (_, index) => {
-      const day = new Date(startOfWeek);
-      day.setDate(day.getDate() + index);
-      return day;
-    });
-
-    return (
-      <>
-        <button
-          className="navigation-button nb-left"
-          onClick={goToPreviousWeek}
-        >
-          <i className="fa-solid fa-arrow-left" />
-        </button>
-        <div className="cell empty">
-          {startOfWeek.toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-          })}
-        </div>
-        {weekDays.map((day, index) => (
-          <div key={index} className="header-cell">
-            {day.toLocaleDateString("en-US", { weekday: "long" })}
-            {/* {day.toLocaleDateString("en-US", {
-              month: "numeric",
-              day: "numeric",
-            })} */}
-          </div>
-        ))}
-        <button className="navigation-button nb-right" onClick={goToNextWeek}>
-          <i className="fa-solid fa-arrow-right" />
-        </button>
-      </>
+    setScheduledSlots(
+      deleteHelper(day, hour, connectedGrouping, scheduledSlots)
     );
-  };
-
-  // Render the body of the calendar with times and cells
-
-  const renderWeek = () => {
-    return hoursInDay.map((hour, index) => (
-      <div key={index + hour} className="row">
-        <div key={index + hour} className="cell hours">{`${hour}:00`}</div>
-        {daysOfWeek.map((day) => (
-          <Cell
-            key={day + hour}
-            day={day}
-            hour={hour}
-            handleSlotClick={handleSlotClick}
-            handleScheduledSlotDelete={handleScheduledSlotDelete}
-            handlePieceDrop={handlePieceDrop}
-            selectedSlot={selectedSlot}
-            setSelectedSlot={setSelectedSlot}
-            isSlotScheduled={isSlotScheduled}
-            isSlotEdge={isSlotEdge}
-            handlePieceExpand={handlePieceExpand}
-            serviceName={
-              scheduledSlots?.find(
-                (slot) =>
-                  slot.day === day && hour >= slot.start && hour < slot.end
-              )?.item?.name
-            }
-            scheduledSlots={scheduledSlots}
-            isLastInGroup={isLastInGroup}
-            puzzlePieces={puzzlePieces}
-          />
-        ))}
-      </div>
-    ));
+    handleSelectedSlot();
   };
 
   return (
     <div className="calendar">
-      <div className="header">{renderHeader()}</div>
-      <div className={`body ${flipAnimation}`}>{renderWeek("current")}</div>
-      {/* <div className="body next-page">{renderWeek("next")}</div> */}
+      {loading && <Spinner />}
+      <div className="header">
+        <button
+          className="navigation-button nb-left"
+          onClick={() => setCurrentWeek(changeWeek(-1, [...currentWeek]))}
+        >
+          <i className="fa-solid fa-arrow-left" />
+        </button>
+        <div className="header-days">
+          <div className="empty"></div>
+          {currentWeek.map((day, index) => (
+            <div key={index} className="header-cell">
+              {day?.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "numeric",
+                day: "numeric",
+              })}
+            </div>
+          ))}
+        </div>
+        <button
+          className="navigation-button nb-right"
+          onClick={() => setCurrentWeek(changeWeek(1, [...currentWeek]))}
+        >
+          <i className="fa-solid fa-arrow-right" />
+        </button>
+      </div>
+      <div className="body">
+        {Array.from({ length: 24 }).map((_, hour) => (
+          <div key={"row" + hour} className="row">
+            <div key={hour} className="cell hours">{`${hour}:00`}</div>
+            {currentWeek.map((day) => (
+              <Cell
+                key={day + hour}
+                date={day}
+                day={day.getUTCDate()}
+                hour={hour}
+                handleSlotClick={(newDay, newHour, newDate) =>
+                  handleSlotClick(newDay, newHour, newDate)
+                }
+                isSlotScheduled={(newDay, newHour) =>
+                  isSlotScheduled(newDay, newHour)
+                }
+                handleScheduledSlotDelete={handleScheduledSlotDelete}
+                handlePieceDrop={(newDay, newHour, newDate, item) =>
+                  handlePieceDrop(newDay, newHour, newDate, item)
+                }
+                selectedSlot={selectedSlot}
+                isSlotEdge={isSlotEdge}
+                handlePieceExpand={handlePieceExpand}
+                scheduledSlots={scheduledSlots}
+                puzzlePieces={puzzlePieces}
+                adminMode={adminMode}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

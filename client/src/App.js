@@ -85,7 +85,7 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<Home session={session} isAdmin={isAdmin} />}
+              element={<Home session={session} type="customer" />}
             />
             <Route
               path="/admin"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar.jsx";
 import Calendar from "../Components/Calendar/Calendar.jsx";
+import CustomerCalendar from "../Components/Calendar/CustomerCalendar.jsx";
 import ScheduleForm from "../Components/Schedule-form/Schedule-form";
 import GuestBooking from "../Components/GuestBookingPage/GuestBookingPage.jsx";
 import { useNavigate } from "react-router-dom";
@@ -15,13 +16,14 @@ import {
   deleteService,
   addService,
   addPersonnelService,
+  getBookings,
 } from "../Database.jsx";
 
 import "./Home.css";
 
 const Home = ({ session, type }) => {
   const [personID, setPersonID] = useState(0);
-  const [selectedSlot, setSelectedSlot] = useState(0);
+  const [selectedSlot, setSelectedSlot] = useState(null);
   const [personnel, setPersonnel] = useState([]);
   const [services, setServices] = useState([]);
   const [deletedService, setDeletedService] = useState(null);
@@ -29,6 +31,7 @@ const Home = ({ session, type }) => {
   const [personnelServices, setPersonnelServices] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedService, setSelectedService] = useState();
+  const [bookings, setBookings] = useState([]);
 
   const adminMode = type === "admin";
   const alert = useAlert();
@@ -42,21 +45,19 @@ const Home = ({ session, type }) => {
     const personnel = await getPersonnel();
     if (personnel) {
       setPersonnel(personnel);
-      // setPersonnelServices(personnel[personID + 1]?.services);
     }
-    console.log("personnel", personnel);
-
     const data = await getServices();
     if (data) setServices(data);
+
+    const bookingsData = await getBookings(personID + 1);
+    if (bookingsData) setBookings(bookingsData);
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    // setPersonnelServices(personnel[personID + 1]?.services);
   }, [personID]);
+
+  useEffect(() => {}, [personID]);
 
   const onDeleteService = async (item) => {
     setDeletedService(item);
@@ -88,20 +89,26 @@ const Home = ({ session, type }) => {
     setTimeout(() => {}, 1000);
   };
 
-  const handleSelectedSlot = (slot) => {
-    if (selectedService?.duration > 0) {
+  const handleSelectedSlot = (day, hour, date, group) => {
+    if (group) {
+      let slots = [];
+      for (let i = group.start; i < group.end; i++) {
+        slots.push({
+          day: day,
+          hour: i,
+          date: date,
+        });
+      }
+      setSelectedSlot(slots);
+    } else
       setSelectedSlot({
-        ...slot,
-        start: slot.hour,
-        end: slot.hour + selectedService?.duration,
+        day: day,
+        hour: hour,
+        date: date,
       });
-    } else {
-      setSelectedSlot(slot);
-    }
   };
 
   const handlePersonnelServiceUpdate = async (services) => {
-    console.log("services", services);
     const allServices = await getServices();
     const { data, error } = await addPersonnelService(personID, allServices);
     if (error) {
@@ -112,6 +119,7 @@ const Home = ({ session, type }) => {
   };
 
   const calendarProps = {
+    adminMode,
     personID,
     onAddService,
     session,
@@ -124,6 +132,7 @@ const Home = ({ session, type }) => {
     handlePersonnelServiceUpdate,
     personnelServices,
     selectedSlot,
+    bookings,
   };
 
   return (

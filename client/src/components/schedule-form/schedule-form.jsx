@@ -15,10 +15,8 @@ const ScheduleForm = ({
   setSelectedService,
 }) => {
   const [person, setPerson] = useState(personnel[personID]);
-  const [day, setDay] = useState(selectedSlot.day);
-  const [start, setStart] = useState(selectedSlot.hour);
-
-  console.log(selectedService);
+  const [day, setDay] = useState();
+  const [start, setStart] = useState();
 
   const [price, setPrice] = useState(20);
 
@@ -29,8 +27,8 @@ const ScheduleForm = ({
   useEffect(() => {
     if (personID !== null) {
       setPerson(personnel[personID]);
-      setDay(selectedSlot.day);
-      setStart(selectedSlot.hour);
+      setDay(selectedSlot?.date || new Date());
+      setStart(selectedSlot?.hour || 9);
     }
   }, [personID, personnel, selectedSlot]);
 
@@ -60,7 +58,7 @@ const ScheduleForm = ({
       type: "service",
       id: personID,
       service: selectedService?.name,
-      start: selectedSlot.hour,
+      start: selectedSlot?.hour,
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -136,7 +134,14 @@ const ScheduleForm = ({
           <div className="schedule-time">
             <span>
               <h1>Date:</h1>
-              <h2> {day} hours</h2>
+              <h2>
+                {" "}
+                {day?.toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "numeric",
+                  day: "numeric",
+                })}
+              </h2>
             </span>
             <span>
               <h1>Start:</h1>
@@ -144,7 +149,10 @@ const ScheduleForm = ({
             </span>
             <span>
               <h1>End:</h1>
-              <h2> {start + selectedService?.duration}:00</h2>
+              <h2>
+                {" "}
+                {start + (selectedService ? selectedService.duration : 2)}:00
+              </h2>
             </span>
           </div>
         </div>

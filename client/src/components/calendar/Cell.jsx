@@ -1,53 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { useDrop, useDrag } from "react-dnd";
-import PuzzleContainer from "../Puzzle/PuzzleContainer";
 import ContextMenu from "./CalendarContextMenu/ContextMenu";
 
-const ResizeIndicator = ({ direction, onResize, name, color }) => {
+const ResizeIndicator = ({ direction, name, item }) => {
   const [, drag] = useDrag({
     type: "resize",
-    item: () => ({ direction, type: "resize", name }),
-    end: (item, monitor) => {
-      if (item && monitor.didDrop()) {
-        onResize(direction, monitor.getDropResult());
-      }
-    },
+    item: () => ({ direction, type: "resize", item }),
+    end: (item, monitor) => {},
   });
 
   return (
     <div
       ref={drag}
       className={`expand-indicator ${direction}`}
-      style={{ borderColor: color }}
+      style={{ borderColor: item?.backgroundColor }}
     ></div>
   );
 };
 
 const Cell = ({
+  date,
   day,
   hour,
-  timeRange,
   handleSlotClick,
   handlePieceDrop,
   handlePieceExpand,
   selectedSlot,
-  setSelectedSlot,
   isSlotScheduled,
   isSlotEdge,
-  serviceName,
   scheduledSlots,
-  isLastInGroup,
   handleScheduledSlotDelete,
-  puzzlePieces,
+  adminMode,
 }) => {
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: ["service", "resize"],
     drop: (item, monitor) => {
       if (item.type === "resize") {
-        console.log(item);
-        handlePieceExpand(day, hour, item);
+        handlePieceExpand(day, hour, date, item);
       } else if (canDrop) {
-        handlePieceDrop(day, hour, item);
+        handlePieceDrop(day, hour, date, item);
       }
     },
     collect: (monitor) => ({
@@ -61,6 +52,8 @@ const Cell = ({
     x: 0,
     y: 0,
   });
+
+  useEffect(() => {}, [scheduledSlots]);
 
   // Function to handle right-click
   const handleContextMenu = (e, day, hour) => {
@@ -97,64 +90,61 @@ const Cell = ({
 
   // Context menu options
   const contextMenuOptions = [
-    { label: "Delete", onClick: () => handleScheduledSlotDelete(day, hour) },
+    {
+      label: "Delete",
+      onClick: (e) => {
+        handleScheduledSlotDelete(day, hour, e);
+        handleCloseContextMenu();
+      },
+    },
     { label: "Copy", onClick: () => console.log("Option 2 clicked") },
-    // Add more options as needed
   ];
 
-  const handleSelectedSlot = () => {
-    return selectedSlot?.hour === hour;
+  const getSlot = (day, hour, scheduledSlots) => {
+    return scheduledSlots.find((slot) => {
+      if (slot.day === day && hour >= slot.start && hour < slot.end) {
+        return slot;
+      }
+    });
   };
 
-  const handleGroupSelect = () => {
+  const handleCheckSelect = (day, hour) => {
     if (!selectedSlot) return;
-    if (selectedSlot?.start && selectedSlot?.end) {
-      return (
-        selectedSlot?.day === day &&
-        hour >= selectedSlot.start &&
-        hour < selectedSlot.end
-      );
+    if (selectedSlot.length > 1) {
+      if (
+        selectedSlot.some((slot) => slot?.day === day && slot?.hour === hour)
+      ) {
+        return "group";
+      }
+    }
+    if (selectedSlot[0]?.day === day && selectedSlot[0]?.hour === hour) {
+      return "single";
     }
     return false;
   };
-  const isSelected = selectedSlot?.day === day && handleSelectedSlot();
-  const groupSelect = handleGroupSelect();
-  const lastInGroup = isLastInGroup(day, hour);
 
-  const handleResize = (direction, dropResult) => {
-    // Implement the logic to adjust the cell's size or duration based on the resize direction
-    console.log(`Resizing ${direction} at ${day} ${hour}`);
+  const isSelected = handleCheckSelect(day, hour);
+  const color = getSlot(day, hour, scheduledSlots)?.item.backgroundColor;
+
+  const handleCellClick = (newDay, newHour) => {
+    handleSlotClick(newDay, newHour, date);
   };
 
-  const handleCellClick = (day, hour, e) => {
-    if (selectedSlot?.start && selectedSlot?.end) {
-      if (selectedSlot.day === day)
-        if (hour >= selectedSlot.start && hour < selectedSlot.end) {
-          return;
-        }
-    }
-    if (selectedSlot?.hour === hour && selectedSlot?.day === day) {
-      console.log("deselect");
-      return;
-    }
-
-    handleSlotClick(day, hour);
+  const handleCellStatus = (day, hour) => {
+    return isSlotScheduled(day, hour);
   };
-  const color = puzzlePieces?.find(
-    (piece) => piece?.name === serviceName
-  )?.backgroundColor;
 
   return (
     <div
       ref={drop}
-      className={`cell ${isSelected ? "selected" : ""} ${
-        isSlotScheduled(day, hour) ? "scheduled" : ""
-      } ${isOver && canDrop ? "over" : ""}
-      ${groupSelect ? "group-selected" : ""}
-      `}
+      key={day + hour}
+      className={`cell ${isSelected}-select 
+            ${isSlotEdge(day, hour, scheduledSlots)}
+            ${handleCellStatus(day, hour)} ${isOver ? "over" : ""}`}
       style={{
-        backgroundColor: isSlotScheduled(day, hour) ? color : color,
-        border: isSlotScheduled(day, hour) ? `1px solid ${color}` : "",
+        backgroundColor: handleCellStatus(day, hour) ? color : "",
+        border: handleCellStatus(day, hour) ? `1px solid ${color}` : "",
+        borderColor: handleCellStatus(day, hour) ? color : "",
       }}
       onClick={(e) => handleCellClick(day, hour, e)}
       onContextMenu={(e) => {
@@ -162,48 +152,41 @@ const Cell = ({
         handleContextMenu(e, day, hour);
       }}
     >
-      {groupSelect && isSlotEdge(day, hour, serviceName) && (
-        <div className="group-select">
-          <ResizeIndicator
-            direction="top"
-            onResize={handleResize}
-            name={serviceName}
-            color={color}
-          />
-        </div>
-      )}
-      {isSelected && isSlotScheduled(day, hour) ? (
+      {!adminMode ? (
         <>
-          {!lastInGroup && (
-            <ResizeIndicator
-              direction="top"
-              onResize={handleResize}
-              name={serviceName}
-              color={color}
-            />
-          )}
-          {/* Cell content */}
-          {lastInGroup ? `${hour + 1}:00 ` : `${hour}:00 `}
-          {serviceName}
-          {true && (
-            <ResizeIndicator
-              direction="bottom"
-              onResize={handleResize}
-              name={serviceName}
-              color={color}
-            />
-          )}
+          <div className="group-select">
+            {handleCellStatus(day, hour) === "booking" &&
+              isSlotEdge(day, hour, scheduledSlots) === "middle" &&
+              "Booked"}
+          </div>
         </>
       ) : (
         <>
-          {isSlotEdge(day, hour, serviceName) && (
+          {isSelected && isSlotEdge(day, hour, scheduledSlots) === "start" && (
+            <ResizeIndicator
+              direction="top"
+              item={getSlot(day, hour, scheduledSlots)?.item}
+            />
+          )}
+
+          {isSlotEdge(day, hour, scheduledSlots) === "start" && (
             <div className="scheduled-slot">
-              {lastInGroup ? `${hour + 1}:00 ` : `${hour}:00 `}
-              {serviceName}
+              {handleCellStatus(day, hour) === "scheduled" &&
+                getSlot(day, hour, scheduledSlots)?.item.name}
             </div>
           )}
+
+          {isSelected &&
+            (isSlotEdge(day, hour, scheduledSlots) === "end" ||
+              isSelected === "single") && (
+              <ResizeIndicator
+                direction="bottom"
+                item={getSlot(day, hour, scheduledSlots)?.item}
+              />
+            )}
         </>
       )}
+
       <ContextMenu
         visible={contextMenu.visible}
         x={contextMenu.x}

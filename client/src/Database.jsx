@@ -158,6 +158,14 @@ export const getServices = async () => {
   return data;
 };
 
+export const getServiceFromId = async (id) => {
+  const { data, error } = await supabase.from("services").select().eq("id", id);
+  if (error) {
+    console.log("Error fetching service:", error);
+  }
+  return data[0];
+};
+
 export const addService = async (newService) => {
   const data = await supabase
     .from("services")
@@ -190,4 +198,17 @@ export const addPersonnelService = async (personnelId, newPersonnelService) => {
     console.log("Error adding personnel service:", error);
   }
   return { data, error };
+};
+
+// BOOKINGS HANDLERS
+
+export const getBookings = async (personnelId) => {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .eq("personnel_id", personnelId);
+  if (error) {
+    console.log("Error fetching bookings:", error);
+  }
+  return data;
 };

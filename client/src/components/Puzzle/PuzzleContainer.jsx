@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDrop, useDrag } from "react-dnd";
 import Calendar from "../Calendar/Calendar.jsx";
 import Modal from "../Modal/Modal";
-import GarbageBin from "../Calendar/GarbageBin";
 import { createKeyframes, getOffset, FlexBoxWrapper } from "../../Utils.jsx";
 import { InputForm } from "../Input/Input.jsx";
 import { HexColorPicker } from "react-colorful";
@@ -19,7 +18,7 @@ import "./Puzzle.css";
 const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
   const [{ isDragging }, drag] = useDrag({
     type: "service",
-    item: { id: piece.id, name: piece.name, color: piece.color },
+    item: { ...piece },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -106,18 +105,18 @@ const PuzzleContainer = ({
   onDeleteService,
   onDrop,
   personID,
-  handleSelectedSlot,
   onAddService,
   deletedService,
   addedService,
   puzzlePieces,
   handlePersonnelServiceUpdate,
   personnelServices,
+  ...calendarProps
 }) => {
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: ["puzzlePiece"],
     drop: (item, monitor) => {
-      onDrop(item); // Call the onDrop function passed as prop with the dropped item
+      onDrop(item);
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -164,13 +163,7 @@ const PuzzleContainer = ({
           position: "relative",
         }}
       >
-        <Calendar
-          personID={personID}
-          handleSelectedSlot={(e) => handleSelectedSlot(e)}
-          puzzlePieces={puzzlePieces}
-          handlePersonnelServiceUpdate={(e) => handlePersonnelServiceUpdate(e)}
-          personnelServices={personnelServices}
-        />
+        <Calendar {...calendarProps} puzzlePieces={puzzlePieces} />
 
         <div className={`pieces-container`}>
           <i
