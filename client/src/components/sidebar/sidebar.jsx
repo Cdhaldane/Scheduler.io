@@ -9,7 +9,7 @@ import ContextMenu from "../ContextMenu/ContextMenu";
 
 import "./Sidebar.css";
 
-const Sidebar = ({ personID, setPersonID, personnel }) => {
+const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [personnelData, setPersonnelData] = useState([]);
   const [contextMenu, setContextMenu] = useState({
@@ -17,7 +17,6 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
     y: 0,
     visible: false,
   });
-  const isAdmin = window.location.pathname === "/admin" ? "true" : "false";
 
   useEffect(() => {
     setPersonnelData(personnel);
@@ -87,18 +86,20 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
               <i className="fa-solid fa-user"></i>
               {person.first_name} {person.last_name}
             </h1>
-            <i
-              class="fa-solid fa-cog"
-              onClick={(e) => {
-                e.preventDefault();
-                setContextMenu({
-                  x: e.clientX,
-                  y: e.clientY,
-                  visible: true,
-                });
-                setPersonID(index);
-              }}
-            ></i>
+            {adminMode && (
+              <i
+                class="fa-solid fa-cog"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setContextMenu({
+                    x: e.clientX,
+                    y: e.clientY,
+                    visible: true,
+                  });
+                  setPersonID(index);
+                }}
+              ></i>
+            )}
           </div>
           <ul
             className={`sidebar-item-body ${
@@ -112,7 +113,7 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
         </div>
       ))
       .concat(
-        isAdmin === "true" && (
+        adminMode === "true" && (
           <div
             key="addPerson"
             className="sidebar-item add"

@@ -1,5 +1,6 @@
 .ac-main {
   height: 100vh;
+  background-color: var(--bg-primary) !important;
 }
 
 .ac-container {
@@ -9,76 +10,89 @@
   align-items: center;
   margin: 0 auto;
   height: 100%;
-  width: 50%;
-  overflow: hidden;
-}
-.ac-container-2 {
-  display: flex;
-  flex-direction: row;
-  margin: 0 auto;
-  height: 100%;
   width: 100%;
   overflow: hidden;
 }
-.ac-container > div > h1 {
-  font-size: 2rem;
-  font-weight: 300;
-  margin-bottom: 1rem;
-  color: white;
-  margin-top: 50px;
+.ac-container.row {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  margin-top: -3rem;
 }
 
-.ac-2-main {
-  position: absolute;
+.ac-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 35%;
+  overflow: hidden;
+}
+
+.ac-right {
   top: 10%;
   right: 0;
-  width: 70%;
+  width: 65%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   animation: fadeIn 1s ease-in-out normal forwards;
 }
-.ac-2-content {
+
+.ac-span {
   position: relative;
-  width: 100%;
+  width: 50%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 20%;
-  color: white;
+  margin-top: 10%;
+  color: var(--primary);
 }
 
-.ac-2-content h1 {
-  font-size: 2rem;
+.ac-content h1 {
   font-weight: 200;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  color: var(--primary);
 }
 
-.ac-2-content span {
-  border: 1px solid var(--blue);
-  border-radius: 8px;
-  background-color: #222222;
-  padding: 10px;
-  margin-top: 20px;
-  color: white !important;
-}
-
-.ac-2-content span i {
-  color: white;
+.ac-input {
+  color: var(--primary);
   cursor: pointer;
+  margin-bottom: 0px;
+  height: 100px;
+  font-size: 2em;
 }
 
-.ac-2-content input {
-  width: 600px;
-  height: 30px;
-  border-radius: 8px;
-  background-color: #222222;
-  border: none;
-  color: white;
-  cursor: pointer;
+.ac-input input {
+  background-color: var(--bg-primary) !important;
+  font-size: 2rem;
+}
+
+.ac-input input:hover {
+  border: 1px solid var(--primary);
+}
+
+.ac-input label {
+  font-size: 2rem;
+  margin-top: 30px;
+}
+
+.active.ac-input label {
+  margin-top: 10px;
+  font-size: 1.5rem !important;
+}
+
+.ac-button {
+  font-size: 2rem;
+  position: absolute;
+  bottom: 5%;
+  right: 3%;
+  width: 100px;
 }
 
 @keyframes moveUp {
@@ -99,40 +113,23 @@
 
 .typewriter {
   margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
 }
 .typewriter h1 {
   font-family: monospace;
   font-weight: 100;
-  font-size: 4em;
+  font-size: 3em;
   color: #fff;
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: 0.15em solid rgb(255, 255, 255); /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
   margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-  letter-spacing: 0em; /* Adjust as needed */
+  letter-spacing: 0.3em; /* Adjust as needed */
   animation: typing 3.5s steps(30, end), blink-caret 0.5s step-end infinite;
 }
-
-/* The typing effect */
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-/* The typewriter cursor effect */
-/* @keyframes blink-caret {
-  from,
-  to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: rgb(255, 255, 255);
-  }
-} */
 
 @media (orientation: portrait) {
   .ac-container {
@@ -145,20 +142,20 @@
   .ac-container-2 > div {
     width: 100%;
   }
-  .ac-2 {
+  .ac {
     width: 200% !important;
     height: 100% !important;
     top: 0%;
     left: -50%;
   }
-  .ac-2-main {
+  .ac-main {
     width: 100%;
     height: 100%;
     top: 30%;
     left: 0;
     font-size: 1vw;
   }
-  .ac-2-main > div {
+  .ac-main > div {
     width: 100%;
     height: 100%;
   }
@@ -167,15 +164,15 @@
     width: fit-content;
   }
 
-  .ac-2-content {
+  .ac-content {
     top: 20%;
     width: 90%;
     margin: 0 auto;
   }
-  .ac-2-content h1 {
+  .ac-content h1 {
     font-size: 1rem;
   }
-  .ac-2-span {
+  .ac-span {
     width: 100%;
     margin: 0 auto;
     display: flex;
@@ -183,12 +180,34 @@
     justify-content: space-between;
     align-items: center;
   }
-  .ac-2-span > input {
+  .ac-span > input {
     width: 95%;
     margin: 0 auto;
   }
   .ac-2-span > i {
     margin: 0 auto;
     font-size: 5vw;
+  }
+}
+
+.glow {
+  animation: borderGlow 1s infinite;
+}
+
+@keyframes borderGlow {
+  0% {
+    box-shadow: 0 0 0 0 var(--blue);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

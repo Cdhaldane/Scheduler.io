@@ -55,6 +55,7 @@ const Home = ({ session, type }) => {
 
   useEffect(() => {
     fetchData();
+    setSelectedSlot(null);
   }, [personID]);
 
   useEffect(() => {}, [personID]);
@@ -90,6 +91,7 @@ const Home = ({ session, type }) => {
   };
 
   const handleSelectedSlot = (day, hour, date, group) => {
+    console.log("selected slot", day, hour, date, group);
     if (group) {
       let slots = [];
       for (let i = group.start; i < group.end; i++) {
@@ -141,6 +143,7 @@ const Home = ({ session, type }) => {
         setPersonID={setPersonID}
         personID={personID}
         personnel={personnel}
+        adminMode={adminMode}
       />
       {adminMode ? (
         <PuzzleContainer

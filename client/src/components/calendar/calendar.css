@@ -91,8 +91,8 @@
 }
 
 .cell.single-select {
-  /* background-color: var(--primary); */
-  box-shadow: var(--bg-primary) 0px 54px 55px, var(--bg-primary) 0px -12px 30px,
+  border: 1px solid white !important;
+  box-shadow: var(--bg-primary) 0px 4px 55px, var(--bg-primary) 0px -12px 30px,
     var(--bg-primary) 0px 4px 6px, var(--bg-primary) 0px 12px 13px,
     var(--bg-primary) 0px -3px 5px !important;
   z-index: 100000;
@@ -107,7 +107,7 @@
 
 .cell.group-select.booking {
   background-color: var(--secondary) !important;
-  border: 1px solid var(--bg-secondary) !important;
+  border: 1px solid black !important;
   color: var(--bg-primary);
 }
 

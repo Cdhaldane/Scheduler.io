@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDidMountEffect } from "../../Utils";
-import "./Blob.scoped.css";
+import "./AnimatedDiv.css";
 
-const Blob = ({
+const AnimatedDiv = ({
   className,
-  blobAnimation,
-  width,
-  height,
   enterAnimation,
   exitAnimation,
   exitTrigger,
+  children,
 }) => {
   const [animationClass, setAnimationClass] = useState("");
 
@@ -26,13 +24,13 @@ const Blob = ({
   }, [exitTrigger]);
 
   return (
-    <div className={`${className} ${animationClass}`} style={{ width, height }}>
-      <div className={`circle1 ${!blobAnimation ? "noanimate" : ""}`}></div>
-      <div className={`circle2 ${!blobAnimation ? "noanimate" : ""}`}></div>
-      <div className={`circle3 ${!blobAnimation ? "noanimate" : ""}`}></div>
-      <div className={`circle4 ${!blobAnimation ? "noanimate" : ""}`}></div>
+    <div
+      className={`animated-div ${className}`}
+      style={{ animationName: animationClass }}
+    >
+      {children}
     </div>
   );
 };
 
-export default Blob;
+export default AnimatedDiv;

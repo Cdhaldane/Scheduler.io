@@ -1,5 +1,6 @@
 :root {
   --primary: #77dd77;
+  --primary-dark: #4d9a4f;
   --secondary: #ee8484;
   --light-grey: #7a7a7a;
   --olive: #38423b;
@@ -10,7 +11,9 @@
   --bg-primary: #2d2d2a;
   --bg-secondary: #333;
   --success: #2ec952;
-  --info: #17a2b8;
+  --info: rgb(23, 162, 184);
+  --info-dark: #0f6674;
+  --info-light: #4eb9d0;
   --black: #000;
   --warning: #ffc107;
   --danger: #dc3545;
@@ -49,22 +52,6 @@ body {
 .row {
   display: flex;
   flex-direction: row !important;
-}
-
-/* BUTTONS */
-button {
-  background-color: var(--primary);
-  border: none;
-  color: var(--bg-primary);
-  border-radius: 10px;
-  font-size: 1rem;
-  width: 100%;
-  padding: 10px;
-  transition: all 0.1s ease-in-out;
-}
-button:hover {
-  cursor: pointer;
-  scale: 1.02;
 }
 
 form > button {

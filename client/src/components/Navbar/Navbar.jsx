@@ -19,7 +19,13 @@ const NavbarItem = ({ icon, route, action }) => {
   );
 };
 
-const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
+const Navbar = ({
+  isAdmin,
+  isLoggedIn,
+  setIsLoggedIn,
+  session,
+  organization,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -47,11 +53,15 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
     setIsLoggedIn(true);
   };
 
-  const handleDropdownClick = (e) => {
-    if (e) {
+  const handleDropdownClick = (option) => {
+    console.log(option);
+    if (option === "Signout") {
       setShowModal(false);
       supabase.auth.signOut();
       setIsLoggedIn(false);
+    }
+    if (option === "Create Organization") {
+      navigate("/create-organization");
     }
   };
 
@@ -71,7 +81,11 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
           className="navbar-logo"
           onClick={() => navigate("/admin")}
         />
-        <h1 onClick={() => navigate("/")}>Time Slot</h1>
+        {isAdmin && organization?.name ? (
+          <h1 onClick={() => navigate("/")}>{organization?.name}</h1>
+        ) : (
+          <h1 onClick={() => navigate("/")}>Time Slot</h1>
+        )}
       </div>
       <ul>
         {!isLoggedIn && !isAdmin && (
@@ -88,7 +102,7 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
             <NavbarItem icon="fa-regular fa-user" route="/admin/profile" />
           </>
         )}
-        {isLoggedIn && !isAdmin && (
+        {isLoggedIn && (
           <>
             <NavbarItem
               icon="fa-solid fa-message"
@@ -98,7 +112,7 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
             <Dropdown
               children={<ProfilePic />}
               label={session?.user.user_metadata.name}
-              options={["Signout"]}
+              options={["Signout", "Create Organization"]}
               onClick={(e) => handleDropdownClick(e)}
               direction="left"
             />

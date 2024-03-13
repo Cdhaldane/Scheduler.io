@@ -5,24 +5,24 @@ import { useDeviceType } from "../../Utils";
 
 import "./AC.css";
 
-const ACMain = () => {
+const ACMain = ({ handleOrganizationCreate }) => {
   const isMobile = useDeviceType();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (sessionStorage.introFinished) {
-      if (sessionStorage.introFinished === "true") {
-        sessionStorage.setItem("isAdmin", "true");
-        navigate("/admin");
-      }
-    }
-  }, [sessionStorage]);
+  // useEffect(() => {
+  //   if (sessionStorage.introFinished) {
+  //     if (sessionStorage.introFinished === "true") {
+  //       sessionStorage.setItem("isAdmin", "true");
+  //       navigate("/admin");
+  //     }
+  //   }
+  // }, [sessionStorage]);
 
   return (
     <div className="ac-main">
       <AC
-        onFinish={() => {
-          sessionStorage.setItem("introFinished", true);
+        onFinish={(org) => {
+          handleOrganizationCreate(org);
           sessionStorage.setItem("isAdmin", "true");
           navigate("/admin");
         }}

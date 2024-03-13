@@ -7,8 +7,10 @@ const Input = ({
   placeholder,
   value: propValue,
   onInputChange,
+  onSubmit,
   type = "text",
   className,
+  icon,
 }) => {
   const [isActive, setIsActive] = useState(propValue ? true : false);
   const [inputValue, setInputValue] = useState(propValue || "");
@@ -38,6 +40,18 @@ const Input = ({
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(inputValue);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onSubmit(inputValue);
+    }
+  };
+
   return (
     <div
       id="input-container"
@@ -62,12 +76,17 @@ const Input = ({
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          onSubmit={(e) => handleSubmit(e)}
           autoComplete="new-password"
           required={true}
           pattern={type === "tel" ? "[0-9]{3}-[0-9]{3}-[0-9]{4}" : null}
+          onKeyDown={(e) => handleKeyPress(e)}
         />
       )}
       <label className={isActive ? "active" : ""}>{label}</label>
+      {icon && (
+        <i onClick={(e) => handleSubmit(e)} className={`icon ${icon}`}></i>
+      )}
     </div>
   );
 };

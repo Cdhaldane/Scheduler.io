@@ -12,7 +12,7 @@ import Admin from "./Views/Admin";
 import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
 import Login from "./Components/Login/Login";
-import ACMain from "./Views/AccountCreation/ACMain";
+import ACMain from "./Views/OrgCreation/ACMain";
 import BookingPage from "./Components/Bookings/BookingPage";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import GuestBookingPage from "./Components/GuestBookingPage/GuestBookingPage";
@@ -34,6 +34,7 @@ import { createClient } from "@supabase/supabase-js";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [organization, setOrganization] = useState({});
   const location = useLocation() || "";
   const [users, setUsers] = useState([]);
   const [session, setSession] = useState(null);
@@ -52,19 +53,29 @@ function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const shouldRenderNavbarAndFooter = location.pathname !== "/create-account";
+  const shouldRenderNavbarAndFooter =
+    location.pathname !== "/create-organization";
 
   useEffect(() => {
-    const adminAuthClient = db.supabase.auth.admin;
-
-    const fetchData = async () => {
-      const {
-        data: { users },
-        error,
-      } = await db.supabase.auth.admin.listUsers();
-    };
-    fetchData();
+    if (session) {
+      const isAdmin = localStorage.getItem("isAdmin");
+      if (isAdmin === "true") {
+        setIsAdmin(true);
+      }
+      setIsLoggedIn(true);
+      const org = JSON.parse(localStorage.getItem("organization"));
+      if (org) {
+        setOrganization(org);
+        setIsAdmin(true);
+      }
+    }
   }, []);
+
+  const handleOrganizationCreate = (org) => {
+    localStorage.setItem("organization", JSON.stringify(org));
+    setIsAdmin(true);
+    setOrganization(org);
+  };
 
   return (
     <>
@@ -78,6 +89,7 @@ function App() {
             isAdmin={isAdmin}
             setIsLoggedIn={(e) => setIsLoggedIn(e)}
             session={session}
+            organization={organization}
           />
         )}
 
@@ -93,7 +105,16 @@ function App() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/info" element={<Info />} />
-            <Route path="/create-account" element={<ACMain />} />
+            <Route
+              path="/create-organization"
+              element={
+                <ACMain
+                  handleOrganizationCreate={(val) =>
+                    handleOrganizationCreate(val)
+                  }
+                />
+              }
+            />
             <Route path="/booking" element={<BookingPage />} />
             <Route path="/guest-booking" element={<GuestBookingPage />} />
             <Route path="/booking-submit" element={<BookingSubmit />} />

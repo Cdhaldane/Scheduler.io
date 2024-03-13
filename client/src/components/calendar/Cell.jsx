@@ -110,14 +110,19 @@ const Cell = ({
 
   const handleCheckSelect = (day, hour) => {
     if (!selectedSlot) return;
+
     if (selectedSlot.length > 1) {
       if (
         selectedSlot.some((slot) => slot?.day === day && slot?.hour === hour)
       ) {
         return "group";
       }
+    } else if (selectedSlot.length === 1) {
+      if (selectedSlot[0].day === day && selectedSlot[0].hour === hour) {
+        return "single";
+      }
     }
-    if (selectedSlot[0]?.day === day && selectedSlot[0]?.hour === hour) {
+    if (selectedSlot.day === day && selectedSlot.hour === hour) {
       return "single";
     }
     return false;

@@ -18,11 +18,12 @@
   font-weight: bolder;
 }
 
-.dropdown-toggle:hover {
+.dropdown-toggle:hover,
+.dropdown-toggle:focus {
   cursor: pointer;
-  background-color: var(--primary);
-  color: var(--bg-primary);
-  scale: 1;
+  background-color: var(--info-light) !important;
+  color: white;
+  animation: button-pulse 1s infinite;
 }
 
 /* .dropdown-toggle:hover {
@@ -57,7 +58,7 @@
 }
 
 .dropdown-menu.left {
-  transform: translateX(-25%);
+  transform: translateX(-50%);
 }
 
 .dropdown-menu-enter {
