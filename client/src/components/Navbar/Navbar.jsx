@@ -87,7 +87,7 @@ const Navbar = ({
           <h1 onClick={() => navigate("/")}>Time Slot</h1>
         )}
       </div>
-      <ul>
+      <div className="navbar-content">
         {!isLoggedIn && !isAdmin && (
           <NavbarItem
             icon="fa-solid fa-arrow-right-to-bracket"
@@ -118,7 +118,7 @@ const Navbar = ({
             />
           </>
         )}
-      </ul>
+      </div>
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <>
           <div className="modal-body">

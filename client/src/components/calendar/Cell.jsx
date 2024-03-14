@@ -162,7 +162,7 @@ const Cell = ({
           <div className="group-select">
             {handleCellStatus(day, hour) === "booking" &&
               isSlotEdge(day, hour, scheduledSlots) === "middle" &&
-              "Booked"}
+              "BOOKED"}
           </div>
         </>
       ) : (

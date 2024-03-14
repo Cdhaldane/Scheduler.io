@@ -80,7 +80,7 @@ function App() {
   return (
     <>
       <Alert />
-      <DevTools />
+      {/* <DevTools /> */}
 
       <div className="app">
         {shouldRenderNavbarAndFooter && (

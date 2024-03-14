@@ -6,6 +6,7 @@ import { useAlert } from "../Providers/Alert";
 import { addPersonnel, deletePersonnel } from "../../Database";
 import Input from "../Input/Input";
 import ContextMenu from "../ContextMenu/ContextMenu";
+import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 
 import "./Sidebar.css";
 
@@ -113,7 +114,7 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
         </div>
       ))
       .concat(
-        adminMode === "true" && (
+        adminMode && (
           <div
             key="addPerson"
             className="sidebar-item add"
@@ -144,6 +145,7 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
           />
         </Modal>
       )}
+      <ThemeSwitch className="theme-switch" />
       <ContextMenu
         visible={contextMenu.visible}
         x={contextMenu.x}

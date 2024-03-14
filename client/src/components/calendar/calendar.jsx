@@ -3,6 +3,7 @@ import { useDrop } from "react-dnd";
 import Cell from "./Cell";
 import "./Calendar.css";
 import { getServiceFromId } from "../../Database";
+import Button from "../Button/Button.jsx";
 import Spinner from "../Spinner/Spinner.jsx";
 
 import {
@@ -27,6 +28,8 @@ const Calendar = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setScheduledSlots([]);
       const slots = await Promise.all(
         bookings.map(async (booking) => {
           const service = await getServiceFromId(booking.service_id);
@@ -40,11 +43,12 @@ const Calendar = ({
           };
         })
       );
+      setLoading(false);
       setScheduledSlots(slots);
     };
 
     if (adminMode === false) {
-      fetchData().then(() => setLoading(false));
+      fetchData();
     } else {
       setLoading(false);
     }
@@ -125,64 +129,69 @@ const Calendar = ({
   };
 
   return (
-    <div className="calendar">
-      {loading && <Spinner />}
-      <div className="header">
-        <button
-          className="navigation-button nb-left"
-          onClick={() => setCurrentWeek(changeWeek(-1, [...currentWeek]))}
-        >
-          <i className="fa-solid fa-arrow-left" />
-        </button>
-        <div className="header-days">
-          <div className="empty"></div>
-          {currentWeek.map((day, index) => (
-            <div key={index} className="header-cell">
-              {day?.toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "numeric",
-                day: "numeric",
-              })}
+    <div className="calendar-container">
+      {/* <div className="calendar-header">
+        <Button className="calendar-button">WEEK</Button>
+      </div> */}
+      <div className="calendar">
+        {loading && <Spinner className="fast" />}
+        <div className="header">
+          <button
+            className="navigation-button nb-left"
+            onClick={() => setCurrentWeek(changeWeek(-1, [...currentWeek]))}
+          >
+            <i className="fa-solid fa-arrow-left" />
+          </button>
+          <button
+            className="navigation-button nb-right"
+            onClick={() => setCurrentWeek(changeWeek(1, [...currentWeek]))}
+          >
+            <i className="fa-solid fa-arrow-right" />
+          </button>
+          <div className="header-days">
+            <div className="empty"></div>
+            {currentWeek.map((day, index) => (
+              <div key={index} className="header-cell">
+                {day?.toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "numeric",
+                  day: "numeric",
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="body">
+          {Array.from({ length: 24 }).map((_, hour) => (
+            <div key={"row" + hour} className="row">
+              <div key={hour} className="cell hours">{`${hour}:00`}</div>
+              {currentWeek.map((day) => (
+                <Cell
+                  key={day + hour}
+                  date={day}
+                  day={day.getUTCDate()}
+                  hour={hour}
+                  handleSlotClick={(newDay, newHour, newDate) =>
+                    handleSlotClick(newDay, newHour, newDate)
+                  }
+                  isSlotScheduled={(newDay, newHour) =>
+                    isSlotScheduled(newDay, newHour)
+                  }
+                  handleScheduledSlotDelete={handleScheduledSlotDelete}
+                  handlePieceDrop={(newDay, newHour, newDate, item) =>
+                    handlePieceDrop(newDay, newHour, newDate, item)
+                  }
+                  selectedSlot={selectedSlot}
+                  isSlotEdge={isSlotEdge}
+                  handlePieceExpand={handlePieceExpand}
+                  scheduledSlots={scheduledSlots}
+                  puzzlePieces={puzzlePieces}
+                  adminMode={adminMode}
+                />
+              ))}
             </div>
           ))}
         </div>
-        <button
-          className="navigation-button nb-right"
-          onClick={() => setCurrentWeek(changeWeek(1, [...currentWeek]))}
-        >
-          <i className="fa-solid fa-arrow-right" />
-        </button>
-      </div>
-      <div className="body">
-        {Array.from({ length: 24 }).map((_, hour) => (
-          <div key={"row" + hour} className="row">
-            <div key={hour} className="cell hours">{`${hour}:00`}</div>
-            {currentWeek.map((day) => (
-              <Cell
-                key={day + hour}
-                date={day}
-                day={day.getUTCDate()}
-                hour={hour}
-                handleSlotClick={(newDay, newHour, newDate) =>
-                  handleSlotClick(newDay, newHour, newDate)
-                }
-                isSlotScheduled={(newDay, newHour) =>
-                  isSlotScheduled(newDay, newHour)
-                }
-                handleScheduledSlotDelete={handleScheduledSlotDelete}
-                handlePieceDrop={(newDay, newHour, newDate, item) =>
-                  handlePieceDrop(newDay, newHour, newDate, item)
-                }
-                selectedSlot={selectedSlot}
-                isSlotEdge={isSlotEdge}
-                handlePieceExpand={handlePieceExpand}
-                scheduledSlots={scheduledSlots}
-                puzzlePieces={puzzlePieces}
-                adminMode={adminMode}
-              />
-            ))}
-          </div>
-        ))}
       </div>
     </div>
   );

@@ -99,9 +99,7 @@ const ScheduleForm = ({
         <div className="schedule-appointment">
           <div className="schedule-header">
             PERSONEL:{" "}
-            <h2
-              className={`typing-animation ${typing ? "animate-typing" : ""}`}
-            >
+            <h2>
               {person?.first_name} {person?.last_name}
             </h2>
           </div>
@@ -119,16 +117,20 @@ const ScheduleForm = ({
                   {selectedService?.name || "Select Service"}
                 </button>
               }
-              options={person?.services?.map((service) => service.name) || []}
+              options={
+                person?.services?.map((service) => service.name) || [
+                  "No Services Available",
+                ]
+              }
               onClick={(service) => handleServiceChange(service)}
             />
             <span>
               <h1>Duration:</h1>
-              <h2> {selectedService?.duration} hours</h2>
+              <h2> {selectedService?.duration || 0} hours</h2>
             </span>
             <span>
               <h1>Price:</h1>
-              <h2> ${selectedService?.price}</h2>
+              <h2> ${selectedService?.price || 0}</h2>
             </span>
           </div>
           <div className="schedule-time">

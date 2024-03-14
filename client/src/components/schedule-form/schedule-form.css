@@ -2,9 +2,8 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background-color: var(--olive);
-  border-radius: 10px;
-  margin: 20px;
+  min-height: var(--main-height);
+  background-color: var(--bg-secondary);
 }
 
 .schedule-container .body {

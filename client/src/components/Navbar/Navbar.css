@@ -7,8 +7,20 @@
   margin-left: 300px;
   height: var(--nav-height);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+}
+
+.navbar-calendar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10%;
+  gap: 20px;
+  max-height: 59px;
+  border: 1px solid var(--primary);
+  border-top: 0px;
+  padding: 0px 10px;
+  margin: 3px 5%;
 }
 
 .admin-navbar {
@@ -21,48 +33,27 @@
 
 .navbar-content {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  height: 60px;
-}
-
-.navbar ul {
-  list-style-type: none;
-  display: flex;
-  align-items: center;
   font-size: 1.5em;
   gap: 40px;
-  margin-right: 40px;
+  margin-right: 5%;
 }
 
-.navbar ul li {
-}
-
-.navbar ul li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.navbar ul li a i {
-  margin-right: 5px;
-  font-size: 1.2em;
-  margin: 0px 10px;
-}
-
-.navbar ul li:hover {
+.navbar-content li:hover {
   transform: scale(1.1);
 }
 
 .navbar-header {
-  margin-left: 35%;
   display: flex;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  width: 100%;
 }
 
 .navbar-header:hover {
-  transform: scale(1.1);
 }
 
 .navbar-header > h1 {
