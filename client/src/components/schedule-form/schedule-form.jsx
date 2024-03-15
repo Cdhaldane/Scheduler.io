@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
-import { useAlert } from "../Providers/Alert";
+import { useAlert } from "../Providers/Alert.jsx";
 
 import "./Schedule-form.css";
 
@@ -94,7 +94,10 @@ const ScheduleForm = ({
   return (
     <div className="main-right schedule-container" ref={drag}>
       <div className="body">
-        <h1>APPOINTMENT</h1>
+        <h1>
+          <i class="fa-solid fa-calendar-check"></i>
+          APPOINTMENT
+        </h1>
 
         <div className="schedule-appointment">
           <div className="schedule-header">
@@ -112,30 +115,29 @@ const ScheduleForm = ({
 
           <div className="schedule-appointment-info">
             <Dropdown
-              children={
-                <button className="dropdown-toggle">
-                  {selectedService?.name || "Select Service"}
-                </button>
-              }
+              type="button"
               options={
                 person?.services?.map((service) => service.name) || [
                   "No Services Available",
                 ]
               }
               onClick={(service) => handleServiceChange(service)}
-            />
+            >
+              {" "}
+              <button className="dropdown-toggle">
+                {selectedService?.name || "SELECT SERVICE"}
+              </button>
+            </Dropdown>
             <span>
-              <h1>Duration:</h1>
+              <h1>Duration</h1>
               <h2> {selectedService?.duration || 0} hours</h2>
             </span>
             <span>
-              <h1>Price:</h1>
+              <h1>Price</h1>
               <h2> ${selectedService?.price || 0}</h2>
             </span>
-          </div>
-          <div className="schedule-time">
             <span>
-              <h1>Date:</h1>
+              <h1>Date</h1>
               <h2>
                 {" "}
                 {day?.toLocaleDateString("en-US", {
@@ -146,11 +148,11 @@ const ScheduleForm = ({
               </h2>
             </span>
             <span>
-              <h1>Start:</h1>
+              <h1>Start</h1>
               <h2> {start}:00</h2>
             </span>
             <span>
-              <h1>End:</h1>
+              <h1>End</h1>
               <h2>
                 {" "}
                 {start + (selectedService ? selectedService.duration : 2)}:00
@@ -161,7 +163,8 @@ const ScheduleForm = ({
       </div>
       <footer>
         <button className="book-appointment" onClick={handleBookAppointment}>
-          Book Appointment
+          BOOK APPOINTMENT
+          <i class="fa-solid fa-computer-mouse"></i>
         </button>
       </footer>
     </div>

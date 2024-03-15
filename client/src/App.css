@@ -1,5 +1,5 @@
 :root {
-  --primary: #77dd77;
+  --primary: #88f188; /*77dd77*/
   --primary-dark: #4d9a4f;
   --secondary: #ee8484;
   --light-grey: #7a7a7a;
@@ -7,10 +7,10 @@
   --blue: #81bee0;
   --dark-blue: #0f6674;
   --red: #ff6961;
-  --ash: #9dc0bc;
+  --ash: #d3dedd;
   --white: #d8d8d8;
   --bg-primary: #2d2d2a;
-  --bg-secondary: #333;
+  --bg-secondary: #4a4a4a;
   --success: #2ec952;
   --info: rgb(23, 162, 184);
   --info-dark: #0f6674;
@@ -22,11 +22,11 @@
   --font-main: "Archivo Narrow", sans-serif;
   --font-secondary: "Julius Sans One", sans-serif;
   --text-white: #ffffff;
-  --sidebar-width: 250px;
+  --sidebar-width: 15%;
   --nav-padding: 40px;
-  --nav-height: 60px;
+  --nav-height: 70px;
   --footer-height: 60px;
-  --main-height: calc(100vh - var(--nav-height) - 2 * var(--footer-height));
+  --main-height: calc(100vh - var(--nav-height));
   --puzzle-width: 180px;
 }
 
@@ -50,9 +50,10 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-main);
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
   overflow-x: hidden;
   overflow-y: scroll;
+  font-size: 0.8vw;
 }
 
 .app-main {
@@ -92,6 +93,17 @@ input {
 }
 .m-bot {
   margin-bottom: 20px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.icon-right {
+  font-size: 1.2em;
+  margin-left: 10px;
+  position: absolute;
+  right: 10px;
 }
 
 /* h2 {

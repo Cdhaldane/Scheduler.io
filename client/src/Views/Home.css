@@ -11,25 +11,24 @@
 
 .main-body {
   width: calc(100% - var(--sidebar-width)) !important;
-  min-height: var(--main-height);
-  height: 100%;
-  position: relative;
+  min-height: var(--main-height) !important;
+  height: var(--main-height);
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: var(--bg-primary);
-  border-radius: 10px 0px 0px 10px;
   margin-left: var(--sidebar-width);
 }
 
 .main-body.collapsed .calendar {
-  width: 90%;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .main-right {
   display: flex;
   flex-direction: column;
-  width: 30%;
+  width: 25%;
+  margin-right: 1.5% !important;
 }
 
 .center {
@@ -45,18 +44,29 @@
 }
 
 .book-appointment {
+  position: relative;
   justify-content: center;
-  align-items: bottom;
-  margin-top: 20px;
-  position: relat;
-  background-color: var(--olive);
-  color: var(--primary);
-  bottom: 10%;
-  left: 10%;
-  height: 40px;
-  width: 100px;
-  border-radius: 10px;
-  margin: 10%;
+  background-color: var(--primary) !important;
+  border-radius: 0px;
+  width: 100%;
+  font-size: 1.5em;
+  font-weight: 800;
+  color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+}
+
+.book-appointment i {
+  position: absolute;
+  right: 10px;
+  color: var(--bg-primary);
+}
+
+.book-appointment:hover {
+  background-color: var(--primary) !important;
+  color: var(--bg-primary);
+  height: 70px;
+  transition: height 0.3s ease-in-out;
 }
 
 .info-page {

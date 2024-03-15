@@ -89,7 +89,7 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
             </h1>
             {adminMode && (
               <i
-                class="fa-solid fa-cog"
+                class="fa-solid fa-ellipsis-vertical"
                 onClick={(e) => {
                   e.preventDefault();
                   setContextMenu({
@@ -120,12 +120,10 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
             className="sidebar-item add"
             onClick={() => setIsOpen(true)}
           >
-            <div className="sidebar-item-header">
-              <h1>
-                {" "}
-                <i className="fa-solid fa-plus"></i>Add Personnel
-              </h1>
-            </div>
+            <h1>
+              {" "}
+              <i className="fa-solid fa-plus"></i>Add Personnel
+            </h1>
           </div>
         )
       );
@@ -134,8 +132,17 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
   return (
     <>
       <div className="sidebar">
-        <div className="sidebar-header">Personnel</div>
-        {getPersons()}
+        <div className="sidebar-title-header">
+          <img src="./logo.png" alt="website logo" className="navbar-logo" />
+          <h1>
+            TIME<span>SLOT</span>
+          </h1>
+        </div>
+        <div className="sidebar-content">
+          <h1>PERSONS</h1>
+          {getPersons()}{" "}
+        </div>
+        <ThemeSwitch className="theme-switch" />
       </div>
       {isOpen && (
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -145,7 +152,7 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
           />
         </Modal>
       )}
-      <ThemeSwitch className="theme-switch" />
+
       <ContextMenu
         visible={contextMenu.visible}
         x={contextMenu.x}

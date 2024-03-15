@@ -4,9 +4,8 @@
   justify-content: flex-start;
   color: var(--white);
   margin: 1rem auto;
-  position: fixed;
   bottom: 0px;
-  left: 50px;
+  left: 40px;
   z-index: 100;
 }
 
@@ -47,11 +46,20 @@
   color: var(--white);
 }
 
-.switch i:hover:not(.active) {
-  animation: spin 0.3s ease-in-out;
+.switch i:hover:not(.switch-active) {
+  animation: spin 1s ease-in-out forwards infinite;
 }
 
-.active {
+.switch-active {
   transition: padding 0.3s ease-in-out;
   color: var(--bg-primary) !important;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

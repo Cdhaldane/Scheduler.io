@@ -1,14 +1,18 @@
-.calendar-container {
+.calendar {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: var(--main-height);
-  background-color: var(--bg-primary);
-  border-radius: 10px 0 0 10px;
-  /* border: 1px solid var(--primary); */
+  color: var(--primary);
+  width: 70%;
+  height: 95%;
+  border: 3px solid var(--primary);
+  padding-bottom: 1px;
+  border-radius: 4px;
+  font-size: 1vw;
+  margin: 0 1%;
 }
+
 .calendar-header {
   display: flex;
   flex-direction: row;
@@ -32,19 +36,9 @@
   transition: all 0.1s ease-in-out;
 }
 
-.calendar {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: var(--primary);
-  width: 100%;
-  min-height: var(--main-height);
-  border-radius: 10px;
-}
-
 .calendar > .body {
   width: 100%; /* Adjusted for the navigation buttons */
+  height: 100%;
 }
 
 .header {
@@ -52,8 +46,12 @@
   flex-direction: row !important;
   width: 100%;
   white-space: nowrap;
-  border-radius: 10px;
-  height: 30px;
+  height: calc(100% / 24);
+  background-color: var(--bg-secondary);
+}
+
+.row {
+  height: calc(100% / 24); /* Adjusted for 7 days + 1 hour column */
 }
 
 .cell {
@@ -61,7 +59,7 @@
   align-items: center;
   justify-content: center;
   width: 100%; /* Adjusted for 7 days + 1 hour column */
-  height: 30px;
+  height: 100%; /* Adjusted for 7 days + 1 hour column */
   border: 1px solid var(--light-grey);
   color: var(--primary);
   transition: all 0.1s ease-in-out;
@@ -81,21 +79,19 @@
   display: flex;
   width: 100%;
   text-align: center; /* Center the text */
-  border: 1px solid var(--light-grey);
-  border-radius: 10px 0px 0px 0px;
+  padding-top: 3px;
 }
 
 .header-cell {
-  width: calc((100%)); /* Adjusted for the navigation buttons */
+  width: calc(100% / 7); /* Adjusted for the navigation buttons */
   text-align: center; /* Center the text */
   padding-top: 3px;
 }
 
 .empty {
-  width: 50%; /* Adjusted for 7 days + 1 hour column */
+  width: calc(100% / 14); /* Adjusted for 7 days + 1 hour column */
   border: none;
   color: var(--ash);
-  font-size: 0.8em;
 }
 
 .cell.hours {
@@ -125,7 +121,6 @@
   box-shadow: var(--bg-primary) 0px 4px 55px, var(--bg-primary) 0px -12px 30px,
     var(--bg-primary) 0px 4px 6px, var(--bg-primary) 0px 12px 13px,
     var(--bg-primary) 0px -3px 5px !important;
-  z-index: 100000;
 }
 
 .cell.group-select:not(.scheduled) {
@@ -202,32 +197,28 @@
 }
 
 .navigation-button {
-  width: var(--nav-padding) !important;
   border: none;
-  background: transparent;
+  background: var(--bg-secondary);
   cursor: pointer;
   color: var(--white);
-  z-index: 1000;
-  position: absolute;
-  top: -0.5%;
+  font-size: 1vw;
+  padding: 0;
+  width: 51%;
+  height: 100%;
+  border-radius: 0px;
+  border-right: 2px solid var(--light-grey);
+  transition: all 0.1s ease-in-out;
 }
 
-.navigation-button:hover {
-  transform: scale(1.1);
-  background-color: transparent !important;
-}
+.navigation-button:hover,
 .navigation-button:focus {
-  background-color: transparent !important;
+  transform: scale(1) !important;
+  background-color: var(--bg-secondary) !important;
 }
 
-.navigation-button.nb-right {
-  float: left;
-  translate: 100% 0;
-}
-
-.navigation-button.nb-left {
-  float: left;
-  translate: -30% 0;
+.navigation-button:active {
+  background-color: var(--bg-primary);
+  animation: button-pulse 0.3s ease-in-out;
 }
 
 .flip-left {

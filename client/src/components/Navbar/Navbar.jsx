@@ -25,6 +25,7 @@ const Navbar = ({
   setIsLoggedIn,
   session,
   organization,
+  isCalendar,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -75,16 +76,17 @@ const Navbar = ({
   return (
     <nav className="navbar">
       <div className="navbar-header">
-        <img
-          src="./logo.png"
-          alt="website logo"
-          className="navbar-logo"
-          onClick={() => navigate("/admin")}
-        />
-        {isAdmin && organization?.name ? (
+        {isCalendar && (
+          <div className="navbar-calendar">
+            <button>
+              <i className="fa-solid fa-calendar mr-10"></i>
+              WEEK
+            </button>
+            <button>{new Date().toLocaleString() + ""}</button>
+          </div>
+        )}
+        {isAdmin && organization?.name && (
           <h1 onClick={() => navigate("/")}>{organization?.name}</h1>
-        ) : (
-          <h1 onClick={() => navigate("/")}>Time Slot</h1>
         )}
       </div>
       <div className="navbar-content">
@@ -109,16 +111,19 @@ const Navbar = ({
               action={() => setIsOpen(true)}
             />
             <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
-            <Dropdown
-              children={<ProfilePic />}
-              label={session?.user.user_metadata.name}
-              options={["Signout", "Create Organization"]}
-              onClick={(e) => handleDropdownClick(e)}
-              direction="left"
-            />
+            <li className="navbar-item hover-none">
+              <Dropdown
+                children={<ProfilePic />}
+                label={session?.user.user_metadata.name}
+                options={["Signout", "Create Organization"]}
+                onClick={(e) => handleDropdownClick(e)}
+                direction="left"
+              />
+            </li>
           </>
         )}
       </div>
+
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <>
           <div className="modal-body">
@@ -128,17 +133,6 @@ const Navbar = ({
               <LoginForm onLoginSuccess={handleLoginSuccess} />
             )}
           </div>
-          {/* <div className="modal-footer">
-            {isRegistering ? (
-              <button onClick={() => setIsRegistering(false)}>
-                Back to Login
-              </button>
-            ) : (
-              <button onClick={() => setIsRegistering(true)}>
-                Want to create an account?
-              </button>
-            )}
-          </div> */}
         </>
       </Modal>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>

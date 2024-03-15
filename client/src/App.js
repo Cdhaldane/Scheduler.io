@@ -56,6 +56,9 @@ function App() {
   const shouldRenderNavbarAndFooter =
     location.pathname !== "/create-organization";
 
+  const isCalendar =
+    location.pathname === "/admin" || location.pathname === "/";
+
   useEffect(() => {
     if (session) {
       const isAdmin = localStorage.getItem("isAdmin");
@@ -90,50 +93,46 @@ function App() {
             setIsLoggedIn={(e) => setIsLoggedIn(e)}
             session={session}
             organization={organization}
+            isCalendar={isCalendar}
           />
         )}
 
-        <div className="app-main">
-          <Routes>
-            <Route
-              path="/"
-              element={<Home session={session} type="customer" />}
-            />
-            <Route
-              path="/admin"
-              element={<Home session={session} type="admin" />}
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/info" element={<Info />} />
-            <Route
-              path="/create-organization"
-              element={
-                <ACMain
-                  handleOrganizationCreate={(val) =>
-                    handleOrganizationCreate(val)
-                  }
-                />
-              }
-            />
-            <Route path="/booking" element={<BookingPage />} />
-            <Route path="/guest-booking" element={<GuestBookingPage />} />
-            <Route path="/booking-submit" element={<BookingSubmit />} />
-            <Route path="/customer-login" element={<CustomerLogin />} />
-            <Route path="/customer-register" element={<CustomerRegister />} />
-            <Route
-              path="/customer-bookingPage"
-              element={<CustomerBookingPage />}
-            />
-            <Route
-              path="/customer-submitPage"
-              element={<CustomerSubmitPage />}
-            />
-            <Route
-              path="/customer-register-submitPage"
-              element={<CustomerRegisterSubmitPage />}
-            />
-          </Routes>
-        </div>
+        <Routes>
+          <Route
+            path="/"
+            element={<Home session={session} type="customer" />}
+          />
+          <Route
+            path="/admin"
+            element={<Home session={session} type="admin" />}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/info" element={<Info />} />
+          <Route
+            path="/create-organization"
+            element={
+              <ACMain
+                handleOrganizationCreate={(val) =>
+                  handleOrganizationCreate(val)
+                }
+              />
+            }
+          />
+          <Route path="/booking" element={<BookingPage />} />
+          <Route path="/guest-booking" element={<GuestBookingPage />} />
+          <Route path="/booking-submit" element={<BookingSubmit />} />
+          <Route path="/customer-login" element={<CustomerLogin />} />
+          <Route path="/customer-register" element={<CustomerRegister />} />
+          <Route
+            path="/customer-bookingPage"
+            element={<CustomerBookingPage />}
+          />
+          <Route path="/customer-submitPage" element={<CustomerSubmitPage />} />
+          <Route
+            path="/customer-register-submitPage"
+            element={<CustomerRegisterSubmitPage />}
+          />
+        </Routes>
         {shouldRenderNavbarAndFooter && <Footer />}
       </div>
     </>

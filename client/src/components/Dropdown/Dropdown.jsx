@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import "./Dropdown.css";
 
-const Dropdown = ({ label, options, onClick, children, direction }) => {
+const Dropdown = ({ label, options, onClick, children, direction, type }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -23,7 +23,16 @@ const Dropdown = ({ label, options, onClick, children, direction }) => {
 
   return (
     <div className="dropdown" ref={dropdownRef}>
-      <div onClick={() => setIsOpen(!isOpen)}>{children}</div>
+      <div onClick={() => setIsOpen(!isOpen)} className="dropdown-holder">
+        {children}
+        {type === "button" ? (
+          isOpen ? (
+            <i className="fa-solid fa-caret-up"></i>
+          ) : (
+            <i className="fa-solid fa-caret-down"></i>
+          )
+        ) : null}
+      </div>
       <CSSTransition
         in={isOpen}
         timeout={100}

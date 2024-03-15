@@ -1,76 +1,46 @@
-/* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/Navbar/Navbar.css */
-
 .navbar {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
   color: #fff;
-  width: calc(100% - 300px);
-  margin-left: 300px;
+  width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
   height: var(--nav-height);
   display: flex;
-  align-items: center;
-}
-
-.navbar-calendar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 10%;
-  gap: 20px;
-  max-height: 59px;
-  border: 1px solid var(--primary);
-  border-top: 0px;
-  padding: 0px 10px;
-  margin: 3px 5%;
-}
-
-.admin-navbar {
-  display: flex;
-}
-
-.loggedin-navbar {
-  display: flex;
-}
-
-.navbar-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 1.5em;
-  gap: 40px;
-  margin-right: 5%;
-}
-
-.navbar-content li:hover {
-  transform: scale(1.1);
 }
 
 .navbar-header {
   display: flex;
   align-items: center;
-  justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  width: 100%;
-}
-
-.navbar-header:hover {
+  width: 70%;
+  margin-top: 2%;
 }
 
 .navbar-header > h1 {
-  color: var(--primary);
-  font-family: var(--font-secondary);
-  font-weight: 800;
-  white-space: nowrap;
-  margin-right: 10px;
-  font-size: 2rem;
-}
-
-.navbar-header h2 {
   color: var(--ash);
   font-family: var(--font-secondary);
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--ash);
+  padding: 10px;
+  border-radius: 8px;
   font-weight: 800;
   white-space: nowrap;
-  margin-right: 10px;
+  font-size: 2rem;
+  margin: 0 auto;
+  margin-top: -2%;
+  position: relative;
+  left: 20px;
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  right: 1%;
+  font-size: 2.5em;
+  gap: 40px;
+  width: 30%;
 }
 
 .navbar-header img {
@@ -86,11 +56,46 @@
   cursor: pointer;
 }
 
+.navbar-item > i:hover {
+  scale: 1.1;
+}
+.navbar-calendar {
+  display: flex;
+  position: absolute;
+  cursor: pointer;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+  margin-left: 1%;
+  gap: 10px;
+}
+
+.navbar-calendar > button {
+  background-color: var(--bg-primary);
+  color: var(--ash);
+  border: 2px solid var(--primary);
+  cursor: pointer;
+  font-size: 1.2em;
+  width: fit-content;
+  height: 50px;
+}
+
 .profile-pic {
   height: 40px !important;
   border-radius: 50%;
   border: 2px solid var(--primary);
   padding: 5px;
+}
+
+.profile-pic:hover {
+  scale: 1.1;
+}
+
+.admin-navbar {
+  display: flex;
+}
+
+.loggedin-navbar {
+  display: flex;
 }
 
 .flipped {
