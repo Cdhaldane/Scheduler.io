@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import GuestBookingPage from "../GuestBookingPage/GuestBookingPage";
+//import GuestBookingPage from "../GuestBookingPage/GuestBookingPage";
 import { supabase } from "../../Database";
 import Input from "../Input/Input";
 import { useAlert } from "../Providers/Alert";
@@ -35,7 +35,7 @@ const BookingPage = () => {
     if (appointment) {
       localStorage.setItem("appointment", JSON.stringify(appointment));
       setAppointmentData(appointment);
-    } else {
+    } else{
       setAppointmentData(JSON.parse(localStorage.getItem("appointment")));
     }
   }, []);
@@ -46,13 +46,15 @@ const BookingPage = () => {
       alert.showAlert("error", "Phone numbers do not match");
       return;
     }
+
     const user = {
       name,
       email,
       phoneNumber,
     };
     if (additionalInfo) appointmentData.additionalInfo = additionalInfo;
-    navigate("/booking-submit", { state: { user, appointmentData } });
+    //console.log('Navigating with state:', { user, appointmentData });
+    navigate("/booking-submit", { state: { user, appointment: appointmentData } });
   };
 
   return (

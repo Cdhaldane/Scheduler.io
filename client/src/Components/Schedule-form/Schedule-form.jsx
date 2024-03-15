@@ -74,6 +74,8 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
       duration: duration,
       price: price,
     };
+
+
     if (session) {
       const user = session?.user.user_metadata;
       navigate("/booking-submit", {

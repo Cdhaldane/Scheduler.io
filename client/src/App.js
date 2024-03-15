@@ -99,8 +99,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/info" element={<Info />} />
             <Route path="/create-account" element={<ACMain />} />
-            <Route path="/booking" element={<BookingPage />} />
-            <Route path="/guest-booking" element={<GuestBookingPage />} />
+            <Route path="/booking" element={<BookingPage />} /> {/* Book Appointments button directs to BookingPage */}
+            {/* merge guest booking page with customer booking page */}
+            {/* <Route path="/guest-booking" element={<GuestBookingPage />} /> */}
             <Route path="/booking-submit" element={<BookingSubmit />} />
             <Route path="/customer-login" element={<CustomerLogin />} />
             <Route path="/customer-register" element={<CustomerRegister />} />

@@ -8,11 +8,12 @@ import "./Bookings.css";
 const BookingSubmit = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, appointment } = location.state || {};
+  const { user, appointment } = location.state || {user:{}, appointment: {}};
   console.log("User:", user, "Appointment:", appointment);
   const alert = useAlert();
 
   const [booked, setBooked] = useState(false);
+
 
   const handleBook = async () => {
     // Logic to book the appointment
@@ -27,7 +28,7 @@ const BookingSubmit = () => {
         {booked ? <h1>Booking Confirmed</h1> : <h1>Confirm booking</h1>}
         <div className="book-info-display">
           <p>
-            Your appointment for a <var>{appointment.service}</var> with{" "}
+            Your appointment for a <var>{appointment.service}</var> with {" "}
             <var>{appointment.personnel.first_name}</var> is on{" "}
             <var>{appointment.day}</var>
           </p>
