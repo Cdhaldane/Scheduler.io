@@ -5,6 +5,27 @@ import { useAlert } from "../Providers/Alert";
 
 import "./Bookings.css";
 
+
+/**
+ * BookingSubmit Component
+ * 
+ * Purpose:
+ * - The BookingSubmit component is responsible for displaying the confirmation details of the booking made by the user.
+ * - It shows the appointment details, service, personnel, date, time, and price.
+ * - It also allows the user to confirm the booking and provides feedback once the booking is confirmed.
+ * 
+ * Actions:
+ * - On mount, it retrieves the user and appointment details from `location.state` or defaults to empty objects.
+ * - The `handleBook` function is called to confirm the booking, show a success alert, and update the booking status.
+ * - On booking confirmation, a message is displayed to the user, and a button is provided to navigate back to the home page.
+ * 
+ * Inputs:
+ * - None directly; relies on React Router's `useLocation` for state passed via navigation.
+ * 
+ * Outputs:
+ * - JSX for rendering the booking confirmation details and interaction elements.
+ */
+
 const BookingSubmit = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,6 +43,7 @@ const BookingSubmit = () => {
     setBooked(true);
   };
 
+  
   return (
     <div className="booking-container">
       <div className="book-info">

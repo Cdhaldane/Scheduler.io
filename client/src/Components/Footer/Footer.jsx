@@ -2,6 +2,19 @@
 import React from "react";
 import "./Footer.css"; // Import the CSS file for the footer
 
+/**
+ * Footer Component
+ * 
+ * Purpose:
+ * - The Footer component displays a simple footer with a copyright notice.
+ * 
+ * Inputs:
+ * - None.
+ * 
+ * Outputs:
+ * - JSX for rendering the footer with the copyright notice.
+ */
+
 const Footer = () => {
   return (
     <footer className="footer">

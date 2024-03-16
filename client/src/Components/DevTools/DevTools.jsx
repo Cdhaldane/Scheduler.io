@@ -1,12 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./DevTools.css"; // Make sure to create a corresponding CSS file for styling
 
+/**
+ * DevTools Component
+ * 
+ * Purpose:
+ * - The DevTools component provides a developer tool interface for debugging purposes.
+ * - It displays the contents of localStorage and sessionStorage, and allows clearing of these storage types.
+ * - The tool can be collapsed or expanded with a button click.
+ * 
+ * Inputs:
+ * - None.
+ * 
+ * Outputs:
+ * - JSX for rendering the developer tool interface.
+ */
+
 const DevTools = () => {
+  //state hooks for managing the collapsed state and the data from localStorage and sessionStorage
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [localStorageData, setLocalStorageData] = useState({});
   const [sessionStorageData, setSessionStorageData] = useState({});
   const devRef = useRef();
 
+  // Effect hook to handle clicks outside of the developer tool interface
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (devRef.current && !devRef.current.contains(e.target)) {
@@ -21,6 +38,7 @@ const DevTools = () => {
     };
   }, []);
 
+  // Effect hook to collect and set localStorage and sessionStorage data
   useEffect(() => {
     // Collect and set localStorage data
     const localData = {};
@@ -40,6 +58,7 @@ const DevTools = () => {
     setSessionStorageData(sessionData);
   }, []);
 
+  // Function to clear localStorage data
   const clearStorage = (type) => {
     if (type === "local") {
       localStorage.clear();
@@ -49,7 +68,7 @@ const DevTools = () => {
       setSessionStorageData({});
     }
   };
-
+  // Function to format the data for display
   const getPretty = (data) => {
     const parseValue = (value) => {
       try {
@@ -77,6 +96,8 @@ const DevTools = () => {
       </pre>
     );
   };
+
+  // Render the developer tool interface
   return (
     <div
       className={`dev-tools ${isCollapsed ? "collapsed" : ""}`}

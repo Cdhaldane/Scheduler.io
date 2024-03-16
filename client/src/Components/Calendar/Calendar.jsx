@@ -5,14 +5,20 @@ import GarbageBin from "./GarbageBin";
 import "./Calendar.css";
 
 const SERVICE = "service";
+// Calendar component displays a weekly calendar view and allows users to schedule and manage time slots.
 const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
+  // State hooks to manage current date, selected slot, and scheduled slots
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [scheduledSlots, setScheduledSlots] = useState([]);
   const [flipAnimation, setFlipAnimation] = useState("");
 
+  // Effect hook to update the component when scheduled slots change
   useEffect(() => {}, [scheduledSlots]);
 
+  // getStartOfWeek: Calculates the start of the week for a given date.
+  // Input: date (Date object)
+  // Output: start (Date object) - The start of the week (Sunday)
   const getStartOfWeek = (date) => {
     const start = new Date(date);
     start.setDate(start.getDate() - start.getDay());
@@ -20,12 +26,14 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     return start;
   };
 
+   // weekDays: Array of week days based on the current date.
   const weekDays = Array.from({ length: 7 }, (_, i) => {
     const day = new Date(currentDate);
     day.setDate(day.getDate() + i);
     return day;
   });
 
+  // dayNames: Array of day names for headers.
   const dayNames = [
     "Sunday",
     "Monday",
@@ -36,6 +44,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     "Saturday",
   ];
 
+  // getDaysOfWeek: Generates an array of days in ISO string format for the current week.
+  // Input: currentDate (Date object)
+  // Output: Array of strings representing days of the week in ISO format
   const getDaysOfWeek = (currentDate) => {
     const startOfWeek = getStartOfWeek(currentDate);
     return Array.from({ length: 7 }, (_, index) => {
@@ -45,10 +56,15 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     });
   };
 
+  // hoursInDay: Array of hours in a day for rendering time slots.
   const hoursInDay = Array.from({ length: 24 }, (_, i) => i);
 
+  // daysOfWeek: Array of days of the week for the current view.
   const daysOfWeek = getDaysOfWeek(new Date()); // Pass the current date or any specific date
 
+  // goToPreviousWeek: Updates the current date to the previous week and triggers flip animation.
+  // Input: None
+  // Output: None
   const goToPreviousWeek = () => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
@@ -61,6 +77,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     }, 1000);
   };
 
+  // goToNextWeek: Updates the current date to the next week and triggers flip animation.
+  // Input: None
+  // Output: None
   const goToNextWeek = () => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
@@ -73,12 +92,18 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     }, 1000);
   };
 
+  // isSlotScheduled: Checks if a time slot is scheduled.
+  // Input: day (String), hour (Number)
+  // Output: Boolean - True if the slot is scheduled, false otherwise
   const isSlotScheduled = (day, hour) => {
     return scheduledSlots.some((slot) => {
       return slot.day === day && hour >= slot.start && hour < slot.end;
     });
   };
 
+  // isSlotEdge: Determines if a slot is at the edge of a scheduled block.
+  // Input: day (String), hour (Number), name (String)
+  // Output: Boolean - True if the slot is at the edge, false otherwise
   const isSlotEdge = (day, hour, name) => {
     let daySlots = scheduledSlots.filter((slot) => slot.day === day);
     daySlots = daySlots.filter((slot) => slot.item.name === name);
@@ -95,6 +120,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     return isFirst || isLast;
   };
 
+  // handleSlotClick: Handles click events on slots/cells, updating the selected slot and calling the handleSelectedSlot callback.
+  // Input: day (String), hour (Number), slots (Array of slots)
+  // Output: None
   const handleSlotClick = (day, hour, slots) => {
     let slot = {};
     if (!day || !hour) {
@@ -131,6 +159,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     handleSelectedSlot(slot);
   };
 
+  // findConnectedGrouping: Finds the continuous grouping of slots that includes the clicked slot.
+  // Input: slots (Array of slots), clickedDay (String), clickedHour (Number)
+  // Output: Object - The grouping of connected slots with start, end, and itemName properties
   const findConnectedGrouping = (slots, clickedDay, clickedHour) => {
     const clickedSlotIndex = slots.findIndex(
       (slot) =>
@@ -166,6 +197,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     return { start, end, itemName };
   };
 
+  // handlePieceDrop: Handles dropping a puzzle piece into calendar, adding a new slot to the schedule form.
+  // Input: date (String), hour (Number), item (Object)
+  // Output: None
   const handlePieceDrop = (date, hour, item) => {
     console.log("handlePieceDrop", date, hour, item);
     const year = date.split("-")[0];
@@ -192,6 +226,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     setSelectedSlot({ day: dayNames[day.getDay()], hour });
   };
 
+  // groupSlotsByDay: Groups slots by day and sorts them by start time.
+  // Input: scheduledSlots (Array of slots)
+  // Output: Object - Slots grouped by day
   const groupSlotsByDay = (scheduledSlots) => {
     return scheduledSlots.reduce((acc, slot) => {
       if (!acc[slot.day]) {
@@ -204,6 +241,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     }, {});
   };
 
+  // handlePieceExpand: Expands a slot to cover multiple hours when a puzzle piece is dragged (resized).
+  // Input: day (String), hour (Number), item (Object)
+  // Output: None
   const handlePieceExpand = (day, hour, item) => {
     let startingTime = Math.min(selectedSlot.hour, hour);
     let endingTime = Math.max(selectedSlot.hour, hour);
@@ -235,6 +275,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     handleSlotClick(day, hour, [...updatedSlots, ...newSlots]);
   };
 
+  // isLastInGroup: Checks if a slot is the last in a connected group.
+  // Input: day (String), hour (Number)
+  // Output: Boolean - True if the slot is the last in the group, false otherwise
   const isLastInGroup = (day, hour) => {
     const grouping = findConnectedGrouping(scheduledSlots, day, hour);
     if (grouping?.end - 1 === grouping?.start) {
@@ -244,6 +287,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     return grouping && hour === grouping.end - 1;
   };
 
+  // handleScheduledSlotDelete: Deletes a scheduled slot and updates the state.
+  // Input: day (String), hour (Number)
+  // Output: None
   const handleScheduledSlotDelete = (day, hour) => {
     console.log("delete");
     let connectedGrouping = findConnectedGrouping(scheduledSlots, day, hour);
@@ -251,6 +297,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     setSelectedSlot(null);
   };
 
+  // deleteHelper: Helper function to delete a slot or a group of connected slots.
+  // Input: day (String), hour (Number), connectedGrouping (Object)
+  // Output: None
   const deleteHelper = (day, hour, connectedGrouping) => {
     let updatedSlots = scheduledSlots.filter((slot) => {
       return (
@@ -262,6 +311,7 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     setScheduledSlots(updatedSlots);
   };
 
+  //userDrop hook for handling drag-and-drop of puzzle pieces into the trash bin (this feature has been replaced by the delete option (2024-03-15))
   const [{ isOver, trashBinDrop }, drop] = useDrop({
     accept: SERVICE,
     drop: (item, monitor) => {
@@ -273,6 +323,10 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     }),
   });
 
+
+  // renderHeader: Renders the calendar header with navigation buttons and day names.
+  // Input: None
+  // Output: JSX - The header of the calendar
   const renderHeader = () => {
     const startOfWeek = getStartOfWeek(currentDate);
     const weekDays = Array.from({ length: 7 }, (_, index) => {
@@ -280,7 +334,7 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
       day.setDate(day.getDate() + index);
       return day;
     });
-
+    // render the header with navigation buttons and day names
     return (
       <>
         <button
@@ -311,7 +365,9 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     );
   };
 
-  // Render the body of the calendar with times and cells
+  // rednerWeek: Render the body of the calendar with times and cells
+  // Input: None
+  // Output: JSX - The body of the calendar 
   const renderWeek = () => {
     return hoursInDay.map((hour, index) => (
       <div key={index + hour} className="row">
@@ -344,6 +400,7 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
     ));
   };
 
+  // renderWeek: Render the body of the calendar with times and cells
   return (
     <div className="main-calendar">
       <div className="calendar">

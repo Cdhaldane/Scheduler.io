@@ -4,6 +4,22 @@ import { useLocation } from "react-router-dom";
 
 import "./CustomerBookingPage.css";
 
+/**
+ * CustomerBookingPage Component
+ * 
+ * Purpose:
+ * - The CustomerBookingPage component allows customers to view and submit their booking information.
+ * - It displays a welcome message with the customer's name, email, and phone number.
+ * - It provides a textarea for customers to enter additional comments about their booking.
+ * 
+ * Inputs:
+ * - None directly; the component may receive customer details such as name, email, and phone number via React Router's location state.
+ * 
+ * Outputs:
+ * - JSX for rendering the customer booking page with welcome message, service display, additional comments section, and submit button.
+ */
+
+
 const CustomerBookingPage = () => {
   const location = useLocation();
   const { name } = location.state || {};

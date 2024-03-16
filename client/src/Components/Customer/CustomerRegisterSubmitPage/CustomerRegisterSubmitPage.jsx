@@ -4,6 +4,21 @@ import { useLocation } from "react-router-dom";
 
 import "./CustomerRegisterSubmitPage.css";
 
+/**
+ * CustomerRegisterSubmitPage Component
+ * 
+ * Purpose:
+ * - The CustomerRegisterSubmitPage component is the final step in the customer registration process.
+ * - It prompts the customer to verify their email address by entering a verification code.
+ * - The verification step is currently a placeholder and will be implemented once the backend is set up.
+ * 
+ * Inputs:
+ * - None directly; the component may receive customer details such as name, email, and phone number via React Router's location state.
+ * 
+ * Outputs:
+ * - JSX for rendering the verification page with an input field for the verification code and a verify button.
+ */
+
 const CustomerRegisterSubmitPage = () => {
   //Pull the accounts' name, phone number and email
   const { email, phoneNumber, name } = useLocation().state || {};

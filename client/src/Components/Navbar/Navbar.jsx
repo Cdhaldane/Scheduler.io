@@ -9,6 +9,22 @@ import { sendEmail, supabase } from "../../Database";
 import { useAlert } from "../Providers/Alert.jsx";
 import "./Navbar.css"; // Import the CSS file for styling
 
+/**
+ * NavbarItem Component
+ * 
+ * Purpose:
+ * - The NavbarItem component represents a single item in the navigation bar.
+ * - It can either navigate to a specified route or perform a custom action when clicked.
+ * 
+ * Inputs:
+ * - icon: The class name for the icon to be displayed in the navbar item.
+ * - route: The route to navigate to when the item is clicked.
+ * - action: An optional custom action to be performed when the item is clicked.
+ * 
+ * Outputs:
+ * - JSX for rendering the navbar item with the specified icon and click behavior.
+ */
+
 const NavbarItem = ({ icon, route, action }) => {
   const navigate = useNavigate();
   const onClick = action ? action : () => navigate(route);
@@ -19,11 +35,30 @@ const NavbarItem = ({ icon, route, action }) => {
   );
 };
 
+/**
+ * Navbar Component
+ * 
+ * Purpose:
+ * - The Navbar component provides the navigation bar for the application.
+ * - It includes links for admin and user actions, as well as login and registration forms.
+ * - The navigation bar changes based on whether the user is logged in or has admin privileges.
+ * 
+ * Inputs:
+ * - isAdmin: A boolean indicating whether the user has admin privileges.
+ * - isLoggedIn: A boolean indicating whether the user is logged in.
+ * - setIsLoggedIn: A function to set the isLoggedIn state.
+ * - session: The current user session object.
+ * 
+ * Outputs:
+ * - JSX for rendering the navigation bar with appropriate links and modals for login and registration.
+ */
+
 const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
 
+  //Profile picture component for the user
   const ProfilePic = () => {
     return (
       <li className="navbar-item">
@@ -42,11 +77,13 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
 
   const navigate = useNavigate();
 
+  //Handler for login success
   const handleLoginSuccess = () => {
     setShowModal(false);
     setIsLoggedIn(true);
   };
 
+  //Handler for dropdown click (signout action)
   const handleDropdownClick = (e) => {
     if (e) {
       setShowModal(false);
@@ -55,6 +92,7 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
     }
   };
 
+  //Effect hook to check for session and update login status
   useEffect(() => {
     if (session) {
       setIsLoggedIn(true);
@@ -62,6 +100,7 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
     }
   }, [session]);
 
+  //Render the navigation bar with appropriate links and modals
   return (
     <nav className="navbar">
       <div className="navbar-content">

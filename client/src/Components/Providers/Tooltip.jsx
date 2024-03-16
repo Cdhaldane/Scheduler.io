@@ -9,12 +9,43 @@ import styled from "styled-components";
 
 import "./Provider.css";
 
-// Context for the tooltip
+/**
+ * TooltipContext
+ * 
+ * Purpose:
+ * - The TooltipContext is a React context that provides a way to display tooltip messages across the application.
+ * 
+ * Outputs:
+ * - A context object that can be used with useContext to access the tooltip state and functions for showing and hiding tooltips.
+ */
 const TooltipContext = createContext();
+
+/**
+ * useTooltip Hook
+ * 
+ * Purpose:
+ * - A custom hook that provides a convenient way to access the tooltip context.
+ * 
+ * Outputs:
+ * - The tooltip context value, which includes the current tooltip state and functions for showing and hiding tooltips.
+ */
 
 export const useTooltip = () => {
   return useContext(TooltipContext);
 };
+
+/**
+ * TooltipProvider Component
+ * 
+ * Purpose:
+ * - The TooltipProvider component wraps the application with the TooltipContext.Provider to provide tooltip functionality to the entire app.
+ * 
+ * Inputs:
+ * - children: The child components of the TooltipProvider.
+ * 
+ * Outputs:
+ * - JSX for rendering the context provider with the tooltip state and functions for showing and hiding tooltips.
+ */
 
 export const TooltipProvider = ({ children }) => {
   const [tooltip, setTooltip] = useState({ visible: false, content: "" });
@@ -31,6 +62,28 @@ export const TooltipProvider = ({ children }) => {
     </TooltipContext.Provider>
   );
 };
+
+/**
+ * ToolTip Component
+ * 
+ * Purpose:
+ * - The ToolTip component provides a tooltip that appears when the user hovers over its child component.
+ * - It uses the useTooltip hook to access and control the tooltip state.
+ * 
+ * Inputs:
+ * - children: The child component over which the tooltip will appear.
+ * - tooltipText: The text to be displayed in the tooltip.
+ * - theme: An object containing theming properties for the tooltip.
+ * 
+ * Outputs:
+ * - JSX for rendering the child component with a tooltip that appears on hover.
+ * 
+ * Example usage:
+ * <Tooltip
+    tooltipText="Delete Service"
+    theme={{ color: "secondary" }}
+  >
+ */
 
 const ToolTip = ({ children, tooltipText, theme }) => {
   const { showTooltip, hideTooltip, tooltip } = useTooltip();
@@ -50,7 +103,7 @@ const ToolTip = ({ children, tooltipText, theme }) => {
       border-top: solid var(--${theme.color}) 10px !important;
     }
   `;
-
+  //Render the child component with the tooltip
   return (
     <div
       className={`tooltip-container ${className}`}

@@ -32,6 +32,20 @@ import "./index.css";
 
 import { createClient } from "@supabase/supabase-js";
 
+/**
+ * App Component
+ * 
+ * Purpose:
+ * - The App component serves as the root component of the application.
+ * - It manages the authentication state, session data, and routing for the application.
+ * 
+ * Inputs:
+ * - None.
+ * 
+ * Outputs:
+ * - JSX for rendering the application layout, including the navbar, footer, and main content based on the current route.
+ */
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);

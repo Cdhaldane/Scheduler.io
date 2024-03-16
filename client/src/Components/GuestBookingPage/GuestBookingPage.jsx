@@ -4,6 +4,20 @@ import { useAlert } from "../Providers/Alert";
 
 import "./GuestBookingPage.css";
 
+/******************************************
+*
+*THIS PAGE IS OBSOLETE, IT HAS BEEN INCORPORATED INTO:  This page had been copied to GuestBookingPage.jsx under Guest/GuestBookingPage
+*
+*
+*
+*
+*DO NOT UPDATE THIS PAGE AS IT IS UNOBTAINABLE
+*
+*
+*
+*
+*
+*********************************/
 const GuestBookingPage = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");

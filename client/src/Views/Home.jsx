@@ -18,7 +18,23 @@ import {
 
 import "./Home.css";
 
+/**
+ * Home Component
+ * 
+ * Purpose:
+ * - The Home component serves as the main interface for customer, admin and employee users.
+ * - It includes a sidebar for selecting personnel, a calendar for scheduling, and forms for managing services.
+ * 
+ * Inputs:
+ * - session: The current user session object.
+ * - type: A string indicating the type of user ("admin" or "employee" or "customer" or "null").
+ * 
+ * Outputs:
+ * - JSX for rendering the main interface with the appropriate components based on the user type.
+ */
+
 const Home = ({ session, type }) => {
+  // State hooks for mangaging personnel, services, and user selection
   const [personID, setPersonID] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState(0);
   const [personnel, setPersonnel] = useState([]);
@@ -30,10 +46,12 @@ const Home = ({ session, type }) => {
   const alert = useAlert();
   const navigate = useNavigate();
 
+  //Handlers for service-related actions
   const onDrop = (item) => {
     console.log("dropped", item);
   };
 
+  //Fetch personnel and services data
   const fetchData = async () => {
     const personnel = await getPersonnel();
     if (personnel) setPersonnel(personnel);
@@ -42,10 +60,12 @@ const Home = ({ session, type }) => {
     if (data) setServices(data);
   };
 
+  //Effect hook for fetching personnel and services data
   useEffect(() => {
     fetchData();
   }, []);
 
+  //Handlers for service-related actions
   const onDeleteService = async (item) => {
     setDeletedService(item);
     setTimeout(() => {
@@ -60,6 +80,7 @@ const Home = ({ session, type }) => {
     }, 500);
   };
 
+  //Handler for adding a new service
   const onAddService = async (service) => {
     await addService(service).then((res) => {
       if (res.error) {
@@ -79,6 +100,7 @@ const Home = ({ session, type }) => {
     setSelectedSlot(slot);
   };
 
+  //Props for the calendar component
   const calendarProps = {
     personID,
     onAddService,
@@ -91,6 +113,7 @@ const Home = ({ session, type }) => {
     onDeleteService,
   };
 
+  //Render the main interface
   return (
     <DndProvider backend={HTML5Backend}>
       <Sidebar

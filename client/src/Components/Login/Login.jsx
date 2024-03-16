@@ -14,7 +14,24 @@ import { supabase, getUsers, signUp, signIn } from "../../Database";
 
 import "./Login.css";
 
+/**
+ * Login Component
+ * 
+ * Purpose:
+ * - The Login component provides a user interface for signing in or signing up to the application.
+ * - It supports authentication with email and password, as well as Single Sign-On (SSO) with Google, GitHub, and Microsoft.
+ * - The component allows users to switch between the login and sign-up forms.
+ * 
+ * Inputs:
+ * - onLoginSuccess: A callback function that is called when the user successfully logs in.
+ * - onClose: A callback function that is called when the login modal is closed.
+ * 
+ * Outputs:
+ * - JSX for rendering the login form with SSO buttons, input fields for email and password, and links for password recovery and account creation.
+ */
+
 const Login = ({ onLoginSuccess, onClose }) => {
+  // State hooks for managing the form inputs and error messages
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -28,6 +45,7 @@ const Login = ({ onLoginSuccess, onClose }) => {
 
   useEffect(() => {}, []);
 
+  //Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { data, error } = { data: {}, error: null };
@@ -56,12 +74,14 @@ const Login = ({ onLoginSuccess, onClose }) => {
     }
   };
 
+  //Handler for SSO authentication
   const handleSSO = (provider) => async () => {
     if (provider === "google") {
       await loginWithGoogle(window.location.href);
     }
   };
 
+  //Render the login component with SSO buttons, input fields, and links
   return (
     <div className="login-container">
       <div className="login-header">

@@ -2,6 +2,33 @@ import React, { useState, useRef, useEffect, cloneElement } from "react";
 import { useAlert } from "../Providers/Alert";
 import "./Input.css";
 
+/**
+ * Input Component
+ * 
+ * Purpose:
+ * - The Input component provides a reusable and customizable input field with dynamic label positioning.
+ * 
+ * Inputs:
+ * - label: The label for the input field.
+ * - placeholder: The placeholder text for the input field.
+ * - value: The value of the input field (controlled by the parent component).
+ * - onInputChange: A callback function that is called when the input value changes.
+ * - type: The type of the input field (e.g., "text", "email", "password", "tel").
+ * - className: Additional class names for styling the input container.
+ * 
+ * Outputs:
+ * - JSX for rendering the input field with dynamic label positioning and optional styling.
+ * 
+ *EXAMPLE USE: 
+  <Input
+   label="Email"
+   placeholder="Email"
+   type="email"
+   value={email}
+   onInputChange={(newValue) => setEmail(newValue)}
+ />;
+ */
+
 const Input = ({
   label,
   placeholder,
@@ -81,11 +108,13 @@ export const InputForm = ({
   buttonLabel,
   successMessage,
 }) => {
+  // Ref for the form element 
   const inputRef = useRef(null);
   const alert = useAlert();
   const [compacted, setCompacted] = useState(false);
   const [values, setValues] = useState({});
 
+  //Effect hook to adjust the form height when the input fields are too long
   useEffect(() => {
     const inputHeight = inputRef.current.getBoundingClientRect();
     const viewBox = document
@@ -96,16 +125,19 @@ export const InputForm = ({
     }
   }, [inputRef]);
 
+  // Function to handle input changes
   const handleChange = (id, newValue) => {
     setValues({ ...values, [id]: newValue });
   };
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     await onSubmit(values);
     onClose();
   };
 
+  // Render the input form
   return (
     <div>
       <div className="input-form-title">
@@ -141,14 +173,4 @@ export const InputForm = ({
 
 export default Input;
 
-// EXAMPLE USE
 
-// <Input
-//   label="Email"
-//   placeholder="Email"
-//   type="email"
-//   value={email}
-//   onInputChange={(newValue) => setEmail(newValue)}
-// />;
-
-// END

@@ -4,6 +4,21 @@ import { useNavigate } from "react-router-dom";
 
 import "./CustomerRegister.css";
 
+/**
+ * CustomerRegister Component
+ * 
+ * Purpose:
+ * - The CustomerRegister component allows customers to register for an account by providing their details.
+ * - It includes input fields for email, password, name, phone number, and home address.
+ * - It performs validation on the email and phone number and ensures that the password and verified password match.
+ * 
+ * Inputs:
+ * - onClose: A callback function that is called when the registration process is complete.
+ * 
+ * Outputs:
+ * - JSX for rendering the registration form with input fields and a register button.
+ */
+
 const CustomerRegister = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,11 +30,13 @@ const CustomerRegister = ({ onClose }) => {
   const alert = useAlert();
   const navigate = useNavigate();
 
+  //Validation functions for email, phone number, and password matching
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
   const isPhoneNumberValid = (phoneNumber) => /^\d{10}$/.test(phoneNumber);
   const doPasswordsMatch = (password, verifiedPassword) =>
     password === verifiedPassword;
 
+  //Event handlers for input fields
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -45,6 +62,7 @@ const CustomerRegister = ({ onClose }) => {
     setHomeAddress(e.target.value);
   };
 
+  //Event handler for register button
   const handleRegister = () => {
     const newErrorMessages = [];
     if (!email) {
@@ -84,6 +102,7 @@ const CustomerRegister = ({ onClose }) => {
     onClose();
   };
 
+  //Render the registration form
   return (
     <div className="customer-register-container">
       <h2>Register</h2>

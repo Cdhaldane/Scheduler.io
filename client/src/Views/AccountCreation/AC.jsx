@@ -3,6 +3,20 @@ import Blob from "../../Components/Blob/Blob";
 
 import "./AC.css";
 
+/**
+ * AC Component
+ * 
+ * Purpose:
+ * - The AC component is a multi-step animation component that transitions through different pages.
+ * - It is used to display an introductory animation sequence.
+ * 
+ * Inputs:
+ * - onFinish: A callback function that is called when the animation sequence is completed.
+ * 
+ * Outputs:
+ * - JSX for rendering the animation sequence with different pages and transitions.
+ */
+
 const AC = ({ onFinish }) => {
   const [page, setPage] = useState(0);
   const [animation, setAnimation] = useState(false);
@@ -29,6 +43,7 @@ const AC = ({ onFinish }) => {
     }
   }, [page]);
 
+  //Render the animation sequence with different pages and transitions
   if (page === 0)
     return (
       <div className="ac-container" onClick={() => handleNext(1)}>

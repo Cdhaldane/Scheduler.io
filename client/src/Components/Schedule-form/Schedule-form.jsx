@@ -6,6 +6,31 @@ import { useAlert } from "../Providers/Alert";
 
 import "./Schedule-form.css";
 
+/**
+ * ScheduleForm Component
+ * 
+ * Purpose:
+ * - The ScheduleForm component displays a form for scheduling an appointment.
+ * - It allows the user to select a service, view the appointment duration and price, and book the appointment.
+ * 
+ * Inputs:
+ * - personID: The ID of the personnel associated with the appointment.
+ * - selectedSlot: The selected time slot for the appointment.
+ * - personnel: An array of personnel objects.
+ * - session: The current user session object.
+ * 
+ * Outputs:
+ * - JSX for rendering the appointment scheduling form with service selection, appointment details, and a booking button.
+ * 
+ * Example usage:
+ * <ScheduleForm
+    personID={personID}
+    selectedSlot={selectedSlot}
+    personnel={personnel}
+    session={session}
+  />
+ */
+
 const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
   const [person, setPerson] = useState(personnel[personID]);
   const [day, setDay] = useState(selectedSlot.day);
@@ -20,6 +45,7 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
 
   /*console.log(selectedSlot); */
 
+  //Effect hooks for updating form data and handling typing animation
   useEffect(() => {
     if (personID !== null) {
       setPerson(personnel[personID]);
@@ -28,6 +54,7 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
     }
   }, [personID, personnel, selectedSlot]);
 
+  //Effect hook for handling typing animation
   useEffect(() => {
     if (person?.first_name) {
       // Start the typing effect
@@ -46,7 +73,7 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
   const handleServiceChange = (service) => {
     setSelectedService(service);
   };
-
+  //useDrag hook to make the component draggable
   const [{ isDragging }, drag] = useDrag({
     type: "service",
     item: {
@@ -60,6 +87,7 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
     }),
   });
 
+  //handler for booking the appointment
   const handleBookAppointment = () => {
     if (!selectedService)
       return alert.showAlert("error", "Please select a service");
@@ -88,6 +116,7 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
     }
   };
 
+  //Render the schedule form with the appointment details and booking button
   return (
     <div className="main-right schedule-container" ref={drag}>
       <div className="body">

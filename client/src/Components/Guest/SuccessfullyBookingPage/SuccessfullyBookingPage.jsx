@@ -4,6 +4,20 @@ import { useNavigate } from "react-router-dom";
 
 import "./SuccessfullyBookingPage.css";
 
+/******************************************
+*
+*THIS PAGE IS OBSOLETE, IT HAS BEEN INCORPORATED INTO: This page had been copied to BookingSubmit.jsx
+*
+*
+*
+*
+*DO NOT UPDATE THIS PAGE AS IT IS UNOBTAINABLE
+*
+*
+*
+*
+*
+*********************************/
 const SuccessfullyBookingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();

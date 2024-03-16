@@ -2,11 +2,13 @@ import { createClient } from "@supabase/supabase-js";
 import emailjs from "@emailjs/browser";
 import { useLocation } from "react-router-dom";
 
+//Initialize Supabase client
 export const supabase = createClient(
   process.env.REACT_APP_SUPABASE_URL,
   process.env.REACT_APP_SUPABASE_KEY
 );
 
+//Fetch all personnel from the database
 export const getPersonnel = async () => {
   const { data, error } = await supabase.from("personnel").select();
   if (error) {
@@ -15,6 +17,7 @@ export const getPersonnel = async () => {
   return data;
 };
 
+//Add a new personnel to the database
 export const addPersonnel = async (newPersonnel) => {
   const { data, error } = await supabase
     .from("personnel")
@@ -27,6 +30,7 @@ export const addPersonnel = async (newPersonnel) => {
   return { data, error };
 };
 
+//Delete a personnel from the database (Employee)
 export const deletePersonnel = async (id) => {
   const { data, error } = await supabase
     .from("personnel")
@@ -40,7 +44,7 @@ export const deletePersonnel = async (id) => {
 };
 
 // USERS HANDLERS
-
+// Fetch all users from the database
 export const getUsers = async () => {
   const {
     data: { users },
@@ -54,6 +58,7 @@ export const getUsers = async () => {
   return users;
 };
 
+// Add a new user to the database 
 export const addUser = async (newUser) => {
   const { data, error } = await supabase
     .from("users")
@@ -66,6 +71,7 @@ export const addUser = async (newUser) => {
   return { data, error };
 };
 
+// Delete a user from the database
 export const deleteUser = async (id) => {
   const { data, error } = await supabase
     .from("users")
@@ -79,7 +85,7 @@ export const deleteUser = async (id) => {
 };
 
 // AUTH
-
+// Sign in with Google OAuth
 export const loginWithGoogle = async (redirect) => {
   await supabase.auth.signInWithOAuth({
     provider: "google",
@@ -89,18 +95,21 @@ export const loginWithGoogle = async (redirect) => {
   });
 };
 
+// Sign in with Github OAuth
 export const loginWithGithub = async () => {
   await supabase.auth.signInWithOAuth({
     provider: "github",
   });
 };
 
+// Sign in with Microsoft OAuth
 export const loginWithMicrosoft = async () => {
   await supabase.auth.signInWithOAuth({
     provider: "microsoft",
   });
 };
 
+//Sign up a new user
 export const signUp = async (email, password, name) => {
   const { data, error } = await supabase.auth.signUp({
     email: email,
@@ -120,6 +129,7 @@ export const signUp = async (email, password, name) => {
   return { data, error };
 };
 
+//Sign in an existing user
 export const signIn = async (email, password) => {
   const { data, error } = await supabase.auth.signInWithPassword({
     email: email,
@@ -131,6 +141,7 @@ export const signIn = async (email, password) => {
   return { data, error };
 };
 
+//Sned an email 
 export const sendEmail = async (name, email, message) => {
   const response = await emailjs.send(
     "service_7xvem3p",
@@ -149,7 +160,6 @@ export const sendEmail = async (name, email, message) => {
 };
 
 // SERVICES HANDLERS
-
 export const getServices = async () => {
   const { data, error } = await supabase.from("services").select();
   if (error) {
@@ -158,6 +168,7 @@ export const getServices = async () => {
   return data;
 };
 
+//Add a new service to the database
 export const addService = async (newService) => {
   const data = await supabase
     .from("services")
@@ -170,6 +181,7 @@ export const addService = async (newService) => {
   return data;
 };
 
+//Delete a service from the database
 export const deleteService = async (id) => {
   const data = await supabase.from("services").delete().eq("id", id).select();
   if (!data) {

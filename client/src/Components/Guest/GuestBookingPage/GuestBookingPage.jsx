@@ -3,6 +3,20 @@ import { useNavigate } from "react-router-dom";
 
 import "./GuestBookingPage.css";
 
+/******************************************
+*
+*THIS PAGE IS OBSOLETE, IT HAS BEEN INCORPORATED INTO: This page had been copied to BookingPage.jsx
+*
+*
+*
+*
+*DO NOT UPDATE THIS PAGE AS IT IS UNOBTAINABLE
+*
+*
+*
+*
+*
+*********************************/
 const GuestBookingPage = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");

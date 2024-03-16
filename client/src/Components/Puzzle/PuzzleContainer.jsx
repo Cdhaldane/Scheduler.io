@@ -16,7 +16,40 @@ import {
 } from "../../Database.jsx";
 import "./Puzzle.css";
 
+/**
+ * PuzzlePiece Component
+ * 
+ * Purpose:
+ * - The PuzzlePiece component represents an individual puzzle piece in the calendar.
+ * - It can be dragged and dropped within the calendar.
+ * - It supports animations for adding or deleting a service.
+ * 
+ * Inputs:
+ * - piece: The data for the puzzle piece, including its id, name, and color.
+ * - animate: A string indicating the type of animation to apply to the piece.
+ * - puzzlePieces: An array of all puzzle pieces in the calendar.
+ * 
+ * Outputs:
+ * - JSX for rendering the puzzle piece with drag-and-drop functionality and animations.
+ * 
+ * Example Usage:
+ * <PuzzlePiece
+      puzzlePieces={puzzlePieces}
+      key={index}
+      piece={piece}
+      animate={
+        piece.id === animateDeleteId
+        ? "animate-delete"
+        : piece.id === animateAddId
+        ? "animate-add"
+        : null
+      }
+      pieceRef={pieceRef}
+    />
+ */
+
 const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
+  // useDrag hook to enable drag-and-drop functionality
   const [{ isDragging }, drag] = useDrag({
     type: "service",
     item: { id: piece.id, name: piece.name, color: piece.color },
@@ -26,6 +59,7 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
   });
   const color = piece.backgroundColor || "#17a2b8";
 
+  // useEffect hook to handle animations
   useEffect(() => {
     if (animate) {
       const puzzleEl = document.getElementById(`piece${piece.id}`);
@@ -62,7 +96,7 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
   }, [animate, piece.id]);
 
   const pieceClass = `puzzle-piece ${animate && animate}`;
-
+  // Return the JSX for the puzzle piece
   return (
     <div
       id={"piece" + piece.id}
@@ -103,6 +137,29 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
   );
 };
 
+/**
+ * PuzzleContainer Component
+ * 
+ * Purpose:
+ * - The PuzzleContainer component contains the calendar and the puzzle pieces.
+ * - It manages the drag-and-drop functionality and animations for the puzzle pieces.
+ * 
+ * Inputs:
+ * - onDrop: A callback function that is called when a puzzle piece is dropped.
+ * - onDeleteService: A callback function that is called when a service is deleted.
+ * - personID: The ID of the person associated with the calendar.
+ * - handleSelectedSlot: A callback function for handling slot selection.
+ * - onAddService: A callback function that is called when a service is added.
+ * - deletedService: The service that was recently deleted.
+ * - addedService: The service that was recently added.
+ * - puzzlePieces: An array of all puzzle pieces in the calendar.
+ * - fetchData: A function for fetching data.
+ * - session: The current user session object.
+ * 
+ * Outputs:
+ * - JSX for rendering the calendar with the puzzle pieces, including the add and delete buttons.
+ */
+
 const PuzzleContainer = ({
   onDrop,
   onDeleteService,
@@ -115,6 +172,7 @@ const PuzzleContainer = ({
   fetchData,
   session,
 }) => {
+  // State hooks and useDrop hook for drag-and-drop functionality
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: "puzzlePiece",
     drop: (item, monitor) => {
@@ -131,6 +189,7 @@ const PuzzleContainer = ({
   const { showTooltip, hideTooltip } = useTooltip();
   const pieceRef = useRef(null);
 
+  //Effect hooks for handling animations when a service is deleted or added
   useEffect(() => {
     if (deletedService) {
       setAnimateDeleteId(deletedService.id);
@@ -147,6 +206,7 @@ const PuzzleContainer = ({
     onDeleteService(item);
   };
 
+  //Render the JSX for the PuzzleContainer
   return (
     <>
       <div

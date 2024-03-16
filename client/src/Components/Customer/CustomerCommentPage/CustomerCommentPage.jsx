@@ -4,6 +4,19 @@ import {useNavigate } from "react-router-dom";
 
 import "./CustomerCommentPage.css";
 
+/**
+ * CustomerCommentPage Component
+ * 
+ * Purpose:
+ * - The CustomerCommentPage component allows customers to leave comments for their past appointments.
+ * - It provides a text area for entering comments and an option to leave the comment anonymously.
+ * 
+ * Inputs:
+ * - None directly; the component may receive customer details such as name and phone number via React Router's location state.
+ * 
+ * Outputs:
+ * - JSX for rendering the comment submission form and navigation buttons.
+ */
 const CustomerCommentPage = () => {
   const location = useLocation();
   const navigate = useNavigate();

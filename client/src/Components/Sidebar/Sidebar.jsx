@@ -9,6 +9,28 @@ import ContextMenu from "../ContextMenu/ContextMenu";
 
 import "./Sidebar.css";
 
+/**
+ * Sidebar Component
+ * 
+ * Purpose:
+ * - The Sidebar component displays a list of personnel and provides options for adding, editing, and deleting personnel.
+ * 
+ * Inputs:
+ * - personID: The currently selected personnel ID.
+ * - setPersonID: A function to set the currently selected personnel ID.
+ * - personnel: An array of personnel objects.
+ * 
+ * Outputs:
+ * - JSX for rendering the sidebar with personnel list and context menu options for personnel actions.
+ * 
+ * Example Usage:
+ *  <Sidebar
+        setPersonID={setPersonID}
+        personID={personID}
+        personnel={personnel}
+      />
+ */
+
 const Sidebar = ({ personID, setPersonID, personnel }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [personnelData, setPersonnelData] = useState([]);
@@ -19,10 +41,12 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
   });
   const isAdmin = window.location.pathname === "/admin" ? "true" : "false";
 
+  //Effect hook to update personnel data
   useEffect(() => {
     setPersonnelData(personnel);
   }, [personnel]);
 
+  //Handlers for personnel selection 
   const handleSelect = (id) => {
     setPersonID(id);
   };
@@ -44,12 +68,14 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
     }
   };
 
+  //Context menu options for user actions
   const contextMenuOptions = [
     { label: "Delete", onClick: (e) => handlePersonnelDelete(personID) },
     { label: "Edit", onClick: () => console.log("Option 2 clicked") },
     // Add more options as needed
   ];
 
+  //Effect hook to handle clicks outside the context menu
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (contextMenu.visible) {
@@ -65,6 +91,7 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
     };
   }, [contextMenu.visible]);
 
+  //Function to render personnel list
   const getPersons = () => {
     return personnelData
       .map((person, index) => (
@@ -106,6 +133,7 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
       );
   };
 
+  //Render the sidebar with personnel list and context menu options
   return (
     <>
       <div className="sidebar">
@@ -131,6 +159,25 @@ const Sidebar = ({ personID, setPersonID, personnel }) => {
   );
 };
 
+/**
+ * AddPersonForm Component
+ * 
+ * Purpose:
+ * - The AddPersonForm component provides a form for adding new personnel.
+ * 
+ * Inputs:
+ * - onClose: A function to close the form modal after successful personnel addition.
+ * 
+ * Outputs:
+ * - JSX for rendering the form for adding new personnel.
+ * 
+ * Example Usage:
+ * <AddPersonForm
+      onAdd={handleAddPerson}
+      onClose={(e) => handleAddPerson(e)}
+    />
+ */
+
 const AddPersonForm = ({ onClose }) => {
   const [first_name, setFirst_name] = useState("");
   const [last_name, setLast_name] = useState("");
@@ -138,6 +185,7 @@ const AddPersonForm = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const alert = useAlert();
 
+  //Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -157,6 +205,7 @@ const AddPersonForm = ({ onClose }) => {
     setIsLoading(false);
   };
 
+  //Render the form for adding new personnel
   return (
     <form className="sidebar-add-form" onSubmit={handleSubmit}>
       <h2 className="modal-title">Add Personnel</h2>

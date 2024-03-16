@@ -1,6 +1,21 @@
 import React from 'react';
 import './CurrentSchedule.css';
 
+
+/**
+ * CurrentSchedule Component
+ * 
+ * Purpose:
+ * - The CurrentSchedule component displays a list of current appointments.
+ * - It is a visual representation of the schedule for the day, showing appointment times, names, services, and descriptions.
+ * 
+ * Inputs:
+ * - None directly; the component uses a hardcoded list of dummy appointments for demonstration purposes.
+ * 
+ * Outputs:
+ * - JSX for rendering the list of appointments in a structured format.
+ */
+
 const CurrentSchedule = () => {
   const dummyAppointments = [
     { id: 1, time: '10:00 AM', name: 'John Doe' , service: 'Haircut', description: 'ExtrExtra info here extra description extra long info description hereExtra info here extra description extra long info description herea info here extra description extra long info description here'},

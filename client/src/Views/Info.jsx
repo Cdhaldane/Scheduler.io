@@ -1,5 +1,18 @@
 import React from "react";
 
+/**
+ * InfoPage Component
+ * 
+ * Purpose:
+ * - The InfoPage component serves as an informational page for TimeSlot, providing details about the platform, its features, and how to get started.
+ * 
+ * Inputs:
+ * - None.
+ * 
+ * Outputs:
+ * - JSX for rendering the informational content, including sections for the mission, features, getting started, contact information, and testimonials.
+ */
+
 const InfoPage = () => {
   return (
     <div className="info-page">

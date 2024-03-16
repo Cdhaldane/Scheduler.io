@@ -15,6 +15,19 @@ import {
 import AvailabilityForm from '../Components/AvailabilityForm/AvailabilityForm';
 import CurrentSchedule from '../Components/CurrentSchedule/CurrentSchedule';
 
+/**
+ * Employee Component
+ * 
+ * Purpose:
+ * - The Employee component provides the main interface for an employee, including the availability form and the calendar.
+ * - It also provides a button for navigating to the admin page.
+ * 
+ * Inputs:
+ * - session: The current user session object.
+ * 
+ * Outputs:
+ * - JSX for rendering the employee interface with the availability form, calendar, and admin navigation button.
+ */
 const Employee = ({ session }) => {
     const navigate = useNavigate();
 

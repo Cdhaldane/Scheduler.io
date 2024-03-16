@@ -1,7 +1,26 @@
 import React, { useEffect } from "react";
 
 import "./ContextMenu.css";
+/**
+ * ContextMenu Component
+ *
+ * Purpose:
+ * This component renders a custom context menu at a given position on the screen. It's shown or hidden
+ * based on the `visible` prop and positioned according to `x` and `y` coordinates. The menu animates
+ * in and out based on its visibility and provides a list of options that a user can click on.
+ *
+ * Example Usage:
+ * <ContextMenu
+        visible={contextMenu.visible}
+        x={contextMenu.x}
+        y={contextMenu.y}
+        options={contextMenuOptions}
+        onRequestClose={handleCloseContextMenu}
+      />
+    </div>
+ */
 
+  
 const ContextMenu = ({ visible, x, y, options, onRequestClose }) => {
   return (
     <div

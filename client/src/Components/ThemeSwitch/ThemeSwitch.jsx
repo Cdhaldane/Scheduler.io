@@ -1,11 +1,26 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./ThemeSwitch.css";
 
+/**
+ * ThemeSwitch Component
+ * 
+ * Purpose:
+ * - The ThemeSwitch component provides a toggle switch for switching between light and dark modes.
+ * - It updates the theme of the application and persists the theme selection in local storage.
+ * 
+ * Inputs:
+ * - props: An object containing the className prop for additional styling.
+ * 
+ * Outputs:
+ * - JSX for rendering the theme switch with icons for light and dark modes.
+ */
+
 function ThemeSwitch(props) {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const sunRef = useRef(null);
   const moonRef = useRef(null);
 
+  //Effect hook to update theme based on local storage
   useEffect(() => {
     if (isDarkMode) {
       moonRef.current?.classList.add("active");
@@ -21,6 +36,7 @@ function ThemeSwitch(props) {
     }
   }, [isDarkMode]);
 
+  //Render the theme switch with icons for light and dark modes
   return (
     <div className={props.className}>
       <label className="switch">
