@@ -22,7 +22,7 @@ import {
 
 import "./Home.css";
 
-const Home = ({ session, type }) => {
+const Home = ({ session, type, organization }) => {
   const [personID, setPersonID] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [personnel, setPersonnel] = useState([]);
@@ -138,6 +138,7 @@ const Home = ({ session, type }) => {
     selectedSlot,
     bookings,
     timeFrame,
+    organization,
   };
 
   return (

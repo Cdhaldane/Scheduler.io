@@ -1,6 +1,6 @@
 .navbar {
   background-color: var(--bg-primary);
-  color: #fff;
+  color: var(--text-white);
   width: calc(100% - var(--sidebar-width));
   margin-left: var(--sidebar-width);
   height: var(--nav-height);

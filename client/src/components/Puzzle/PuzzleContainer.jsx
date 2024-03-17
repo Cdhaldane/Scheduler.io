@@ -144,7 +144,7 @@ const PuzzleContainer = ({
       <div ref={drop} className={`main-body ${collapsed && "collapsed"}`}>
         <Calendar {...calendarProps} puzzlePieces={puzzlePieces} />
 
-        <div className={`main-right`}>
+        <div className={`main-right ${collapsed && "collapsed"}`}>
           <div className="pieces-container">
             <div className="pieces-main">
               <i

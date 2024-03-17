@@ -24,6 +24,7 @@ const Calendar = ({
   selectedSlot,
   bookings,
   adminMode,
+  organization,
 }) => {
   const [currentView, setCurrentView] = useState(getDaysOfWeek(new Date()));
   const [scheduledSlots, setScheduledSlots] = useState([]);
@@ -167,14 +168,18 @@ const Calendar = ({
           <i className="fa-solid fa-calendar mr-10"></i>
           {timeFrame}
         </button>
-        <h1>
+        {organization?.name && (
+          <span className="fancy">{organization.name}</span>
+        )}
+
+        <h2>
           {currentView[0]?.toLocaleDateString("en-US", {
             weekday: "long",
             month: "long",
             day: "numeric",
             year: "numeric",
           })}
-        </h1>
+        </h2>
       </div>
       <div className="header">
         <div className={`header-days ${timeFrame}`}>

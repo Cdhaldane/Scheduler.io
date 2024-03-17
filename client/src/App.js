@@ -66,18 +66,19 @@ function App() {
         setIsAdmin(true);
       }
       setIsLoggedIn(true);
-      const org = JSON.parse(localStorage.getItem("organization"));
-      if (org) {
-        setOrganization(org);
-        setIsAdmin(true);
-      }
+    }
+    const org = JSON.parse(localStorage.getItem("organization"));
+
+    if (org) {
+      setOrganization(org);
+      setIsAdmin(true);
     }
   }, []);
 
   const handleOrganizationCreate = (org) => {
-    localStorage.setItem("organization", JSON.stringify(org));
     setIsAdmin(true);
     setOrganization(org);
+    localStorage.setItem("organization", JSON.stringify(org));
   };
 
   return (
@@ -104,7 +105,13 @@ function App() {
           />
           <Route
             path="/admin"
-            element={<Home session={session} type="admin" />}
+            element={
+              <Home
+                session={session}
+                type="admin"
+                organization={organization}
+              />
+            }
           />
           <Route path="/login" element={<Login />} />
           <Route path="/info" element={<Info />} />
