@@ -7,6 +7,8 @@ import Dropdown from "../Dropdown/Dropdown.jsx";
 import { InputForm } from "../Input/Input.jsx";
 import { sendEmail, supabase } from "../../Database";
 import { useAlert } from "../Providers/Alert.jsx";
+import { useSelector, useDispatch } from "react-redux";
+import { setTime } from "../../Store.js";
 import "./Navbar.css"; // Import the CSS file for styling
 
 const NavbarItem = ({ icon, route, action }) => {
@@ -30,6 +32,11 @@ const Navbar = ({
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+
+  const times = ["Week", "Month", "Day"];
+  const [timeFrameIndex, setTimeFrameIndex] = useState(0);
+  const timeFrame = useSelector((state) => state.timeFrame.value);
+  const dispatch = useDispatch();
 
   const ProfilePic = () => {
     return (
@@ -75,20 +82,7 @@ const Navbar = ({
 
   return (
     <nav className="navbar">
-      <div className="navbar-header">
-        {isCalendar && (
-          <div className="navbar-calendar">
-            <button>
-              <i className="fa-solid fa-calendar mr-10"></i>
-              WEEK
-            </button>
-            <button>{new Date().toLocaleString() + ""}</button>
-          </div>
-        )}
-        {isAdmin && organization?.name && (
-          <h1 onClick={() => navigate("/")}>{organization?.name}</h1>
-        )}
-      </div>
+      <div className="navbar-header"></div>
       <div className="navbar-content">
         {!isLoggedIn && !isAdmin && (
           <NavbarItem

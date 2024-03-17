@@ -5,11 +5,14 @@ import "./Calendar.css";
 import { getServiceFromId } from "../../Database.jsx";
 import Button from "../Button/Button.jsx";
 import Spinner from "../Spinner/Spinner.jsx";
+import { useSelector, useDispatch } from "react-redux";
+import { setTime } from "../../Store.js";
 
 import {
   getDaysOfWeek,
+  getDaysOfMonth,
   findConnectedGrouping,
-  changeWeek,
+  changeView,
   isSlotEdge,
   deleteHelper,
 } from "./Utils.jsx";
@@ -22,9 +25,34 @@ const Calendar = ({
   bookings,
   adminMode,
 }) => {
-  const [currentWeek, setCurrentWeek] = useState(getDaysOfWeek(new Date()));
+  const [currentView, setCurrentView] = useState(getDaysOfWeek(new Date()));
   const [scheduledSlots, setScheduledSlots] = useState([]);
   const [loading, setLoading] = useState(true);
+  const times = ["Week", "Month", "Day"];
+  const [timeFrameIndex, setTimeFrameIndex] = useState(0);
+  const timeFrame = useSelector((state) => state.timeFrame.value);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setLoading(true);
+
+    const fetchData = async () => {
+      switch (timeFrame) {
+        case "Day":
+          setCurrentView([new Date()]);
+          break;
+        case "Week":
+          setCurrentView(getDaysOfWeek(new Date()));
+          break;
+        case "Month":
+          setCurrentView(getDaysOfMonth(new Date()));
+          break;
+        default:
+          setCurrentView(getDaysOfWeek(new Date()));
+      }
+    };
+    fetchData().finally(() => setLoading(false));
+  }, [timeFrame]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,12 +71,11 @@ const Calendar = ({
           };
         })
       );
-      setLoading(false);
       setScheduledSlots(slots);
     };
 
     if (adminMode === false) {
-      fetchData();
+      fetchData().finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
@@ -114,7 +141,6 @@ const Calendar = ({
     if ((item.direction === "top") & (hour > connectedGrouping?.start)) {
       updatedSlots = updatedSlots.filter((slot) => slot.day !== day);
     }
-    console.log("newSlots", newSlots);
     setScheduledSlots([...updatedSlots, ...newSlots]);
     handleSlotClick(day, hour, [...updatedSlots, ...newSlots]);
   };
@@ -127,42 +153,72 @@ const Calendar = ({
     );
     handleSelectedSlot();
   };
-
   return (
     <div className="calendar">
-      {loading && <Spinner className="fast" />}
+      {loading && <Spinner className={"fast"} />}
+      <div className="calendar-buttons">
+        <button
+          onClick={() => {
+            if (timeFrameIndex >= times.length - 1) setTimeFrameIndex(0);
+            else setTimeFrameIndex(timeFrameIndex + 1);
+            dispatch(setTime(times[timeFrameIndex + 1] || times[0]));
+          }}
+        >
+          <i className="fa-solid fa-calendar mr-10"></i>
+          {timeFrame}
+        </button>
+        <h1>
+          {currentView[0]?.toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </h1>
+      </div>
       <div className="header">
-        <div className="header-days">
-          <div className="empty">
+        <div className={`header-days ${timeFrame}`}>
+          <div className={`empty ${timeFrame}`}>
             <button
               className="navigation-button nb-left"
-              onClick={() => setCurrentWeek(changeWeek(-1, [...currentWeek]))}
+              onClick={() =>
+                setCurrentView(changeView(-1, [...currentView], timeFrame))
+              }
             >
               <i className="fa-solid fa-arrow-left" />
             </button>
             <button
               className="navigation-button nb-right"
-              onClick={() => setCurrentWeek(changeWeek(1, [...currentWeek]))}
+              onClick={() =>
+                setCurrentView(changeView(1, [...currentView], timeFrame))
+              }
             >
               <i className="fa-solid fa-arrow-right" />
             </button>
           </div>
-          {currentWeek.map((day, index) => (
+          {currentView.map((day, index) => (
             <div key={index} className="header-cell">
-              {day?.toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "numeric",
-                day: "numeric",
-              })}
+              {timeFrame !== "Month"
+                ? day?.toLocaleDateString("en-US", {
+                    weekday: "long",
+                    month: "numeric",
+                    day: "numeric",
+                  })
+                : day?.toLocaleDateString("en-US", {
+                    day: "numeric",
+                  })}
             </div>
           ))}
         </div>
       </div>
-      <div className="body">
+      <div className={`body ${timeFrame}`}>
         {Array.from({ length: 24 }).map((_, hour) => (
           <div key={"row" + hour} className="row">
-            <div key={hour} className="cell hours">{`${hour}:00`}</div>
-            {currentWeek.map((day) => (
+            <div
+              key={hour}
+              className={`cell hours ${timeFrame}`}
+            >{`${hour}:00`}</div>
+            {currentView.map((day) => (
               <Cell
                 key={day + hour}
                 date={day}

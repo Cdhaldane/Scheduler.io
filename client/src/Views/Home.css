@@ -16,6 +16,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 10px;
   background-color: var(--bg-primary);
   margin-left: var(--sidebar-width);
 }
@@ -26,8 +27,10 @@
 
 .main-right {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   width: 25%;
+  height: 95% !important;
+  min-height: var(--main-height - 70px) !important;
   margin-right: 1.5% !important;
 }
 

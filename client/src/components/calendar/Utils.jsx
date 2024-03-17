@@ -1,10 +1,22 @@
 // CALENDAR DATE UTILS
 
-export const changeWeek = (offset, currentWeek) => {
-  console.log("currentWeek", currentWeek, "offset", offset);
-  const newWeek = currentWeek[0];
-  newWeek.setDate(newWeek.getUTCDate() + offset * 7);
-  return getDaysOfWeek(newWeek);
+export const changeView = (offset, currentWeek, timeFrame) => {
+  if (timeFrame === "Week") {
+    const newWeek = currentWeek[0];
+    newWeek.setDate(newWeek.getUTCDate() + offset * 7);
+    return getDaysOfWeek(newWeek);
+  }
+  if (timeFrame === "Month") {
+    const newMonth = currentWeek[0];
+    newMonth.setMonth(newMonth.getUTCMonth() + offset);
+    return getDaysOfMonth(newMonth);
+  }
+  if (timeFrame === "Day") {
+    const newDay = currentWeek[0];
+    newDay.setDate(newDay.getDate() + offset);
+    console.log(newDay);
+    return [newDay];
+  }
 };
 
 export const getStartOfWeek = (date) => {
@@ -46,6 +58,25 @@ export const getDaysOfWeek = (currentDate) => {
     day.setDate(day.getUTCDate() + index);
     return day; // Convert Date objects to string format to avoid React error
   });
+};
+
+export const getDaysOfMonth = (currentDate) => {
+  const startOfMonth = new Date(currentDate);
+  startOfMonth.setDate(1);
+  const endOfMonth = new Date(currentDate);
+  endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+  endOfMonth.setDate(0);
+  console.log("startOfMonth", startOfMonth, "endOfMonth", endOfMonth);
+  console.log(endOfMonth.getDate());
+  return Array.from(
+    { length: endOfMonth.getDate() },
+    (_, index) =>
+      new Date(
+        startOfMonth.getUTCFullYear(),
+        startOfMonth.getUTCMonth(),
+        index + 1
+      )
+  );
 };
 
 // CALENDAR SLOT UTILS

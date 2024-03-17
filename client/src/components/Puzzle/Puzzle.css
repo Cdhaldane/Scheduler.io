@@ -11,9 +11,8 @@
   flex-direction: column;
   background-color: var(--bg-primary);
   border: 3px solid var(--primary);
-  height: 95%;
+  min-width: 100%;
   border-radius: 4px;
-
   animation: slideIn 0.5s ease-in-out forwards;
 }
 

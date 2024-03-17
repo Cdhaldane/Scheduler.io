@@ -5,12 +5,12 @@
   align-items: center;
   color: var(--primary);
   width: 70%;
-  height: 95%;
-  border: 3px solid var(--primary);
+  height: calc(100% + 60px);
   padding-bottom: 1px;
   border-radius: 4px;
-  font-size: 1vw;
+  font-size: 1em;
   margin: 0 1%;
+  margin-top: -60px;
 }
 
 .calendar-header {
@@ -36,9 +36,56 @@
   transition: all 0.1s ease-in-out;
 }
 
+.calendar-buttons {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: flex-start;
+  transition: all 0.3s ease-in-out;
+  gap: 10px;
+  width: calc(100% - 4px);
+  margin: 2px;
+  color: var(--ash);
+}
+
+.calendar-buttons > button {
+  background-color: var(--bg-primary);
+  color: var(--ash);
+  border: 2px solid var(--bg-secondary);
+  cursor: pointer;
+  font-size: 1.2em;
+  width: fit-content;
+  border-radius: 2px;
+  width: 12%;
+  white-space: nowrap;
+}
+
+.calendar-buttons > button:focus {
+  background-color: var(--bg-secondary);
+}
+
+.calendar-buttons > button:hover {
+  background-color: var(--bg-secondary);
+}
+
+.calendar-buttons > h1 {
+  text-align: center;
+  margin: 0 auto;
+  translate: -10% 0;
+  font-size: 1.5em;
+  padding: 0px 5px;
+  font-weight: 400;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  font-size: 2em;
+}
+
 .calendar > .body {
   width: 100%; /* Adjusted for the navigation buttons */
   height: 100%;
+  border: 3px solid var(--ash);
+  border-radius: 0 0 4px 4px;
+  border-top: none;
 }
 
 .header {
@@ -48,6 +95,10 @@
   white-space: nowrap;
   height: calc(100% / 24);
   background-color: var(--bg-secondary);
+  border: 3px solid var(--ash);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  margin-top: 5px;
 }
 
 .row {
@@ -59,7 +110,6 @@
   align-items: center;
   justify-content: center;
   width: 100%; /* Adjusted for 7 days + 1 hour column */
-  height: 100%; /* Adjusted for 7 days + 1 hour column */
   border: 1px solid var(--light-grey);
   color: var(--primary);
   transition: all 0.1s ease-in-out;
@@ -69,6 +119,7 @@
   position: relative;
   cursor: pointer;
   background-color: var(--bg-primary);
+  overflow: hidden;
 }
 
 .cell:hover {
@@ -79,19 +130,33 @@
   display: flex;
   width: 100%;
   text-align: center; /* Center the text */
-  padding-top: 3px;
+}
+
+.header-days.Day .header-cell {
+  width: 100%; /* Adjusted for the navigation buttons */
+  text-align: center; /* Center the text */
 }
 
 .header-cell {
   width: calc(100% / 7); /* Adjusted for the navigation buttons */
   text-align: center; /* Center the text */
-  padding-top: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .empty {
-  width: calc(100% / 14); /* Adjusted for 7 days + 1 hour column */
+  width: calc(7% + 2px); /* Adjusted for 7 days + 1 hour column */
   border: none;
   color: var(--ash);
+}
+
+.empty.Day {
+  width: calc(48% + 11px);
+}
+
+.empty.Month {
+  min-width: calc(4% + 2px) !important;
 }
 
 .cell.hours {
@@ -100,6 +165,14 @@
   justify-content: center; /* Align hour text to the right */
   width: 50%;
   text-align: center; /* Align hour text to the right */
+}
+
+.cell.hours.Month {
+  min-width: calc(4%) !important; /* Adjusted for 7 days + 1 hour column */
+}
+
+.cell.hours.Day {
+  min-width: calc(30%) !important; /* Adjusted for 7 days + 1 hour column */
 }
 
 .cell.scheduled {

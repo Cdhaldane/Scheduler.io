@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar.jsx";
 import Calendar from "../Components/Calendar/Calendar.jsx";
-import CustomerCalendar from "../Components/Calendar/CustomerCalendar.jsx";
 import ScheduleForm from "../Components/Schedule-form/Schedule-form";
 import GuestBooking from "../Components/GuestBookingPage/GuestBookingPage.jsx";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +8,8 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import { useAlert } from "../Components/Providers/Alert.jsx";
+import { useSelector } from "react-redux";
+
 import {
   supabase,
   getPersonnel,
@@ -32,6 +33,7 @@ const Home = ({ session, type }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedService, setSelectedService] = useState();
   const [bookings, setBookings] = useState([]);
+  const timeFrame = useSelector((state) => state.timeFrame);
 
   const adminMode = type === "admin";
   const alert = useAlert();
@@ -135,6 +137,7 @@ const Home = ({ session, type }) => {
     personnelServices,
     selectedSlot,
     bookings,
+    timeFrame,
   };
 
   return (
