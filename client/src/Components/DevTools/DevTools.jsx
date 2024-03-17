@@ -103,6 +103,7 @@ const DevTools = () => {
       className={`dev-tools ${isCollapsed ? "collapsed" : ""}`}
       style={{ position: "fixed", bottom: 0, left: 0, zIndex: 1000 }}
       ref={devRef}
+      data-testid="dev-tools"
     >
       <button onClick={() => setIsCollapsed(!isCollapsed)}>
         {isCollapsed ? <i className="fa-brands fa-dev"></i> : "Collapse"}

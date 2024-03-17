@@ -25,12 +25,12 @@ import "./Navbar.css"; // Import the CSS file for styling
  * - JSX for rendering the navbar item with the specified icon and click behavior.
  */
 
-const NavbarItem = ({ icon, route, action }) => {
+const NavbarItem = ({ icon, route, action , id}) => {
   const navigate = useNavigate();
   const onClick = action ? action : () => navigate(route);
   return (
     <li onClick={onClick} className="navbar-item">
-      <i className={icon}></i>
+      <i className={icon} data-testid={id} ></i>
     </li>
   );
 };
@@ -102,10 +102,10 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
 
   //Render the navigation bar with appropriate links and modals
   return (
-    <nav className="navbar">
+    <nav className="navbar" data-testid="navbar">
       <div className="navbar-content">
         <div className="navbar-header">
-          <img
+          <img data-testid="navbar-logo"
             src="./logo.png"
             alt="website logo"
             className="navbar-logo"
@@ -119,6 +119,7 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
               icon="fa-solid fa-arrow-right-to-bracket"
               route="#"
               action={() => setShowModal(true)}
+              id="login-header-button"
             />
           )}
           {isAdmin && (

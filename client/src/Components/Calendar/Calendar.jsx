@@ -402,11 +402,11 @@ const Calendar = ({ puzzlePieces, personID, handleSelectedSlot }) => {
 
   // renderWeek: Render the body of the calendar with times and cells
   return (
-    <div className="main-calendar">
+    <div className="main-calendar" data-testid="calendar">
       <div className="calendar">
-        <div className="header">{renderHeader()}</div>
-        <div className={`body ${flipAnimation}`}>{renderWeek("current")}</div>
-        <div className="body next-page">{renderWeek("next")}</div>
+        <div className="header" data-testid="calendar-header">{renderHeader()}</div>
+        <div className={`body ${flipAnimation}`} data-testid="calendar-current-page">{renderWeek("current")}</div>
+        <div className="body next-page" data-testid="calendar-next-page">{renderWeek("next")}</div>
       </div>
     </div>
   );

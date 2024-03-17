@@ -122,10 +122,10 @@ const Home = ({ session, type }) => {
         personnel={personnel}
       />
 
-      <button className="admin-button" onClick={() => navigate("/admin")}>
+      <button className="admin-button" data-testid="admin-button" onClick={() => navigate("/admin")}>
         ADMIN
       </button>
-      <button className="employee-button" onClick={() => navigate("/employee")}>
+      <button className="employee-button" data-testid="employee-button" onClick={() => navigate("/employee")}>
         EMPLOYEE
       </button>
 
