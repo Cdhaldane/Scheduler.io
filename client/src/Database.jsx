@@ -58,7 +58,7 @@ export const getUsers = async () => {
   return users;
 };
 
-// Add a new user to the database 
+// Add a new user to the database
 export const addUser = async (newUser) => {
   const { data, error } = await supabase
     .from("users")
@@ -141,15 +141,30 @@ export const signIn = async (email, password) => {
   return { data, error };
 };
 
-//Sned an email 
-export const sendEmail = async (name, email, message) => {
+//Send an email
+export const sendEmail = async (
+  name,
+  email,
+  message,
+  template = "template_5imqdhx"
+) => {
+  let messageString = message;
+  if (typeof message === "object") {
+    messageString = `Day: ${message.day}
+    \nStart: ${message.start}:00
+    \nEnd: ${message.end}:00
+    \nService: ${message.service.name}
+    \nPersonnel: ${message.personnel.first_name} ${message.personnel.last_name}
+    \nPrice: $${message.price}
+    \nAdditional Info: ${message.additionalInfo}`;
+  }
   const response = await emailjs.send(
     "service_7xvem3p",
-    "template_5imqdhx",
+    template,
     {
       user_name: name,
       user_email: email,
-      message: message,
+      message: messageString,
     },
     {
       publicKey: "g49oHx9bZd0NTtYal",
@@ -169,6 +184,14 @@ export const getServices = async () => {
 };
 
 //Add a new service to the database
+export const getServiceFromId = async (id) => {
+  const { data, error } = await supabase.from("services").select().eq("id", id);
+  if (error) {
+    console.log("Error fetching service:", error);
+  }
+  return data[0];
+};
+
 export const addService = async (newService) => {
   const data = await supabase
     .from("services")
@@ -188,4 +211,43 @@ export const deleteService = async (id) => {
     console.log("Error deleting service:", data.error);
   }
   return data;
+};
+
+// PERSONNEL SERVICES HANDLERS
+
+export const addPersonnelService = async (personnelId, newPersonnelService) => {
+  const { data, error } = await supabase
+    .from("personnel")
+    .update({ services: newPersonnelService })
+    .eq("id", personnelId)
+    .select();
+  if (error) {
+    console.log("Error adding personnel service:", error);
+  }
+  return { data, error };
+};
+
+// BOOKINGS HANDLERS
+
+export const getBookings = async (personnelId) => {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .eq("personnel_id", personnelId);
+  if (error) {
+    console.log("Error fetching bookings:", error);
+  }
+  return data;
+};
+
+export const addBooking = async (newBooking) => {
+  const { data, error } = await supabase
+    .from("bookings")
+    .insert([newBooking])
+    .single()
+    .select();
+  if (error) {
+    console.log("Error adding booking:", error);
+  }
+  return { data, error };
 };

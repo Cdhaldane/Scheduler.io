@@ -1,8 +1,8 @@
 .main {
   display: flex;
   justify-content: space-between;
-  width: calc(100% - 300px);
-  height: calc(100%);
+  width: calc(100% - var(--sidebar-width));
+  height: 100%;
   margin-left: 300px;
   border-radius: 10px 0px 0px 10px;
   animation: slideInTop 0.5s ease-in-out normal forwards;
@@ -11,20 +11,31 @@
 
 .main-body {
   width: calc(100% - var(--sidebar-width)) !important;
-  height: 100%;
-  position: relative;
+  height: calc(var(--main-height) - 10px);
   display: flex;
+  justify-content: space-between;
+  align-items: end;
+  padding-bottom: 10px;
   background-color: var(--bg-primary);
-  border-radius: 10px 0px 0px 10px;
   margin-left: var(--sidebar-width);
-  padding: 30px 0px 30px 50px;
+}
+
+.main-body.collapsed .calendar {
+  width: 100%;
 }
 
 .main-right {
   display: flex;
-  flex-direction: column;
   width: 25%;
-  min-height: calc(var(--main-height) - 60px);
+  justify-content: space-between;
+  align-items: end;
+  height: 100%;
+  margin-right: 1.5% !important;
+}
+
+.main-right.collapsed {
+  width: 3%;
+  margin-right: 0px !important;
 }
 
 .center {
@@ -40,18 +51,31 @@
 }
 
 .book-appointment {
+  position: relative;
   justify-content: center;
-  align-items: bottom;
-  margin-top: 20px;
-  position: relat;
-  background-color: var(--olive);
+  background-color: var(--bg-primary) !important;
+  border: 3px solid var(--primary);
+  width: 90%;
+  font-size: 1.4em;
+  font-weight: 800;
   color: var(--primary);
-  bottom: 10%;
-  left: 10%;
-  height: 40px;
-  width: 100px;
-  border-radius: 10px;
-  margin: 10%;
+  display: flex;
+  align-items: center;
+  margin: 10px auto;
+  border-radius: 4px;
+}
+
+.book-appointment i {
+  position: absolute;
+  right: 10px;
+}
+
+.book-appointment:hover {
+  background-color: var(--primary) !important;
+  transition: all 0.3s ease-in-out;
+
+  font-size: 1.5em;
+  color: var(--bg-primary);
 }
 
 .info-page {
@@ -93,7 +117,7 @@
 .admin-button {
   position: fixed;
   bottom: 10px;
-  left: 80px;
+  left: 100px;
   z-index: 1000000;
   background-color: var(--secondary);
   color: var(--bg-primary);
@@ -103,16 +127,11 @@
   padding: 10px;
   transition: all 0.1s ease-in-out;
 }
-.employee-button {
-  position: fixed;
-  bottom: 10px;
-  left: 190px;
-  z-index: 1000000;
-  background-color: var(--primary);
-  color: var(--bg-primary);
-  border-radius: 10px;
-  font-size: 1rem;
-  width: 100px;
-  padding: 10px;
-  transition: all 0.1s ease-in-out;
+
+@media (max-width: 768px) {
+  .main-body {
+    margin-left: 0px;
+    width: 100% !important;
+    overflow: hidden;
+  }
 }

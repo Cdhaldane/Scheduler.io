@@ -1,0 +1,126 @@
+.clock {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  box-shadow: -3px -3px 7px #46464673, 3px 3px 5px rgba(0, 0, 0, 0.288);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-color: var(--bg-secondary);
+}
+
+/* Clock face layers */
+.clock::before,
+.clock::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.clock::before {
+  width: 93%;
+  height: 93%;
+  box-shadow: inset -3px -3px 7px #7c7c7c73,
+    inset 3px 3px 5px rgba(0, 0, 0, 0.288);
+  z-index: 10;
+}
+
+.clock::after {
+  width: 25%;
+  height: 25%;
+
+  box-shadow: -1px 0px 20px 10px #000000, 1px 1px 3px rgba(0, 0, 0, 0.288);
+}
+
+/* Center nut */
+.clock-face {
+  position: absolute;
+  width: 7%;
+  height: 7%;
+  background: var(--primary);
+  border: 5px solid black;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.hour-mark {
+  position: absolute;
+  width: 10%;
+  height: 86%;
+  border-radius: 10px;
+  transform-origin: 50% 50%;
+  z-index: 1;
+}
+
+.hour-mark::before {
+  content: "";
+  position: absolute;
+  width: 25%;
+  height: 3%;
+  background: var(--primary);
+  border-radius: 10px;
+  transform-origin: 50% 100%;
+}
+
+/* Clock hands */
+
+.hand {
+  position: absolute;
+  width: 3%;
+  background: var(--primary);
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px 5px #00000073;
+}
+
+.hour {
+  height: 20%;
+  background: var(--blue);
+  z-index: 10;
+}
+
+.minute {
+  height: 30%;
+  background: var(--secondary);
+  z-index: 10;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.second {
+  height: 50%;
+  background: var(--primary);
+  z-index: 10;
+}
+
+.second::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 20%;
+  background: var(--primary);
+  border-radius: 100px 100px 30px 30px;
+  top: -15%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+/* Clock hands animation */
+@keyframes secondHand {
+  from {
+    transform: rotate(0deg) translateY(-30%);
+  }
+  to {
+    transform: rotate(360deg) translateY(-30%);
+  }
+}
+
+@keyframes minuteHand {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

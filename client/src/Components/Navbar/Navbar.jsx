@@ -6,59 +6,66 @@ import Modal from "../Modal/Modal";
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import { InputForm } from "../Input/Input.jsx";
 import { sendEmail, supabase } from "../../Database";
-import { useAlert } from "../Providers/Alert.jsx";
+import { useSelector, useDispatch } from "react-redux";
 import "./Navbar.css"; // Import the CSS file for styling
 
 /**
  * NavbarItem Component
- * 
+ *
  * Purpose:
  * - The NavbarItem component represents a single item in the navigation bar.
  * - It can either navigate to a specified route or perform a custom action when clicked.
- * 
+ *
  * Inputs:
  * - icon: The class name for the icon to be displayed in the navbar item.
  * - route: The route to navigate to when the item is clicked.
  * - action: An optional custom action to be performed when the item is clicked.
- * 
+ *
  * Outputs:
  * - JSX for rendering the navbar item with the specified icon and click behavior.
  */
 
-const NavbarItem = ({ icon, route, action , id}) => {
+const NavbarItem = ({ icon, route, action, id }) => {
   const navigate = useNavigate();
   const onClick = action ? action : () => navigate(route);
   return (
     <li onClick={onClick} className="navbar-item">
-      <i className={icon} data-testid={id} ></i>
+      <i className={icon} data-testid={id}></i>
     </li>
   );
 };
 
 /**
  * Navbar Component
- * 
+ *
  * Purpose:
  * - The Navbar component provides the navigation bar for the application.
  * - It includes links for admin and user actions, as well as login and registration forms.
  * - The navigation bar changes based on whether the user is logged in or has admin privileges.
- * 
+ *
  * Inputs:
  * - isAdmin: A boolean indicating whether the user has admin privileges.
  * - isLoggedIn: A boolean indicating whether the user is logged in.
  * - setIsLoggedIn: A function to set the isLoggedIn state.
  * - session: The current user session object.
- * 
+ *
  * Outputs:
  * - JSX for rendering the navigation bar with appropriate links and modals for login and registration.
  */
 
-const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
+const Navbar = ({
+  isAdmin,
+  isLoggedIn,
+  setIsLoggedIn,
+  session,
+  organization,
+  isCalendar,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+  const isMobile = window.innerWidth < 768;
 
-  //Profile picture component for the user
   const ProfilePic = () => {
     return (
       <li className="navbar-item">
@@ -83,12 +90,15 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
     setIsLoggedIn(true);
   };
 
-  //Handler for dropdown click (signout action)
-  const handleDropdownClick = (e) => {
-    if (e) {
+  const handleDropdownClick = (option) => {
+    console.log(option);
+    if (option === "Signout") {
       setShowModal(false);
       supabase.auth.signOut();
       setIsLoggedIn(false);
+    }
+    if (option === "Create Organization") {
+      navigate("/create-organization");
     }
   };
 
@@ -102,54 +112,51 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
 
   //Render the navigation bar with appropriate links and modals
   return (
-    <nav className="navbar" data-testid="navbar">
+    <nav
+      className={`navbar ${isMobile ? "mobile" : ""}`}
+      style={{
+        marginLeft: isCalendar ? "var(--sidebar-width)" : "0",
+        width: isCalendar ? "calc(100% - var(--sidebar-width))" : "100%",
+        backgroundColor: isCalendar
+          ? "var(--bg-primary)"
+          : "var(--bg-secondary",
+      }}
+    >
+      <div className="navbar-header"></div>
       <div className="navbar-content">
-        <div className="navbar-header">
-          <img data-testid="navbar-logo"
-            src="./logo.png"
-            alt="website logo"
-            className="navbar-logo"
-            onClick={() => navigate("/admin")}
+        {!isLoggedIn && (
+          <NavbarItem
+            icon="fa-solid fa-arrow-right-to-bracket"
+            route="#"
+            action={() => setShowModal(true)}
           />
-          <h1 onClick={() => navigate("/")}>Time Slot</h1>
-        </div>
-        <ul>
-          {!isLoggedIn && !isAdmin && (
+        )}
+        {isAdmin && isLoggedIn && (
+          <>
+            <NavbarItem icon="fa-solid fa-clipboard" route="/admin" />
+            <NavbarItem icon="fa-regular fa-user" route="/admin/employee" />
+          </>
+        )}
+        {isLoggedIn && (
+          <>
             <NavbarItem
-              icon="fa-solid fa-arrow-right-to-bracket"
-              route="#"
-              action={() => setShowModal(true)}
-              id="login-header-button"
+              icon="fa-solid fa-message"
+              action={() => setIsOpen(true)}
             />
-          )}
-          {isAdmin && (
-            <>
-              <NavbarItem
-                icon="fa-solid fa-clipboard"
-                route="/admin/dashboard"
-              />
-              <NavbarItem icon="fa-solid fa-plus" route="/admin/add" />
-              <NavbarItem icon="fa-regular fa-user" route="/admin/profile" />
-            </>
-          )}
-          {isLoggedIn && !isAdmin && (
-            <>
-              <NavbarItem
-                icon="fa-solid fa-message"
-                action={() => setIsOpen(true)}
-              />
-              <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
+            <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
+            <li className="navbar-item hover-none">
               <Dropdown
                 children={<ProfilePic />}
                 label={session?.user.user_metadata.name}
-                options={["Signout"]}
+                options={["Signout", "Create Organization"]}
                 onClick={(e) => handleDropdownClick(e)}
                 direction="left"
               />
-            </>
-          )}
-        </ul>
+            </li>
+          </>
+        )}
       </div>
+
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <>
           <div className="modal-body">
@@ -159,17 +166,6 @@ const Navbar = ({ isAdmin, isLoggedIn, setIsLoggedIn, session }) => {
               <LoginForm onLoginSuccess={handleLoginSuccess} />
             )}
           </div>
-          {/* <div className="modal-footer">
-            {isRegistering ? (
-              <button onClick={() => setIsRegistering(false)}>
-                Back to Login
-              </button>
-            ) : (
-              <button onClick={() => setIsRegistering(true)}>
-                Want to create an account?
-              </button>
-            )}
-          </div> */}
         </>
       </Modal>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>

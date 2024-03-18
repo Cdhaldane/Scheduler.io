@@ -1,45 +1,118 @@
-.main-calendar {
-  display: flex;
-  flex-direction: column;
-  width: calc(70% - 30px);
-  min-height: calc(var(--main-height));
-  color: var(--primary);
-  border-radius: 10px 0 0 10px;
-  background-color: var(--bg-primary);
-}
-
 .calendar {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 95%;
+  color: var(--primary);
+  width: 70%;
+  height: calc(100% + 60px);
+  padding-bottom: 1px;
+  border-radius: 4px;
+  font-size: 1em;
+  margin: 0 1%;
+  margin-top: -60px;
+  animation: slideInBottom 0.5s ease-in-out normal forwards;
+}
+
+.calendar-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: var(--bg-primary);
+  border-radius: 10px 0 0 10px;
+}
+.calendar-button {
+  width: 100px;
+  height: 30px;
+  background-color: var(--bg-primary) !important;
   border-radius: 10px;
-  perspective: 2000px; /* Add perspective to enhance the 3D effect */
+  color: var(--primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s ease-in-out;
+}
+
+.calendar-buttons {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: flex-start;
+  transition: all 0.3s ease-in-out;
+  gap: 10px;
+  width: calc(100% - 4px);
+  margin: 10px;
+  color: var(--ash);
+}
+
+.calendar-buttons > button {
+  background-color: var(--bg-primary);
+  color: var(--ash);
+  border: 2px solid var(--bg-secondary);
+  cursor: pointer;
+  font-size: 1.2em;
+  width: fit-content;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.calendar-buttons > button:focus {
+  background-color: var(--bg-secondary);
+}
+
+.calendar-buttons > button:hover {
+  background-color: var(--bg-secondary);
+}
+
+.calendar-buttons > span {
+  margin: 0 auto;
+  translate: 30% 0;
+  font-size: 2.5em !important;
+  font-weight: 1000;
+  color: var(--primary);
+  border: 2px solid var(--bg-secondary);
+  background-color: var(--bg-secondary);
+  border-radius: 4px !important;
+  padding: 0px 10px;
+  margin-top: -1%;
+  margin-bottom: -0.5%;
+}
+
+.calendar-buttons > h2 {
+  font-size: 1.5em !important;
+  padding: 0px 5px;
+  font-weight: 400;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
 }
 
 .calendar > .body {
-  transform-style: preserve-3d; /* Preserve 3D transformations */
-  position: relative; /* Position it directly under the current page */
-  top: 32px;
   width: 100%; /* Adjusted for the navigation buttons */
-}
-
-.next-page {
-  transform-style: preserve-3d; /* Preserve 3D transformations */
-  position: absolute !important; /* Position it directly under the current page */
-  width: 100%; /* Match the width of the current page */
-  z-index: -1;
+  height: 100%;
+  border: 3px solid var(--ash);
+  border-radius: 0 0 4px 4px;
+  border-top: none;
 }
 
 .header {
-  position: absolute;
   display: flex;
-  width: calc(
-    100% + 2 * var(--nav-padding)
-  ); /* Adjusted for the navigation buttons */
+  flex-direction: row !important;
+  width: 100%;
   white-space: nowrap;
-  z-index: 2;
+  height: calc(100% / 24);
+  background-color: var(--bg-secondary);
+  border: 3px solid var(--ash);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  margin-top: 5px;
+}
+
+.row {
+  height: calc(100% / 24); /* Adjusted for 7 days + 1 hour column */
 }
 
 .cell {
@@ -47,8 +120,7 @@
   align-items: center;
   justify-content: center;
   width: 100%; /* Adjusted for 7 days + 1 hour column */
-  height: 30px;
-  border: 1px solid var(--light-grey);
+  border: 1px solid var(--bg-secondary);
   color: var(--primary);
   transition: all 0.1s ease-in-out;
   display: flex;
@@ -57,25 +129,44 @@
   position: relative;
   cursor: pointer;
   background-color: var(--bg-primary);
+  overflow: hidden;
 }
 
 .cell:hover {
   border: 1px solid var(--primary);
 }
 
-.header-cell {
-  width: calc((100%)); /* Adjusted for the navigation buttons */
+.header-days {
+  display: flex;
+  width: 100%;
   text-align: center; /* Center the text */
-  border: 1px solid var(--light-grey);
-  padding-top: 3px;
+}
+
+.header-days.Day .header-cell {
+  width: 100%; /* Adjusted for the navigation buttons */
+  text-align: center; /* Center the text */
+}
+
+.header-cell {
+  width: calc(100% / 7); /* Adjusted for the navigation buttons */
+  text-align: center; /* Center the text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .empty {
-  width: 50%; /* Adjusted for 7 days + 1 hour column */
+  width: calc(7% + 2px); /* Adjusted for 7 days + 1 hour column */
   border: none;
   color: var(--ash);
-  border: 1px solid var(--light-grey);
-  font-size: 0.8em;
+}
+
+.empty.Day {
+  width: calc(48% + 11px);
+}
+
+.empty.Month {
+  min-width: calc(4% + 2px) !important;
 }
 
 .cell.hours {
@@ -86,26 +177,69 @@
   text-align: center; /* Align hour text to the right */
 }
 
+.cell.hours.Month {
+  min-width: calc(4%) !important; /* Adjusted for 7 days + 1 hour column */
+}
+
+.cell.hours.Day {
+  min-width: calc(30%) !important; /* Adjusted for 7 days + 1 hour column */
+}
+
 .cell.scheduled {
-  background-color: inherit;
-  color: var(--white);
-  border: 1px solid inherit;
+  color: var(--text-white);
+  font-weight: bold;
+  font-family: var(--font-main);
 }
 
-.cell.selected {
-  background-color: var(--primary) !important;
-  border: 1px solid var(--primary) !important;
-  color: var(--bg-primary);
+.cell.booking {
+  background-color: var(--secondary) !important;
+  color: var(--bg-primary) !important;
+  font-weight: bold !important;
+  border: 1px solid var(--secondary) !important;
 }
 
-.cell.group-selected {
+.cell.single-select {
+  border: 1px solid white !important;
+  background-color: var(--bg-secondary);
+  box-shadow: var(--bg-primary) 0px 4px 55px, var(--bg-primary) 0px -12px 30px,
+    var(--bg-primary) 0px 4px 6px, var(--bg-primary) 0px 12px 13px,
+    var(--bg-primary) 0px -3px 5px !important;
+}
+
+.cell.group-select:not(.scheduled) {
   background-color: var(--primary) !important ;
-  border: 1px solid var(--primary) !important;
+  border: 1px solid transparent !important;
   color: var(--bg-primary);
+  z-index: 10;
+}
+
+.cell.group-select.booking {
+  background-color: var(--secondary) !important;
+  border: 1px solid black !important;
+  color: var(--bg-primary);
+}
+
+.cell.group-select.booking.start {
+  box-shadow: black 0px 54px 55px, black 0px 20px 30px, black 0px 1px 100px,
+    black 0px 12px 1px, black 0px 3px 5px !important;
+  border-bottom: 1px solid transparent !important;
+}
+
+.cell.group-select.booking.middle {
+  box-shadow: black 0px 54px 55px, black 0px 20px 30px, black 0px 4px 6px,
+    black 0px 12px 13px, black 0px 20px -1px !important;
+  border-top: 1px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
+}
+
+.cell.group-select.booking.end {
+  box-shadow: black 0px 54px 55px, black 0px 20px 30px, black 0px 4px -2px,
+    black 0px 12px 13px, black 0px -3px 5px !important;
+  border-top: 1px solid transparent !important;
 }
 
 .cell.over {
-  background-color: var(--light-grey);
+  background-color: var(--bg-secondary) !important;
 }
 
 .day.selected {
@@ -118,20 +252,23 @@
   z-index: 1;
   cursor: -webkit-grab;
   animation: pulse 1s infinite;
+  border-color: inherit !important;
 }
 
 .expand-indicator.top {
   top: -15px; /* Adjust based on the cell's border and desired appearance */
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid var(--primary);
+  border-bottom: 10px solid white !important;
+  border-color: inherit !important;
+  border-left: 10px solid transparent !important;
+  border-right: 10px solid transparent !important;
 }
 
 .expand-indicator.bottom {
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
+  border-top: 10px solid white !important;
+  border-color: inherit !important;
+  border-left: 10px solid transparent !important;
+  border-right: 10px solid transparent !important;
 
-  border-top: 10px solid var(--primary);
   bottom: -15px; /* Adjust based on the cell's border and desired appearance */
 }
 
@@ -143,71 +280,51 @@
 }
 
 .navigation-button {
-  width: var(--nav-padding) !important;
-  height: 30px;
   border: none;
-  background: transparent;
+  background: var(--bg-secondary);
   cursor: pointer;
   color: var(--white);
-  padding: 10px 20px;
+  padding: 0;
+  width: 51%;
+  height: 100%;
+  border-radius: 0px;
+  border-right: 2px solid var(--bg-secondary);
+  transition: all 0.1s ease-in-out;
 }
 
-.navigation-button.nb-right {
-  float: right;
-  translate: -30% 0;
+.navigation-button:hover,
+.navigation-button:focus {
+  transform: scale(1) !important;
+  background-color: var(--bg-secondary) !important;
 }
 
-.navigation-button.nb-left {
-  float: left;
-  translate: -10% 0;
+.navigation-button:active {
+  background-color: var(--bg-primary);
+  animation: button-pulse 0.3s ease-in-out;
 }
 
-.flip-left {
-  animation: flipPageLeft 0.6s ease-in-out;
-  transform-style: preserve-3d; /* Preserve 3D transformations */
-  z-index: 2; /* Ensure current page is above the next page */
+/* MOBILE STYLING */
+
+.calendar.mobile {
+  width: 95%;
+  height: 100%;
+  border-radius: 0;
+  margin: 0 auto;
+  margin-top: 100px;
+  align-items: flex-start;
 }
 
-.flip-right {
-  animation: flipPageRight 0.6s ease-in-out;
-  transform-style: preserve-3d; /* Preserve 3D transformations */
-  z-index: 2; /* Ensure current page is above the next page */
+.calendar.mobile .calendar-buttons {
+  width: 80%;
+  height: 8%;
+  margin: 0px;
 }
 
-@keyframes flipPageRight {
-  0% {
-    transform: rotateY(0deg);
-    transform-origin: left;
-    opacity: 1;
-  }
-  100% {
-    transform: rotateY(-180deg);
-    scale: 0.1;
-    transform-origin: left;
-    opacity: 0;
-  }
+.calendar.mobile .calendar-buttons > span {
+  translate: 0;
+  font-size: 1.5em !important;
 }
 
-@keyframes flipPageLeft {
-  0% {
-    transform: rotateY(-180deg);
-    scale: 0.1;
-    transform-origin: left;
-    opacity: 1;
-  }
-  100% {
-    transform: rotateY(0deg);
-    transform-origin: left;
-    opacity: 0.3;
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
+.calendar.mobile .calendar-buttons > h2 {
+  font-size: 1.2em !important;
 }

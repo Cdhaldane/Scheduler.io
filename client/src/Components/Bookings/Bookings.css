@@ -94,3 +94,17 @@
     transform: translateY(0);
   }
 }
+
+@media (max-width: 768px) {
+  .booking-container {
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 90%;
+  }
+  .book-info {
+    width: 100%;
+  }
+  .book-info > button {
+    width: 100%;
+  }
+}

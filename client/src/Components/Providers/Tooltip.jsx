@@ -11,10 +11,10 @@ import "./Provider.css";
 
 /**
  * TooltipContext
- * 
+ *
  * Purpose:
  * - The TooltipContext is a React context that provides a way to display tooltip messages across the application.
- * 
+ *
  * Outputs:
  * - A context object that can be used with useContext to access the tooltip state and functions for showing and hiding tooltips.
  */
@@ -22,10 +22,10 @@ const TooltipContext = createContext();
 
 /**
  * useTooltip Hook
- * 
+ *
  * Purpose:
  * - A custom hook that provides a convenient way to access the tooltip context.
- * 
+ *
  * Outputs:
  * - The tooltip context value, which includes the current tooltip state and functions for showing and hiding tooltips.
  */
@@ -36,13 +36,13 @@ export const useTooltip = () => {
 
 /**
  * TooltipProvider Component
- * 
+ *
  * Purpose:
  * - The TooltipProvider component wraps the application with the TooltipContext.Provider to provide tooltip functionality to the entire app.
- * 
+ *
  * Inputs:
  * - children: The child components of the TooltipProvider.
- * 
+ *
  * Outputs:
  * - JSX for rendering the context provider with the tooltip state and functions for showing and hiding tooltips.
  */
@@ -50,11 +50,9 @@ export const useTooltip = () => {
 export const TooltipProvider = ({ children }) => {
   const [tooltip, setTooltip] = useState({ visible: false, content: "" });
 
-  // Function to show the tooltip
-  const showTooltip = (content) => setTooltip({ visible: true, content });
-
   // Function to hide the tooltip
   const hideTooltip = () => setTooltip({ visible: false, content: "" });
+  const showTooltip = (content) => setTooltip({ visible: true, content });
 
   return (
     <TooltipContext.Provider value={{ tooltip, showTooltip, hideTooltip }}>
@@ -84,46 +82,52 @@ export const TooltipProvider = ({ children }) => {
     theme={{ color: "secondary" }}
   >
  */
+const Tooltip = ({ tooltipText, children, theme, direction }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const { className, onClick } = children.props;
 
-const ToolTip = ({ children, tooltipText, theme }) => {
-  const { showTooltip, hideTooltip, tooltip } = useTooltip();
-  const { className, id, onClick } = children.props;
+  const showTooltip = () => setIsVisible(true);
+  const hideTooltip = () => setIsVisible(false);
 
-  console.log(children.props);
+  let colorVar = theme.color;
 
-  const Tooltip = styled.div`
-    /* Base styles for the tooltip */
-    display: inline-block;
-    position: relative;
-    border: 3px solid var(--${theme.color});
-    box-shadow: 2px 2px 6px var(--${theme.color});
+  if (!colorVar?.includes("#")) {
+    colorVar = `var(--${colorVar})`;
+  }
 
-    /* Styles for the :before pseudo-element */
-    &::after {
-      border-top: solid var(--${theme.color}) 10px !important;
-    }
-  `;
-  //Render the child component with the tooltip
+  const TooltipDiv = styled.div`
+      /* Base styles for the tooltip */
+      display: inline-block;
+      position: relative;
+      border: 3px solid ${colorVar};
+      box-shadow: 2px 2px 6px ${colorVar});
+  
+      /* Styles for the :before pseudo-element */
+      &::after {
+        border-top: solid ${colorVar} 10px !important;
+        border-bottom: ${
+          direction === "down" ? "solid" + colorVar + " 10px" : "none"
+        }; 
+      }
+  
+  
+    `;
+
   return (
     <div
-      className={`tooltip-container ${className}`}
-      id={id}
-      onClick={onClick}
-      tooltipText="Add Service"
-      onMouseEnter={() => showTooltip(tooltipText)}
+      onMouseEnter={showTooltip}
       onMouseLeave={hideTooltip}
+      className={"tooltip-container " + className}
+      onClick={onClick}
     >
       {children}
-      <Tooltip
-        className="tooltip"
-        style={{
-          visibility: tooltip.visible ? "visible" : "hidden",
-        }}
-      >
-        {tooltipText}
-      </Tooltip>
+      {isVisible && (
+        <TooltipDiv className={"tooltip " + direction}>
+          {tooltipText}
+        </TooltipDiv>
+      )}
     </div>
   );
 };
 
-export default ToolTip;
+export default Tooltip;

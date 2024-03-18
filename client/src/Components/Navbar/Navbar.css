@@ -1,11 +1,73 @@
-/* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/Navbar/Navbar.css */
-
 .navbar {
-  background-color: var(--bg-secondary);
-  color: #fff;
-  width: calc(100% - 300px);
-  margin-left: 300px;
+  background-color: var(--bg-primary);
+  color: var(--text-white);
+  width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
   height: var(--nav-height);
+  display: flex;
+}
+
+.navbar-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  width: 70%;
+  margin-top: 2%;
+}
+
+.navbar-header > h1 {
+  color: var(--ash);
+  font-family: var(--font-secondary);
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--ash);
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 800;
+  white-space: nowrap;
+  font-size: 2rem;
+  margin: 0 auto;
+  margin-top: -2%;
+  position: relative;
+  left: 20px;
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  right: 1%;
+  font-size: 2em;
+  gap: 40px;
+  width: 30%;
+}
+
+.navbar-header img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.navbar-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.navbar-item > i:hover {
+  scale: 1.1;
+}
+
+.profile-pic {
+  height: 40px !important;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  padding: 5px;
+}
+
+.profile-pic:hover {
+  scale: 1.1;
 }
 
 .admin-navbar {
@@ -16,91 +78,13 @@
   display: flex;
 }
 
-.navbar-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 60px;
-}
-
-.navbar ul {
-  list-style-type: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.5em;
-  margin-right: 20px;
-}
-
-.navbar ul li {
-  margin-right: 30px;
-}
-
-.navbar ul li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.navbar ul li a i {
-  margin-right: 5px;
-  font-size: 1.2em;
-  margin: 0px 10px;
-}
-
-.navbar ul li:hover {
-  transform: scale(1.1);
-}
-
-.navbar-header {
-  margin-left: 35%;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.navbar-header:hover {
-  transform: scale(1.1);
-}
-
-.navbar-header > h1 {
-  color: var(--primary);
-  font-family: var(--font-secondary);
-  font-weight: 800;
-  white-space: nowrap;
-  margin-right: 10px;
-}
-
-.navbar-header h2 {
-  color: var(--ash);
-  font-family: var(--font-secondary);
-  font-weight: 800;
-  white-space: nowrap;
-  margin-right: 10px;
-}
-
-.navbar-header img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.navbar-item {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.profile-pic {
-  height: 40px;
-  border-radius: 50%;
-}
-
 .flipped {
   transform: rotateY(180deg);
 }
 
-.fa-user {
-  margin: 5px;
+/* MOBILE STYLING  */
+
+.navbar.mobile .navbar-content {
+  font-size: 2em;
+  gap: 20px;
 }

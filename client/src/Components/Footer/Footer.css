@@ -6,8 +6,7 @@
   justify-content: center;
   bottom: 0px;
   width: 100%;
-  background-color: var(--bg-secondary);
-  color: white;
+  color: var(--text-white);
   text-align: center;
   font-family: var(--font-secondary);
   height: 60px;

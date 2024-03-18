@@ -33,7 +33,6 @@ const BookingPage = () => {
   const navigate = useNavigate();
   const alert = useAlert();
   const { session, appointment } = location.state || {};
-  console.log("Session:", session, "Appointment:", appointment);
 
   const [appointmentData, setAppointmentData] = useState({
     day: "",
@@ -141,7 +140,15 @@ const BookingPage = () => {
         <a>You are not currently logged in.</a>
         <div className="book-info-display">
           <p>
-            Your appointment is on <var>{appointmentData.day}</var>
+            Your appointment is on{" "}
+            <var>
+              {appointmentData.day &&
+                appointmentData.day.toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                })}
+            </var>
           </p>
           <p>
             Starting at{" "}

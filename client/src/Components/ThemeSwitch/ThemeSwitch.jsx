@@ -23,14 +23,14 @@ function ThemeSwitch(props) {
   //Effect hook to update theme based on local storage
   useEffect(() => {
     if (isDarkMode) {
-      moonRef.current?.classList.add("active");
-      sunRef.current?.classList.remove("active");
+      moonRef.current?.classList.add("switch-active");
+      sunRef.current?.classList.remove("switch-active");
       document.body.classList.remove("light-mode");
       console.log("Dark Mode");
       localStorage.setItem("isDarkMode", true);
     } else {
-      moonRef.current?.classList.remove("active");
-      sunRef.current?.classList.add("active");
+      moonRef.current?.classList.remove("switch-active");
+      sunRef.current?.classList.add("switch-active");
       document.body.classList.add("light-mode");
       localStorage.setItem("isDarkMode", false);
     }

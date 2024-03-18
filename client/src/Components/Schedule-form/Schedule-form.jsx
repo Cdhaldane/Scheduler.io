@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
-import { useAlert } from "../Providers/Alert";
+import { useAlert } from "../Providers/Alert.jsx";
+import Clock from "../AnimatedDiv/Clock/Clock.jsx";
 
 import "./Schedule-form.css";
 
@@ -31,46 +32,52 @@ import "./Schedule-form.css";
   />
  */
 
-const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
-  const [person, setPerson] = useState(personnel[personID]);
-  const [day, setDay] = useState(selectedSlot.day);
-  const [start, setStart] = useState(selectedSlot.hour);
-  const [selectedService, setSelectedService] = useState();
-  const [duration, setDuration] = useState(2);
+const ScheduleForm = ({
+  selectedPersonnel,
+  selectedSlot,
+  personnel,
+  session,
+  selectedService,
+  setSelectedService,
+  services,
+}) => {
+  const [day, setDay] = useState();
+  const [start, setStart] = useState();
+
   const [price, setPrice] = useState(20);
 
   const navigate = useNavigate();
   const [typing, setTyping] = useState(false);
   const alert = useAlert();
-
-  /*console.log(selectedSlot); */
+  const isMobile = window.innerWidth < 768;
+  const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
 
   //Effect hooks for updating form data and handling typing animation
   useEffect(() => {
-    if (personID !== null) {
-      setPerson(personnel[personID]);
-      setDay(selectedSlot.day);
-      setStart(selectedSlot.hour);
+    if (selectedPersonnel !== null) {
+      setDay(selectedSlot?.date || new Date());
+      setStart(selectedSlot?.hour || 9);
     }
-  }, [personID, personnel, selectedSlot]);
+  }, [selectedPersonnel, selectedSlot]);
 
   //Effect hook for handling typing animation
   useEffect(() => {
-    if (person?.first_name) {
-      // Start the typing effect
+    if (selectedPersonnel?.first_name) {
       setTyping(true);
 
-      // Wait for the animation to finish before removing the class
       const timer = setTimeout(() => {
         setTyping(false);
-      }, 1000); // Duration should match the CSS animation
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
-  }, [person?.first_name]);
+  }, [selectedPersonnel?.first_name]);
 
-  //add a handler for the service change
-  const handleServiceChange = (service) => {
+  const handleServiceChange = (serviceName) => {
+    let service = selectedPersonnel?.services?.find(
+      (service) => service.name === serviceName
+    );
+
     setSelectedService(service);
   };
   //useDrag hook to make the component draggable
@@ -78,9 +85,9 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
     type: "service",
     item: {
       type: "service",
-      id: personID,
+      id: selectedPersonnel.id,
       service: selectedService,
-      start: selectedSlot.hour,
+      start: selectedSlot?.hour,
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -94,94 +101,130 @@ const ScheduleForm = ({ personID, selectedSlot, personnel, session }) => {
     if (!day) return alert.showAlert("error", "Please select a day");
 
     const appointment = {
-      personnel: person,
+      personnel: selectedPersonnel,
       day: day,
       start: start,
-      end: start + duration,
+      end: start + selectedService?.duration,
       service: selectedService,
-      duration: duration,
+      duration: selectedService?.duration,
       price: price,
     };
-
 
     if (session) {
       const user = session?.user.user_metadata;
       navigate("/booking-submit", {
-        state: { user, appointment},
+        state: { user, appointment },
       });
     } else {
       navigate("/booking", {
-        state: {appointment},
+        state: { appointment },
       });
     }
   };
 
   //Render the schedule form with the appointment details and booking button
   return (
-    <div className="main-right schedule-container" ref={drag}>
-      <div className="body">
-        <h1>APPOINTMENT</h1>
+    <>
+      {isMobile && (
+        <i
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className={`fa-solid fa-calendar-check schedule-form-mobile-toggle ${
+            mobileOpen ? "hidden" : ""
+          }`}
+        ></i>
+      )}
+      {mobileOpen && (
+        <div
+          className={`main-right schedule-container ${
+            isMobile ? "mobile" : ""
+          }`}
+          ref={drag}
+          style={{}}
+        >
+          <div className="body">
+            <h1>
+              <i
+                class="fa-solid fa-calendar-check"
+                onClick={() => setMobileOpen(!mobileOpen)}
+              ></i>
+              APPOINTMENT
+            </h1>
 
-        <div className="schedule-appointment">
-          <div className="schedule-header">
-            PERSONEL:{" "}
-            <h2
-              className={`typing-animation ${typing ? "animate-typing" : ""}`}
-            >
-              {person?.first_name} {person?.last_name}
-            </h2>
-          </div>
+            <div className="schedule-appointment">
+              <div className="schedule-header">
+                PERSONEL:{" "}
+                <h2>
+                  {selectedPersonnel?.first_name} {selectedPersonnel?.last_name}
+                </h2>
+              </div>
 
-          {/* <select onChange={handleServiceChange} value={selectedService}>
+              {/* <select onChange={handleServiceChange} value={selectedService}>
             <option value="haircut">Haircut</option>
             <option value="shave">Shave</option>
             <option value="haircut and shave">Haircut and Shave</option>
           </select> */}
 
-          <div className="schedule-appointment-info">
-            <Dropdown
-              children={
-                <button className="dropdown-toggle">
-                  {selectedService || "Select Service"}
-                </button>
-              }
-              options={["Haircut", "Shave", "Haircut and Shave"]}
-              onClick={(service) => handleServiceChange(service)}
-            />
-            <span>
-              <h1>Duration:</h1>
-              <h2> {duration} hours</h2>
-            </span>
-            <span>
-              <h1>Price:</h1>
-              <h2> ${price}</h2>
-            </span>
+              <div className="schedule-appointment-info">
+                <Dropdown
+                  type="button"
+                  options={
+                    services?.map((service) => service.name) || [
+                      "No Services Available",
+                    ]
+                  }
+                  onClick={(service) => handleServiceChange(service)}
+                >
+                  {" "}
+                  <button className="dropdown-toggle">
+                    {selectedService?.name || "SELECT SERVICE"}
+                  </button>
+                </Dropdown>
+                <span>
+                  <h1>Duration</h1>
+                  <h2> {selectedService?.duration || 0} hours</h2>
+                </span>
+                <span>
+                  <h1>Price</h1>
+                  <h2> ${selectedService?.price || 0}</h2>
+                </span>
+                <span>
+                  <h1>Date</h1>
+                  <h2>
+                    {" "}
+                    {day?.toLocaleDateString("en-US", {
+                      weekday: "long",
+                      month: "numeric",
+                      day: "numeric",
+                    })}
+                  </h2>
+                </span>
+                <span>
+                  <h1>Start</h1>
+                  <h2> {start}:00</h2>
+                </span>
+                <span>
+                  <h1>End</h1>
+                  <h2>
+                    {" "}
+                    {start + (selectedService ? selectedService.duration : 2)}
+                    :00
+                  </h2>
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="schedule-time">
-            <p>
-              Your appointment is on <var>{day}</var>
-            </p>
-            <p>
-              Starting at{" "}
-              <var>
-                {start}:00{start <= 12 ? "AM" : "PM"}
-              </var>{" "}
-            </p>
-            <p>
-              Ending at{" "}
-              <var>
-                {start + 2}:00 {start + 2 <= 12 ? "AM" : "PM"}
-              </var>
-            </p>
-          </div>
+          <footer>
+            <button
+              className="book-appointment"
+              onClick={handleBookAppointment}
+            >
+              BOOK APPOINTMENT
+              <i class="fa-solid fa-computer-mouse"></i>
+            </button>
+          </footer>
         </div>
-      </div>
-      <footer>
-        <button className="book-appointment" onClick={handleBookAppointment}>
-          Book Appointment
-        </button>
-      </footer>
-    </div>
+      )}
+    </>
   );
 };
 
