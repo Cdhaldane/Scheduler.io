@@ -3,14 +3,13 @@
   display: flex;
   flex-direction: column;
   width: 100% !important;
-  height: 70px;
   margin-bottom: 20px;
 }
 
 .input-container label {
   position: absolute;
-  margin-top: 3.5%;
   margin-left: 20px;
+  margin-top: 20px;
   color: var(--light-grey);
   font-size: 1.4rem;
   transition: all 0.3s ease-in-out;
@@ -40,7 +39,7 @@
 .input-container textarea {
   resize: none;
   width: auto;
-  height: 100px;
+  height: 100px !important;
 }
 
 .input-container.active input {
@@ -124,13 +123,13 @@
 }
 
 .input-form.compacted .input-container {
-  width: 48%;
+  width: 48% !important;
   flex-grow: 1;
   min-width: 0;
 }
 
 .input-form .type-textarea {
-  width: 100% !important;
+  min-width: 100% !important;
 }
 
 .input-form-title {

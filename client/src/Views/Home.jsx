@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar.jsx";
 import Calendar from "../Components/Calendar/Calendar.jsx";
 import ScheduleForm from "../Components/Schedule-form/Schedule-form";
-import GuestBooking from "../Components/GuestBookingPage/GuestBookingPage.jsx";
+import EmployeeSchedule from "../Components/Employee/EmployeeSchedule";
+import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
+import Spinner from "../Components/Spinner/Spinner.jsx";
+
 import { useNavigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import { useAlert } from "../Components/Providers/Alert.jsx";
 import { useSelector } from "react-redux";
 
@@ -23,14 +25,14 @@ import {
 import "./Home.css";
 
 const Home = ({ session, type, organization }) => {
-  const [personID, setPersonID] = useState(0);
+  const [selectedPersonnel, setSelectedPersonnel] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [personnel, setPersonnel] = useState([]);
   const [services, setServices] = useState([]);
   const [deletedService, setDeletedService] = useState(null);
   const [addedService, setAddedService] = useState(null);
   const [personnelServices, setPersonnelServices] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedService, setSelectedService] = useState();
   const [bookings, setBookings] = useState([]);
   const timeFrame = useSelector((state) => state.timeFrame);
@@ -45,22 +47,22 @@ const Home = ({ session, type, organization }) => {
 
   const fetchData = async () => {
     const personnel = await getPersonnel();
+
     if (personnel) {
       setPersonnel(personnel);
+      if (selectedPersonnel === null) setSelectedPersonnel(personnel[0]);
+      const bookingsData = await getBookings(selectedPersonnel?.id);
+      if (bookingsData) setBookings(bookingsData);
     }
+
     const data = await getServices();
     if (data) setServices(data);
-
-    const bookingsData = await getBookings(personID + 1);
-    if (bookingsData) setBookings(bookingsData);
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData().finally(() => setLoading(false));
     setSelectedSlot(null);
-  }, [personID]);
-
-  useEffect(() => {}, [personID]);
+  }, [selectedPersonnel]);
 
   const onDeleteService = async (item) => {
     setDeletedService(item);
@@ -82,7 +84,7 @@ const Home = ({ session, type, organization }) => {
         alert.showAlert("error", res.error.message);
       } else {
         setAddedService(res.data);
-        addPersonnelService(personID, res.data);
+        addPersonnelService(selectedPersonnel.id, res.data);
         fetchData();
 
         alert.showAlert("success", "Service added");
@@ -93,7 +95,6 @@ const Home = ({ session, type, organization }) => {
   };
 
   const handleSelectedSlot = (day, hour, date, group) => {
-    console.log("selected slot", day, hour, date, group);
     if (group) {
       let slots = [];
       for (let i = group.start; i < group.end; i++) {
@@ -114,7 +115,10 @@ const Home = ({ session, type, organization }) => {
 
   const handlePersonnelServiceUpdate = async (services) => {
     const allServices = await getServices();
-    const { data, error } = await addPersonnelService(personID, allServices);
+    const { data, error } = await addPersonnelService(
+      selectedPersonnel.id,
+      allServices
+    );
     if (error) {
       alert.showAlert("error", error.message);
     } else {
@@ -124,7 +128,7 @@ const Home = ({ session, type, organization }) => {
 
   const calendarProps = {
     adminMode,
-    personID,
+    selectedPersonnel,
     onAddService,
     session,
     handleSelectedSlot,
@@ -141,11 +145,17 @@ const Home = ({ session, type, organization }) => {
     organization,
   };
 
+  if (loading)
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
   return (
     <DndProvider backend={HTML5Backend}>
       <Sidebar
-        setPersonID={setPersonID}
-        personID={personID}
+        setSelectedPersonnel={setSelectedPersonnel}
+        selectedPersonnel={selectedPersonnel}
         personnel={personnel}
         adminMode={adminMode}
       />
@@ -158,14 +168,19 @@ const Home = ({ session, type, organization }) => {
       ) : (
         <div className="main-body">
           <Calendar {...calendarProps} />
-          <ScheduleForm
-            personID={personID}
-            selectedSlot={selectedSlot}
-            personnel={personnel}
-            session={session}
-            selectedService={selectedService}
-            setSelectedService={setSelectedService}
-          />
+          {type === "employee" ? (
+            <EmployeeSchedule bookings={bookings} />
+          ) : (
+            <ScheduleForm
+              selectedPersonnel={selectedPersonnel}
+              selectedSlot={selectedSlot}
+              personnel={personnel}
+              session={session}
+              selectedService={selectedService}
+              setSelectedService={setSelectedService}
+              services={services}
+            />
+          )}
         </div>
       )}
     </DndProvider>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../Providers/Alert";
+import { sendEmail, addBooking } from "../../Database";
 
 import "./Bookings.css";
 
@@ -13,13 +14,36 @@ const BookingSubmit = () => {
 
   const [booked, setBooked] = useState(false);
 
-  console.log("User:", user, "Appointment:", appointment);
-
   const handleBook = async () => {
-    // Logic to book the appointment
-    // Update your state here
-    alert.showAlert("success", "Booking Confirmed");
-    setBooked(true);
+    const time = appointment.day;
+    time.setHours(appointment.start, 0, 0, 0);
+    console.log(appointment);
+
+    const { res, error } = await addBooking({
+      client_email: user.email,
+      client_name: user.name,
+      client_phone: user.phoneNumber,
+      personnel_id: appointment.personnel.id,
+      service_id: appointment.service.id,
+      booking_date: appointment.day,
+      booking_time: time.toLocaleTimeString("en-US"),
+      status: "confrimed",
+    });
+    if (error) {
+      alert.showAlert("error", "Booking Failed");
+      return;
+    }
+    await sendEmail(
+      user.name,
+      user.email,
+      appointment,
+      "appointment_template"
+    ).finally(() => {
+      alert.showAlert("success", "Booking Confirmed");
+      setBooked(true);
+    });
+
+    const handleBookEmail = async () => {};
   };
 
   return (
@@ -28,9 +52,16 @@ const BookingSubmit = () => {
         {booked ? <h1>Booking Confirmed</h1> : <h1>Confirm booking</h1>}
         <div className="book-info-display">
           <p>
-            Your appointment for a <var>{appointment.service}</var> with{" "}
+            Your appointment for a <var>{appointment.service.name}</var> with{" "}
             <var>{appointment.personnel.first_name}</var> is on{" "}
-            <var>{appointment.day}</var>
+            <var>
+              {appointment.day &&
+                appointment.day.toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                })}
+            </var>
           </p>
           <p>
             Starting at{" "}

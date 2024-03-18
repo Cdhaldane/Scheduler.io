@@ -3,18 +3,19 @@ import { useDrag } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
 import { useAlert } from "../Providers/Alert.jsx";
+import Clock from "../AnimatedDiv/Clock/Clock.jsx";
 
 import "./Schedule-form.css";
 
 const ScheduleForm = ({
-  personID,
+  selectedPersonnel,
   selectedSlot,
   personnel,
   session,
   selectedService,
   setSelectedService,
+  services,
 }) => {
-  const [person, setPerson] = useState(personnel[personID]);
   const [day, setDay] = useState();
   const [start, setStart] = useState();
 
@@ -25,15 +26,14 @@ const ScheduleForm = ({
   const alert = useAlert();
 
   useEffect(() => {
-    if (personID !== null) {
-      setPerson(personnel[personID]);
+    if (selectedPersonnel !== null) {
       setDay(selectedSlot?.date || new Date());
       setStart(selectedSlot?.hour || 9);
     }
-  }, [personID, personnel, selectedSlot]);
+  }, [selectedPersonnel, selectedSlot]);
 
   useEffect(() => {
-    if (person?.first_name) {
+    if (selectedPersonnel?.first_name) {
       setTyping(true);
 
       const timer = setTimeout(() => {
@@ -42,10 +42,10 @@ const ScheduleForm = ({
 
       return () => clearTimeout(timer);
     }
-  }, [person?.first_name]);
+  }, [selectedPersonnel?.first_name]);
 
   const handleServiceChange = (serviceName) => {
-    let service = person.services.find(
+    let service = selectedPersonnel.services.find(
       (service) => service.name === serviceName
     );
 
@@ -56,8 +56,8 @@ const ScheduleForm = ({
     type: "service",
     item: {
       type: "service",
-      id: personID,
-      service: selectedService?.name,
+      id: selectedPersonnel.id,
+      service: selectedService,
       start: selectedSlot?.hour,
     },
     collect: (monitor) => ({
@@ -71,11 +71,11 @@ const ScheduleForm = ({
     if (!day) return alert.showAlert("error", "Please select a day");
 
     const appointment = {
-      personnel: person,
+      personnel: selectedPersonnel,
       day: day,
       start: start,
       end: start + 2,
-      service: selectedService?.name,
+      service: selectedService,
       duration: selectedService?.duration,
       price: price,
     };
@@ -92,7 +92,7 @@ const ScheduleForm = ({
   };
 
   return (
-    <div className="main-right schedule-container" ref={drag}>
+    <div className="main-right schedule-container" ref={drag} style={{}}>
       <div className="body">
         <h1>
           <i class="fa-solid fa-calendar-check"></i>
@@ -103,7 +103,7 @@ const ScheduleForm = ({
           <div className="schedule-header">
             PERSONEL:{" "}
             <h2>
-              {person?.first_name} {person?.last_name}
+              {selectedPersonnel?.first_name} {selectedPersonnel?.last_name}
             </h2>
           </div>
 
@@ -117,7 +117,7 @@ const ScheduleForm = ({
             <Dropdown
               type="button"
               options={
-                person?.services?.map((service) => service.name) || [
+                services?.map((service) => service.name) || [
                   "No Services Available",
                 ]
               }

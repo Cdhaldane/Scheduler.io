@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import "./Clock.css";
 
-const Clock = () => {
+const Clock = ({ width, height, offset, color }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -36,7 +36,16 @@ const Clock = () => {
   };
 
   return (
-    <div className="clock" style={{ backgroundImage: `url("./logo.png")` }}>
+    <div
+      className="clock"
+      style={{
+        backgroundImage: `url("/logo.png")`,
+        backgroundPositionX: offset ? offset : 10 + "px",
+        backgroundColor: `var(--${color})`,
+        width: width,
+        height: height,
+      }}
+    >
       <div className="clock-face"></div>
       {[...Array(12)].map((_, i) => (
         <div
@@ -59,6 +68,32 @@ const Clock = () => {
         id="sec"
         style={{ transform: getRotation("sec") }}
       ></div>
+    </div>
+  );
+};
+
+export const BackgroundClockContainer = ({ children }) => {
+  const containerStyle = {
+    position: "relative", // This allows absolute positioning inside the div
+  };
+
+  const overlayContentStyle = {
+    position: "absolute", // This positions the content over the clock
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white", // Change the text color as needed
+    // Add more styling here as needed
+  };
+
+  return (
+    <div style={containerStyle}>
+      <Clock />
+      <div style={overlayContentStyle}>{children}</div>
     </div>
   );
 };

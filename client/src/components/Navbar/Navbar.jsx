@@ -84,18 +84,17 @@ const Navbar = ({
     <nav className="navbar">
       <div className="navbar-header"></div>
       <div className="navbar-content">
-        {!isLoggedIn && !isAdmin && (
+        {!isLoggedIn && (
           <NavbarItem
             icon="fa-solid fa-arrow-right-to-bracket"
             route="#"
             action={() => setShowModal(true)}
           />
         )}
-        {isAdmin && (
+        {isAdmin && isLoggedIn && (
           <>
-            <NavbarItem icon="fa-solid fa-clipboard" route="/admin/dashboard" />
-            <NavbarItem icon="fa-solid fa-plus" route="/admin/add" />
-            <NavbarItem icon="fa-regular fa-user" route="/admin/profile" />
+            <NavbarItem icon="fa-solid fa-clipboard" route="/admin" />
+            <NavbarItem icon="fa-regular fa-user" route="/admin/employee" />
           </>
         )}
         {isLoggedIn && (

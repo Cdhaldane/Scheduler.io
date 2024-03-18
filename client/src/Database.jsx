@@ -131,14 +131,29 @@ export const signIn = async (email, password) => {
   return { data, error };
 };
 
-export const sendEmail = async (name, email, message) => {
+export const sendEmail = async (
+  name,
+  email,
+  message,
+  template = "template_5imqdhx"
+) => {
+  let messageString = message;
+  if (typeof message === "object") {
+    messageString = `Day: ${message.day}
+    \nStart: ${message.start}:00
+    \nEnd: ${message.end}:00
+    \nService: ${message.service.name}
+    \nPersonnel: ${message.personnel.first_name} ${message.personnel.last_name}
+    \nPrice: $${message.price}
+    \nAdditional Info: ${message.additionalInfo}`;
+  }
   const response = await emailjs.send(
     "service_7xvem3p",
-    "template_5imqdhx",
+    template,
     {
       user_name: name,
       user_email: email,
-      message: message,
+      message: messageString,
     },
     {
       publicKey: "g49oHx9bZd0NTtYal",
@@ -211,4 +226,16 @@ export const getBookings = async (personnelId) => {
     console.log("Error fetching bookings:", error);
   }
   return data;
+};
+
+export const addBooking = async (newBooking) => {
+  const { data, error } = await supabase
+    .from("bookings")
+    .insert([newBooking])
+    .single()
+    .select();
+  if (error) {
+    console.log("Error adding booking:", error);
+  }
+  return { data, error };
 };

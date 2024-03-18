@@ -113,6 +113,16 @@ function App() {
               />
             }
           />
+          <Route
+            path="/admin/employee"
+            element={
+              <Home
+                session={session}
+                type="employee"
+                organization={organization}
+              />
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/info" element={<Info />} />
           <Route

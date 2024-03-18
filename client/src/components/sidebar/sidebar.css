@@ -64,6 +64,10 @@
   margin: 10px auto;
   font-size: 1.3em;
   color: var(--ash);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
 .sidebar-item.selected,
@@ -140,6 +144,53 @@
 
 .sidebar-item.add h1 i {
   margin-right: 10px;
+}
+
+.sidebar-employee-clock {
+  width: 90%;
+  margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ash);
+}
+
+.sidebar-employee-item {
+  text-align: left;
+  border-radius: 4px;
+  padding: 5px 0px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin: 10px auto;
+  font-size: 1.2em;
+  color: var(--ash);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.sidebar-employee-item .title {
+  font-size: 1.5em;
+  color: var(--primary);
+  margin-top: -10px;
+}
+
+.sidebar-content.employee {
+  height: 100%;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar-employee-item hr {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 @keyframes slide-down {

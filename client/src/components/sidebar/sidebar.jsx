@@ -4,27 +4,37 @@ import Modal from "../Modal/Modal";
 import { supabase } from "../../Database";
 import { useAlert } from "../Providers/Alert";
 import { addPersonnel, deletePersonnel } from "../../Database";
+
 import Input from "../Input/Input";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
+import Clock from "../AnimatedDiv/Clock/Clock";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import "./Sidebar.css";
 
-const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
+const Sidebar = ({
+  selectedPersonnel,
+  setSelectedPersonnel,
+  personnel,
+  adminMode,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [personnelData, setPersonnelData] = useState([]);
+  const navigate = useNavigate();
   const [contextMenu, setContextMenu] = useState({
     x: 0,
     y: 0,
     visible: false,
   });
+  const location = useLocation() || "";
 
   useEffect(() => {
     setPersonnelData(personnel);
   }, [personnel]);
 
-  const handleSelect = (id) => {
-    setPersonID(id);
+  const handleSelect = (person) => {
+    setSelectedPersonnel(person);
   };
 
   const handleAddPerson = (e) => {
@@ -34,18 +44,23 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
 
   const handleCloseContextMenu = () => {};
 
-  const handlePersonnelDelete = async (id) => {
-    const { data, error } = await deletePersonnel(personnelData[id].id);
+  const handlePersonnelDelete = async (person) => {
+    const { data, error } = await deletePersonnel(personnelData[person.id].id);
 
     if (error) console.log("Error deleting personnel: ", error);
     else {
-      setPersonnelData(personnelData.filter((person, index) => index !== id));
-      setPersonID(0);
+      setPersonnelData(
+        personnelData.filter((person, index) => index !== person.id)
+      );
+      setSelectedPersonnel(null);
     }
   };
 
   const contextMenuOptions = [
-    { label: "Delete", onClick: (e) => handlePersonnelDelete(personID) },
+    {
+      label: "Delete",
+      onClick: (e) => handlePersonnelDelete(selectedPersonnel),
+    },
     { label: "Edit", onClick: () => console.log("Option 2 clicked") },
     // Add more options as needed
   ];
@@ -70,8 +85,10 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
       .map((person, index) => (
         <div
           key={index}
-          className={`sidebar-item ${personID === index ? "selected" : ""}`}
-          onClick={() => handleSelect(index)}
+          className={`sidebar-item ${
+            person?.id === selectedPersonnel?.id ? "selected" : ""
+          }`}
+          onClick={() => handleSelect(person)}
           onContextMenu={(e) => {
             e.preventDefault();
             setContextMenu({
@@ -79,7 +96,7 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
               y: e.clientY,
               visible: true,
             });
-            setPersonID(index);
+            setSelectedPersonnel(person);
           }}
         >
           <div className="sidebar-item-header">
@@ -97,14 +114,16 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
                     y: e.clientY,
                     visible: true,
                   });
-                  setPersonID(index);
+                  setSelectedPersonnel(person);
                 }}
               ></i>
             )}
           </div>
           <ul
             className={`sidebar-item-body ${
-              personID === index && person?.services ? "" : "none"
+              selectedPersonnel?.id === person?.id && person?.services
+                ? ""
+                : "none"
             }`}
           >
             {person?.services?.map((service, i) => {
@@ -132,16 +151,35 @@ const Sidebar = ({ personID, setPersonID, personnel, adminMode }) => {
   return (
     <>
       <div className="sidebar">
-        <div className="sidebar-title-header">
-          <img src="./logo.png" alt="website logo" className="navbar-logo" />
+        <div className="sidebar-title-header" onClick={() => navigate("/")}>
+          <img src="/logo.png" alt="website logo" className="navbar-logo" />
           <h1>
             TIME<span>SLOT</span>
           </h1>
         </div>
-        <div className="sidebar-content">
-          <h1>PERSONS</h1>
-          {getPersons()}{" "}
-        </div>
+        {location.pathname.includes("/employee") ? (
+          <>
+            <div className="sidebar-content employee">
+              <h1>
+                {selectedPersonnel.first_name} {selectedPersonnel.last_name}
+              </h1>
+              <div className="sidebar-employee-item">
+                <span className="title">{selectedPersonnel?.job_title}</span>
+                <hr />
+                <span>{selectedPersonnel?.email}</span>
+                <span>{selectedPersonnel?.start_date}</span>
+              </div>
+            </div>
+            <div className="sidebar-employee-clock">
+              <Clock offset={5} color={"bg-primary"} />
+            </div>
+          </>
+        ) : (
+          <div className="sidebar-content">
+            <h1>PERSONS</h1>
+            {getPersons()}{" "}
+          </div>
+        )}
         <ThemeSwitch className="theme-switch" />
       </div>
       {isOpen && (
