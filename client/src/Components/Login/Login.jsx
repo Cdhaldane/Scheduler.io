@@ -16,16 +16,16 @@ import "./Login.css";
 
 /**
  * Login Component
- * 
+ *
  * Purpose:
  * - The Login component provides a user interface for signing in or signing up to the application.
  * - It supports authentication with email and password, as well as Single Sign-On (SSO) with Google, GitHub, and Microsoft.
  * - The component allows users to switch between the login and sign-up forms.
- * 
+ *
  * Inputs:
  * - onLoginSuccess: A callback function that is called when the user successfully logs in.
  * - onClose: A callback function that is called when the login modal is closed.
- * 
+ *
  * Outputs:
  * - JSX for rendering the login form with SSO buttons, input fields for email and password, and links for password recovery and account creation.
  */
@@ -36,38 +36,33 @@ const Login = ({ onLoginSuccess, onClose }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+
   const [error, setError] = useState("");
   const [signUpFlag, setSignUpFlag] = useState(false);
-  const navigate = useNavigate();
   const alert = useAlert();
-  const location = useLocation();
-  console.log("Location:", window.location);
-
-  useEffect(() => {}, []);
 
   //Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data, error } = { data: {}, error: null };
 
     if (signUpFlag) {
       if (password !== confirmPassword) {
         setError("Passwords do not match");
       } else {
-        const { data, error } = await signUp(email, password, name);
+        const { data, error } = await signUp(email, password, name, phone);
         if (error) setError(error.message);
         else {
-          alert.showAlert("success", "Signed up successfully");
-          // onLoginSuccess(data);
+          alert.showAlert("success", "Account created successfully");
         }
       }
     } else {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-      });
-      if (error) setError(error.message);
-      else {
+      const { data, error } = await signIn(email, password);
+      if (error || data.session === null) {
+        console.log(error);
+
+        setError(error.message);
+      } else {
         alert.showAlert("success", "Logged in successfully");
         onLoginSuccess(data);
       }
@@ -80,6 +75,23 @@ const Login = ({ onLoginSuccess, onClose }) => {
       await loginWithGoogle(window.location.href);
     }
   };
+
+  const handlePasswordReset = async (e) => {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "http://localhost:3000/reset-password",
+    });
+    if (error) {
+      setError(error.message);
+    } else {
+      alert.showAlert("success", "Password reset email sent");
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setError("");
+    }, 5000);
+  }, [error]);
 
   //Render the login component with SSO buttons, input fields, and links
   return (
@@ -102,7 +114,7 @@ const Login = ({ onLoginSuccess, onClose }) => {
       </div>
       <form
         className="login-form"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => handleSubmit(e)}
         autoComplete="new-password"
       >
         <Input
@@ -111,6 +123,7 @@ const Login = ({ onLoginSuccess, onClose }) => {
           type="email"
           value={email}
           onInputChange={(newValue) => setEmail(newValue)}
+          onSubmit={(e) => handleSubmit(e)}
         />
         <Input
           label="Password"
@@ -118,6 +131,7 @@ const Login = ({ onLoginSuccess, onClose }) => {
           type="password"
           value={password}
           onInputChange={(newValue) => setPassword(newValue)}
+          onSubmit={(e) => handleSubmit(e)}
         />
 
         {signUpFlag && (
@@ -128,6 +142,7 @@ const Login = ({ onLoginSuccess, onClose }) => {
               type="password"
               value={confirmPassword}
               onInputChange={(newValue) => setConfirmPassword(newValue)}
+              onSubmit={(e) => handleSubmit(e)}
             />
             <Input
               label="Name"
@@ -135,6 +150,15 @@ const Login = ({ onLoginSuccess, onClose }) => {
               type="name"
               value={name}
               onInputChange={(newValue) => setName(newValue)}
+              onSubmit={(e) => handleSubmit(e)}
+            />
+            <Input
+              label="Phone"
+              placeholder="Phone"
+              type="tel"
+              value={phone}
+              onInputChange={(newValue) => setPhone(newValue)}
+              onSubmit={(e) => handleSubmit(e)}
             />
           </>
         )}
@@ -142,7 +166,7 @@ const Login = ({ onLoginSuccess, onClose }) => {
         <button type="submit" className="login-button">
           {signUpFlag ? "Sign Up" : "Sign In"}
         </button>
-        <a href="/forgot-password">Forgot your Password?</a>
+        <a onClick={handlePasswordReset}>Forgot your Password?</a>
         <a onClick={() => setSignUpFlag(!signUpFlag)}>
           {signUpFlag ? "Back to sign in" : "Don't have an account? Sign up"}{" "}
         </a>

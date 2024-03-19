@@ -21,7 +21,7 @@ const Footer = () => {
   const location = useLocation();
   const isCalendar =
     location.pathname.includes("/admin") ||
-    location.pathname === "/" ||
+    location.pathname === "/home" ||
     location.pathname.includes("/employee");
 
   return (
@@ -29,9 +29,7 @@ const Footer = () => {
       className="footer"
       data-testid="footer"
       style={{
-        backgroundColor: isCalendar
-          ? "var(--bg-primary)"
-          : "var(--bg-secondary)",
+        backgroundColor: isCalendar ? "var(--bg-primary)" : "var(--bg-primary)",
       }}
     >
       <div className="footer-content">

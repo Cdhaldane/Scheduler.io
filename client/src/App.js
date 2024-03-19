@@ -4,23 +4,22 @@ import {
   Routes,
   Route,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 
 import "./App.css";
+import Landing from "./Views/Landing.jsx";
 import Home from "./Views/Home.jsx";
 import Admin from "./Views/Admin.jsx";
 import Employee from "./Views/Employee.jsx";
+import Appointments from "./Views/Appointments.jsx";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import Footer from "./Components/Footer/Footer.jsx";
 import Login from "./Components/Login/Login.jsx";
+import ResetPassword from "./Components/Login/LoginResetPassword.jsx";
 import ACMain from "./Views/OrgCreation/ACMain.jsx";
 import BookingPage from "./Components/Bookings/BookingPage.jsx";
 import BookingSubmit from "./Components/Bookings/BookingSubmit.jsx";
-import CustomerLogin from "./Components/Customer/CustomerLogin/CustomerLogin.jsx";
-import CustomerRegister from "./Components/Customer/CustomerRegister/CustomerRegister.jsx";
-import CustomerBookingPage from "./Components/Customer/CustomerLoginBooking/CustomerBookingPage.jsx";
-import CustomerSubmitPage from "./Components/Customer/CustomerSubmitPage/CustomerSubmitPage.jsx";
-import CustomerRegisterSubmitPage from "./Components/Customer/CustomerRegisterSubmitPage/CustomerRegisterSubmitPage.jsx";
 import CookieConsent from "./Components/CookieConsent/CookieConsent.jsx";
 import Alert from "./Components/Providers/Alert";
 import Info from "./Views/Info";
@@ -52,6 +51,7 @@ function App() {
   const [users, setUsers] = useState([]);
   const [session, setSession] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -67,23 +67,40 @@ function App() {
 
   useEffect(() => {
     db.supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("session", session);
       setSession(session);
     });
 
     const {
       data: { subscription },
-    } = db.supabase.auth.onAuthStateChange((_event, session) => {
+    } = db.supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
+      if (event === "INITIAL_SESSION") {
+        // handle initial session
+      } else if (event === "SIGNED_IN") {
+        // handle sign in event
+      } else if (event === "SIGNED_OUT") {
+        navigate("/home");
+      } else if (event === "PASSWORD_RECOVERY") {
+        console.log("PASSWORD_RECOVERY");
+      } else if (event === "TOKEN_REFRESHED") {
+        // handle token refreshed event
+      } else if (event === "USER_UPDATED") {
+        // handle user updated event
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
   const shouldRenderNavbarAndFooter =
-    location.pathname !== "/create-organization";
+    location.pathname === "/create-organization" ||
+    location.pathname.includes("reset-password");
 
   const isCalendar =
-    location.pathname === "/admin" || location.pathname === "/";
+    location.pathname === "/admin" ||
+    location.pathname === "/home" ||
+    location.pathname.includes("/employee");
 
   useEffect(() => {
     if (session) {
@@ -113,7 +130,7 @@ function App() {
       {/* <DevTools /> */}
 
       <div className="app">
-        {shouldRenderNavbarAndFooter && (
+        {!shouldRenderNavbarAndFooter ? (
           <Navbar
             isLoggedIn={isLoggedIn}
             isAdmin={isAdmin}
@@ -122,12 +139,29 @@ function App() {
             organization={organization}
             isCalendar={isCalendar}
           />
+        ) : (
+          <nav className={`navbar title`}>
+            <img
+              src="/logo.png"
+              alt="website logo"
+              className="navbar-logo"
+              onClick={() => navigate("/")}
+            />
+            <h1>
+              TIME<span>SLOT</span>
+            </h1>
+          </nav>
         )}
 
         <Routes>
+          <Route path="/" element={<Landing />} />
           <Route
-            path="/"
+            path="/home"
             element={<Home session={session} type="customer" />}
+          />
+          <Route
+            path="/appointments"
+            element={<Appointments session={session} />}
           />
           <Route
             path="/admin"
@@ -154,6 +188,7 @@ function App() {
             element={<Employee session={session} type="employee" />}
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/info" element={<Info />} />
           <Route
             path="/create-organization"
@@ -170,17 +205,6 @@ function App() {
           {/* merge guest booking page with customer booking page */}
           {/* <Route path="/guest-booking" element={<GuestBookingPage />} /> */}
           <Route path="/booking-submit" element={<BookingSubmit />} />
-          <Route path="/customer-login" element={<CustomerLogin />} />
-          <Route path="/customer-register" element={<CustomerRegister />} />
-          <Route
-            path="/customer-bookingPage"
-            element={<CustomerBookingPage />}
-          />
-          <Route path="/customer-submitPage" element={<CustomerSubmitPage />} />
-          <Route
-            path="/customer-register-submitPage"
-            element={<CustomerRegisterSubmitPage />}
-          />
         </Routes>
         <CookieConsent />
         {shouldRenderNavbarAndFooter && <Footer />}

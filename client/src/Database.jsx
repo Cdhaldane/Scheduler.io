@@ -2,10 +2,18 @@ import { createClient } from "@supabase/supabase-js";
 import emailjs from "@emailjs/browser";
 import { useLocation } from "react-router-dom";
 
+const options = {
+  schema: "public",
+  autoRefreshToken: true,
+  persistSession: true,
+  detectSessionInUrl: true,
+};
+
 //Initialize Supabase client
 export const supabase = createClient(
   process.env.REACT_APP_SUPABASE_URL,
-  process.env.REACT_APP_SUPABASE_KEY
+  process.env.REACT_APP_SUPABASE_KEY,
+  options
 );
 
 //Fetch all personnel from the database
@@ -110,21 +118,20 @@ export const loginWithMicrosoft = async () => {
 };
 
 //Sign up a new user
-export const signUp = async (email, password, name) => {
+export const signUp = async (email, password, name, phone) => {
   const { data, error } = await supabase.auth.signUp({
     email: email,
     password: password,
     options: {
       emailRedirectTo: "http://localhost:3000/admin",
+      data: {
+        full_name: name,
+        phone: phone,
+      },
     },
   });
-  if (!error) {
-    const { data, error } = await supabase.auth.updateUser({
-      email: "new@email.com",
-      password: "new-password",
-      data: { full_name: name },
-    });
-    return { data, error };
+  if (error) {
+    console.log("Error signing up:", error);
   }
   return { data, error };
 };
@@ -238,6 +245,17 @@ export const getBookings = async (personnelId) => {
     console.log("Error fetching bookings:", error);
   }
   return data;
+};
+
+export const getBookingsByClientEmail = async (email) => {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .eq("client_email", email);
+  if (error) {
+    console.log("Error fetching bookings:", error);
+  }
+  return { data, error };
 };
 
 export const addBooking = async (newBooking) => {

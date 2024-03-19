@@ -7,29 +7,31 @@
   display: flex;
 }
 
+.navbar.title {
+  justify-content: flex-start;
+  margin-left: 20px;
+  width: 100%;
+}
+
 .navbar-header {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   width: 70%;
-  margin-top: 2%;
+  height: 100%;
+  padding-left: 20px;
 }
 
 .navbar-header > h1 {
-  color: var(--ash);
-  font-family: var(--font-secondary);
-  background-color: var(--bg-secondary);
-  border: 2px solid var(--ash);
-  padding: 10px;
-  border-radius: 8px;
   font-weight: 800;
-  white-space: nowrap;
   font-size: 2rem;
-  margin: 0 auto;
-  margin-top: -2%;
-  position: relative;
-  left: 20px;
+}
+
+.navbar-item.profile-item {
+  font-size: 1em !important;
+  margin-right: 20px;
 }
 
 .navbar-content {
@@ -38,9 +40,13 @@
   justify-content: flex-end;
   position: relative;
   right: 1%;
-  font-size: 2em;
   gap: 40px;
   width: 30%;
+}
+
+.navbar-content i {
+  font-size: 2em;
+  transition: all 0.3s ease-in-out;
 }
 
 .navbar-header img {
@@ -53,6 +59,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  font-size: 1em;
 }
 
 .navbar-item > i:hover {

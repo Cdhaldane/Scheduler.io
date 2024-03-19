@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import "./Clock.css";
 
-const Clock = ({ width, height, offset, color }) => {
+const Clock = ({ width, height, offset, color, className }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const Clock = ({ width, height, offset, color }) => {
 
   return (
     <div
-      className="clock"
+      className={`clock ${className}`}
       style={{
         backgroundImage: `url("/logo.png")`,
         backgroundPositionX: offset ? offset : 10 + "px",

@@ -68,17 +68,17 @@ const Navbar = ({
 
   const ProfilePic = () => {
     return (
-      <li className="navbar-item">
+      <div className="navbar-item profile-item">
         {session?.user.user_metadata.avatar_url ? (
           <img
-            src={session?.user.user_metadata.avatar_url}
+            src={session.user.user_metadata.avatar_url}
             alt="profile"
             className="profile-pic"
           />
         ) : (
           <i className="fa-solid fa-user"></i>
         )}
-      </li>
+      </div>
     );
   };
 
@@ -91,7 +91,6 @@ const Navbar = ({
   };
 
   const handleDropdownClick = (option) => {
-    console.log(option);
     if (option === "Signout") {
       setShowModal(false);
       supabase.auth.signOut();
@@ -99,6 +98,9 @@ const Navbar = ({
     }
     if (option === "Create Organization") {
       navigate("/create-organization");
+    }
+    if (option === "Your Appointments") {
+      navigate("/appointments");
     }
   };
 
@@ -117,12 +119,24 @@ const Navbar = ({
       style={{
         marginLeft: isCalendar ? "var(--sidebar-width)" : "0",
         width: isCalendar ? "calc(100% - var(--sidebar-width))" : "100%",
-        backgroundColor: isCalendar
-          ? "var(--bg-primary)"
-          : "var(--bg-secondary",
+        backgroundColor: isCalendar ? "var(--bg-primary)" : "var(--bg-primary)",
       }}
     >
-      <div className="navbar-header"></div>
+      <div className="navbar-header">
+        {!isCalendar && (
+          <>
+            <img
+              src="/logo.png"
+              alt="website logo"
+              className="navbar-logo"
+              onClick={() => navigate("/")}
+            />
+            <h1 className="timeslot-title" onClick={() => navigate("/home")}>
+              TIME<span>SLOT</span>
+            </h1>
+          </>
+        )}
+      </div>
       <div className="navbar-content">
         {!isLoggedIn && (
           <NavbarItem
@@ -144,11 +158,15 @@ const Navbar = ({
               action={() => setIsOpen(true)}
             />
             <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
-            <li className="navbar-item hover-none">
+            <li className="navbar-item hover-none profile">
               <Dropdown
                 children={<ProfilePic />}
                 label={session?.user.user_metadata.name}
-                options={["Signout", "Create Organization"]}
+                options={[
+                  "Signout",
+                  "Create Organization",
+                  "Your Appointments",
+                ]}
                 onClick={(e) => handleDropdownClick(e)}
                 direction="left"
               />

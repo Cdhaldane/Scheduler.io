@@ -48,7 +48,7 @@ const BookingSubmit = () => {
       service_id: appointment.service.id,
       booking_date: appointment.day,
       booking_time: time.toLocaleTimeString("en-US"),
-      status: "confrimed",
+      status: "confirmed",
     });
     if (error) {
       alert.showAlert("error", "Booking Failed");

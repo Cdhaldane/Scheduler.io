@@ -17,19 +17,23 @@
   padding: 20px 30px;
   width: 80%;
   max-width: 500px; /* Adjust width for smaller screens */
-  max-height: calc(80%) !important;
+  max-height: calc(90%) !important;
   color: var(--white);
   overflow: hidden;
   border-radius: 10px;
   animation: appear 0.2s ease-in-out normal forwards;
 }
 
+.modal-content.extended {
+  background-color: var(--bg-primary);
+}
+
 .close {
   position: absolute;
   right: 20px;
-  top: -0px;
+  top: -10px;
   color: #aaa;
-  font-size: 28px;
+  font-size: 50px;
   font-weight: bold;
 }
 

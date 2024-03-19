@@ -1,0 +1,126 @@
+.landing-page {
+  font-family: var(--font-main);
+  color: var(--text-white);
+  background-color: var(--bg-primary);
+  width: 100%;
+  margin: 0 auto;
+  z-index: 1000;
+}
+
+.landing-page > img {
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+}
+
+.hero {
+  text-align: center;
+  padding: 0px 20px;
+  padding-bottom: 50px;
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  font-size: 2em;
+  translate: -5% 0;
+  position: relative;
+  z-index: 2;
+  animation: slideInLeft 0.5s ease-in-out normal forwards;
+}
+
+.hero-span {
+  display: flex;
+}
+
+.hero-span > span {
+  width: 70%;
+}
+
+.landing-clock {
+  width: 40%;
+}
+
+.hero h1 {
+  margin-block-start: 20px !important;
+  margin-block-end: 0px !important;
+}
+
+.hero p {
+  margin-bottom: 30px;
+}
+
+.hero button {
+  background-color: var(--secondary);
+  color: var(--secondary-dark) !important;
+  border: none;
+  cursor: pointer;
+  width: 50%;
+  border-radius: 9px;
+  font-size: 0.7em;
+}
+
+.hero button:hover {
+  background-color: var(--secondary-dark);
+  color: var(--secondary) !important;
+}
+
+.features {
+  position: relative;
+  padding: 20px 20px;
+  background-color: var(--primary);
+  color: var(--bg-primary);
+  box-shadow: 0px 0px 100000px 200px #88f18841;
+  z-index: 1;
+  animation: slideInRight 0.5s ease-in-out normal forwards;
+}
+
+.features h2,
+.testimonials h2 {
+  text-align: center;
+  font: 2em var(--font-secondary);
+  margin-bottom: 0px;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  position: relative;
+  z-index: 2 !important;
+}
+
+.feature-list {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.feature {
+  width: 30%;
+  min-width: 200px;
+  margin: 10px;
+  text-align: center;
+}
+
+.feature h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  gap: 10px;
+}
+
+.features h3 > i {
+}
+
+.testimonials {
+  padding: 20px 20px;
+  margin-top: 20px;
+  background-color: var(--bg-primary);
+  animation: slideInLeft 0.5s ease-in-out normal forwards;
+}
+
+.testimonial {
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 2 !important;
+}

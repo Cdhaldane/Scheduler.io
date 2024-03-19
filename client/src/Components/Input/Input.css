@@ -34,16 +34,17 @@
   color: var(--primary) !important;
   font-size: 1.1rem;
   overflow: hidden;
+  height: 70px;
 }
 
 .input-container textarea {
   resize: none;
   width: auto;
-  height: 100px !important;
+  height: 150px !important;
 }
 
 .input-container.active input {
-  padding-top: 6%;
+  padding-top: 30px;
   border-color: var(--primary);
 }
 
@@ -58,8 +59,8 @@
 } */
 
 .input-container.active textarea {
-  padding-top: 40px;
-  height: 80px;
+  padding-top: 30px;
+  height: 140px !important;
 }
 
 .input-container.active label {

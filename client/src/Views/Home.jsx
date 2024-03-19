@@ -22,7 +22,7 @@ import {
   getBookings,
 } from "../Database.jsx";
 
-import "./Home.css";
+import "./Styles/Home.css";
 
 /**
  * Home Component

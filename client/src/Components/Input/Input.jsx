@@ -69,13 +69,13 @@ const Input = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(inputValue);
+    onSubmit(e, inputValue);
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      onSubmit(inputValue);
+      onSubmit(e, inputValue);
     }
   };
 
@@ -127,7 +127,7 @@ export const InputForm = ({
   buttonLabel,
   successMessage,
 }) => {
-  // Ref for the form element 
+  // Ref for the form element
   const inputRef = useRef(null);
   const alert = useAlert();
   const [compacted, setCompacted] = useState(false);
@@ -191,5 +191,3 @@ export const InputForm = ({
 };
 
 export default Input;
-
-
