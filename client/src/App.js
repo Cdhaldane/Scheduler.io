@@ -207,7 +207,7 @@ function App() {
           <Route path="/booking-submit" element={<BookingSubmit />} />
         </Routes>
         <CookieConsent />
-        {shouldRenderNavbarAndFooter && <Footer />}
+        {!shouldRenderNavbarAndFooter && <Footer />}
       </div>
     </>
   );

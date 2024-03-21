@@ -170,43 +170,45 @@ const Home = ({ session, type, organization }) => {
   //Render the main interface
   if (loading)
     return (
-      <div>
+      <div className="app-main">
         <Spinner />
       </div>
     );
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Sidebar
-        setSelectedPersonnel={setSelectedPersonnel}
-        selectedPersonnel={selectedPersonnel}
-        personnel={personnel}
-        adminMode={adminMode}
-      />
-      {adminMode ? (
-        <PuzzleContainer
-          puzzlePieces={services}
-          onDrop={onDrop}
-          {...calendarProps}
+    <div className="app-main">
+      <DndProvider backend={HTML5Backend}>
+        <Sidebar
+          setSelectedPersonnel={setSelectedPersonnel}
+          selectedPersonnel={selectedPersonnel}
+          personnel={personnel}
+          adminMode={adminMode}
         />
-      ) : (
-        <div className="main-body">
-          <Calendar {...calendarProps} />
-          {type === "employee" ? (
-            <EmployeeSchedule bookings={bookings} />
-          ) : (
-            <ScheduleForm
-              selectedPersonnel={selectedPersonnel}
-              selectedSlot={selectedSlot}
-              personnel={personnel}
-              session={session}
-              selectedService={selectedService}
-              setSelectedService={setSelectedService}
-              services={services}
-            />
-          )}
-        </div>
-      )}
-    </DndProvider>
+        {adminMode ? (
+          <PuzzleContainer
+            puzzlePieces={services}
+            onDrop={onDrop}
+            {...calendarProps}
+          />
+        ) : (
+          <div className="main-body">
+            <Calendar {...calendarProps} />
+            {type === "employee" ? (
+              <EmployeeSchedule bookings={bookings} />
+            ) : (
+              <ScheduleForm
+                selectedPersonnel={selectedPersonnel}
+                selectedSlot={selectedSlot}
+                personnel={personnel}
+                session={session}
+                selectedService={selectedService}
+                setSelectedService={setSelectedService}
+                services={services}
+              />
+            )}
+          </div>
+        )}
+      </DndProvider>
+    </div>
   );
 };
 

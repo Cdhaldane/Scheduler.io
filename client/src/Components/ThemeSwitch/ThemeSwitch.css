@@ -3,10 +3,12 @@
   align-items: flex-start;
   justify-content: flex-start;
   color: var(--white);
-  margin: 1rem auto;
+  margin: 0 auto;
   bottom: 0px;
-  left: 40px;
   z-index: 100;
+  border-bottom: 3px solid var(--primary);
+  padding-bottom: 20px;
+  width: 80%;
 }
 
 .slider-theme {
@@ -34,6 +36,8 @@
   background-color: var(--bg-primary);
   border-radius: 20px;
   height: 40px;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .switch i {

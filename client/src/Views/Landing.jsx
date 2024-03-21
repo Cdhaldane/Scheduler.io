@@ -9,18 +9,16 @@ const Landing = () => {
     <div className="landing-page">
       {/* <img src="/banner.png" alt="banner" /> */}
       <section className="hero">
-        <span className="hero-span">
-          <Clock className="landing-clock" offset={4} color="bg-secondary" />
-          <span>
-            <h1 className="timeslot-title">
-              TIME<span>SLOT</span>
-            </h1>
-            <h1>Simplify Your Scheduling</h1>
-            <p>
-              Effortless appointment booking and management for professionals.
-            </p>
-            <button onClick={() => navigate("/home")}>Get Started</button>
-          </span>
+        <Clock className="landing-clock" offset={4} color="bg-secondary" />
+        <span>
+          <h1 className="timeslot-title">
+            TIME<span>SLOT</span>
+          </h1>
+          <h1>Simplify Your Scheduling</h1>
+          <p>
+            Effortless appointment booking and management for professionals.
+          </p>
+          <button onClick={() => navigate("/home")}>Get Started</button>
         </span>
       </section>
 
