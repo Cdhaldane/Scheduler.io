@@ -125,11 +125,11 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
 
 /**
  * PuzzleContainer Component
- * 
+ *
  * Purpose:
  * - The PuzzleContainer component contains the calendar and the puzzle pieces.
  * - It manages the drag-and-drop functionality and animations for the puzzle pieces.
- * 
+ *
  * Inputs:
  * - onDrop: A callback function that is called when a puzzle piece is dropped.
  * - onDeleteService: A callback function that is called when a service is deleted.
@@ -141,7 +141,7 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
  * - puzzlePieces: An array of all puzzle pieces in the calendar.
  * - fetchData: A function for fetching data.
  * - session: The current user session object.
- * 
+ *
  * Outputs:
  * - JSX for rendering the calendar with the puzzle pieces, including the add and delete buttons.
  */
@@ -207,10 +207,10 @@ const PuzzleContainer = ({
         <div className={`main-right ${collapsed && "collapsed"}`}>
           <div className="pieces-container">
             <div className="pieces-main">
-              <i
+              {/* <i
                 className={`fa-solid fa-caret-${!collapsed ? "right" : "left"}`}
                 onClick={() => setCollapsed(!collapsed)}
-              ></i>
+              ></i> */}
               <h1>
                 <i className="fas fa-puzzle-piece icon-right"></i> Services
               </h1>

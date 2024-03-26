@@ -42,7 +42,7 @@ const EmployeeSchedule = ({ bookings }) => {
         <div className={`schedule-view ${isMobile ? "mobile" : ""}`}>
           <h2>
             <i
-              onClick={() => setMobileOpen(!mobileOpen)}
+              onClick={() => isMobile && setMobileOpen(false)}
               className={`fa-solid fa-calendar-check schedule-view-mobile-toggle`}
             ></i>
             My Bookings

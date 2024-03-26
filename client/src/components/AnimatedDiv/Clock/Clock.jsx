@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 
 import "./Clock.css";
 
-const Clock = ({ width, height, offset, color, className }) => {
+const Clock = ({
+  width,
+  height,
+  offset,
+  color = "bg-secondary",
+  className,
+}) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {

@@ -18,7 +18,9 @@ const Landing = () => {
           <p>
             Effortless appointment booking and management for professionals.
           </p>
-          <button onClick={() => navigate("/home")}>Get Started</button>
+          <button onClick={() => navigate("/create-organization")}>
+            Get Started
+          </button>
         </span>
       </section>
 

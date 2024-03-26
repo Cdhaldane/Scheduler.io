@@ -7,11 +7,14 @@
   justify-content: center;
   bottom: 0px;
   width: 100%;
+  height: var(--footer-height);
   color: var(--text-white);
   text-align: center;
   font-family: var(--font-secondary);
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
+  border-top: 2px solid var(--primary);
   margin-top: 50px;
+  z-index: 100;
 }
 
 .footer-logo {
@@ -63,7 +66,7 @@
   justify-content: center;
   width: 100%;
   padding: 10px;
-  background-color: var(--primary-dark);
+  background-color: var(--primary);
   color: var(--bg-primary);
   font-weight: 600;
   font-size: 1em;

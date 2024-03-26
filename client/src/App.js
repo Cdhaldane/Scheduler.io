@@ -5,6 +5,9 @@ import {
   Route,
   useLocation,
   useNavigate,
+  useParams,
+  useSearchParams,
+  Navigate,
 } from "react-router-dom";
 
 import "./App.css";
@@ -21,8 +24,11 @@ import ACMain from "./Views/OrgCreation/ACMain.jsx";
 import BookingPage from "./Components/Bookings/BookingPage.jsx";
 import BookingSubmit from "./Components/Bookings/BookingSubmit.jsx";
 import CookieConsent from "./Components/CookieConsent/CookieConsent.jsx";
+import NotFoundPage from "./Views/404.jsx";
 import Alert from "./Components/Providers/Alert";
+import Modal from "./Components/Modal/Modal";
 import Info from "./Views/Info";
+import Spinner from "./Components/Spinner/Spinner";
 import DevTools from "./Components/DevTools/DevTools";
 import * as db from "./Database";
 import "./index.css";
@@ -51,7 +57,32 @@ function App() {
   const [users, setUsers] = useState([]);
   const [session, setSession] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (session) {
+        const isAdmin = localStorage.getItem("isAdmin");
+        setIsAdmin(true);
+        setIsLoggedIn(true);
+      }
+      if (session?.user.user_metadata.organization) {
+        setOrganization(session.user.user_metadata.organization);
+      } else {
+        const org = await db.getOrganization(location.pathname.split("/")[2]);
+        setOrganization(org);
+      }
+    };
+
+    setIsLoading(true);
+    fetchData().finally(() => {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    });
+  }, [session]);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -80,7 +111,8 @@ function App() {
       } else if (event === "SIGNED_IN") {
         // handle sign in event
       } else if (event === "SIGNED_OUT") {
-        navigate("/home");
+        setIsLoggedIn(false);
+        navigate("/");
       } else if (event === "PASSWORD_RECOVERY") {
         console.log("PASSWORD_RECOVERY");
       } else if (event === "TOKEN_REFRESHED") {
@@ -93,6 +125,16 @@ function App() {
     return () => subscription.unsubscribe();
   }, []);
 
+  const ProtectedRoute = ({ isLoggedIn, isLoading, children }) => {
+    if (isLoading) return null;
+    if (!isLoggedIn) {
+      setLoginModal(true);
+      return null;
+    }
+
+    return children;
+  };
+
   const shouldRenderNavbarAndFooter =
     location.pathname === "/create-organization" ||
     location.pathname.includes("reset-password");
@@ -102,28 +144,12 @@ function App() {
     location.pathname === "/home" ||
     location.pathname.includes("/employee");
 
-  useEffect(() => {
-    if (session) {
-      const isAdmin = localStorage.getItem("isAdmin");
-      if (isAdmin === "true") {
-        setIsAdmin(true);
-      }
-      setIsLoggedIn(true);
-    }
-    const org = JSON.parse(localStorage.getItem("organization"));
-
-    if (org) {
-      setOrganization(org);
-      setIsAdmin(true);
-    }
-  }, []);
-
   const handleOrganizationCreate = (org) => {
     setIsAdmin(true);
     setOrganization(org);
-    localStorage.setItem("organization", JSON.stringify(org));
+    db.updateUser(org, session.user);
   };
-
+  if (isLoading) return <Spinner />;
   return (
     <>
       <Alert />
@@ -156,59 +182,90 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route
-            path="/home"
-            element={<Home session={session} type="customer" />}
+            path="/home/:organizationId"
+            element={
+              <Home
+                session={session}
+                type="customer"
+                organization={organization}
+              />
+            }
           />
           <Route
             path="/appointments"
-            element={<Appointments session={session} />}
-          />
-          <Route
-            path="/admin"
             element={
-              <Home
-                session={session}
-                type="admin"
-                organization={organization}
-              />
+              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
+                <Appointments session={session} />
+              </ProtectedRoute>
             }
           />
+
+          {/* Protect the Admin route */}
           <Route
-            path="/admin/employee"
+            path="/admin/:organizationId"
             element={
-              <Home
-                session={session}
-                type="employee"
-                organization={organization}
-              />
+              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
+                <Home
+                  session={session}
+                  type="admin"
+                  organization={organization}
+                />
+              </ProtectedRoute>
             }
           />
+
+          {/* Protect the Employee route */}
+          <Route
+            path="/admin/employee/:organizationId/:employeeId"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
+                <Home
+                  session={session}
+                  type="employee"
+                  organization={organization}
+                />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/employee"
-            element={<Employee session={session} type="employee" />}
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
+                <Employee session={session} type="employee" />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/info" element={<Info />} />
           <Route
             path="/create-organization"
             element={
-              <ACMain
-                handleOrganizationCreate={(val) =>
-                  handleOrganizationCreate(val)
-                }
-              />
+              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
+                <ACMain
+                  handleOrganizationCreate={(val) =>
+                    handleOrganizationCreate(val)
+                  }
+                />
+              </ProtectedRoute>
             }
           />
-          <Route path="/booking" element={<BookingPage />} />{" "}
-          {/* Book Appointments button directs to BookingPage */}
-          {/* merge guest booking page with customer booking page */}
-          {/* <Route path="/guest-booking" element={<GuestBookingPage />} /> */}
+          <Route path="/booking" element={<BookingPage />} />
           <Route path="/booking-submit" element={<BookingSubmit />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
+
         <CookieConsent />
         {!shouldRenderNavbarAndFooter && <Footer />}
       </div>
+      <Modal isOpen={loginModal} onClose={() => setLoginModal(false)}>
+        <Login
+          onLoginSuccess={() => {
+            setIsLoggedIn(true);
+            setLoginModal(false);
+          }}
+        />
+      </Modal>
     </>
   );
 }

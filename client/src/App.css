@@ -27,7 +27,7 @@
   --sidebar-width: 15%;
   --nav-padding: 40px;
   --nav-height: 70px;
-  --footer-height: 60px;
+  --footer-height: 250px;
   --main-height: calc(100vh - var(--nav-height));
   --puzzle-width: 180px;
 }

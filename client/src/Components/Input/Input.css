@@ -4,27 +4,30 @@
   flex-direction: column;
   width: 100% !important;
   margin-bottom: 20px;
+  font-size: 1.8rem;
 }
 
 .input-container label {
   position: absolute;
   margin-left: 20px;
-  margin-top: 20px;
+  margin-top: 0.6em;
   color: var(--light-grey);
-  font-size: 1.4rem;
+  font-size: 1em;
   transition: all 0.3s ease-in-out;
   pointer-events: none;
 }
 
 .input-container .icon {
   position: absolute;
-  top: 30%;
+  top: 1.1em;
   right: 20px;
+  font-size: 0.8em;
+  transition: color 0.3s ease-in-out;
 }
 
 .input-container input,
 .input-container textarea {
-  padding: 20px;
+  padding: 1.5em 0.7em 1em 0.7em;
   border: 1px solid var(--light-grey);
   border-radius: 5px;
   font-size: 16px;
@@ -32,9 +35,10 @@
   height: 100%;
   background-color: var(--bg-primary) !important;
   color: var(--primary) !important;
-  font-size: 1.1rem;
+  font-size: 1em;
   overflow: hidden;
-  height: 70px;
+  height: 2.5em;
+  transition: border-color 0.3s ease-in-out;
 }
 
 .input-container textarea {
@@ -44,28 +48,18 @@
 }
 
 .input-container.active input {
-  padding-top: 30px;
+  /* padding-top: 1em; */
   border-color: var(--primary);
 }
 
-.changed:not(.active) input:required,
-.changed:not(.active) textarea:required {
-  border-color: var(--danger);
-}
-
-/* .changed:not(.active) input:not(:required),
-.changed:not(.active) textarea:not(:required) {
-  border-color: var(--warning) !important;
-} */
-
 .input-container.active textarea {
   padding-top: 30px;
-  height: 140px !important;
+  height: 165px !important;
 }
 
 .input-container.active label {
-  margin-top: 10px;
-  font-size: 1rem;
+  margin-top: 5px;
+  font-size: 0.7em;
 }
 
 .input-container:focus,
@@ -83,6 +77,18 @@
 .input-container.active textarea {
   animation: paddingTop 0.3s ease-in-out forwards;
 }
+
+.changed:not(.active) input:required,
+.changed:not(.active) textarea:required,
+.changed:not(.active) .icon {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* .changed:not(.active) input:not(:required),
+.changed:not(.active) textarea:not(:required) {
+  border-color: var(--warning) !important;
+} */
 
 .type-number input::-webkit-inner-spin-button {
   -webkit-appearance: none;

@@ -15,37 +15,45 @@
 
 @keyframes slideInLeft {
   0% {
-    transform: translateX(-100%);
+    opacity: 0;
+    transform: translateX(-50vw);
   }
   100% {
+    opacity: 1;
     transform: translateX(0%);
   }
 }
 
 @keyframes slideOutLeft {
   0% {
+    opacity: 1;
     transform: translateX(0%);
   }
   100% {
-    transform: translateX(-100%);
+    opacity: 0;
+    transform: translateX(-50vw);
   }
 }
 
 @keyframes slideInRight {
   0% {
-    transform: translateX(100%);
+    opacity: 0;
+    transform: translateX(50vw);
   }
   100% {
+    opacity: 1;
     transform: translateX(0%);
   }
 }
 
 @keyframes slideOutRight {
   0% {
+    opacity: 1;
     transform: translateX(0%);
   }
   100% {
-    transform: translateX(100%);
+    opacity: 0;
+    transform: translateX(50vw);
   }
 }
 

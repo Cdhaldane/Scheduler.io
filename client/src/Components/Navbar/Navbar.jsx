@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import LoginForm from "../Login/Login";
 import RegisterAccount from "../Customer/CustomerRegister/CustomerRegister.jsx";
 import Modal from "../Modal/Modal";
@@ -7,6 +7,7 @@ import Dropdown from "../Dropdown/Dropdown.jsx";
 import { InputForm } from "../Input/Input.jsx";
 import { sendEmail, supabase } from "../../Database";
 import { useSelector, useDispatch } from "react-redux";
+
 import "./Navbar.css"; // Import the CSS file for styling
 
 /**
@@ -65,6 +66,11 @@ const Navbar = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const isMobile = window.innerWidth < 768;
+  const location = useLocation();
+  let orgId = "";
+  if (isLoggedIn) {
+    orgId = session.user.user_metadata.organization.org_id;
+  }
 
   const ProfilePic = () => {
     return (
@@ -96,10 +102,10 @@ const Navbar = ({
       supabase.auth.signOut();
       setIsLoggedIn(false);
     }
-    if (option === "Create Organization") {
+    if (option === "Create an Organization") {
       navigate("/create-organization");
     }
-    if (option === "Your Appointments") {
+    if (option === "Profile") {
       navigate("/appointments");
     }
   };
@@ -129,9 +135,9 @@ const Navbar = ({
               src="/logo.png"
               alt="website logo"
               className="navbar-logo"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/home")}
             />
-            <h1 className="timeslot-title" onClick={() => navigate("/home")}>
+            <h1 className="timeslot-title">
               TIME<span>SLOT</span>
             </h1>
           </>
@@ -139,16 +145,33 @@ const Navbar = ({
       </div>
       <div className="navbar-content">
         {!isLoggedIn && (
-          <NavbarItem
-            icon="fa-solid fa-arrow-right-to-bracket"
-            route="#"
-            action={() => setShowModal(true)}
-          />
+          <>
+            <NavbarItem
+              icon="fa-solid fa-message"
+              action={() => setIsOpen(true)}
+            />
+            <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
+            <NavbarItem
+              icon="fa-solid fa-arrow-right-to-bracket"
+              route="#"
+              action={() => setShowModal(true)}
+            />
+            <a href="http://localhost:3000/home/bce8fd49-4a09-4d41-83e9-7c0a13bca6c3">
+              TEST
+            </a>
+          </>
         )}
         {isAdmin && isLoggedIn && (
           <>
-            <NavbarItem icon="fa-solid fa-clipboard" route="/admin" />
-            <NavbarItem icon="fa-regular fa-user" route="/admin/employee" />
+            <NavbarItem icon="fa-solid fa-home" route={`/home/${orgId}`} />
+            <NavbarItem
+              icon="fa-solid fa-clipboard"
+              route={`/admin/${orgId}`}
+            />
+            <NavbarItem
+              icon="fa-regular fa-user"
+              route={`/admin/employee/${orgId}/:employeeId`}
+            />
           </>
         )}
         {isLoggedIn && (
@@ -163,9 +186,13 @@ const Navbar = ({
                 children={<ProfilePic />}
                 label={session?.user.user_metadata.name}
                 options={[
-                  "Signout",
-                  "Create Organization",
-                  "Your Appointments",
+                  !isLoggedIn
+                    ? {
+                        label: "Create an Organization",
+                        icon: "fa-solid fa-plus",
+                      }
+                    : { label: "Profile", icon: "fa-regular fa-user" },
+                  { label: "Signout", icon: "fa-solid fa-sign-out" },
                 ]}
                 onClick={(e) => handleDropdownClick(e)}
                 direction="left"

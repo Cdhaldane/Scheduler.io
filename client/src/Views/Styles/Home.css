@@ -128,6 +128,25 @@
   transition: all 0.1s ease-in-out;
 }
 
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(var(--main-height) - var(--footer-height) - 111px);
+  background-color: var(--bg-primary);
+}
+
+.not-found-container h1 {
+  font-size: 3rem;
+  color: var(--primary);
+}
+
+.not-found-container p {
+  font-size: 1.5rem;
+  color: var(--primary-dark);
+}
+
 @media (max-width: 768px) {
   .main-body {
     margin-left: 0px;

@@ -3,8 +3,10 @@ import {
   supabase,
   getBookingsByClientEmail,
   getServiceFromId,
+  updateUser,
 } from "../Database";
 import Modal from "../Components/Modal/Modal";
+import { useNavigate } from "react-router-dom";
 import Spinner from "../Components/Spinner/Spinner";
 import "./Styles/Appointments.css";
 
@@ -13,6 +15,8 @@ const UserProfile = ({ session }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const organization = session?.user.user_metadata.organization;
 
   const fetchAppointments = async () => {
     const { data, error } = await getBookingsByClientEmail(session.user.email);
@@ -70,10 +74,13 @@ const UserProfile = ({ session }) => {
             </div>{" "}
           </header>
           <main className="card-main">
-            <div className="activity">
+            <div
+              className="activity"
+              onClick={() => navigate("/create-organization")}
+            >
               <i class="fa-solid fa-house"></i>
               <span className="activity-name">Organization</span>
-              <span className="index">RECON</span>
+              <span className="index">{organization.name}</span>
             </div>
             <div className="activity sepcial">
               <i class="fa-solid fa-clock"></i>

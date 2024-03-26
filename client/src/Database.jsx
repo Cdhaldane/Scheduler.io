@@ -148,6 +148,18 @@ export const signIn = async (email, password) => {
   return { data, error };
 };
 
+//Update user details
+export const updateUser = async (info, user) => {
+  const { data, error } = supabase.auth.updateUser({
+    email: user.email,
+    data: { organization: info },
+  });
+  if (error) {
+    console.log("Error updating user:", error);
+  }
+  return { data, error };
+};
+
 //Send an email
 export const sendEmail = async (
   name,
@@ -242,7 +254,7 @@ export const getBookings = async (personnelId) => {
     .select("*")
     .eq("personnel_id", personnelId);
   if (error) {
-    console.log("Error fetching bookings:", error);
+    // console.log("Error fetching bookings:", error);
   }
   return data;
 };
@@ -268,4 +280,34 @@ export const addBooking = async (newBooking) => {
     console.log("Error adding booking:", error);
   }
   return { data, error };
+};
+
+// ORGANIZATION HANDLERS
+
+export const createOrganization = async (newOrganization) => {
+  const { data, error } = await supabase
+    .from("organizations")
+    .insert([newOrganization])
+    .single()
+    .select();
+  if (error) {
+    console.log("Error creating organization:", error);
+  }
+  return { data, error };
+};
+
+export const getOrganization = async (id) => {
+  const { data, error } = await supabase
+    .from("organizations")
+    .select()
+    .eq("org_id", id);
+
+  console.log("org data", data);
+
+  if (error) {
+    console.log("Error fetching organization:", error);
+    return error;
+  }
+
+  return data[0];
 };

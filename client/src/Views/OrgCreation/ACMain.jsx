@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AC from "./AC";
 import { useNavigate } from "react-router-dom";
 import { useDeviceType } from "../../Utils";
+import { createOrganization, updateUser } from "../../Database";
 
 import "./AC.css";
 
@@ -32,15 +33,22 @@ const ACMain = ({ handleOrganizationCreate }) => {
   //   }
   // }, [sessionStorage]);
 
+  const handleFinish = async (organizationDetails) => {
+    try {
+      const { data, error } = await createOrganization(organizationDetails);
+      if (data && data.id) {
+        handleOrganizationCreate(data);
+        navigate(`/admin/${data.org_id}`);
+      } else {
+        console.error("Organization creation failed or returned no ID.");
+      }
+    } catch (error) {
+      console.error("Error creating organization:", error);
+    }
+  };
   return (
     <div className="ac-main">
-      <AC
-        onFinish={(org) => {
-          handleOrganizationCreate(org);
-          sessionStorage.setItem("isAdmin", "true");
-          navigate("/admin");
-        }}
-      />
+      <AC onFinish={(org) => handleFinish(org)} />
     </div>
   );
 };

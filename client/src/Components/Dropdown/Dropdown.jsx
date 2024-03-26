@@ -73,9 +73,10 @@ const Dropdown = ({ label, options, onClick, children, direction, type }) => {
             <div
               key={index}
               className="dropdown-item"
-              onClick={() => handleClick(option)}
+              onClick={() => handleClick(option.label || option)}
             >
-              {option}
+              {option.icon && <i className={option.icon}></i>}
+              {option.label || option}
             </div>
           ))}
         </div>

@@ -44,7 +44,7 @@
 
 .ac-span {
   position: relative;
-  width: 50%;
+  width: 60%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -61,39 +61,16 @@
   color: var(--primary);
 }
 
-.ac-input {
-  color: var(--primary);
-  cursor: pointer;
-  margin-bottom: 0px;
-  height: 100px;
-  font-size: 2em;
-}
-
-.ac-input input {
-  background-color: var(--bg-primary) !important;
-  font-size: 2rem;
-}
-
-.ac-input input:hover {
-  border: 1px solid var(--primary);
-}
-
-.ac-input label {
-  font-size: 2rem;
-  margin-top: 30px;
-}
-
-.active.ac-input label {
-  margin-top: 10px;
-  font-size: 1.5rem !important;
-}
-
 .ac-button {
   font-size: 2rem;
   position: absolute;
   bottom: 5%;
   right: 3%;
   width: 100px;
+}
+
+.ac-input {
+  font-size: 2rem;
 }
 
 @keyframes moveUp {

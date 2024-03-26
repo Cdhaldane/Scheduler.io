@@ -6,7 +6,7 @@ import EmployeeSchedule from "../Components/Employee/EmployeeSchedule";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import Spinner from "../Components/Spinner/Spinner.jsx";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useAlert } from "../Components/Providers/Alert.jsx";
@@ -20,6 +20,7 @@ import {
   addService,
   addPersonnelService,
   getBookings,
+  getOrganization,
 } from "../Database.jsx";
 
 import "./Styles/Home.css";
@@ -52,6 +53,8 @@ const Home = ({ session, type, organization }) => {
   const [bookings, setBookings] = useState([]);
   const timeFrame = useSelector((state) => state.timeFrame);
   const isMobile = window.innerWidth < 768;
+  const location = useLocation();
+  const [org, setOrg] = useState(organization);
 
   const adminMode = type === "admin";
   const alert = useAlert();
@@ -71,6 +74,11 @@ const Home = ({ session, type, organization }) => {
       if (selectedPersonnel === null) setSelectedPersonnel(personnel[0]);
       const bookingsData = await getBookings(selectedPersonnel?.id);
       if (bookingsData) setBookings(bookingsData);
+      const orgData = await getOrganization(
+        organization?.org_id || session?.user.user_metadata.organization?.org_id
+      );
+      if (orgData) setOrg(orgData);
+      else navigate("/404");
     }
 
     const data = await getServices();
@@ -164,7 +172,7 @@ const Home = ({ session, type, organization }) => {
     selectedSlot,
     bookings,
     timeFrame,
-    organization,
+    organization: org,
   };
 
   //Render the main interface
