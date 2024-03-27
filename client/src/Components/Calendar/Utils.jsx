@@ -141,6 +141,8 @@ export const isSlotEdge = (day, hour, scheduledSlots) => {
   const connectedBookings = findConnectedGrouping(scheduledSlots, day, hour);
   if (!connectedBookings) return;
 
+  if (connectedBookings.start === hour && connectedBookings.end - 1 === hour)
+    return "both";
   if (connectedBookings.start === hour) return "start";
   if (connectedBookings.end - 1 === hour) return "end";
   return "middle";

@@ -75,12 +75,8 @@ function App() {
         setOrganization(org);
       }
     };
-
-    setIsLoading(true);
     fetchData().finally(() => {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
+      setIsLoading(false);
     });
   }, [session]);
 
@@ -124,16 +120,6 @@ function App() {
 
     return () => subscription.unsubscribe();
   }, []);
-
-  const ProtectedRoute = ({ isLoggedIn, isLoading, children }) => {
-    if (isLoading) return null;
-    if (!isLoggedIn) {
-      setLoginModal(true);
-      return null;
-    }
-
-    return children;
-  };
 
   const shouldRenderNavbarAndFooter =
     location.pathname === "/create-organization" ||
@@ -193,61 +179,47 @@ function App() {
           />
           <Route
             path="/appointments"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
-                <Appointments session={session} />
-              </ProtectedRoute>
-            }
+            element={<Appointments session={session} />}
           />
 
           {/* Protect the Admin route */}
           <Route
             path="/admin/:organizationId"
             element={
-              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
-                <Home
-                  session={session}
-                  type="admin"
-                  organization={organization}
-                />
-              </ProtectedRoute>
+              <Home
+                session={session}
+                type="admin"
+                organization={organization}
+              />
             }
           />
 
           {/* Protect the Employee route */}
           <Route
-            path="/admin/employee/:organizationId/:employeeId"
+            path="/admin/:organizationId/employee/:employeeId"
             element={
-              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
-                <Home
-                  session={session}
-                  type="employee"
-                  organization={organization}
-                />
-              </ProtectedRoute>
+              <Home
+                session={session}
+                type="employee"
+                organization={organization}
+              />
             }
           />
 
           <Route
             path="/employee"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
-                <Employee session={session} type="employee" />
-              </ProtectedRoute>
-            }
+            element={<Employee session={session} type="employee" />}
           />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/info" element={<Info />} />
           <Route
             path="/create-organization"
             element={
-              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
-                <ACMain
-                  handleOrganizationCreate={(val) =>
-                    handleOrganizationCreate(val)
-                  }
-                />
-              </ProtectedRoute>
+              <ACMain
+                handleOrganizationCreate={(val) =>
+                  handleOrganizationCreate(val)
+                }
+              />
             }
           />
           <Route path="/booking" element={<BookingPage />} />

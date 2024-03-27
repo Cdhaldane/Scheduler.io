@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar.jsx";
 import Calendar from "../Components/Calendar/Calendar.jsx";
 import ScheduleForm from "../Components/Schedule-form/Schedule-form";
@@ -6,7 +6,7 @@ import EmployeeSchedule from "../Components/Employee/EmployeeSchedule";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import Spinner from "../Components/Spinner/Spinner.jsx";
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useAlert } from "../Components/Providers/Alert.jsx";
@@ -52,9 +52,8 @@ const Home = ({ session, type, organization }) => {
   const [selectedService, setSelectedService] = useState();
   const [bookings, setBookings] = useState([]);
   const timeFrame = useSelector((state) => state.timeFrame);
-  const isMobile = window.innerWidth < 768;
-  const location = useLocation();
   const [org, setOrg] = useState(organization);
+  const url = useParams();
 
   const adminMode = type === "admin";
   const alert = useAlert();
@@ -67,29 +66,33 @@ const Home = ({ session, type, organization }) => {
 
   //Fetch personnel and services data
   const fetchData = async () => {
-    const personnel = await getPersonnel();
+    console.log(organization);
+    const orgData = await getOrganization(
+      organization.org_id || session?.user.user_metadata.organization.org_id
+    );
+    if (orgData) {
+      setOrg(orgData);
+      const personnelData = await getPersonnel(orgData.id);
+      setPersonnel(personnelData || []);
+      if (selectedPersonnel === null)
+        setSelectedPersonnel(
+          personnelData?.length > 0 ? personnelData[0] : null
+        );
 
-    if (personnel) {
-      setPersonnel(personnel);
-      if (selectedPersonnel === null) setSelectedPersonnel(personnel[0]);
       const bookingsData = await getBookings(selectedPersonnel?.id);
       if (bookingsData) setBookings(bookingsData);
-      const orgData = await getOrganization(
-        organization?.org_id || session?.user.user_metadata.organization?.org_id
-      );
-      if (orgData) setOrg(orgData);
-      else navigate("/404");
-    }
 
-    const data = await getServices();
-    if (data) setServices(data);
+      const servicesData = await getServices(orgData.id);
+      if (servicesData) setServices(servicesData);
+    } else navigate("/404");
   };
 
   //Effect hook for fetching personnel and services data
   useEffect(() => {
-    fetchData().finally(() => setLoading(false));
-    setSelectedSlot(null);
-  }, [selectedPersonnel]);
+    fetchData().finally(() => {
+      setLoading(false);
+    });
+  }, [session]);
 
   //Handlers for service-related actions
   const onDeleteService = async (item) => {
@@ -190,6 +193,8 @@ const Home = ({ session, type, organization }) => {
           selectedPersonnel={selectedPersonnel}
           personnel={personnel}
           adminMode={adminMode}
+          organization={org}
+          services={services}
         />
         {adminMode ? (
           <PuzzleContainer

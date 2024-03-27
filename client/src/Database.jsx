@@ -17,8 +17,11 @@ export const supabase = createClient(
 );
 
 //Fetch all personnel from the database
-export const getPersonnel = async () => {
-  const { data, error } = await supabase.from("personnel").select();
+export const getPersonnel = async (org_id) => {
+  const { data, error } = await supabase
+    .from("personnel")
+    .select()
+    .eq("organization_id", org_id);
   if (error) {
     console.log("Error fetching personnel:", error);
   }
@@ -194,8 +197,11 @@ export const sendEmail = async (
 };
 
 // SERVICES HANDLERS
-export const getServices = async () => {
-  const { data, error } = await supabase.from("services").select();
+export const getServices = async (org_id) => {
+  const { data, error } = await supabase
+    .from("services")
+    .select()
+    .eq("organization_id", org_id);
   if (error) {
     console.log("Error fetching services:", error);
   }
@@ -302,10 +308,10 @@ export const getOrganization = async (id) => {
     .select()
     .eq("org_id", id);
 
-  console.log("org data", data);
+  // console.log("org data", data);
 
   if (error) {
-    console.log("Error fetching organization:", error);
+    // console.log("Error fetching organization:", error);
     return error;
   }
 

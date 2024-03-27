@@ -124,8 +124,8 @@ const Cell = ({
       setContextMenu({
         id: day + hour,
         visible: true,
-        x: e.nativeEvent.offsetX,
-        y: e.nativeEvent.offsetY,
+        x: e.pageX - 310,
+        y: e.pageY - 10,
       });
   };
 
@@ -202,59 +202,62 @@ const Cell = ({
   };
 
   return (
-    //Main cell component with drag and drop and context menu functionality
-    <div
-      ref={drop}
-      key={day + hour}
-      className={`cell ${isSelected}-select 
+    <>
+      <div
+        ref={drop}
+        key={day + hour}
+        className={`cell ${isSelected}-select 
             ${isSlotEdge(day, hour, scheduledSlots)}
             ${handleCellStatus(day, hour)} ${isOver ? "over" : ""}`}
-      style={{
-        backgroundColor: handleCellStatus(day, hour) ? color : "",
-        border: handleCellStatus(day, hour) ? `1px solid ${color}` : "",
-        borderColor: handleCellStatus(day, hour) ? color : "",
-      }}
-      onClick={(e) => handleCellClick(day, hour, e)}
-      onContextMenu={(e) => {
-        handleCellClick(day, hour, e);
-        handleContextMenu(e, day, hour);
-      }}
-    >
-      {!adminMode ? (
-        <>
-          <div className="group-select">
-            {handleCellStatus(day, hour) === "booking" &&
-              isSlotEdge(day, hour, scheduledSlots) === "middle" &&
-              "BOOKED"}
-          </div>
-        </>
-      ) : (
-        <>
-          {isSelected && isSlotEdge(day, hour, scheduledSlots) === "start" && (
-            <ResizeIndicator
-              direction="top"
-              item={getSlot(day, hour, scheduledSlots)?.item}
-            />
-          )}
-
-          {isSlotEdge(day, hour, scheduledSlots) === "start" && (
-            <div className="scheduled-slot">
-              {handleCellStatus(day, hour) === "scheduled" &&
-                getSlot(day, hour, scheduledSlots)?.item.name}
+        style={{
+          backgroundColor: handleCellStatus(day, hour) ? color : "",
+          border: handleCellStatus(day, hour) ? `1px solid ${color}` : "",
+          borderColor: handleCellStatus(day, hour) ? color : "",
+        }}
+        onClick={(e) => handleCellClick(day, hour, e)}
+        onContextMenu={(e) => {
+          handleCellClick(day, hour, e);
+          handleContextMenu(e, day, hour);
+        }}
+      >
+        {!adminMode ? (
+          <>
+            <div className="group-select">
+              {handleCellStatus(day, hour) === "booking" &&
+                isSlotEdge(day, hour, scheduledSlots) === "middle" &&
+                "BOOKED"}
             </div>
-          )}
+          </>
+        ) : (
+          <>
+            {isSelected &&
+              (isSlotEdge(day, hour, scheduledSlots) === "start" ||
+                isSlotEdge(day, hour, scheduledSlots) === "both") && (
+                <ResizeIndicator
+                  direction="top"
+                  item={getSlot(day, hour, scheduledSlots)?.item}
+                />
+              )}
 
-          {isSelected &&
-            (isSlotEdge(day, hour, scheduledSlots) === "end" ||
-              isSelected === "single") && (
-              <ResizeIndicator
-                direction="bottom"
-                item={getSlot(day, hour, scheduledSlots)?.item}
-              />
+            {(isSlotEdge(day, hour, scheduledSlots) === "start" ||
+              isSlotEdge(day, hour, scheduledSlots) === "both") && (
+              <div className="scheduled-slot">
+                {handleCellStatus(day, hour) === "scheduled" &&
+                  getSlot(day, hour, scheduledSlots)?.item.name}
+              </div>
             )}
-        </>
-      )}
-
+            {console.log(isSlotEdge(day, hour, scheduledSlots))}
+            {isSelected &&
+              (isSlotEdge(day, hour, scheduledSlots) === "end" ||
+                isSlotEdge(day, hour, scheduledSlots) === "both") && (
+                <ResizeIndicator
+                  direction="bottom"
+                  item={getSlot(day, hour, scheduledSlots)?.item}
+                />
+              )}
+          </>
+        )}
+      </div>
       <ContextMenu
         visible={contextMenu.visible}
         x={contextMenu.x}
@@ -262,7 +265,7 @@ const Cell = ({
         options={contextMenuOptions}
         onRequestClose={handleCloseContextMenu}
       />
-    </div>
+    </>
   );
 };
 

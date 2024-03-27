@@ -11,7 +11,8 @@
   font-size: 1em;
   margin: 0 1%;
   margin-top: -60px;
-  animation: slideInBottom 0.5s ease-in-out normal forwards;
+  transition: all 0.5s ease-in-out;
+  /* animation: slideInBottom 0.5s ease-in-out normal forwards; */
 }
 
 .calendar-header {
@@ -129,7 +130,6 @@
   position: relative;
   cursor: pointer;
   background-color: var(--bg-primary);
-  overflow: hidden;
 }
 
 .cell:hover {
@@ -199,18 +199,14 @@
 }
 
 .cell.single-select {
-  border: 1px solid white !important;
+  border: 1px solid white;
   background-color: var(--bg-secondary);
-  box-shadow: var(--bg-primary) 0px 4px 55px, var(--bg-primary) 0px -12px 30px,
-    var(--bg-primary) 0px 4px 6px, var(--bg-primary) 0px 12px 13px,
-    var(--bg-primary) 0px -3px 5px !important;
 }
 
 .cell.group-select:not(.scheduled) {
   background-color: var(--primary) !important ;
   border: 1px solid transparent !important;
   color: var(--bg-primary);
-  z-index: 10;
 }
 
 .cell.group-select.booking {
@@ -220,21 +216,15 @@
 }
 
 .cell.group-select.booking.start {
-  box-shadow: black 0px 54px 55px, black 0px 20px 30px, black 0px 1px 100px,
-    black 0px 12px 1px, black 0px 3px 5px !important;
   border-bottom: 1px solid transparent !important;
 }
 
 .cell.group-select.booking.middle {
-  box-shadow: black 0px 54px 55px, black 0px 20px 30px, black 0px 4px 6px,
-    black 0px 12px 13px, black 0px 20px -1px !important;
   border-top: 1px solid transparent !important;
   border-bottom: 1px solid transparent !important;
 }
 
 .cell.group-select.booking.end {
-  box-shadow: black 0px 54px 55px, black 0px 20px 30px, black 0px 4px -2px,
-    black 0px 12px 13px, black 0px -3px 5px !important;
   border-top: 1px solid transparent !important;
 }
 
@@ -249,7 +239,7 @@
 .expand-indicator {
   position: absolute;
   left: 44%;
-  z-index: 1;
+  z-index: 10000;
   cursor: -webkit-grab;
   animation: pulse 1s infinite;
   border-color: inherit !important;

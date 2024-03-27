@@ -3,14 +3,14 @@ import "./ThemeSwitch.css";
 
 /**
  * ThemeSwitch Component
- * 
+ *
  * Purpose:
  * - The ThemeSwitch component provides a toggle switch for switching between light and dark modes.
  * - It updates the theme of the application and persists the theme selection in local storage.
- * 
+ *
  * Inputs:
  * - props: An object containing the className prop for additional styling.
- * 
+ *
  * Outputs:
  * - JSX for rendering the theme switch with icons for light and dark modes.
  */
@@ -26,7 +26,6 @@ function ThemeSwitch(props) {
       moonRef.current?.classList.add("switch-active");
       sunRef.current?.classList.remove("switch-active");
       document.body.classList.remove("light-mode");
-      console.log("Dark Mode");
       localStorage.setItem("isDarkMode", true);
     } else {
       moonRef.current?.classList.remove("switch-active");

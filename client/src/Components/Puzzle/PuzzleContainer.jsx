@@ -156,6 +156,7 @@ const PuzzleContainer = ({
   puzzlePieces,
   handlePersonnelServiceUpdate,
   personnelServices,
+  organization,
   ...calendarProps
 }) => {
   // State hooks and useDrop hook for drag-and-drop functionality
@@ -202,7 +203,11 @@ const PuzzleContainer = ({
   return (
     <>
       <div ref={drop} className={`main-body ${collapsed && "collapsed"}`}>
-        <Calendar {...calendarProps} puzzlePieces={puzzlePieces} />
+        <Calendar
+          {...calendarProps}
+          puzzlePieces={puzzlePieces}
+          organization={organization}
+        />
 
         <div className={`main-right ${collapsed && "collapsed"}`}>
           <div className="pieces-container">
@@ -287,6 +292,7 @@ const PuzzleContainer = ({
               price: states.price,
               backgroundColor: states.backgroundColor,
               description: states.description,
+              organization_id: organization?.id,
             });
           }}
           buttonLabel="Add Service"

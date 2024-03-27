@@ -6,7 +6,7 @@
   border: 3px solid var(--ash);
   height: 98% !important;
   border-radius: 4px;
-  animation: slideInRight 0.5s ease-in-out normal forwards;
+  /* animation: slideInRight 0.5s ease-in-out normal forwards; */
 }
 
 .schedule-container .body {

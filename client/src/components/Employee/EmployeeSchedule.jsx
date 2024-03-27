@@ -7,6 +7,7 @@ const EmployeeSchedule = ({ bookings }) => {
   const [isOpen, setIsOpen] = useState(0);
   const isMobile = window.innerWidth < 768;
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -25,8 +26,10 @@ const EmployeeSchedule = ({ bookings }) => {
       setServices(servicesTemp);
     };
 
-    fetchServices();
+    fetchServices().finally(() => setLoading(false));
   }, [bookings]); // Re-run effect if bookings array changes
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <>

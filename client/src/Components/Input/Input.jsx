@@ -69,13 +69,13 @@ const Input = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(e, inputValue);
+    if (onSubmit) onSubmit(e, inputValue);
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      onSubmit(e, inputValue);
+      if (onSubmit) onSubmit(e, inputValue);
     }
   };
 

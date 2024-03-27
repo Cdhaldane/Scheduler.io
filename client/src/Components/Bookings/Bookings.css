@@ -65,6 +65,10 @@
   gap: 10px;
 }
 
+.book-input {
+  font-size: 1.5em;
+}
+
 .book-input > input,
 .book-input > textarea {
   background-color: var(--bg-secondary) !important;

@@ -5,7 +5,7 @@
   height: 100%;
   margin-left: 300px;
   border-radius: 10px 0px 0px 10px;
-  animation: slideInTop 0.5s ease-in-out normal forwards;
+  /* animation: slideInTop 0.5s ease-in-out normal forwards; */
   background-color: var(--bg-primary);
 }
 
@@ -86,7 +86,7 @@
   background-color: var(--bg-primary);
   color: var(--primary);
   padding-bottom: 2%;
-  animation: slideInBottom 0.5s ease-in-out normal forwards;
+  /* animation: slideInBottom 0.5s ease-in-out normal forwards; */
 }
 
 .info-page h1 {

@@ -44,7 +44,7 @@ const ScheduleForm = ({
   const [day, setDay] = useState();
   const [start, setStart] = useState();
 
-  const [price, setPrice] = useState(20);
+  const [price, setPrice] = useState();
 
   const navigate = useNavigate();
   const [typing, setTyping] = useState(false);
@@ -74,10 +74,9 @@ const ScheduleForm = ({
   }, [selectedPersonnel?.first_name]);
 
   const handleServiceChange = (serviceName) => {
-    let service = selectedPersonnel?.services?.find(
-      (service) => service.name === serviceName
-    );
-
+    console.log("service name", serviceName);
+    let service = services?.find((service) => service.name === serviceName);
+    console.log("service", service);
     setSelectedService(service);
   };
   //useDrag hook to make the component draggable
@@ -85,7 +84,7 @@ const ScheduleForm = ({
     type: "service",
     item: {
       type: "service",
-      id: selectedPersonnel.id,
+      id: selectedPersonnel?.id,
       service: selectedService,
       start: selectedSlot?.hour,
     },
@@ -107,7 +106,7 @@ const ScheduleForm = ({
       end: start + selectedService?.duration,
       service: selectedService,
       duration: selectedService?.duration,
-      price: price,
+      price: selectedService?.price,
     };
 
     if (session) {

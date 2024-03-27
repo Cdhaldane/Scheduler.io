@@ -4,12 +4,12 @@
   flex-direction: column;
   width: 100% !important;
   margin-bottom: 20px;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
 }
 
 .input-container label {
   position: absolute;
-  margin-left: 20px;
+  margin-left: 1em;
   margin-top: 0.6em;
   color: var(--light-grey);
   font-size: 1em;
@@ -44,7 +44,9 @@
 .input-container textarea {
   resize: none;
   width: auto;
-  height: 150px !important;
+  height: 130px !important;
+  max-height: 130px;
+  min-height: 130px;
 }
 
 .input-container.active input {
@@ -53,12 +55,15 @@
 }
 
 .input-container.active textarea {
-  padding-top: 30px;
   height: 165px !important;
 }
 
 .input-container.active label {
   margin-top: 5px;
+  font-size: 0.7em;
+}
+.input-container.active.type-textarea label {
+  margin-top: 10px;
   font-size: 0.7em;
 }
 

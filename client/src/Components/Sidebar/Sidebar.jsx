@@ -18,10 +18,13 @@ const Sidebar = ({
   setSelectedPersonnel,
   personnel,
   adminMode,
+  organization,
+  services,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = window.innerWidth < 768;
   const [personnelData, setPersonnelData] = useState([]);
+  const [openIndex, setOpenIndex] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
   const navigate = useNavigate();
   const [contextMenu, setContextMenu] = useState({
@@ -35,7 +38,9 @@ const Sidebar = ({
     setPersonnelData(personnel);
   }, [personnel]);
 
-  const handleSelect = (person) => {
+  const handleSelect = (e, person) => {
+    e.preventDefault();
+    // navigate(`/admin/${organization.org_id}/employee/${person.id}`);
     setSelectedPersonnel(person);
   };
 
@@ -90,7 +95,10 @@ const Sidebar = ({
           className={`sidebar-item ${
             person?.id === selectedPersonnel?.id ? "selected" : ""
           }`}
-          onClick={() => handleSelect(person)}
+          onClick={(e) => {
+            handleSelect(e, person);
+            setOpenIndex(index === openIndex ? null : index);
+          }}
           onContextMenu={(e) => {
             e.preventDefault();
             setContextMenu({
@@ -121,17 +129,30 @@ const Sidebar = ({
               ></i>
             )}
           </div>
-          <ul
-            className={`sidebar-item-body ${
-              selectedPersonnel?.id === person?.id && person?.services
-                ? ""
-                : "none"
-            }`}
-          >
-            {person?.services?.map((service, i) => {
-              return <li key={i}>{service.name}</li>;
-            })}
-          </ul>
+          {openIndex === index && (
+            <>
+              <ul
+                className={`sidebar-item-body ${
+                  selectedPersonnel?.id === person?.id ? "" : "none"
+                }`}
+              >
+                {services?.map((service, i) => {
+                  return <li key={i}>{service.name}</li>;
+                })}
+              </ul>
+              <button
+                className="sidebar-item-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(
+                    `/admin/${organization.org_id}/employee/${person.id}`
+                  );
+                }}
+              >
+                Bookings
+              </button>
+            </>
+          )}
         </div>
       ))
       .concat(
@@ -183,7 +204,8 @@ const Sidebar = ({
               <>
                 <div className="sidebar-content employee">
                   <h1>
-                    {selectedPersonnel.first_name} {selectedPersonnel.last_name}
+                    {selectedPersonnel?.first_name}{" "}
+                    {selectedPersonnel?.last_name}
                   </h1>
                   <div className="sidebar-employee-item">
                     <span className="title">
@@ -212,6 +234,7 @@ const Sidebar = ({
               <AddPersonForm
                 onAdd={handleAddPerson}
                 onClose={(e) => handleAddPerson(e)}
+                organization={organization}
               />
             </Modal>
           )}
@@ -229,12 +252,13 @@ const Sidebar = ({
   );
 };
 
-const AddPersonForm = ({ onClose }) => {
+const AddPersonForm = ({ onClose, organization }) => {
   const [first_name, setFirst_name] = useState("");
   const [last_name, setLast_name] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const alert = useAlert();
+  console.log("AddPersonForm", organization);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -245,6 +269,7 @@ const AddPersonForm = ({ onClose }) => {
       last_name: last_name,
       email: email,
       start_date: new Date(),
+      organization_id: organization.id,
     };
 
     const { data, error } = await addPersonnel(newPersonnel);
