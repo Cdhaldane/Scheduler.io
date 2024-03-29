@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useDrop, useDrag } from "react-dnd";
 import ContextMenu from "./CalendarContextMenu/ContextMenu";
 
+import "./Cell.css";
+
 /**
  * ResizeIndicator Component
  *
@@ -89,7 +91,9 @@ const Cell = ({
   isSlotEdge,
   scheduledSlots,
   handleScheduledSlotDelete,
+  handleOperatingHours,
   adminMode,
+  organization,
 }) => {
   //userDrop hook for handling drag-and-drop actions
   const [{ isOver, canDrop }, drop] = useDrop({
@@ -113,8 +117,6 @@ const Cell = ({
     x: 0,
     y: 0,
   });
-
-  useEffect(() => {}, [scheduledSlots]);
 
   // Function to handle right-click
   const handleContextMenu = (e, day, hour) => {
@@ -208,7 +210,8 @@ const Cell = ({
         key={day + hour}
         className={`cell ${isSelected}-select 
             ${isSlotEdge(day, hour, scheduledSlots)}
-            ${handleCellStatus(day, hour)} ${isOver ? "over" : ""}`}
+            ${handleCellStatus(day, hour)} ${isOver ? "over" : ""}
+            ${handleOperatingHours(day, hour) ? "open" : "closed"}`}
         style={{
           backgroundColor: handleCellStatus(day, hour) ? color : "",
           border: handleCellStatus(day, hour) ? `1px solid ${color}` : "",
@@ -246,7 +249,6 @@ const Cell = ({
                   getSlot(day, hour, scheduledSlots)?.item.name}
               </div>
             )}
-            {console.log(isSlotEdge(day, hour, scheduledSlots))}
             {isSelected &&
               (isSlotEdge(day, hour, scheduledSlots) === "end" ||
                 isSlotEdge(day, hour, scheduledSlots) === "both") && (

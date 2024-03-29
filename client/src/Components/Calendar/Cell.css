@@ -1,10 +1,17 @@
-
-.scheduled-slot{
-    border: green;
+.cell.closed {
+  color: #000;
 }
 
+.calendar-row.closed {
+  color: #000;
+  height: 10px;
+  display: none;
+}
 
-.scheduled-service-info{
-    border: green;
-    
+.calendar-row.open {
+  display: table-row;
+}
+
+.calendar-row.closed .cell.hours {
+  font-size: 0;
 }

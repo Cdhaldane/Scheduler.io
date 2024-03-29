@@ -23,13 +23,13 @@ import ResetPassword from "./Components/Login/LoginResetPassword.jsx";
 import ACMain from "./Views/OrgCreation/ACMain.jsx";
 import BookingPage from "./Components/Bookings/BookingPage.jsx";
 import BookingSubmit from "./Components/Bookings/BookingSubmit.jsx";
-import CookieConsent from "./Components/CookieConsent/CookieConsent.jsx";
+import CookieConsent from "./DevComponents/CookieConsent/CookieConsent.jsx";
 import NotFoundPage from "./Views/404.jsx";
 import Alert from "./Components/Providers/Alert";
-import Modal from "./Components/Modal/Modal";
+import Modal from "./DevComponents/Modal/Modal.jsx";
 import Info from "./Views/Info";
 import Spinner from "./Components/Spinner/Spinner";
-import DevTools from "./Components/DevTools/DevTools";
+import DevTools from "./DevComponents/DevTools/DevTools.jsx";
 import * as db from "./Database";
 import "./index.css";
 

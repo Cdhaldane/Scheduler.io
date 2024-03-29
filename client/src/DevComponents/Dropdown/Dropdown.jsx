@@ -31,7 +31,16 @@ import "./Dropdown.css";
     />
  */
 
-const Dropdown = ({ label, options, onClick, children, direction, type }) => {
+const Dropdown = ({
+  label,
+  options,
+  onClick,
+  children,
+  direction,
+  type,
+  className,
+  style,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -68,7 +77,10 @@ const Dropdown = ({ label, options, onClick, children, direction, type }) => {
         classNames="dropdown-menu"
         unmountOnExit
       >
-        <div className={"dropdown-menu " + direction}>
+        <div
+          className={`dropdown-menu ${direction} ${className && className}`}
+          style={style}
+        >
           {options.map((option, index) => (
             <div
               key={index}

@@ -15,16 +15,6 @@
   /* animation: slideInBottom 0.5s ease-in-out normal forwards; */
 }
 
-.calendar-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 50px;
-  background-color: var(--bg-primary);
-  border-radius: 10px 0 0 10px;
-}
 .calendar-button {
   width: 100px;
   height: 30px;
@@ -38,16 +28,20 @@
   transition: all 0.1s ease-in-out;
 }
 
-.calendar-buttons {
+.calendar-top {
   display: flex;
-  cursor: pointer;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   transition: all 0.3s ease-in-out;
   gap: 10px;
-  width: calc(100% - 4px);
+  width: 100%;
   margin: 10px;
   color: var(--ash);
+}
+
+.calendar-buttons {
+  display: flex;
+  gap: 10px;
 }
 
 .calendar-buttons > button {
@@ -69,9 +63,7 @@
   background-color: var(--bg-secondary);
 }
 
-.calendar-buttons > span {
-  margin: 0 auto;
-  translate: 30% 0;
+.calendar-top > span {
   font-size: 2.5em !important;
   font-weight: 1000;
   color: var(--primary);
@@ -79,8 +71,6 @@
   background-color: var(--bg-secondary);
   border-radius: 4px !important;
   padding: 0px 10px;
-  margin-top: -1%;
-  margin-bottom: -0.5%;
 }
 
 .calendar-buttons > h2 {
@@ -91,17 +81,33 @@
   margin-block-end: 0px;
 }
 
-.calendar > .body {
-  width: 100%; /* Adjusted for the navigation buttons */
-  height: 100%;
-  border: 3px solid var(--ash);
-  border-radius: 0 0 4px 4px;
-  border-top: none;
+.cell {
+  display: table-cell;
+  border: 1px solid var(--bg-secondary);
+  color: var(--primary);
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  background-color: var(--bg-primary);
+  text-align: center;
+  vertical-align: middle;
 }
 
-.header {
-  display: flex;
-  flex-direction: row !important;
+.cell:hover {
+  border: 1px solid var(--primary);
+}
+
+.calendar-table {
+  display: table;
+  table-layout: fixed;
+  border: 3px solid var(--ash);
+  border-radius: 4px;
+  margin-top: 5px;
+  width: 100%;
+  height: 100%;
+}
+
+.calendar-header {
+  display: table-row;
   width: 100%;
   white-space: nowrap;
   height: calc(100% / 24);
@@ -109,37 +115,13 @@
   border: 3px solid var(--ash);
   border-bottom: none;
   border-radius: 4px 4px 0 0;
-  margin-top: 5px;
 }
 
-.row {
-  height: calc(100% / 24); /* Adjusted for 7 days + 1 hour column */
-}
-
-.cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%; /* Adjusted for 7 days + 1 hour column */
-  border: 1px solid var(--bg-secondary);
-  color: var(--primary);
-  transition: all 0.1s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  cursor: pointer;
-  background-color: var(--bg-primary);
-}
-
-.cell:hover {
-  border: 1px solid var(--primary);
-}
-
-.header-days {
-  display: flex;
+.calendar-row {
+  display: table-row;
   width: 100%;
-  text-align: center; /* Center the text */
+  white-space: nowrap;
+  height: calc(100% / 24);
 }
 
 .header-days.Day .header-cell {
@@ -148,37 +130,22 @@
 }
 
 .header-cell {
-  width: calc(100% / 7); /* Adjusted for the navigation buttons */
   text-align: center; /* Center the text */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.empty {
-  width: calc(7% + 2px); /* Adjusted for 7 days + 1 hour column */
-  border: none;
-  color: var(--ash);
-}
-
-.empty.Day {
-  width: calc(48% + 11px);
-}
-
-.empty.Month {
-  min-width: calc(4% + 2px) !important;
+  vertical-align: middle; /* Center the text */
+  display: table-cell;
 }
 
 .cell.hours {
-  display: flex;
+  display: table-cell;
   align-items: center;
   justify-content: center; /* Align hour text to the right */
-  width: 50%;
   text-align: center; /* Align hour text to the right */
 }
 
 .cell.hours.Month {
-  min-width: calc(4%) !important; /* Adjusted for 7 days + 1 hour column */
+  padding: 5px;
+  min-width: 100px !important;
+  font-size: 0.8em;
 }
 
 .cell.hours.Day {
@@ -285,7 +252,7 @@
 .navigation-button:hover,
 .navigation-button:focus {
   transform: scale(1) !important;
-  background-color: var(--bg-secondary) !important;
+  background-color: var(--light-grey) !important;
 }
 
 .navigation-button:active {

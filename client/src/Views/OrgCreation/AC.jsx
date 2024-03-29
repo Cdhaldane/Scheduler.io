@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AnimatedDiv from "../../Components/AnimatedDiv/AnimatedDiv";
 import Clock from "../../Components/AnimatedDiv/Clock/Clock";
-import Button from "../../Components/Button/Button";
-import Input from "../../Components/Input/Input";
+import Button from "../../DevComponents/Button/Button";
+import Input from "../../DevComponents/Input/Input";
 
 import "./AC.css";
 

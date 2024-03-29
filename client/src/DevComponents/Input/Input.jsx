@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, cloneElement } from "react";
-import { useAlert } from "../Providers/Alert";
+import { useAlert } from "../../Components/Providers/Alert";
 import "./Input.css";
 
 /**

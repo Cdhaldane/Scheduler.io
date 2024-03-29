@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAlert } from "../Providers/Alert";
-import Input from "../Input/Input";
+import Input from "../../DevComponents/Input/Input";
 import { ReactComponent as GoogleIcon } from "../../Icons/Google.svg";
 import { ReactComponent as GitHubIcon } from "../../Icons/GitHub.svg";
 import { ReactComponent as Microsoft } from "../../Icons/Microsoft.svg";

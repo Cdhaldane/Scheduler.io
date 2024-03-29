@@ -178,3 +178,14 @@ export const deleteHelper = (day, hour, connectedGrouping, scheduledSlots) => {
   if (updatedSlots.length === 0) return [];
   return updatedSlots;
 };
+
+export const handleOperatingHours = (hour, organization) => {
+  if (!organization) return false;
+  const openingTime = parseInt(organization.org_settings.openingTime);
+  const closingTime = parseInt(organization.org_settings.closingTime);
+
+  if (hour >= openingTime && hour < closingTime) {
+    return true;
+  }
+  return false;
+};

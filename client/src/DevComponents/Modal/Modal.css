@@ -19,7 +19,6 @@
   max-width: 500px; /* Adjust width for smaller screens */
   max-height: calc(90%) !important;
   color: var(--white);
-  overflow: hidden;
   border-radius: 10px;
   animation: appear 0.2s ease-in-out normal forwards;
 }

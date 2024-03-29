@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { useNavigate } from "react-router-dom";
-import Dropdown from "../Dropdown/Dropdown";
+import Dropdown from "../../DevComponents/Dropdown/Dropdown.jsx";
 import { useAlert } from "../Providers/Alert.jsx";
 import Clock from "../AnimatedDiv/Clock/Clock.jsx";
 
@@ -166,6 +166,7 @@ const ScheduleForm = ({
               <div className="schedule-appointment-info">
                 <Dropdown
                   type="button"
+                  className={"service-dropdown"}
                   options={
                     services?.map((service) => service.name) || [
                       "No Services Available",

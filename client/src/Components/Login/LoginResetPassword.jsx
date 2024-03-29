@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Input from "../Input/Input";
+import Input from "../../DevComponents/Input/Input";
 import { supabase } from "../../Database";
 import { useAlert } from "../Providers/Alert";
 import { useNavigate } from "react-router-dom";

@@ -5,7 +5,7 @@ import {
   getServiceFromId,
   updateUser,
 } from "../Database";
-import Modal from "../Components/Modal/Modal";
+import Modal from "../DevComponents/Modal/Modal";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../Components/Spinner/Spinner";
 import "./Styles/Appointments.css";

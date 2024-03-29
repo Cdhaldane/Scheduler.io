@@ -3,10 +3,12 @@ import { useDrop } from "react-dnd";
 import Cell from "./Cell.jsx";
 import "./Calendar.css";
 import { getServiceFromId } from "../../Database.jsx";
-import Button from "../Button/Button.jsx";
+import Button from "../../DevComponents/Button/Button.jsx";
 import Spinner from "../Spinner/Spinner.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { setTime } from "../../Store.js";
+import Modal from "../../DevComponents/Modal/Modal.jsx";
+import OrganizationSettings from "../Organization/OrganizationSettings.jsx";
 
 import {
   getDaysOfWeek,
@@ -15,6 +17,7 @@ import {
   changeView,
   isSlotEdge,
   deleteHelper,
+  handleOperatingHours,
 } from "./Utils.jsx";
 
 const SERVICE = "service";
@@ -34,10 +37,12 @@ const Calendar = ({
   const [loading, setLoading] = useState(true);
   const times = ["Week", "Month", "Day"];
   const [timeFrameIndex, setTimeFrameIndex] = useState(0);
+  const [fullView, setFullView] = useState(false);
   const timeFrame = useSelector((state) => state.timeFrame.value);
   const dispatch = useDispatch();
   const isMobile = window.innerWidth < 768;
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
+  const [organizationModal, setOrganizationModal] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -174,20 +179,33 @@ const Calendar = ({
   return (
     <div className={`calendar ${isMobile ? "mobile" : ""}`}>
       {loading && <Spinner className={"fast"} />}
-      <div className="calendar-buttons">
-        <button
-          onClick={() => {
-            if (timeFrameIndex >= times.length - 1) setTimeFrameIndex(0);
-            else setTimeFrameIndex(timeFrameIndex + 1);
-            dispatch(setTime(times[timeFrameIndex + 1] || times[0]));
-          }}
-          className={`timeframe-button ${isMobile ? "hidden" : ""}`}
-        >
-          <i className="fa-solid fa-calendar mr-10"></i>
-          {timeFrame}
-        </button>
+      <div className="calendar-top">
+        <div className="calendar-buttons">
+          <button
+            onClick={() => {
+              if (timeFrameIndex >= times.length - 1) setTimeFrameIndex(0);
+              else setTimeFrameIndex(timeFrameIndex + 1);
+              dispatch(setTime(times[timeFrameIndex + 1] || times[0]));
+            }}
+            className={`timeframe-button ${isMobile ? "hidden" : ""}`}
+          >
+            <i className="fa-solid fa-calendar mr-10"></i>
+            {timeFrame}
+          </button>
+          <button
+            onClick={() => {
+              setFullView(!fullView);
+            }}
+            className={`timeframe-button ${isMobile ? "hidden" : ""}`}
+          >
+            <i className="fa-solid fa-cog mr-10"></i>
+            Full Calendar
+          </button>
+        </div>
         {organization?.name && (
-          <span className="fancy">{organization.name}</span>
+          <span className="fancy" onClick={() => setOrganizationModal(true)}>
+            {organization.name}
+          </span>
         )}
 
         <h2>
@@ -199,9 +217,9 @@ const Calendar = ({
           })}
         </h2>
       </div>
-      <div className="header">
-        <div className={`header-days ${timeFrame}`}>
-          <div className={`empty ${timeFrame}`}>
+      <div className="calendar-table">
+        <div className={`calendar-header ${timeFrame}`}>
+          <div className={`header-cell ${timeFrame}`}>
             <button
               className="navigation-button nb-left"
               onClick={() =>
@@ -233,10 +251,19 @@ const Calendar = ({
             </div>
           ))}
         </div>
-      </div>
-      <div className={`body ${timeFrame}`}>
+
         {Array.from({ length: 24 }).map((_, hour) => (
-          <div key={"row" + hour} className="row">
+          <div
+            key={"row" + hour}
+            className={`calendar-row  ${
+              fullView
+                ? "full"
+                : handleOperatingHours(hour, organization)
+                ? "open"
+                : "closed"
+            } ${timeFrame}
+         `}
+          >
             <div
               key={hour}
               className={`cell hours ${timeFrame}`}
@@ -258,16 +285,31 @@ const Calendar = ({
                   handlePieceDrop(newDay, newHour, newDate, item)
                 }
                 selectedSlot={selectedSlot}
+                handleOperatingHours={(day, hour) =>
+                  handleOperatingHours(hour, organization)
+                }
                 isSlotEdge={isSlotEdge}
                 handlePieceExpand={handlePieceExpand}
                 scheduledSlots={scheduledSlots}
                 puzzlePieces={puzzlePieces}
                 adminMode={adminMode}
+                organization={organization}
               />
             ))}
           </div>
         ))}
       </div>
+
+      <Modal
+        isOpen={organizationModal}
+        onClose={() => setOrganizationModal(false)}
+        label="Organization Settings"
+      >
+        <OrganizationSettings
+          organization={organization}
+          onClose={() => setOrganizationModal(false)}
+        />
+      </Modal>
     </div>
   );
 };

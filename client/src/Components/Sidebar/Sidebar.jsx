@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import data from "../../personnelData.json";
-import Modal from "../Modal/Modal";
+import Modal from "../../DevComponents/Modal/Modal";
 import { supabase } from "../../Database";
 import { useAlert } from "../Providers/Alert";
 import { addPersonnel, deletePersonnel } from "../../Database";
 
-import Input from "../Input/Input";
+import Input from "../../DevComponents/Input/Input";
 import ContextMenu from "../ContextMenu/ContextMenu";
-import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
+import ThemeSwitch from "../../DevComponents/ThemeSwitch/ThemeSwitch";
 import Clock from "../AnimatedDiv/Clock/Clock";
 import { useLocation, useNavigate } from "react-router-dom";
 

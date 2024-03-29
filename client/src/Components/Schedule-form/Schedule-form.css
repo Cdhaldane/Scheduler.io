@@ -149,3 +149,9 @@
   left: 0;
   font-size: 0.8em !important;
 }
+
+.service-dropdown {
+  width: 98%;
+  margin: 0px 1%;
+  border: 2px solid var(--primary);
+}

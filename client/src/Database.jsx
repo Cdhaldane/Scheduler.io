@@ -317,3 +317,15 @@ export const getOrganization = async (id) => {
 
   return data[0];
 };
+
+export const updateOrganization = async (id, organization) => {
+  const { data, error } = await supabase
+    .from("organizations")
+    .update(organization)
+    .eq("org_id", id)
+    .select();
+  if (error) {
+    console.log("Error updating organization:", error);
+  }
+  return { data, error };
+};

@@ -104,6 +104,15 @@ input {
   margin-right: 10px;
 }
 
+.inline {
+  display: flex;
+  flex-direction: row;
+}
+
+.width-50 {
+  width: 45% !important;
+}
+
 .icon-right {
   font-size: 1.2em;
   margin-left: 10px;

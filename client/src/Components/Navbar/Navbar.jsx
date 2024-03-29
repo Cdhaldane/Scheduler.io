@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoginForm from "../Login/Login";
 import RegisterAccount from "../Customer/CustomerRegister/CustomerRegister.jsx";
-import Modal from "../Modal/Modal";
-import Dropdown from "../Dropdown/Dropdown.jsx";
-import { InputForm } from "../Input/Input.jsx";
+import Modal from "../../DevComponents/Modal/Modal.jsx";
+import Dropdown from "../../DevComponents/Dropdown/Dropdown.jsx";
+import { InputForm } from "../../DevComponents/Input/Input.jsx";
 import { sendEmail, supabase } from "../../Database";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -167,10 +167,6 @@ const Navbar = ({
             <NavbarItem
               icon="fa-solid fa-clipboard"
               route={`/admin/${orgId}`}
-            />
-            <NavbarItem
-              icon="fa-regular fa-user"
-              route={`/admin/employee/${orgId}/:employeeId`}
             />
           </>
         )}

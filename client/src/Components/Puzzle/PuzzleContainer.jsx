@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDrop, useDrag } from "react-dnd";
 import Calendar from "../Calendar/Calendar.jsx";
-import Modal from "../Modal/Modal";
+import Modal from "../../DevComponents/Modal/Modal.jsx";
 import { createKeyframes, getOffset, FlexBoxWrapper } from "../../Utils.jsx";
-import { InputForm } from "../Input/Input.jsx";
+import { InputForm } from "../../DevComponents/Input/Input.jsx";
 import { HexColorPicker } from "react-colorful";
 import Tooltip, { TooltipProvider, useTooltip } from "../Providers/Tooltip";
 import {
