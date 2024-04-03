@@ -30,7 +30,7 @@ import "./Login.css";
  * - JSX for rendering the login form with SSO buttons, input fields for email and password, and links for password recovery and account creation.
  */
 
-const Login = ({ onLoginSuccess, onClose }) => {
+const Login = ({ onLoginSuccess, onClose, type }) => {
   // State hooks for managing the form inputs and error messages
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -95,7 +95,7 @@ const Login = ({ onLoginSuccess, onClose }) => {
 
   //Render the login component with SSO buttons, input fields, and links
   return (
-    <div className="login-container">
+    <div className={`login-container ${type}`}>
       <div className="login-header">
         <img src={"/logo.png"} alt="logo" className="login-logo" />
         <h1> Time Slot</h1>

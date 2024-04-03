@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import data from "../../personnelData.json";
 import Modal from "../../DevComponents/Modal/Modal";
 import { supabase } from "../../Database";
 import { useAlert } from "../Providers/Alert";

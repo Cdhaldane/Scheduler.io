@@ -57,6 +57,7 @@ const Clock = ({
         <div
           className="hour-mark"
           style={{ transform: `rotate(${i * 30}deg)` }}
+          key={i}
         ></div>
       ))}
       <div

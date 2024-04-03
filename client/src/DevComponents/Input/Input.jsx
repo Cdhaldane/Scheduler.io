@@ -43,6 +43,8 @@ const Input = ({
   const [inputValue, setInputValue] = useState(propValue || "");
   const [hasChanged, setHasChanged] = useState(false);
   const inputRef = useRef(null);
+  const alert = useAlert();
+
   // Update local state when propValue changes
   useEffect(() => {
     setInputValue(propValue || "");
@@ -67,25 +69,51 @@ const Input = ({
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onSubmit) onSubmit(e, inputValue);
+
+    let isFormValid = true;
+
+    // Loop through each input element in the form and check its validity
+    const inputs = inputRef.current.querySelectorAll("input,textarea,select");
+    inputs.forEach((input) => {
+      if (!input.checkValidity()) {
+        console.log(input.validationMessage, input.pattern);
+        isFormValid = false;
+        if (input.pattern === "[0-9]{3}-[0-9]{3}-[0-9]{4}") {
+          alert.showAlert(
+            "error",
+            "Please enter a valid phone number (e.g., 123-456-7890)."
+          );
+        } else {
+          alert.showAlert("error", input.validationMessage);
+        }
+      }
+    });
+
+    if (!isFormValid) {
+      return; // Exit the function if the form is invalid
+    }
+
+    // If the form is valid, proceed with submitting the form data
+    await onSubmit(e, inputValue);
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      e.preventDefault();
-      if (onSubmit) onSubmit(e, inputValue);
+      handleSubmit(e);
     }
   };
 
   return (
-    <div
+    <form
       id="input-container"
       className={`input-container ${
         isActive && "active"
       } type-${type} ${className} ${hasChanged && "changed"}`}
       ref={inputRef}
+      onSubmit={(e) => handleSubmit(e)}
+      onKeyDown={(e) => handleKeyPress(e)}
     >
       {type === "textarea" ? (
         <textarea
@@ -94,7 +122,6 @@ const Input = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={placeholder}
-          autoComplete="new-password"
         />
       ) : (
         <input
@@ -103,18 +130,18 @@ const Input = ({
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          onSubmit={(e) => handleSubmit(e)}
-          autoComplete="new-password"
           required={true}
           pattern={type === "tel" ? "[0-9]{3}-[0-9]{3}-[0-9]{4}" : null}
-          onKeyDown={(e) => handleKeyPress(e)}
+          autoComplete={type}
         />
       )}
       <label className={isActive ? "active" : ""}>{label}</label>
       {icon && (
-        <i onClick={(e) => handleSubmit(e)} className={`icon ${icon}`}></i>
+        <button className="input-submit-button" type="submit">
+          <i className={`icon ${icon}`}></i>
+        </button>
       )}
-    </div>
+    </form>
   );
 };
 
@@ -129,7 +156,6 @@ export const InputForm = ({
 }) => {
   // Ref for the form element
   const inputRef = useRef(null);
-  const alert = useAlert();
   const [compacted, setCompacted] = useState(false);
   const [values, setValues] = useState({});
 

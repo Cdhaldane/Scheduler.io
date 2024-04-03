@@ -107,7 +107,7 @@ const BookingSubmit = () => {
           </div>
         )}
         {booked ? (
-          <button onClick={() => navigate("/")}>Back to Home</button>
+          <button onClick={() => navigate("/home")}>Back to Home</button>
         ) : (
           <button onClick={handleBook}>Confirm Booking</button>
         )}

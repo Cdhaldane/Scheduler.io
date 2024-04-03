@@ -176,6 +176,7 @@ const Calendar = ({
   useEffect(() => {
     if (isMobile) dispatch(setTime("Day"));
   }, [isMobile]);
+
   return (
     <div className={`calendar ${isMobile ? "mobile" : ""}`}>
       {loading && <Spinner className={"fast"} />}
@@ -183,6 +184,7 @@ const Calendar = ({
         <div className="calendar-buttons">
           <button
             onClick={() => {
+              setLoading(true);
               if (timeFrameIndex >= times.length - 1) setTimeFrameIndex(0);
               else setTimeFrameIndex(timeFrameIndex + 1);
               dispatch(setTime(times[timeFrameIndex + 1] || times[0]));
@@ -199,7 +201,7 @@ const Calendar = ({
             className={`timeframe-button ${isMobile ? "hidden" : ""}`}
           >
             <i className="fa-solid fa-cog mr-10"></i>
-            Full Calendar
+            {fullView ? "Compact" : "Full"}
           </button>
         </div>
         {organization?.name && (
@@ -238,7 +240,10 @@ const Calendar = ({
             </button>
           </div>
           {currentView.map((day, index) => (
-            <div key={index} className="header-cell">
+            <div
+              key={index}
+              className={`header-cell  ${loading ? "loading" : ""}`}
+            >
               {timeFrame !== "Month"
                 ? day?.toLocaleDateString("en-US", {
                     weekday: "long",

@@ -152,21 +152,58 @@ function App() {
             isCalendar={isCalendar}
           />
         ) : (
-          <nav className={`navbar title`}>
-            <img
-              src="/logo.png"
-              alt="website logo"
-              className="navbar-logo"
-              onClick={() => navigate("/")}
-            />
-            <h1>
-              TIME<span>SLOT</span>
-            </h1>
-          </nav>
+          <nav className={`navbar title`}></nav>
         )}
 
         <Routes>
           <Route path="/" element={<Landing />} />
+          {session ? (
+            <>
+              <Route
+                path="/create-organization"
+                element={
+                  <ACMain
+                    handleOrganizationCreate={(val) =>
+                      handleOrganizationCreate(val)
+                    }
+                  />
+                }
+              />
+              <Route
+                path="/admin/:organizationId/employee/:employeeId"
+                element={
+                  <Home
+                    session={session}
+                    type="employee"
+                    organization={organization}
+                  />
+                }
+              />
+              <Route
+                path="/appointments"
+                element={<Appointments session={session} />}
+              />
+              <Route
+                path="/admin/:organizationId"
+                element={
+                  <Home
+                    session={session}
+                    type="admin"
+                    organization={organization}
+                  />
+                }
+              />
+              <Route
+                path="/employee"
+                element={<Employee session={session} type="employee" />}
+              />
+            </>
+          ) : (
+            <Route
+              path="/create-organization"
+              element={<Login type="page" />}
+            />
+          )}
           <Route
             path="/home/:organizationId"
             element={
@@ -177,51 +214,10 @@ function App() {
               />
             }
           />
-          <Route
-            path="/appointments"
-            element={<Appointments session={session} />}
-          />
 
-          {/* Protect the Admin route */}
-          <Route
-            path="/admin/:organizationId"
-            element={
-              <Home
-                session={session}
-                type="admin"
-                organization={organization}
-              />
-            }
-          />
-
-          {/* Protect the Employee route */}
-          <Route
-            path="/admin/:organizationId/employee/:employeeId"
-            element={
-              <Home
-                session={session}
-                type="employee"
-                organization={organization}
-              />
-            }
-          />
-
-          <Route
-            path="/employee"
-            element={<Employee session={session} type="employee" />}
-          />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/info" element={<Info />} />
-          <Route
-            path="/create-organization"
-            element={
-              <ACMain
-                handleOrganizationCreate={(val) =>
-                  handleOrganizationCreate(val)
-                }
-              />
-            }
-          />
+
           <Route path="/booking" element={<BookingPage />} />
           <Route path="/booking-submit" element={<BookingSubmit />} />
           <Route path="*" element={<NotFoundPage />} />

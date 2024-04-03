@@ -11,6 +11,18 @@
   gap: 16px;
 }
 
+.login-container.page {
+  background-color: var(--bg-secondary);
+  padding: 20px 30px;
+  width: 80%;
+  max-width: 500px; /* Adjust width for smaller screens */
+  max-height: calc(90%) !important;
+  color: var(--white);
+  border-radius: 10px;
+  animation: appear 0.2s ease-in-out normal forwards;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
 .login-container > div {
   width: 100%;
 }
