@@ -29,8 +29,12 @@ import "./Bookings.css";
 const BookingSubmit = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, appointment } = location.state || { user: {}, appointment: {} };
-  console.log("User:", user, "Appointment:", appointment);
+  const { user, appointment, organization } = location.state || {
+    user: {},
+    appointment: {},
+    organization: {},
+  };
+  console.log(user, appointment, organization);
   const alert = useAlert();
 
   const [booked, setBooked] = useState(false);
@@ -38,7 +42,6 @@ const BookingSubmit = () => {
   const handleBook = async () => {
     const time = appointment.day;
     time.setHours(appointment.start, 0, 0, 0);
-    console.log(appointment);
 
     const { res, error } = await addBooking({
       client_email: user.email,
@@ -107,7 +110,9 @@ const BookingSubmit = () => {
           </div>
         )}
         {booked ? (
-          <button onClick={() => navigate("/home")}>Back to Home</button>
+          <button onClick={() => navigate(`/home/${organization?.org_id}`)}>
+            Back to Home
+          </button>
         ) : (
           <button onClick={handleBook}>Confirm Booking</button>
         )}

@@ -6,7 +6,7 @@ import EmployeeSchedule from "../Components/Employee/EmployeeSchedule";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import Spinner from "../Components/Spinner/Spinner.jsx";
 
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useAlert } from "../Components/Providers/Alert.jsx";
@@ -216,6 +216,7 @@ const Home = ({ session, type, organization }) => {
                 selectedService={selectedService}
                 setSelectedService={setSelectedService}
                 services={services}
+                organization={org}
               />
             )}
           </div>

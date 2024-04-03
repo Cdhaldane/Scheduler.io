@@ -40,6 +40,7 @@ const ScheduleForm = ({
   selectedService,
   setSelectedService,
   services,
+  organization,
 }) => {
   const [day, setDay] = useState();
   const [start, setStart] = useState();
@@ -112,7 +113,7 @@ const ScheduleForm = ({
     if (session) {
       const user = session?.user.user_metadata;
       navigate("/booking-submit", {
-        state: { user, appointment },
+        state: { user, appointment, organization },
       });
     } else {
       navigate("/booking", {
