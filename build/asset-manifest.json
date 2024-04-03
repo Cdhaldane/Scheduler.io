@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/Scheduler.io/client/static/css/main.6aae5695.css",
+    "main.js": "/Scheduler.io/client/static/js/main.f9c6ce7e.js",
+    "static/js/952.abad0bfb.chunk.js": "/Scheduler.io/client/static/js/952.abad0bfb.chunk.js",
+    "static/media/GitHub.svg": "/Scheduler.io/client/static/media/GitHub.3cbebced6ddbbe8912feb21d03354166.svg",
+    "static/media/Google.svg": "/Scheduler.io/client/static/media/Google.c03244fa4175e0546e1fed359c5b7b55.svg",
+    "static/media/Microsoft.svg": "/Scheduler.io/client/static/media/Microsoft.63a444c7af7f21a64a8cc74b7ea39e84.svg",
+    "index.html": "/Scheduler.io/client/index.html",
+    "main.6aae5695.css.map": "/Scheduler.io/client/static/css/main.6aae5695.css.map",
+    "main.f9c6ce7e.js.map": "/Scheduler.io/client/static/js/main.f9c6ce7e.js.map",
+    "952.abad0bfb.chunk.js.map": "/Scheduler.io/client/static/js/952.abad0bfb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6aae5695.css",
+    "static/js/main.f9c6ce7e.js"
+  ]
+}
