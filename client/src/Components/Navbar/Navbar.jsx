@@ -135,7 +135,7 @@ const Navbar = ({
               src="/logo.png"
               alt="website logo"
               className="navbar-logo"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/")}
             />
             <h1 className="timeslot-title">
               TIME<span>SLOT</span>

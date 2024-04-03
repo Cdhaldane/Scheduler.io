@@ -3,20 +3,33 @@ import AnimatedDiv from "../../Components/AnimatedDiv/AnimatedDiv";
 import Clock from "../../Components/AnimatedDiv/Clock/Clock";
 import Button from "../../DevComponents/Button/Button";
 import Input from "../../DevComponents/Input/Input";
-
 import "./AC.css";
 
-const AC = ({ onFinish }) => {
+const AC = ({ onFinish, session }) => {
   const [page, setPage] = useState(0);
   const [animation, setAnimation] = useState(false);
   const [inputAnimation, setInputAnimation] = useState("slideInRight");
   const [organization, setOrganization] = useState({});
   const [labelIndex, setLabelIndex] = useState(0);
+  const [loginModal, setLoginModal] = useState(true);
 
   const options = [
-    { label: "What is your organization's name?", value: "name" },
-    { label: "What is your organization's email?", value: "email" },
-    { label: "What is your organization's phone number?", value: "phone" },
+    { label: "What is your organization's name?", value: "name", type: "name" },
+    {
+      label: "What is your organization's email?",
+      value: "email",
+      type: "email",
+    },
+    {
+      label: "What is your organization's phone number?",
+      value: "phone",
+      type: "tel",
+    },
+    {
+      label: "What is your organization's address?",
+      value: "address",
+      type: "text",
+    },
   ];
 
   const [inputLabel, setInputLabel] = useState(options[labelIndex]);
@@ -85,7 +98,7 @@ const AC = ({ onFinish }) => {
             <Input
               label={inputLabel?.label}
               placeholder="Organization Name"
-              type="text"
+              type={inputLabel?.type}
               value={value}
               onInputChange={(newValue) => setValue(newValue)}
               className={"ac-input"}

@@ -17,11 +17,29 @@
   pointer-events: none;
 }
 
-.input-container .icon {
+.input-submit-button {
   position: absolute;
-  top: 1.1em;
-  right: 20px;
-  font-size: 0.8em;
+  top: 0;
+  right: 1.5em;
+  background-color: transparent;
+  width: 10px;
+  height: 100%;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-submit-button:hover,
+.input-submit-button:active,
+.input-submit-button:focus {
+  background-color: transparent !important;
+}
+
+.input-container .icon {
+  font-size: 2em;
   transition: color 0.3s ease-in-out;
 }
 
@@ -81,6 +99,11 @@
 .input-container.active input,
 .input-container.active textarea {
   animation: paddingTop 0.3s ease-in-out forwards;
+}
+
+.input-container input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px var(--bg-primary) inset;
+  -webkit-text-fill-color: var(--primary) !important;
 }
 
 .changed:not(.active) input:required,
