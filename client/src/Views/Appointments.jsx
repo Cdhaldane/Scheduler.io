@@ -10,6 +10,25 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../Components/Spinner/Spinner";
 import "./Styles/Appointments.css";
 
+/**
+ * UserProfile Component
+ *
+ * Purpose:
+ * - The UserProfile component provides a user interface for displaying the user's profile and appointments.
+ * - It displays user information such as full name, email, and organization.
+ * - The component also shows a list of the user's appointments with the ability to filter by status (confirmed, pending, canceled).
+ * - Users can navigate to the organization creation page and toggle the visibility of the appointments modal.
+ *
+ * Inputs:
+ * - session: A session object containing user session information.
+ *
+ * Outputs:
+ * - JSX for rendering the user's profile card with information and appointments.
+ * - A modal containing the list of appointments, with filters for different appointment statuses.
+ * - Handlers for navigating to the organization creation page and toggling the appointments modal.
+ */
+
+
 const UserProfile = ({ session }) => {
   const [appointments, setAppointments] = useState([]);
   const [isOpen, setIsOpen] = useState(false);

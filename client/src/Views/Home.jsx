@@ -126,6 +126,7 @@ const Home = ({ session, type, organization }) => {
     setTimeout(() => {}, 1000);
   };
 
+  //Handler for updating the selected slot
   const handleSelectedSlot = (day, hour, date, group) => {
     if (group) {
       let slots = [];
@@ -145,6 +146,7 @@ const Home = ({ session, type, organization }) => {
       });
   };
 
+  //Handler for updating personnel services
   const handlePersonnelServiceUpdate = async (services) => {
     const allServices = await getServices();
     const { data, error } = await addPersonnelService(

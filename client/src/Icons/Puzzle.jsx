@@ -1,5 +1,24 @@
 import React from "react";
 
+/**
+ * Puzzle Component
+ *
+ * Purpose:
+ * - The Puzzle component provides a container for displaying a puzzle piece.
+ * - It uses an SVG element to render the shape of a puzzle piece.
+ * - The component accepts children, allowing for additional content to be displayed within the puzzle piece.
+ *
+ * Inputs:
+ * - children: The content to be displayed inside the puzzle piece.
+ * - ref: A ref object to be attached to the root div element of the component.
+ * - style: An object containing CSS styles to be applied to the root div element.
+ * - className: A string containing additional CSS class names to be applied to the root div element.
+ * - color: A string representing the fill color of the puzzle piece SVG.
+ *
+ * Outputs:
+ * - JSX for rendering a div element containing the puzzle piece SVG and any children passed to the component.
+ */
+
 const Puzzle = ({ children, ref, style, className, color }) => {
   console.log(ref, style);
   return (

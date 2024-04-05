@@ -6,6 +6,24 @@ import { useNavigate } from "react-router-dom";
 
 import "./Login.css";
 
+/**
+ * ResetPassword Component
+ *
+ * Purpose:
+ * - The ResetPassword component provides a user interface for resetting the user's password.
+ * - It allows the user to enter a new password and update it in the system.
+ * - The component uses Supabase for authentication and updates the user's password in the database.
+ * - It provides feedback to the user on the success or failure of the password update.
+ *
+ * Inputs:
+ * - None
+ *
+ * Outputs:
+ * - JSX for rendering the password reset form with an input field for the new password and a submit button.
+ * - Alerts to inform the user of the status of their password update.
+ */
+
+
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const alert = useAlert();

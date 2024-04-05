@@ -72,6 +72,21 @@ const Navbar = ({
     orgId = session.user.user_metadata.organization.org_id;
   }
 
+  /**
+ * ProfilePic Component
+ *
+ * Purpose:
+ * - The ProfilePic component displays the user's profile picture in the navigation bar.
+ * - If the user has set a profile picture (avatar_url), it is shown as an image.
+ * - If the user has not set a profile picture, a default icon is displayed instead.
+ *
+ * Inputs:
+ * - None (assumes access to a global `session` object containing user information)
+ *
+ * Outputs:
+ * - JSX for rendering the user's profile picture or a default icon in the navigation bar.
+ */
+
   const ProfilePic = () => {
     return (
       <div className="navbar-item profile-item">
@@ -96,6 +111,7 @@ const Navbar = ({
     setIsLoggedIn(true);
   };
 
+  //Handler for dropdown click
   const handleDropdownClick = (option) => {
     if (option === "Signout") {
       setShowModal(false);
@@ -201,7 +217,8 @@ const Navbar = ({
           </>
         )}
       </div>
-
+      
+      {/* Modal for login and registration */}
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <>
           <div className="modal-body">
@@ -213,6 +230,8 @@ const Navbar = ({
           </div>
         </>
       </Modal>
+
+      {/* Modal for contact form */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <InputForm
           id="contact"

@@ -5,6 +5,25 @@ import Button from "../../DevComponents/Button/Button";
 import Input from "../../DevComponents/Input/Input";
 import "./AC.css";
 
+/**
+ * AC Component
+ *
+ * Purpose:
+ * - The AC (Account Creation) component provides a user interface for creating a new organization account.
+ * - It consists of multiple pages with animations for transitioning between pages.
+ * - The first page is a welcome message with a button to proceed.
+ * - The second page collects information about the organization through a series of input fields.
+ * - The third page displays a message indicating that the account creation process is in progress.
+ *
+ * Inputs:
+ * - onFinish: A callback function that is called when the account creation process is completed.
+ * - session: A session object containing user session information (optional).
+ *
+ * Outputs:
+ * - JSX for rendering the different pages of the account creation process with animations and input fields.
+ * - The collected organization information is passed to the onFinish callback function upon completion.
+ */
+
 const AC = ({ onFinish, session }) => {
   const [page, setPage] = useState(0);
   const [animation, setAnimation] = useState(false);

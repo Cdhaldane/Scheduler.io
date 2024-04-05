@@ -6,6 +6,24 @@ import { useAlert } from "../Providers/Alert.jsx";
 
 import "./Organization.css";
 
+/**
+ * OrganizationSettings Component
+ *
+ * Purpose:
+ * - The OrganizationSettings component allows the user to modify the settings of an organization.
+ * - It provides a form to update the opening and closing times of the organization.
+ * - The component uses the `updateOrganization` function from the Database to update the organization's settings in the database.
+ * - It provides feedback to the user on the success or failure of the update operation.
+ *
+ * Inputs:
+ * - organization: An object containing the details of the organization.
+ * - onClose: A callback function that is called when the settings update is completed or cancelled.
+ *
+ * Outputs:
+ * - JSX for rendering the organization settings form with TimePicker components for opening and closing times, and a submit button to save changes.
+ * - Alerts to inform the user of the status of the organization settings update.
+ */
+
 const OrganizationSettings = ({ organization, onClose }) => {
   const alert = useAlert();
   const [orgDetails, setOrgDetails] = useState({

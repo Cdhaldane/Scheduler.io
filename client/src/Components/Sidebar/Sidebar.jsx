@@ -12,6 +12,29 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import "./Sidebar.css";
 
+/**
+ * Sidebar Component
+ *
+ * Purpose:
+ * - The Sidebar component provides a navigation menu for the application.
+ * - It displays a list of personnel and allows the user to select a person for further actions.
+ * - The component supports admin mode, where additional options like adding or deleting personnel are available.
+ * - It also includes a context menu for performing actions on the selected personnel.
+ * - The component is responsive and adapts to mobile view.
+ *
+ * Inputs:
+ * - selectedPersonnel: The currently selected personnel.
+ * - setSelectedPersonnel: A function to set the selected personnel.
+ * - personnel: An array of personnel objects.
+ * - adminMode: A boolean indicating whether the user is in admin mode.
+ * - organization: An object containing organization details.
+ * - services: An array of services offered by the organization.
+ *
+ * Outputs:
+ * - JSX for rendering the sidebar with personnel list, add personnel button (in admin mode), and context menu.
+ * - Handlers for selecting personnel, adding personnel, and performing actions through the context menu.
+ */
+
 const Sidebar = ({
   selectedPersonnel,
   setSelectedPersonnel,
@@ -250,6 +273,24 @@ const Sidebar = ({
     </>
   );
 };
+
+/**
+ * AddPersonForm Component
+ *
+ * Purpose:
+ * - The AddPersonForm component provides a form for adding a new person to the personnel list.
+ * - It captures the first name, last name, and email of the new person.
+ * - The component uses the `addPersonnel` function from the Database to add the new person to the database.
+ * - It provides feedback to the user on the success or failure of the addition operation.
+ *
+ * Inputs:
+ * - onClose: A callback function that is called when the form is successfully submitted or cancelled.
+ * - organization: An object containing organization details.
+ *
+ * Outputs:
+ * - JSX for rendering the form with input fields for first name, last name, and email, and a submit button to add the new person.
+ * - Alerts to inform the user of the status of the person addition operation.
+ */
 
 const AddPersonForm = ({ onClose, organization }) => {
   const [first_name, setFirst_name] = useState("");
