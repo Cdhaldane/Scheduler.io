@@ -1,0 +1,103 @@
+.schedule-view {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  border: 3px solid var(--ash);
+  color: var(--ash);
+  width: 25%;
+  margin: 0px 20px;
+  height: 98% !important;
+  border-radius: 4px;
+  font-size: 1.5em;
+  animation: slideInRight 0.5s ease-in-out normal forwards;
+}
+
+.schedule-view h2 {
+  color: var(--ash);
+  text-align: center;
+  margin: 10px;
+}
+
+.booking-list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.booking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 90%;
+}
+
+.booking-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--bg-secondary); /* White background for each item */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.booking-time,
+.booking-client,
+.booking-service {
+  flex: 1;
+  text-align: center;
+}
+
+.booking-time {
+  font-weight: bold;
+}
+
+.booking-client {
+  font-style: italic;
+}
+
+.booking-details {
+  position: relative;
+  top: -5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  width: fit-content;
+  margin: 0 auto;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.booking-details p {
+  margin: 0;
+  padding: 0;
+  font-size: 1em;
+  word-wrap: none !important;
+  white-space: nowrap;
+  color: var(--black);
+  font-family: Satisfy;
+}
+
+/* Add more styles as needed */
+
+/* MOBILE STYLING */
+
+.schedule-view.mobile {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  width: 98%;
+  height: calc(100% - 80px) !important;
+  margin: 0;
+}
+
+.schedule-view-mobile-toggle {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 1em;
+  z-index: 1000;
+  color: var(--ash);
+}
