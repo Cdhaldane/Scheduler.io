@@ -18,4 +18,4 @@ jobs:
         run: npm install
       - name: Run tests
         working-directory: ./client
-        run: npm test
+        run: npm test --detectOpenHandles
