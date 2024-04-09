@@ -37,7 +37,7 @@ const Calendar = ({
   const [loading, setLoading] = useState(true);
   const times = ["Week", "Month", "Day"];
   const [timeFrameIndex, setTimeFrameIndex] = useState(0);
-  const [fullView, setFullView] = useState(false);
+  const [fullView, setFullView] = useState(true);
   const timeFrame = useSelector((state) => state.timeFrame.value);
   const dispatch = useDispatch();
   const isMobile = window.innerWidth < 768;
@@ -299,6 +299,7 @@ const Calendar = ({
                 puzzlePieces={puzzlePieces}
                 adminMode={adminMode}
                 organization={organization}
+                timeView={times[timeFrameIndex]}
               />
             ))}
           </div>

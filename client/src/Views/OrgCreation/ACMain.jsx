@@ -24,15 +24,6 @@ const ACMain = ({ handleOrganizationCreate }) => {
   const isMobile = useDeviceType();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (sessionStorage.introFinished) {
-  //     if (sessionStorage.introFinished === "true") {
-  //       sessionStorage.setItem("isAdmin", "true");
-  //       navigate("/admin");
-  //     }
-  //   }
-  // }, [sessionStorage]);
-
   const handleFinish = async (organizationDetails) => {
     try {
       const { data, error } = await createOrganization(organizationDetails);

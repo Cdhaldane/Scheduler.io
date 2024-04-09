@@ -115,7 +115,7 @@ const Sidebar = ({
             </h1>
             {adminMode && (
               <i
-                class="fa-solid fa-ellipsis-vertical"
+                className="fa-solid fa-ellipsis-vertical"
                 onClick={(e) => {
                   e.preventDefault();
                   setContextMenu({

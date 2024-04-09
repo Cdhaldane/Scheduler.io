@@ -78,19 +78,19 @@ const UserProfile = ({ session }) => {
               className="activity"
               onClick={() => navigate("/create-organization")}
             >
-              <i class="fa-solid fa-house"></i>
+              <i className="fa-solid fa-house"></i>
               <span className="activity-name">Organization</span>
               <span className="index">{organization.name}</span>
             </div>
             <div className="activity sepcial">
-              <i class="fa-solid fa-clock"></i>
+              <i className="fa-solid fa-clock"></i>
               <span className="activity-name">Activity</span>
               <span className="index">
                 {session.user.updated_at?.split("T")[0]}
               </span>
             </div>
             <div className="activity" onClick={() => setIsOpen(!isOpen)}>
-              <i class="fa-solid fa-calendar"></i>
+              <i className="fa-solid fa-calendar"></i>
               <span className="activity-name">Appointments</span>
               <span className="index">
                 {appointments && appointments.length}
@@ -109,7 +109,7 @@ const UserProfile = ({ session }) => {
             Upcoming Appointments
             <span>
               <i
-                class="fa-solid fa-check"
+                className="fa-solid fa-check"
                 style={{
                   backgroundColor:
                     selectedFilter === "confirmed"
@@ -123,7 +123,7 @@ const UserProfile = ({ session }) => {
                 }
               />
               <i
-                class="fa-solid fa-hourglass"
+                className="fa-solid fa-hourglass"
                 style={{
                   backgroundColor:
                     selectedFilter === "pending"
@@ -137,7 +137,7 @@ const UserProfile = ({ session }) => {
                 }
               />
               <i
-                class="fa-solid fa-x"
+                className="fa-solid fa-x"
                 style={{
                   backgroundColor:
                     selectedFilter === "cancelled"
@@ -165,25 +165,25 @@ const UserProfile = ({ session }) => {
                       <h4>{appointment.service.name}</h4>
                       <p className="appointment-status">
                         {appointment.status === "confirmed" && (
-                          <i class="fa-solid fa-check"></i>
+                          <i className="fa-solid fa-check"></i>
                         )}
                         {appointment.status === "pending" && (
-                          <i class="fa-solid fa-hourglass"></i>
+                          <i className="fa-solid fa-hourglass"></i>
                         )}
                         {appointment.status === "cancelled" && (
-                          <i class="fa-solid fa-x"></i>
+                          <i className="fa-solid fa-x"></i>
                         )}
                         {appointment.status}
                       </p>
                     </div>
 
                     <p className="appointment-date-time">
-                      <i class="fa-solid fa-calendar-week"></i>
+                      <i className="fa-solid fa-calendar-week"></i>
                       {appointment.booking_date} at {appointment.booking_time}
                     </p>
 
                     <p className="appointment-price">
-                      <i class="fa-solid fa-money-bill"></i>
+                      <i className="fa-solid fa-money-bill"></i>
                       Price: ${appointment.service.price}
                     </p>
                     <div className="appointment-buttons">

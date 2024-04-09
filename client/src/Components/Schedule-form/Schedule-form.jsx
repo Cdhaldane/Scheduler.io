@@ -144,7 +144,7 @@ const ScheduleForm = ({
           <div className="body">
             <h1>
               <i
-                class="fa-solid fa-calendar-check"
+                className="fa-solid fa-calendar-check"
                 onClick={() => setMobileOpen(!mobileOpen)}
               ></i>
               APPOINTMENT
@@ -220,7 +220,7 @@ const ScheduleForm = ({
               onClick={handleBookAppointment}
             >
               BOOK APPOINTMENT
-              <i class="fa-solid fa-computer-mouse"></i>
+              <i className="fa-solid fa-computer-mouse"></i>
             </button>
           </footer>
         </div>

@@ -68,12 +68,12 @@ function App() {
         setIsAdmin(true);
         setIsLoggedIn(true);
       }
-      if (session?.user.user_metadata.organization) {
-        setOrganization(session.user.user_metadata.organization);
-      } else {
-        const org = await db.getOrganization(location.pathname.split("/")[2]);
-        setOrganization(org);
-      }
+      // if (session?.user.user_metadata.organization) {
+      //   setOrganization(session.user.user_metadata.organization);
+      // } else {
+      const org = await db.getOrganization(location.pathname.split("/")[2]);
+      setOrganization(org);
+      // }
     };
     fetchData().finally(() => {
       setIsLoading(false);
@@ -135,12 +135,23 @@ function App() {
     setOrganization(org);
     db.updateUser(org, session.user);
   };
+
+  const setOrgDefault = async () => {
+    if (session) {
+      const o = await db.getOrganization(
+        "bce8fd49-4a09-4d41-83e9-7c0a13bca6c3"
+      );
+      if (o) console.log("o", o);
+      db.updateUser(o, session.user);
+    }
+  };
+
   if (isLoading) return <Spinner />;
   return (
     <>
       <Alert />
       {/* <DevTools /> */}
-
+      {/* <button onClick={setOrgDefault}>Click</button> */}
       <div className="app">
         {!shouldRenderNavbarAndFooter ? (
           <Navbar

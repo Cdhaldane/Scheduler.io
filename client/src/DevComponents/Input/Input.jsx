@@ -96,7 +96,7 @@ const Input = ({
     }
 
     // If the form is valid, proceed with submitting the form data
-    await onSubmit(e, inputValue);
+    if (onSubmit) await onSubmit(e, inputValue);
   };
 
   const handleKeyPress = (e) => {

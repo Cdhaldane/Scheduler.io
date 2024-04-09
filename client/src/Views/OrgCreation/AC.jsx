@@ -70,7 +70,7 @@ const AC = ({ onFinish, session }) => {
           className="button-lg button-transparent ac-button"
           onClick={() => handleNext(1)}
         >
-          <i class="fa-solid fa-arrow-right"></i>
+          <i className="fa-solid fa-arrow-right"></i>
         </Button>
       </div>
     );

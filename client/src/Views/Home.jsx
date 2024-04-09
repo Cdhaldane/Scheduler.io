@@ -66,7 +66,6 @@ const Home = ({ session, type, organization }) => {
 
   //Fetch personnel and services data
   const fetchData = async () => {
-    console.log(organization);
     const orgData = await getOrganization(
       organization.org_id || session?.user.user_metadata.organization.org_id
     );
@@ -79,8 +78,11 @@ const Home = ({ session, type, organization }) => {
           personnelData?.length > 0 ? personnelData[0] : null
         );
 
-      const bookingsData = await getBookings(selectedPersonnel?.id);
-      if (bookingsData) setBookings(bookingsData);
+      console.log("selectedPersonnel", selectedPersonnel);
+      if (personnelData?.length > 0) {
+        const bookingsData = await getBookings(personnelData[0]?.id);
+        if (bookingsData) setBookings(bookingsData);
+      }
 
       const servicesData = await getServices(orgData.id);
       if (servicesData) setServices(servicesData);

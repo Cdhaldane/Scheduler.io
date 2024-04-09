@@ -94,6 +94,7 @@ const Cell = ({
   handleOperatingHours,
   adminMode,
   organization,
+  timeView,
 }) => {
   //userDrop hook for handling drag-and-drop actions
   const [{ isOver, canDrop }, drop] = useDrop({
@@ -227,7 +228,8 @@ const Cell = ({
           <>
             <div className="group-select">
               {handleCellStatus(day, hour) === "booking" &&
-                isSlotEdge(day, hour, scheduledSlots) === "middle" &&
+                isSlotEdge(day, hour, scheduledSlots) === "start" &&
+                timeView !== "Month" &&
                 "BOOKED"}
             </div>
           </>

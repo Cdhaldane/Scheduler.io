@@ -113,10 +113,10 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
       </h1>
       <span>
         <h1>
-          <i class="fas fa-clock"></i> {piece.duration} hrs
+          <i className="fas fa-clock"></i> {piece.duration} hrs
         </h1>
         <h1>
-          <i class="fas fa-dollar-sign"></i> {piece.price}
+          <i className="fas fa-dollar-sign"></i> {piece.price}
         </h1>
       </span>
     </div>
@@ -262,7 +262,7 @@ const PuzzleContainer = ({
                 className={`${isBinOver ? "is-over" : "no"}`}
                 ref={dropRef}
               >
-                <i class="fa-regular fa-trash-can"></i>
+                <i className="fa-regular fa-trash-can"></i>
               </div>
               {/* </Tooltip> */}
             </div>

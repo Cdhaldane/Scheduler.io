@@ -29,7 +29,7 @@ const Landing = () => {
         <div className="feature-list">
           <div className="feature">
             <h3>
-              <i class="fa-solid fa-calendar"></i>
+              <i className="fa-solid fa-calendar"></i>
               Seamless Scheduling
             </h3>
             <p>
@@ -38,7 +38,7 @@ const Landing = () => {
           </div>
           <div className="feature">
             <h3>
-              <i class="fa-solid fa-mobile"></i>Mobile Optimized
+              <i className="fa-solid fa-mobile"></i>Mobile Optimized
             </h3>
             <p>
               Manage your appointments on the go with our responsive design.
@@ -46,7 +46,7 @@ const Landing = () => {
           </div>
           <div className="feature">
             <h3>
-              <i class="fa-solid fa-landmark"></i>Client Management
+              <i className="fa-solid fa-landmark"></i>Client Management
             </h3>
             <p>
               Easily track client information and history for personalized
