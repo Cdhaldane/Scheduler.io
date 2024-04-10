@@ -45,8 +45,6 @@ const Calendar = ({
   const [organizationModal, setOrganizationModal] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-
     const fetchData = async () => {
       switch (timeFrame) {
         case "Day":
@@ -61,8 +59,9 @@ const Calendar = ({
         default:
           setCurrentView(getDaysOfWeek(new Date()));
       }
+      setLoading(false);
     };
-    fetchData().finally(() => setLoading(false));
+    fetchData();
   }, [timeFrame]);
 
   useEffect(() => {
@@ -137,31 +136,55 @@ const Calendar = ({
   // Input: day (String), hour (Number), item (Object)
   // Output: None
   const handlePieceExpand = (day, hour, date, item) => {
-    let startingTime = Math.min(selectedSlot[0].hour, hour);
-    let endingTime = Math.max(selectedSlot[0].hour, hour);
+    console.log(selectedSlot, hour, item);
+    let startingTime = Math.min(
+      Array.isArray(selectedSlot) ? selectedSlot[0].hour : selectedSlot.hour,
+      hour
+    );
+    let endingTime = Math.max(
+      Array.isArray(selectedSlot)
+        ? selectedSlot[selectedSlot.length - 1].hour
+        : selectedSlot.hour,
+      hour
+    );
     let updatedSlots = scheduledSlots.filter((slot) => {
       return (
         slot.day !== day || slot.end <= startingTime || slot.start > endingTime
       );
     });
-
+    console.log("startingTime", startingTime, "endingTime", endingTime);
     let newSlots = [];
     for (let i = startingTime; i <= endingTime; i++) {
       newSlots.push({ day, start: i, end: i + 1, item: item.item });
     }
+
     let connectedGrouping = findConnectedGrouping(
       [...updatedSlots, ...newSlots],
       day,
       hour
     );
-    if ((item.direction === "bottom") & (hour < selectedSlot.hour)) {
-      newSlots = [{ day, start: hour, end: hour + 1, item }];
+
+    console.log("connectedGrouping", connectedGrouping);
+
+    console.log("newSlots", newSlots);
+    if (connectedGrouping) {
+      if (item.direction === "top" && connectedGrouping.start < hour) {
+        let x = newSlots.filter((slot) => {
+          return slot.start >= hour;
+        });
+        newSlots = x;
+      }
+      if (item.direction === "bottom" && connectedGrouping.end > hour) {
+        let x = newSlots.filter((slot) => {
+          return slot.start <= hour;
+        });
+        newSlots = x;
+      }
     }
-    if ((item.direction === "top") & (hour > connectedGrouping?.start)) {
-      updatedSlots = updatedSlots.filter((slot) => slot.day !== day);
-    }
+    console.log("newSlots", newSlots, "updatedSlots", updatedSlots);
+
     setScheduledSlots([...updatedSlots, ...newSlots]);
-    handleSlotClick(day, hour, [...updatedSlots, ...newSlots]);
+    handleSlotClick(null);
   };
 
   const handleScheduledSlotDelete = (day, hour, e) => {
@@ -210,7 +233,7 @@ const Calendar = ({
           </span>
         )}
 
-        <h2>
+        <h2 className="noselect">
           {currentView[0]?.toLocaleDateString("en-US", {
             weekday: "long",
             month: "long",
@@ -242,7 +265,7 @@ const Calendar = ({
           {currentView.map((day, index) => (
             <div
               key={index}
-              className={`header-cell  ${loading ? "loading" : ""}`}
+              className={`header-cell noselect ${loading ? "loading" : ""}`}
             >
               {timeFrame !== "Month"
                 ? day?.toLocaleDateString("en-US", {
@@ -260,7 +283,7 @@ const Calendar = ({
         {Array.from({ length: 24 }).map((_, hour) => (
           <div
             key={"row" + hour}
-            className={`calendar-row  ${
+            className={`calendar-row noselect  ${
               fullView
                 ? "full"
                 : handleOperatingHours(hour, organization)

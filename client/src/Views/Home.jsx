@@ -5,6 +5,7 @@ import ScheduleForm from "../Components/Schedule-form/Schedule-form";
 import EmployeeSchedule from "../Components/Employee/EmployeeSchedule";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import Spinner from "../Components/Spinner/Spinner.jsx";
+import _ from "lodash";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { DndProvider } from "react-dnd";
@@ -78,10 +79,10 @@ const Home = ({ session, type, organization }) => {
           personnelData?.length > 0 ? personnelData[0] : null
         );
 
-      console.log("selectedPersonnel", selectedPersonnel);
       if (personnelData?.length > 0) {
         const bookingsData = await getBookings(personnelData[0]?.id);
-        if (bookingsData) setBookings(bookingsData);
+        if (bookingsData && !_.isEqual(bookingsData, bookings))
+          setBookings(bookingsData);
       }
 
       const servicesData = await getServices(orgData.id);

@@ -83,21 +83,6 @@
   text-align: right;
 }
 
-.cell {
-  display: table-cell;
-  border: 1px solid var(--bg-secondary);
-  color: var(--primary);
-  transition: all 0.1s ease-in-out;
-  cursor: pointer;
-  background-color: var(--bg-primary);
-  text-align: center;
-  vertical-align: middle;
-}
-
-.cell:hover {
-  border: 1px solid var(--primary);
-}
-
 .calendar-table {
   display: table;
   table-layout: fixed;
@@ -207,32 +192,6 @@
 
 .day.selected {
   background-color: #61dafb;
-}
-
-.expand-indicator {
-  position: absolute;
-  left: 44%;
-  z-index: 10000;
-  cursor: -webkit-grab;
-  animation: pulse 1s infinite;
-  border-color: inherit !important;
-}
-
-.expand-indicator.top {
-  top: -15px; /* Adjust based on the cell's border and desired appearance */
-  border-bottom: 10px solid white !important;
-  border-color: inherit !important;
-  border-left: 10px solid transparent !important;
-  border-right: 10px solid transparent !important;
-}
-
-.expand-indicator.bottom {
-  border-top: 10px solid white !important;
-  border-color: inherit !important;
-  border-left: 10px solid transparent !important;
-  border-right: 10px solid transparent !important;
-
-  bottom: -15px; /* Adjust based on the cell's border and desired appearance */
 }
 
 .scheduled-slot {

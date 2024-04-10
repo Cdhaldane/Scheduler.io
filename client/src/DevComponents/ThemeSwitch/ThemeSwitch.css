@@ -18,6 +18,9 @@
   background-color: var(--primary);
   border-radius: 20px;
   transition: transform 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slider-sun {
@@ -44,6 +47,11 @@
   font-size: 1.3rem;
   cursor: pointer;
   border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 100%;
   z-index: 1;
   transition: padding 0.3s ease-in-out;
   padding: 0px 30px !important;

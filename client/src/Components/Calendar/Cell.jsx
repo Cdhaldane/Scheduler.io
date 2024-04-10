@@ -122,13 +122,12 @@ const Cell = ({
   // Function to handle right-click
   const handleContextMenu = (e, day, hour) => {
     e.preventDefault(); // Prevent the default context menu from showing
-    console.log(e, e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     if (isSlotScheduled(day, hour))
       setContextMenu({
         id: day + hour,
         visible: true,
-        x: e.pageX - 310,
-        y: e.pageY - 10,
+        x: e.nativeEvent.offsetX,
+        y: e.nativeEvent.offsetY,
       });
   };
 
@@ -209,7 +208,7 @@ const Cell = ({
       <div
         ref={drop}
         key={day + hour}
-        className={`cell ${isSelected}-select 
+        className={`cell noselect ${isSelected}-select 
             ${isSlotEdge(day, hour, scheduledSlots)}
             ${handleCellStatus(day, hour)} ${isOver ? "over" : ""}
             ${handleOperatingHours(day, hour) ? "open" : "closed"}`}
@@ -261,14 +260,14 @@ const Cell = ({
               )}
           </>
         )}
+        <ContextMenu
+          visible={contextMenu.visible}
+          x={contextMenu.x}
+          y={contextMenu.y}
+          options={contextMenuOptions}
+          onRequestClose={handleCloseContextMenu}
+        />
       </div>
-      <ContextMenu
-        visible={contextMenu.visible}
-        x={contextMenu.x}
-        y={contextMenu.y}
-        options={contextMenuOptions}
-        onRequestClose={handleCloseContextMenu}
-      />
     </>
   );
 };

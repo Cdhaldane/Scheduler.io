@@ -1,3 +1,19 @@
+.cell {
+  display: table-cell;
+  border: 1px solid var(--bg-secondary);
+  color: var(--primary);
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  background-color: var(--bg-primary);
+  text-align: center;
+  vertical-align: middle;
+  position: relative;
+}
+
+.cell:hover {
+  border: 1px solid var(--primary);
+}
+
 .cell.closed {
   color: #000;
 }
@@ -14,4 +30,30 @@
 
 .calendar-row.closed .cell.hours {
   font-size: 0;
+}
+
+.expand-indicator {
+  position: absolute;
+  left: 40%;
+  z-index: 100;
+  cursor: -webkit-grab;
+  animation: pulse 1s infinite;
+  border-color: inherit !important;
+}
+
+.expand-indicator.top {
+  top: -20px; /* Adjust based on the cell's border and desired appearance */
+  border-bottom: 15px solid white !important;
+  border-color: inherit !important;
+  border-left: 15px solid transparent !important;
+  border-right: 15px solid transparent !important;
+}
+
+.expand-indicator.bottom {
+  border-top: 15px solid white !important;
+  border-color: inherit !important;
+  border-left: 15px solid transparent !important;
+  border-right: 15px solid transparent !important;
+
+  bottom: -20px; /* Adjust based on the cell's border and desired appearance */
 }

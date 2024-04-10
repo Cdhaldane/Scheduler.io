@@ -128,7 +128,7 @@ const Sidebar = ({
               ></i>
             )}
           </div>
-          {openIndex === index && (
+          {openIndex === index && adminMode && (
             <>
               <ul
                 className={`sidebar-item-body ${
