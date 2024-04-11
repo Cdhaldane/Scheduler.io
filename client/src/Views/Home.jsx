@@ -95,7 +95,7 @@ const Home = ({ session, type, organization }) => {
     fetchData().finally(() => {
       setLoading(false);
     });
-  }, [session]);
+  }, [session, organization]);
 
   //Handlers for service-related actions
   const onDeleteService = async (item) => {

@@ -71,14 +71,18 @@ function App() {
       // if (session?.user.user_metadata.organization) {
       //   setOrganization(session.user.user_metadata.organization);
       // } else {
+      if (location.pathname === "/") return;
       const org = await db.getOrganization(location.pathname.split("/")[2]);
-      setOrganization(org);
+      if (org) {
+        console.log(org);
+        setOrganization(org);
+      }
       // }
     };
     fetchData().finally(() => {
       setIsLoading(false);
     });
-  }, [session]);
+  }, [session, location.pathname]);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -150,8 +154,9 @@ function App() {
   return (
     <>
       <Alert />
-      {/* <DevTools /> */}
-      <button className="temp-button" onClick={setOrgDefault}></button>
+      {session && session.user.email === "xcdhaldane@gmail.com" && (
+        <DevTools setOrgDefault={setOrgDefault} />
+      )}
       <div className="app">
         {!shouldRenderNavbarAndFooter ? (
           <Navbar

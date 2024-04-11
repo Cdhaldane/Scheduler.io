@@ -156,13 +156,6 @@ const Navbar = ({
               route="#"
               action={() => setShowModal(true)}
             />
-            <div
-              onClick={() =>
-                navigate("/home/bce8fd49-4a09-4d41-83e9-7c0a13bca6c3")
-              }
-            >
-              TEST
-            </div>
           </>
         )}
         {isAdmin && isLoggedIn && (

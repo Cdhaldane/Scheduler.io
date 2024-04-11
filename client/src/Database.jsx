@@ -98,6 +98,7 @@ export const deleteUser = async (id) => {
 // AUTH
 // Sign in with Google OAuth
 export const loginWithGoogle = async (redirect) => {
+  console.log("redirect", redirect);
   await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {

@@ -137,7 +137,7 @@ const AC = ({ onFinish, session }) => {
         </AnimatedDiv>
 
         <div className="ac-content">
-          <h1>Finding the right one...</h1>
+          <h1>Creating your organization...</h1>
         </div>
       </div>
     );

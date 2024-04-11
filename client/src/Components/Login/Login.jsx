@@ -59,8 +59,6 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
     } else {
       const { data, error } = await signIn(email, password);
       if (error || data.session === null) {
-        console.log(error);
-
         setError(error.message);
       } else {
         alert.showAlert("success", "Logged in successfully");
@@ -72,6 +70,7 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
   //Handler for SSO authentication
   const handleSSO = (provider) => async () => {
     if (provider === "google") {
+      console.log(window.location.href);
       await loginWithGoogle(window.location.href);
     }
   };
@@ -162,7 +161,13 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
             />
           </>
         )}
-        <div className="login-error">{error ? <p>{error}</p> : <></>}</div>
+        {error ? (
+          <div className="login-error">
+            <p>{error}</p>
+          </div>
+        ) : (
+          <></>
+        )}
         <button type="submit" className="login-button">
           {signUpFlag ? "Sign Up" : "Sign In"}
         </button>
