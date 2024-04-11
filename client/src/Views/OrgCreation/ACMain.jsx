@@ -25,8 +25,15 @@ const ACMain = ({ handleOrganizationCreate }) => {
   const navigate = useNavigate();
 
   const handleFinish = async (organizationDetails) => {
+    const org = {
+      ...organizationDetails,
+      org_settings: {
+        openingTime: "09:00:00",
+        closingTime: "17:00:00",
+      },
+    };
     try {
-      const { data, error } = await createOrganization(organizationDetails);
+      const { data, error } = await createOrganization(org);
       if (data && data.id) {
         handleOrganizationCreate(data);
         navigate(`/admin/${data.org_id}`);

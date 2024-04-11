@@ -34,7 +34,7 @@
 
 .light-mode {
   --primary: #4b4b4b;
-  --primary-dark: #4d9a4f;
+  --primary-dark: rgb(58, 58, 58);
   --secondary: #ee8484;
   --light-grey: #1f1f1f;
   --olive: #3f3f3f;
@@ -95,6 +95,7 @@ input {
 }
 .text-center {
   text-align: center;
+  margin: 0px;
 }
 .m-bot {
   margin-bottom: 20px;
@@ -118,6 +119,18 @@ input {
   margin-left: 10px;
   position: absolute;
   right: 10px;
+}
+
+.temp-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 100;
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50%;
+  padding: 0px !important;
+  border: 2px white solid;
 }
 
 /* h2 {

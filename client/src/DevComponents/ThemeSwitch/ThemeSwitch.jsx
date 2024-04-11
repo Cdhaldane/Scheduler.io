@@ -16,22 +16,26 @@ import "./ThemeSwitch.css";
  */
 
 function ThemeSwitch(props) {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState();
   const sunRef = useRef(null);
   const moonRef = useRef(null);
 
   //Effect hook to update theme based on local storage
   useEffect(() => {
+    const isDarkMode = JSON.parse(sessionStorage.getItem("isDarkMode"));
+    setIsDarkMode(isDarkMode);
+  }, []);
+  useEffect(() => {
     if (isDarkMode) {
       moonRef.current?.classList.add("switch-active");
       sunRef.current?.classList.remove("switch-active");
       document.body.classList.remove("light-mode");
-      localStorage.setItem("isDarkMode", true);
+      sessionStorage.setItem("isDarkMode", true);
     } else {
       moonRef.current?.classList.remove("switch-active");
       sunRef.current?.classList.add("switch-active");
       document.body.classList.add("light-mode");
-      localStorage.setItem("isDarkMode", false);
+      sessionStorage.setItem("isDarkMode", false);
     }
   }, [isDarkMode]);
 

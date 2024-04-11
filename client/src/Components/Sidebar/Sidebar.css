@@ -13,6 +13,10 @@
   padding-bottom: 6vh;
 }
 
+.sidebar-add-form {
+  gap: 20px;
+}
+
 .sidebar-title-header {
   position: relative;
   color: var(--primary);

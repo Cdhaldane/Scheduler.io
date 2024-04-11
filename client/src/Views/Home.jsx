@@ -119,7 +119,7 @@ const Home = ({ session, type, organization }) => {
         alert.showAlert("error", res.error.message);
       } else {
         setAddedService(res.data);
-        addPersonnelService(selectedPersonnel.id, res.data);
+        addPersonnelService(selectedPersonnel?.id, res.data);
         fetchData();
 
         alert.showAlert("success", "Service added");

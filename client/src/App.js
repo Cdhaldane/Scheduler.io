@@ -151,7 +151,7 @@ function App() {
     <>
       <Alert />
       {/* <DevTools /> */}
-      {/* <button onClick={setOrgDefault}>Click</button> */}
+      <button className="temp-button" onClick={setOrgDefault}></button>
       <div className="app">
         {!shouldRenderNavbarAndFooter ? (
           <Navbar

@@ -3,7 +3,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 20px;
   font-size: 1.5rem;
 }
 
@@ -148,6 +147,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  gap: 20px;
 }
 
 .input-form.compacted {

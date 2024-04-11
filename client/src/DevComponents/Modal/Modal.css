@@ -55,15 +55,15 @@
 .modal-content button[type="submit"] {
   /* margin-top: 20px; */
   padding: 10px;
-  background-color: #4caf50; /* Green */
-  color: white;
+  background-color: var(--primary); /* Green */
+  color: var(--bg-secondary);
   border: none;
   cursor: pointer;
   border-radius: 4px;
 }
 
 button[type="submit"]:hover {
-  background-color: #45a049;
+  background-color: var(--primary-dark);
 }
 
 .modal-title {
