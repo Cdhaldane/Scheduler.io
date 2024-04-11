@@ -70,14 +70,13 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
   //Handler for SSO authentication
   const handleSSO = (provider) => async () => {
     if (provider === "google") {
-      console.log(window.location.href);
-      await loginWithGoogle(window.location.href);
+      await loginWithGoogle();
     }
   };
 
   const handlePasswordReset = async (e) => {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:3000/reset-password",
+      redirectTo: "https://time-slot.ca/reset-password",
     });
     if (error) {
       setError(error.message);
