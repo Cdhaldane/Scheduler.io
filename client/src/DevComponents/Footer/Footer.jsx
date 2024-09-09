@@ -1,7 +1,6 @@
 // Footer.js
 import React from "react";
 import { useLocation } from "react-router-dom";
-import Clock from "../AnimatedDiv/Clock/Clock";
 
 import "./Footer.css"; // Import the CSS file for the footer
 

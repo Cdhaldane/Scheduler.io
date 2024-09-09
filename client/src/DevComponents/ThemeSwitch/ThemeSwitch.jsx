@@ -26,16 +26,16 @@ function ThemeSwitch(props) {
     setIsDarkMode(isDarkMode);
   }, []);
   useEffect(() => {
-    if (isDarkMode) {
-      moonRef.current?.classList.add("switch-active");
-      sunRef.current?.classList.remove("switch-active");
-      document.body.classList.remove("light-mode");
-      sessionStorage.setItem("isDarkMode", true);
-    } else {
+    if (!isDarkMode) {
       moonRef.current?.classList.remove("switch-active");
       sunRef.current?.classList.add("switch-active");
       document.body.classList.add("light-mode");
       sessionStorage.setItem("isDarkMode", false);
+    } else {
+      moonRef.current?.classList.add("switch-active");
+      sunRef.current?.classList.remove("switch-active");
+      document.body.classList.remove("light-mode");
+      sessionStorage.setItem("isDarkMode", true);
     }
   }, [isDarkMode]);
 
@@ -66,3 +66,12 @@ function ThemeSwitch(props) {
 }
 
 export default ThemeSwitch;
+
+export const initializeTheme = () => {
+  const isDarkMode = JSON.parse(sessionStorage.getItem("isDarkMode"));
+  if (isDarkMode) {
+    document.body.classList.remove("light-mode");
+  } else {
+    document.body.classList.add("light-mode");
+  }
+};

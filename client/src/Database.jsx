@@ -261,7 +261,7 @@ export const getBookings = async (personnelId) => {
     .select("*")
     .eq("personnel_id", personnelId);
   if (error) {
-    // console.log("Error fetching bookings:", error);
+    console.log("Error fetching bookings:", error);
   }
   return data;
 };

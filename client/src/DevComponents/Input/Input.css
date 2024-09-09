@@ -172,3 +172,21 @@
   font-size: 2rem;
   margin-bottom: 20px;
 }
+
+.react-colorful {
+  width: 100% !important;
+}
+
+@media screen and (max-width: 768px) {
+  .input-form.compacted .input-container {
+    width: 100% !important;
+  }
+
+  .react-colorful {
+    height: 150px !important;
+  }
+
+  .react-colorful__saturation {
+    border-bottom: none;
+  }
+}

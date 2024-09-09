@@ -131,15 +131,28 @@ const Navbar = ({
       <div className="navbar-header">
         {!isCalendar && (
           <>
-            <img
-              src="/logo.png"
-              alt="website logo"
-              className="navbar-logo"
-              onClick={() => navigate("/")}
-            />
-            <h1 className="timeslot-title">
-              TIME<span>SLOT</span>
-            </h1>
+            {!isMobile && (
+              <>
+                <img
+                  src="/logo.png"
+                  alt="website logo"
+                  className="navbar-logo"
+                  onClick={() => navigate("/")}
+                />
+                <h1 className="timeslot-title">
+                  TIME<span>SLOT</span>
+                </h1>
+              </>
+            )}
+            {!(
+              location.pathname.includes("/admin") ||
+              location.pathname.includes("/home")
+            ) &&
+              isMobile && (
+                <h1 className="timeslot-title">
+                  T<span>S</span>
+                </h1>
+              )}
           </>
         )}
       </div>

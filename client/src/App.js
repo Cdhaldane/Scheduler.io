@@ -17,19 +17,22 @@ import Admin from "./Views/Admin.jsx";
 import Employee from "./Views/Employee.jsx";
 import Appointments from "./Views/Appointments.jsx";
 import Navbar from "./Components/Navbar/Navbar.jsx";
-import Footer from "./Components/Footer/Footer.jsx";
 import Login from "./Components/Login/Login.jsx";
 import ResetPassword from "./Components/Login/LoginResetPassword.jsx";
 import ACMain from "./Views/OrgCreation/ACMain.jsx";
 import BookingPage from "./Components/Bookings/BookingPage.jsx";
 import BookingSubmit from "./Components/Bookings/BookingSubmit.jsx";
-import CookieConsent from "./DevComponents/CookieConsent/CookieConsent.jsx";
 import NotFoundPage from "./Views/404.jsx";
 import Alert from "./Components/Providers/Alert";
-import Modal from "./DevComponents/Modal/Modal.jsx";
 import Info from "./Views/Info";
 import Spinner from "./Components/Spinner/Spinner";
+import CookieConsent from "./DevComponents/CookieConsent/CookieConsent.jsx";
+import Modal from "./DevComponents/Modal/Modal.jsx";
 import DevTools from "./DevComponents/DevTools/DevTools.jsx";
+import Footer from "./DevComponents/Footer/Footer.jsx";
+
+import { initializeTheme } from "./DevComponents/ThemeSwitch/ThemeSwitch.jsx";
+
 import * as db from "./Database";
 import "./index.css";
 
@@ -74,7 +77,6 @@ function App() {
       if (location.pathname === "/") return;
       const org = await db.getOrganization(location.pathname.split("/")[2]);
       if (org) {
-        console.log(org);
         setOrganization(org);
       }
       // }
@@ -94,6 +96,7 @@ function App() {
         window.location.reload();
       }
     });
+    initializeTheme();
   }, []);
 
   useEffect(() => {
@@ -126,8 +129,7 @@ function App() {
   }, []);
 
   const shouldRenderNavbarAndFooter =
-    location.pathname === "/create-organization" ||
-    location.pathname.includes("reset-password");
+    location.pathname === "/create-organization";
 
   const isCalendar =
     location.pathname === "/admin" ||
@@ -154,10 +156,10 @@ function App() {
   return (
     <>
       <Alert />
-      {session && session.user.email === "xcdhaldane@gmail.com" && (
-        <DevTools setOrgDefault={setOrgDefault} />
-      )}
-      <div className="app">
+
+      <DevTools setOrgDefault={setOrgDefault} />
+
+      <div className="app" id="app">
         {!shouldRenderNavbarAndFooter ? (
           <Navbar
             isLoggedIn={isLoggedIn}

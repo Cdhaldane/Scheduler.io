@@ -29,19 +29,21 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="password-reset">
-      <h2>Set New Password</h2>
-      <form onSubmit={handleNewPassword}>
-        <Input
-          type="password"
-          label="New password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+    <div className="min-height">
+      <div className="password-reset">
+        <h2 className="no-margin">Set New Password</h2>
+        <form onSubmit={handleNewPassword}>
+          <Input
+            type="password"
+            label="New password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit">Update Password</button>
-      </form>
+          <button type="submit">Update Password</button>
+        </form>
+      </div>
     </div>
   );
 };

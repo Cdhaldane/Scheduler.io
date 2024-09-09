@@ -95,6 +95,8 @@ const Cell = ({
   adminMode,
   organization,
   timeView,
+  contextMenu,
+  setContextMenu,
 }) => {
   //userDrop hook for handling drag-and-drop actions
   const [{ isOver, canDrop }, drop] = useDrop({
@@ -113,21 +115,28 @@ const Cell = ({
   });
 
   // State for manageing the visibility and position of the context menu
-  const [contextMenu, setContextMenu] = useState({
-    visible: false,
-    x: 0,
-    y: 0,
-  });
 
   // Function to handle right-click
   const handleContextMenu = (e, day, hour) => {
     e.preventDefault(); // Prevent the default context menu from showing
+    e.stopPropagation(); // Stop the event from propagating
     if (isSlotScheduled(day, hour))
       setContextMenu({
         id: day + hour,
         visible: true,
-        x: e.nativeEvent.offsetX,
-        y: e.nativeEvent.offsetY,
+        x:
+          e.nativeEvent.pageX -
+          document.getElementsByClassName("calendar")[0].offsetLeft,
+        y: e.nativeEvent.pageY,
+        options: [
+          {
+            label: "Delete",
+            onClick: (e) => {
+              handleScheduledSlotDelete(day, hour, e);
+            },
+          },
+          { label: "Copy", onClick: () => console.log("Option 2 clicked") },
+        ],
       });
   };
 
@@ -151,18 +160,6 @@ const Cell = ({
       document.removeEventListener("contextmenu", handleCloseContextMenu);
     };
   }, [contextMenu.visible]);
-
-  // Context menu options
-  const contextMenuOptions = [
-    {
-      label: "Delete",
-      onClick: (e) => {
-        handleScheduledSlotDelete(day, hour, e);
-        handleCloseContextMenu();
-      },
-    },
-    { label: "Copy", onClick: () => console.log("Option 2 clicked") },
-  ];
 
   const getSlot = (day, hour, scheduledSlots) => {
     return scheduledSlots.find((slot) => {
@@ -219,6 +216,7 @@ const Cell = ({
         }}
         onClick={(e) => handleCellClick(day, hour, e)}
         onContextMenu={(e) => {
+          console.log("context menu");
           handleCellClick(day, hour, e);
           handleContextMenu(e, day, hour);
         }}
@@ -260,13 +258,6 @@ const Cell = ({
               )}
           </>
         )}
-        <ContextMenu
-          visible={contextMenu.visible}
-          x={contextMenu.x}
-          y={contextMenu.y}
-          options={contextMenuOptions}
-          onRequestClose={handleCloseContextMenu}
-        />
       </div>
     </>
   );

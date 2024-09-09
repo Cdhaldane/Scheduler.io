@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setTime } from "../../Store.js";
 import Modal from "../../DevComponents/Modal/Modal.jsx";
 import OrganizationSettings from "../Organization/OrganizationSettings.jsx";
+import ContextMenu from "./CalendarContextMenu/ContextMenu";
 
 import {
   getDaysOfWeek,
@@ -43,6 +44,12 @@ const Calendar = ({
   const isMobile = window.innerWidth < 768;
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
   const [organizationModal, setOrganizationModal] = useState(false);
+
+  const [contextMenu, setContextMenu] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -136,7 +143,6 @@ const Calendar = ({
   // Input: day (String), hour (Number), item (Object)
   // Output: None
   const handlePieceExpand = (day, hour, date, item) => {
-    console.log(selectedSlot, hour, item);
     let startingTime = Math.min(
       Array.isArray(selectedSlot) ? selectedSlot[0].hour : selectedSlot.hour,
       hour
@@ -152,7 +158,6 @@ const Calendar = ({
         slot.day !== day || slot.end <= startingTime || slot.start > endingTime
       );
     });
-    console.log("startingTime", startingTime, "endingTime", endingTime);
     let newSlots = [];
     for (let i = startingTime; i <= endingTime; i++) {
       newSlots.push({ day, start: i, end: i + 1, item: item.item });
@@ -164,9 +169,6 @@ const Calendar = ({
       hour
     );
 
-    console.log("connectedGrouping", connectedGrouping);
-
-    console.log("newSlots", newSlots);
     if (connectedGrouping) {
       if (item.direction === "top" && connectedGrouping.start < hour) {
         let x = newSlots.filter((slot) => {
@@ -181,7 +183,6 @@ const Calendar = ({
         newSlots = x;
       }
     }
-    console.log("newSlots", newSlots, "updatedSlots", updatedSlots);
 
     setScheduledSlots([...updatedSlots, ...newSlots]);
     handleSlotClick(null);
@@ -200,6 +201,13 @@ const Calendar = ({
     if (isMobile) dispatch(setTime("Day"));
   }, [isMobile]);
 
+  // Function to hide the context menu
+  const handleCloseContextMenu = () => {
+    setContextMenu({ ...contextMenu, visible: false });
+  };
+
+  // Context menu options
+
   return (
     <div className={`calendar ${isMobile ? "mobile" : ""}`}>
       {loading && <Spinner className={"fast"} />}
@@ -212,10 +220,10 @@ const Calendar = ({
               else setTimeFrameIndex(timeFrameIndex + 1);
               dispatch(setTime(times[timeFrameIndex + 1] || times[0]));
             }}
-            className={`timeframe-button ${isMobile ? "hidden" : ""}`}
+            className={`timeframe-button ${isMobile ? "" : ""}`}
           >
             <i className="fa-solid fa-calendar mr-10"></i>
-            {timeFrame}
+            {!isMobile && timeFrame}
           </button>
           <button
             onClick={() => {
@@ -224,7 +232,7 @@ const Calendar = ({
             className={`timeframe-button ${isMobile ? "hidden" : ""}`}
           >
             <i className="fa-solid fa-cog mr-10"></i>
-            {fullView ? "Compact" : "Full"}
+            {!isMobile && (fullView ? "Compact" : "Full")}
           </button>
         </div>
         {organization?.name && (
@@ -323,10 +331,19 @@ const Calendar = ({
                 adminMode={adminMode}
                 organization={organization}
                 timeView={times[timeFrameIndex]}
+                contextMenu={contextMenu}
+                setContextMenu={setContextMenu}
               />
             ))}
           </div>
         ))}
+        <ContextMenu
+          visible={contextMenu.visible}
+          x={contextMenu.x}
+          y={contextMenu.y}
+          options={contextMenu.options || []}
+          onRequestClose={handleCloseContextMenu}
+        />
       </div>
 
       <Modal

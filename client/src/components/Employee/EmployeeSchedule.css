@@ -7,7 +7,6 @@
   color: var(--ash);
   width: 25%;
   margin: 0px 20px;
-  height: 98% !important;
   border-radius: 4px;
   font-size: 1.5em;
   animation: slideInRight 0.5s ease-in-out normal forwards;

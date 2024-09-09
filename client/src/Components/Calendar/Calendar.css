@@ -5,7 +5,7 @@
   align-items: center;
   color: var(--primary);
   width: 70%;
-  height: calc(100% + 60px);
+  height: calc(var(--main-height) + 60px);
   padding-bottom: 1px;
   border-radius: 4px;
   font-size: 1em;
@@ -29,6 +29,7 @@
 }
 
 .calendar-top {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -229,17 +230,36 @@
 
 .calendar.mobile {
   width: 95%;
-  height: 100%;
   border-radius: 0;
   margin: 0 auto;
-  margin-top: 100px;
   align-items: flex-start;
 }
 
 .calendar.mobile .calendar-buttons {
-  width: 80%;
-  height: 8%;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: fit-content;
   margin: 0px;
+  position: absolute;
+  bottom: 25%;
+  left: 0px;
+  gap: 0px;
+}
+
+.calendar.mobile .calendar-buttons > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: 30px;
+  width: 30px;
+  padding: 15px;
+  font-size: 1.2em;
+}
+
+.calendar.mobile .calendar-buttons > button > i {
+  margin-right: 0px;
 }
 
 .calendar.mobile .calendar-buttons > span {
@@ -249,4 +269,40 @@
 
 .calendar.mobile .calendar-buttons > h2 {
   font-size: 1.2em !important;
+}
+
+.calendar-mobile-expand {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  top: 90px;
+  right: 10px;
+  font-size: 1em;
+  color: var(--ash);
+  border: 2px solid var(--bg-secondary);
+  border-radius: 4px;
+  padding: 0px;
+  z-index: 1000;
+}
+
+@media screen and (max-width: 768px) {
+  .calendar-top {
+    flex-direction: column;
+    width: 100%;
+    margin: 0px;
+    min-height: 70px;
+  }
+
+  .calendar-top > span {
+    font-size: 1.5em !important;
+  }
+
+  .calendar-top > h2 {
+    font-size: 1em !important;
+    width: 90%;
+    text-align: center;
+  }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import "./ContextMenu.css";
+import "./CalendarContextMenu.css";
 
 /**
  * ContextMenu Component

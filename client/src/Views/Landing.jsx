@@ -5,11 +5,14 @@ import "./Styles/Landing.css"; // Ensure you have the corresponding CSS file
 
 const Landing = () => {
   const navigate = useNavigate();
+  const isMobile = window.innerWidth < 768;
   return (
     <div className="landing-page">
       {/* <img src="/banner.png" alt="banner" /> */}
       <section className="hero">
-        <Clock className="landing-clock" offset={4} color="bg-secondary" />
+        {!isMobile && (
+          <Clock className="landing-clock" offset={4} color="bg-secondary" />
+        )}
         <span>
           <h1 className="timeslot-title">
             TIME<span>SLOT</span>

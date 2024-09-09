@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar.jsx";
 import Calendar from "../Components/Calendar/Calendar.jsx";
 import ScheduleForm from "../Components/Schedule-form/Schedule-form";
@@ -10,8 +10,12 @@ import _ from "lodash";
 import { useNavigate, useParams } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
 import { useAlert } from "../Components/Providers/Alert.jsx";
 import { useSelector } from "react-redux";
+import DragLayer from "../Components/Puzzle/Dnd/DragLayer.js";
+import { usePreview } from "react-dnd-preview";
+import PuzzlePiece from "../Components/Puzzle/PuzzlePiece.jsx";
 
 import {
   supabase,
@@ -54,6 +58,7 @@ const Home = ({ session, type, organization }) => {
   const [bookings, setBookings] = useState([]);
   const timeFrame = useSelector((state) => state.timeFrame);
   const [org, setOrg] = useState(organization);
+  const isMobile = window.innerWidth < 768;
   const url = useParams();
 
   const adminMode = type === "admin";
@@ -74,17 +79,11 @@ const Home = ({ session, type, organization }) => {
       setOrg(orgData);
       const personnelData = await getPersonnel(orgData.id);
       setPersonnel(personnelData || []);
-      if (selectedPersonnel === null)
-        setSelectedPersonnel(
-          personnelData?.length > 0 ? personnelData[0] : null
-        );
-
-      if (personnelData?.length > 0) {
-        const bookingsData = await getBookings(personnelData[0]?.id);
-        if (bookingsData && !_.isEqual(bookingsData, bookings))
-          setBookings(bookingsData);
+      if (selectedPersonnel) {
+        const bookingsData = await getBookings(selectedPersonnel?.id);
+        if (type === "admin") setBookings([]);
+        else setBookings(bookingsData || []);
       }
-
       const servicesData = await getServices(orgData.id);
       if (servicesData) setServices(servicesData);
     } else navigate("/404");
@@ -95,7 +94,7 @@ const Home = ({ session, type, organization }) => {
     fetchData().finally(() => {
       setLoading(false);
     });
-  }, [session, organization]);
+  }, [session, organization, selectedPersonnel]);
 
   //Handlers for service-related actions
   const onDeleteService = async (item) => {
@@ -181,6 +180,28 @@ const Home = ({ session, type, organization }) => {
     organization: org,
   };
 
+  // allow vertical scrolling
+  const options = {
+    /*scrollAngleRanges: [
+      { start: 30, end: 150 },
+      { start: 210, end: 330 },
+    ],*/
+  };
+
+  const MyPreview = () => {
+    const preview = usePreview();
+    if (!preview.display) {
+      return null;
+    }
+    console.log("preview", preview);
+    const { itemType, item, style } = preview;
+    return (
+      <div className="item-list__item" style={style}>
+        <PuzzlePiece piece={item} />
+      </div>
+    );
+  };
+
   //Render the main interface
   if (loading)
     return (
@@ -188,42 +209,52 @@ const Home = ({ session, type, organization }) => {
         <Spinner />
       </div>
     );
+
+  const backend = isMobile ? TouchBackend : HTML5Backend;
   return (
     <div className="app-main">
-      <DndProvider backend={HTML5Backend}>
+      <DndProvider
+        key="TOUCH"
+        backend={backend}
+        options={{ enableMouseEvents: true }}
+      >
         <Sidebar
-          setSelectedPersonnel={setSelectedPersonnel}
+          setSelectedPersonnel={(e) => {
+            setSelectedPersonnel(e);
+            console.log("selectedPersonnel", e);
+          }}
           selectedPersonnel={selectedPersonnel}
           personnel={personnel}
           adminMode={adminMode}
           organization={org}
           services={services}
         />
-        {adminMode ? (
-          <PuzzleContainer
-            puzzlePieces={services}
-            onDrop={onDrop}
-            {...calendarProps}
-          />
-        ) : (
-          <div className="main-body">
-            <Calendar {...calendarProps} />
-            {type === "employee" ? (
-              <EmployeeSchedule bookings={bookings} />
-            ) : (
-              <ScheduleForm
-                selectedPersonnel={selectedPersonnel}
-                selectedSlot={selectedSlot}
-                personnel={personnel}
-                session={session}
-                selectedService={selectedService}
-                setSelectedService={setSelectedService}
-                services={services}
-                organization={org}
+        <div className="main-body">
+          <Calendar {...calendarProps} />
+          {type === "employee" && <EmployeeSchedule bookings={bookings} />}
+          {type === "customer" && (
+            <ScheduleForm
+              selectedPersonnel={selectedPersonnel}
+              selectedSlot={selectedSlot}
+              personnel={personnel}
+              session={session}
+              selectedService={selectedService}
+              setSelectedService={setSelectedService}
+              services={services}
+              organization={org}
+            />
+          )}
+          {type === "admin" && (
+            <>
+              <MyPreview />
+              <PuzzleContainer
+                puzzlePieces={services}
+                onDrop={onDrop}
+                {...calendarProps}
               />
-            )}
-          </div>
-        )}
+            </>
+          )}
+        </div>
       </DndProvider>
     </div>
   );

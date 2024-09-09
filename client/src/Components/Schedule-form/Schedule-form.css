@@ -4,7 +4,6 @@
   flex-direction: column;
   background-color: var(--bg-primary);
   border: 3px solid var(--ash);
-  height: 98% !important;
   border-radius: 4px;
   /* animation: slideInRight 0.5s ease-in-out normal forwards; */
 }
@@ -145,9 +144,11 @@
   width: 98%;
   max-height: 90%;
   position: fixed;
-  top: 70px;
+  bottom: 0px;
   left: 0;
   font-size: 0.8em !important;
+  z-index: 1000;
+  animation: slideInRight 0.5s ease-in-out normal forwards;
 }
 
 .service-dropdown {
