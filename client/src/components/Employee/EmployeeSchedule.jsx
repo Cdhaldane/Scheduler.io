@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getServiceFromId } from "../../Database";
 import "./EmployeeSchedule.css"; // Importing the CSS file
+import { handleTwoWayCollapse } from "../../Utils";
 
 const EmployeeSchedule = ({ bookings }) => {
   const [services, setServices] = useState({});
@@ -35,17 +36,31 @@ const EmployeeSchedule = ({ bookings }) => {
     <>
       {isMobile && (
         <i
-          onClick={() => setMobileOpen(!mobileOpen)}
+          onClick={() =>
+            handleTwoWayCollapse(
+              mobileOpen,
+              setMobileOpen,
+              "schedule-view",
+              "right"
+            )
+          }
           className={`fa-solid fa-calendar-check schedule-form-mobile-toggle ${
             mobileOpen ? "hidden" : ""
           }`}
         ></i>
       )}
       {mobileOpen && (
-        <div className={`schedule-view ${isMobile ? "mobile" : ""}`}>
+        <div className={`main-right schedule-view ${isMobile ? "mobile" : ""}`}>
           <h2>
             <i
-              onClick={() => isMobile && setMobileOpen(false)}
+              onClick={() =>
+                handleTwoWayCollapse(
+                  mobileOpen,
+                  setMobileOpen,
+                  "schedule-view",
+                  "right"
+                )
+              }
               className={`fa-solid fa-calendar-check schedule-view-mobile-toggle`}
             ></i>
             My Bookings

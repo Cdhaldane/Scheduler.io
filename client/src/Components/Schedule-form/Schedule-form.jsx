@@ -6,6 +6,7 @@ import { useAlert } from "../Providers/Alert.jsx";
 import Clock from "../AnimatedDiv/Clock/Clock.jsx";
 
 import "./Schedule-form.css";
+import { handleTwoWayCollapse } from "../../Utils.jsx";
 
 /**
  * ScheduleForm Component
@@ -127,7 +128,14 @@ const ScheduleForm = ({
     <>
       {isMobile && (
         <i
-          onClick={() => setMobileOpen(!mobileOpen)}
+          onClick={() =>
+            handleTwoWayCollapse(
+              mobileOpen,
+              setMobileOpen,
+              "schedule-container",
+              "right"
+            )
+          }
           className={`fa-solid fa-calendar-check schedule-form-mobile-toggle ${
             mobileOpen ? "hidden" : ""
           }`}
@@ -145,7 +153,14 @@ const ScheduleForm = ({
             <h1>
               <i
                 className="fa-solid fa-calendar-check"
-                onClick={() => setMobileOpen(!mobileOpen)}
+                onClick={() =>
+                  handleTwoWayCollapse(
+                    mobileOpen,
+                    setMobileOpen,
+                    "schedule-container",
+                    "right"
+                  )
+                }
               ></i>
               APPOINTMENT
             </h1>

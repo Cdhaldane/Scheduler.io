@@ -1,6 +1,6 @@
 .modal {
   position: fixed !important;
-  z-index: 1000 !important;
+  z-index: 10000 !important;
   left: 0;
   top: 0;
   width: 100%;
@@ -31,7 +31,7 @@
   position: absolute;
   right: 20px;
   top: -10px;
-  color: #aaa;
+  color: var(--primary);
   font-size: 50px;
   font-weight: bold;
 }
@@ -94,4 +94,28 @@ button[type="submit"]:hover {
 .modal-footer button {
   border-radius: 4px;
   padding: 15px;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    /* overflow: scroll; */
+  }
+
+  .modal-content form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-content button[type="submit"] {
+    padding: 10px;
+  }
+
+  .modal-title {
+    font-size: 1.5em;
+  }
+
+  .close {
+    font-size: 40px;
+    right: 10px;
+  }
 }

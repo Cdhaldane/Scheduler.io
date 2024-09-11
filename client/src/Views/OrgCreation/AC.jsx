@@ -76,18 +76,18 @@ const AC = ({ onFinish, session }) => {
     );
   else if (page === 1)
     return (
-      <div className="ac-container row">
+      <div className="ac-container column">
         <AnimatedDiv
           enterAnimation={"slideInLeft"}
           exitAnimation={"slideOutLeft"}
           exitTrigger={animation}
-          className={"ac-left"}
+          className={"ac-top"}
         >
           {" "}
           <Clock />
         </AnimatedDiv>
 
-        <div className="ac-right">
+        <div className="ac-bottom">
           <div className="typewriter">
             <h1>Your business organization system</h1>
           </div>

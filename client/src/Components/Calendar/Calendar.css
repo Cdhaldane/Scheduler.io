@@ -284,8 +284,6 @@
   color: var(--ash);
   border: 2px solid var(--bg-secondary);
   border-radius: 4px;
-  padding: 0px;
-  z-index: 1000;
 }
 
 @media screen and (max-width: 768px) {

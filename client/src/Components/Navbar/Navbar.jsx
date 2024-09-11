@@ -80,6 +80,7 @@ const Navbar = ({
             src={session.user.user_metadata.avatar_url}
             alt="profile"
             className="profile-pic"
+            referrerPolicy="no-referrer"
           />
         ) : (
           <i className="fa-solid fa-user"></i>

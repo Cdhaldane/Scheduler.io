@@ -90,10 +90,8 @@ function App() {
     window.addEventListener("resize", () => {
       if (window.innerWidth < 768) {
         setIsMobile(true);
-        window.location.reload();
       } else {
         setIsMobile(false);
-        window.location.reload();
       }
     });
     initializeTheme();

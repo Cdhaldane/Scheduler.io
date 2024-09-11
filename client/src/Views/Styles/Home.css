@@ -59,7 +59,7 @@
   color: var(--primary);
   display: flex;
   align-items: center;
-  margin: 10px auto;
+  margin: 0px auto;
   border-radius: 4px;
 }
 

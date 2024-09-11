@@ -4,18 +4,16 @@
   flex-direction: column;
   background-color: var(--bg-primary);
   border: 3px solid var(--ash);
-  color: var(--ash);
-  width: 25%;
-  margin: 0px 20px;
   border-radius: 4px;
-  font-size: 1.5em;
-  animation: slideInRight 0.5s ease-in-out normal forwards;
+  animation: slideInRight 0.5s ease-in-out forwards;
 }
 
 .schedule-view h2 {
+  width: 100%;
+  text-align: center;
+  font-size: 2em;
   color: var(--ash);
   text-align: center;
-  margin: 10px;
 }
 
 .booking-list-container {
@@ -30,6 +28,8 @@
   padding: 0;
   margin: 0;
   height: 90%;
+  width: 100%;
+  font-size: 1.5em;
   overflow-y: scroll;
 }
 
@@ -85,12 +85,15 @@
 /* MOBILE STYLING */
 
 .schedule-view.mobile {
-  position: absolute;
-  top: 70px;
-  left: 0;
   width: 98%;
-  height: calc(100% - 80px) !important;
-  margin: 0;
+  height: 90%;
+  position: fixed;
+  bottom: 0px;
+  left: 0;
+  font-size: 0.8em !important;
+  z-index: 1000;
+  animation: slideInRight 0.5s ease-in-out normal forwards;
+  overflow-y: hidden;
 }
 
 .schedule-view-mobile-toggle {

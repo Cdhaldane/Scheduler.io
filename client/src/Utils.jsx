@@ -116,3 +116,18 @@ export const useDidMountEffect = (func, deps) => {
     else didMount.current = true;
   }, deps);
 };
+
+export const handleTwoWayCollapse = (state, setState, className, direction) => {
+  let el = document.getElementsByClassName(className)[0];
+  let animation = direction === "right" ? "slideOutRight" : "slideOutLeft";
+
+  if (state && el) {
+    el.style.animation = `${animation} 0.2s ease-in-out`;
+    setTimeout(() => {
+      setState(false);
+    }, 180);
+  }
+  if (!state) {
+    setState(true);
+  }
+};

@@ -60,13 +60,19 @@ const UserProfile = ({ session }) => {
     setAppointments(sortedAppointments);
   };
 
+  console.log(session.user);
+
   return (
     <div className="user-profile">
       {session && (
         <div className="card">
           <header className="card-header">
             <div className="card-title">
-              <img src={session.user.user_metadata.avatar_url} alt="" />
+              <img
+                src={session.user.user_metadata.avatar_url}
+                alt=""
+                referrerPolicy="no-referrer"
+              />
               <div className="heading-box">
                 <h1>{session.user.user_metadata.full_name}</h1>
                 <h3>{session.user.email}</h3>

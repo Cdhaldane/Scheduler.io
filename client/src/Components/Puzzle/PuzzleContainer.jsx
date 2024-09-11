@@ -14,6 +14,7 @@ import {
   addService,
 } from "../../Database.jsx";
 import "./Puzzle.css";
+import { handleTwoWayCollapse } from "../../Utils.jsx";
 
 /**
  * PuzzleContainer Component
@@ -64,7 +65,6 @@ const PuzzleContainer = ({
   });
   const [animateDeleteId, setAnimateDeleteId] = useState(null);
   const [animateAddId, setAnimateAddId] = useState(null);
-  const [collapsed, setCollapsed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pieceRef = useRef(null);
   const isMobile = window.innerWidth < 768;
@@ -98,7 +98,14 @@ const PuzzleContainer = ({
     <>
       {isMobile && (
         <i
-          onClick={() => setMobileOpen(!mobileOpen)}
+          onClick={() =>
+            handleTwoWayCollapse(
+              mobileOpen,
+              setMobileOpen,
+              "pieces-container",
+              "right"
+            )
+          }
           className={`fa-solid fa-chevron-left calendar-mobile-expand ${
             mobileOpen ? "hidden" : ""
           }`}
@@ -110,8 +117,15 @@ const PuzzleContainer = ({
           <div className="pieces-main">
             {isMobile && (
               <i
-                className={`fa-solid fa-caret-${!collapsed ? "right" : "left"}`}
-                onClick={() => setMobileOpen(false)}
+                className={`fa-solid fa-caret-right`}
+                onClick={() =>
+                  handleTwoWayCollapse(
+                    mobileOpen,
+                    setMobileOpen,
+                    "pieces-container",
+                    "right"
+                  )
+                }
               ></i>
             )}
             <h1>

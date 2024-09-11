@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 
 .input-container label {
@@ -18,8 +18,9 @@
 
 .input-submit-button {
   position: absolute;
+  font-size: 0.5em;
   top: 0;
-  right: 1.5em;
+  right: 3%;
   background-color: transparent;
   width: 10px;
   height: 100%;
@@ -61,9 +62,9 @@
 .input-container textarea {
   resize: none;
   width: auto;
-  height: 130px !important;
-  max-height: 130px;
-  min-height: 130px;
+  height: 6em !important;
+  max-height: 6em;
+  min-height: 6em;
 }
 
 .input-container.active input {
@@ -72,15 +73,14 @@
 }
 
 .input-container.active textarea {
-  height: 165px !important;
 }
 
 .input-container.active label {
-  margin-top: 5px;
+  margin-top: 3px;
   font-size: 0.7em;
 }
 .input-container.active.type-textarea label {
-  margin-top: 10px;
+  margin-top: 5px;
   font-size: 0.7em;
 }
 
@@ -130,7 +130,8 @@
   opacity: 0.5; /* shows Spin Buttons per default (Chrome >= 39) */
 }
 .type-textarea label {
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-left: 0.8em;
 }
 
 .input-container .react-colorful {
@@ -155,6 +156,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   column-gap: 10px;
+  height: 100%;
 }
 
 .input-form.compacted .input-container {
@@ -180,7 +182,36 @@
 @media screen and (max-width: 768px) {
   .input-form.compacted .input-container {
     width: 100% !important;
+    font-size: 1em;
   }
+
+  .input-submit-button {
+    right: 0.5em;
+  }
+
+  .input-container label {
+    margin-left: 0.8em;
+  }
+
+  .input-container input {
+    padding: 1em 0.6em 0.3em 0.5em;
+  }
+
+  .input-container textarea {
+    padding: 1.4em 0.6em 0.3em 0.55em;
+  }
+
+  .type-textarea label {
+    margin-left: 0.7em;
+  }
+
+  .input-form {
+    gap: 10px;
+  }
+
+  /* .input-container textarea {
+    max-height: ;
+  } */
 
   .react-colorful {
     height: 150px !important;

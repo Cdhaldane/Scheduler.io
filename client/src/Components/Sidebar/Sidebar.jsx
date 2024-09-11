@@ -11,6 +11,7 @@ import Clock from "../AnimatedDiv/Clock/Clock";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import "./Sidebar.css";
+import { handleTwoWayCollapse } from "../../Utils";
 
 const Sidebar = ({
   selectedPersonnel,
@@ -159,11 +160,12 @@ const Sidebar = ({
           <div
             key="addPerson"
             className="sidebar-item add"
-            onClick={() => setIsOpen(true)}
+            onClick={() => setIsOpen(!isOpen)}
           >
             <h1>
               {" "}
-              <i className="fa-solid fa-plus"></i>Add Personnel
+              <i className="fa-solid fa-plus"></i>Add Personnel{" "}
+              {isOpen ? "!" : ""}
             </h1>
           </div>
         )
@@ -174,7 +176,9 @@ const Sidebar = ({
     <>
       {isMobile && (
         <i
-          onClick={() => setMobileOpen(!mobileOpen)}
+          onClick={() =>
+            handleTwoWayCollapse(mobileOpen, setMobileOpen, "sidebar", "left")
+          }
           className="fa-solid fa-bars sidebar-mobile-toggle"
         ></i>
       )}
@@ -184,7 +188,14 @@ const Sidebar = ({
             <div className="sidebar-title-header">
               {isMobile && (
                 <i
-                  onClick={() => setMobileOpen(!mobileOpen)}
+                  onClick={() =>
+                    handleTwoWayCollapse(
+                      mobileOpen,
+                      setMobileOpen,
+                      "sidebar",
+                      "left"
+                    )
+                  }
                   className="fa-solid fa-bars sidebar-mobile-toggle"
                 ></i>
               )}
@@ -215,9 +226,13 @@ const Sidebar = ({
                     <span>{selectedPersonnel?.start_date}</span>
                   </div>
                 </div>
-                <div className="sidebar-employee-clock">
-                  <Clock offset={5} color={"bg-primary"} />
-                </div>
+                {!isMobile ? (
+                  <div className="sidebar-employee-clock">
+                    <Clock offset={5} color={"bg-primary"} />
+                  </div>
+                ) : (
+                  <br />
+                )}
               </>
             ) : (
               <div className="sidebar-content">
