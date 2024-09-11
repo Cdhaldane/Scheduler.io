@@ -82,6 +82,7 @@ export const createKeyframes = (keyframeName, keyframeCSS) => {
   );
 };
 
+// useDeviceType Hook
 export const useDeviceType = () => {
   const [isMobile, setIsMobile] = useState(false);
 

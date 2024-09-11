@@ -18,7 +18,7 @@
   text-align: center;
   padding: 0px 20px;
   padding-bottom: 30px;
-  width: 50%;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: row;
@@ -30,11 +30,20 @@
 }
 
 .hero > span {
+  width: 50%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  margin-right: 10%;
 }
 
+.landing-clock-container {
+  width: 40%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0 auto;
+}
 .landing-clock {
   width: 350px;
   aspect-ratio: 1/1 !important;
@@ -129,4 +138,34 @@
   text-align: center;
   position: relative;
   z-index: 2 !important;
+}
+
+@media screen and (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .hero > span {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .landing-clock-container {
+    width: 100%;
+  }
+
+  .landing-clock {
+    width: 100%;
+  }
+
+  .feature-list {
+    width: 100%;
+  }
+
+  .feature {
+    width: 100%;
+  }
 }

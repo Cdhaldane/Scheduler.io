@@ -3,6 +3,26 @@ import Input from "../Input/Input"; // Importing the Input component
 import Dropdown from "../Dropdown/Dropdown";
 import "./TimePicker.css"; // Importing the CSS file for styling
 
+
+/**
+ * TimePicker Component
+ *
+ * Purpose:
+ * - The TimePicker component provides a user interface for selecting a time.
+ * - It consists of dropdowns for selecting hours, minutes, and seconds.
+ * - The component supports default values and triggers a callback function when the time is changed.
+ *
+ * Inputs:
+ * - label: The label for the time picker (optional).
+ * - onChange: A callback function that is called when the time is changed.
+ * - defaultValue: The default time value in the format "HH:MM:SS" (optional).
+ *
+ * Outputs:
+ * - JSX for rendering the time picker with dropdowns for hours, minutes, and seconds.
+ * - The selected time is passed to the onChange callback function in the format "HH:MM:SS".
+ */
+
+
 const TimePicker = ({ label, onChange, defaultValue }) => {
   const [selectedHour, setSelectedHour] = useState("");
   const [selectedMinute, setSelectedMinute] = useState("");

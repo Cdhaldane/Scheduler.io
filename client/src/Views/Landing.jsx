@@ -3,6 +3,23 @@ import Clock from "../Components/AnimatedDiv/Clock/Clock.jsx";
 import { useNavigate } from "react-router-dom";
 import "./Styles/Landing.css"; // Ensure you have the corresponding CSS file
 
+/**
+ * Landing Component
+ *
+ * Purpose:
+ * - The Landing component provides the landing page for the application.
+ * - It features a hero section with a clock animation, a title, a brief description, and a 'Get Started' button.
+ * - The features section highlights the key functionalities of the application, such as seamless scheduling, mobile optimization, and client management.
+ * - The testimonials section showcases quotes from users praising the application's impact on their businesses.
+ *
+ * Inputs:
+ * - None
+ *
+ * Outputs:
+ * - JSX for rendering the landing page with a hero section, features section, and testimonials section.
+ * - A handler for navigating to the organization creation page when the 'Get Started' button is clicked.
+ */
+
 const Landing = () => {
   const navigate = useNavigate();
   const isMobile = window.innerWidth < 768;
@@ -11,7 +28,9 @@ const Landing = () => {
       {/* <img src="/banner.png" alt="banner" /> */}
       <section className="hero">
         {!isMobile && (
-          <Clock className="landing-clock" offset={4} color="bg-secondary" />
+          <div className="landing-clock-container">
+            <Clock className="landing-clock" offset={4} color="bg-secondary" />
+          </div>
         )}
         <span>
           <h1 className="timeslot-title">

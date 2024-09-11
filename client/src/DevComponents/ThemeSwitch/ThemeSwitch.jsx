@@ -22,20 +22,21 @@ function ThemeSwitch(props) {
 
   //Effect hook to update theme based on local storage
   useEffect(() => {
-    const isDarkMode = JSON.parse(sessionStorage.getItem("isDarkMode"));
+    const isDarkMode = JSON.parse(localStorage.getItem("isDarkMode"));
     setIsDarkMode(isDarkMode);
   }, []);
+
   useEffect(() => {
     if (!isDarkMode) {
       moonRef.current?.classList.remove("switch-active");
       sunRef.current?.classList.add("switch-active");
       document.body.classList.add("light-mode");
-      sessionStorage.setItem("isDarkMode", false);
+      localStorage.setItem("isDarkMode", false);
     } else {
       moonRef.current?.classList.add("switch-active");
       sunRef.current?.classList.remove("switch-active");
       document.body.classList.remove("light-mode");
-      sessionStorage.setItem("isDarkMode", true);
+      localStorage.setItem("isDarkMode", true);
     }
   }, [isDarkMode]);
 
@@ -68,7 +69,8 @@ function ThemeSwitch(props) {
 export default ThemeSwitch;
 
 export const initializeTheme = () => {
-  const isDarkMode = JSON.parse(sessionStorage.getItem("isDarkMode"));
+  const isDarkMode = JSON.parse(localStorage.getItem("isDarkMode"));
+  console.log("isDarkMode", isDarkMode);
   if (isDarkMode) {
     document.body.classList.remove("light-mode");
   } else {
