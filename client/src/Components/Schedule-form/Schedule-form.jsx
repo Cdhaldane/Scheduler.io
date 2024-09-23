@@ -51,7 +51,7 @@ const ScheduleForm = ({
   const navigate = useNavigate();
   const [typing, setTyping] = useState(false);
   const alert = useAlert();
-  const isMobile = window.innerWidth < 768;
+  const isMobile = window.innerWidth <= 768;
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
 
   //Effect hooks for updating form data and handling typing animation
@@ -150,7 +150,7 @@ const ScheduleForm = ({
           style={{}}
         >
           <div className="body">
-            <h1>
+            <div className="schedule-label">
               <i
                 className="fa-solid fa-calendar-check"
                 onClick={() =>
@@ -162,8 +162,8 @@ const ScheduleForm = ({
                   )
                 }
               ></i>
-              APPOINTMENT
-            </h1>
+              <h1>APPOINTMENT</h1>
+            </div>
 
             <div className="schedule-appointment">
               <div className="schedule-header">

@@ -30,6 +30,7 @@ import "./Input.css";
  */
 
 const Input = ({
+  id,
   label,
   placeholder,
   value: propValue,
@@ -108,6 +109,7 @@ const Input = ({
   return (
     <form
       id="input-container"
+      data-testid="input-container"
       className={`input-container ${
         isActive && "active"
       } type-${type} ${className} ${hasChanged && "changed"}`}
@@ -117,6 +119,7 @@ const Input = ({
     >
       {type === "textarea" ? (
         <textarea
+          id={id}
           value={inputValue}
           onChange={handleChange}
           onFocus={handleFocus}
@@ -125,6 +128,7 @@ const Input = ({
         />
       ) : (
         <input
+          id={id || label}
           type={type}
           value={inputValue}
           onChange={handleChange}
@@ -135,7 +139,9 @@ const Input = ({
           autoComplete={type}
         />
       )}
-      <label className={isActive ? "active" : ""}>{label}</label>
+      <label htmlFor={label} className={isActive ? "active" : ""}>
+        {label}
+      </label>
       {icon && (
         <button className="input-submit-button" type="submit">
           <i className={`icon ${icon}`}></i>
@@ -156,19 +162,8 @@ export const InputForm = ({
 }) => {
   // Ref for the form element
   const inputRef = useRef(null);
-  const [compacted, setCompacted] = useState(false);
+  const compacted = false; // Set to true to compact the form for mobile view
   const [values, setValues] = useState({});
-
-  //Effect hook to adjust the form height when the input fields are too long
-  useEffect(() => {
-    const inputHeight = inputRef.current.getBoundingClientRect();
-    const viewBox = document
-      .querySelector(".modal-content")
-      .getBoundingClientRect();
-    if (inputHeight.bottom > viewBox.bottom) {
-      setCompacted(true);
-    }
-  }, [inputRef]);
 
   // Function to handle input changes
   const handleChange = (id, newValue) => {
@@ -177,6 +172,7 @@ export const InputForm = ({
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
+    console.log(values);
     e.preventDefault();
     await onSubmit(values);
     onClose();
@@ -188,14 +184,11 @@ export const InputForm = ({
       <div className="input-form-title">
         {id.toUpperCase().replace("-", " ")}
       </div>
-      <form
-        onSubmit={handleSubmit}
-        ref={inputRef}
-        className={`input-form ${compacted && "compacted"}`}
-      >
+      <div ref={inputRef} className={`input-form ${compacted && "compacted"}`}>
         {states.map((state, index) => {
           return state.child ? (
             cloneElement(state.child, {
+              key: index,
               onChange: (value) => handleChange(state.id, value),
               value: values[state.id],
               id: state.id,
@@ -203,6 +196,7 @@ export const InputForm = ({
             })
           ) : (
             <Input
+              key={index}
               label={state.label}
               type={state.type}
               onInputChange={(value) => handleChange(state.id, value)}
@@ -210,8 +204,10 @@ export const InputForm = ({
           );
         })}
         {children}
-        <button type="submit">{buttonLabel}</button>
-      </form>
+        <button type="submit" onClick={handleSubmit}>
+          {buttonLabel}
+        </button>
+      </div>
     </div>
   );
 };

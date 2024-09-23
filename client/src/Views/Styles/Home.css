@@ -26,9 +26,11 @@
 .main-right {
   display: flex;
   width: 25%;
+  height: calc(var(--main-height) - 25px);
   justify-content: space-between;
   align-items: end;
   margin-right: 1.5% !important;
+  margin-top: 19px;
 }
 
 .main-right.collapsed {

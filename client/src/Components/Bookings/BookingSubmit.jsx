@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import ErrorPage from "../../Views/404";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../Providers/Alert";
 import { sendEmail, addBooking } from "../../Database";
+import queryString from "query-string";
 
 import "./Bookings.css";
 
@@ -29,18 +31,38 @@ import "./Bookings.css";
 const BookingSubmit = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, appointment, organization } = location.state || {
+  const alert = useAlert();
+  const [booked, setBooked] = useState(false);
+
+  let { user, appointment, organization } = location.state || {
     user: {},
     appointment: {},
     organization: {},
   };
-  console.log(user, appointment, organization);
-  const alert = useAlert();
 
-  const [booked, setBooked] = useState(false);
+  const parsedQuery = queryString.parse(location.search);
+
+  const userFromQuery = parsedQuery.user ? JSON.parse(parsedQuery.user) : {};
+  const appointmentFromQuery = parsedQuery.appointment
+    ? JSON.parse(parsedQuery.appointment)
+    : {};
+  const organizationFromQuery = parsedQuery.organization
+    ? JSON.parse(parsedQuery.organization)
+    : {};
+
+  if (
+    Object.keys(userFromQuery).length > 0 &&
+    Object.keys(appointmentFromQuery).length > 0 &&
+    Object.keys(organizationFromQuery).length > 0
+  ) {
+    user = userFromQuery;
+    appointment = appointmentFromQuery;
+    organization = organizationFromQuery;
+  }
 
   const handleBook = async () => {
-    const time = appointment.day;
+    let time = appointment.day;
+    if (typeof time === "string") time = new Date(time);
     time.setHours(appointment.start, 0, 0, 0);
 
     const { res, error } = await addBooking({
@@ -70,21 +92,24 @@ const BookingSubmit = () => {
     const handleBookEmail = async () => {};
   };
 
+  if (!user?.name || !appointment?.day) return <ErrorPage />;
+
   return (
     <div className="booking-container">
       <div className="book-info">
         {booked ? <h1>Booking Confirmed</h1> : <h1>Confirm booking</h1>}
         <div className="book-info-display">
           <p>
-            Your appointment for a <var>{appointment.service.name}</var> with{" "}
-            <var>{appointment.personnel.first_name}</var> is on{" "}
+            Your appointment for a <var>{appointment.service?.name}</var> with{" "}
+            <var>{appointment.personnel?.first_name}</var> is on{" "}
             <var>
-              {appointment.day &&
-                appointment.day.toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                })}
+              {typeof appointment.day == "object"
+                ? appointment.day.toLocaleDateString("en-US", {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : appointment.day}
             </var>
           </p>
           <p>

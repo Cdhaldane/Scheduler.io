@@ -51,7 +51,7 @@
 
 .dropdown-menu {
   position: absolute;
-  top: 110%;
+  top: 130%;
   left: 0;
   z-index: 1;
   width: fit-content;
@@ -67,8 +67,18 @@
   align-items: left;
 }
 
-.dropdown-menu.left {
+.dropdown-menu::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 89%;
   transform: translateX(-50%);
+  border: 10px solid transparent;
+  border-bottom-color: var(--primary);
+}
+
+.dropdown-menu.left {
+  transform: translateX(-70%);
 }
 
 .dropdown-menu-enter {

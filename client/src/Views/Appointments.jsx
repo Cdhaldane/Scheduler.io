@@ -28,7 +28,6 @@ import "./Styles/Appointments.css";
  * - Handlers for navigating to the organization creation page and toggling the appointments modal.
  */
 
-
 const UserProfile = ({ session }) => {
   const [appointments, setAppointments] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -105,7 +104,9 @@ const UserProfile = ({ session }) => {
             >
               <i className="fa-solid fa-house"></i>
               <span className="activity-name">Organization</span>
-              <span className="index">{organization.name}</span>
+              <span className="index">
+                {organization ? organization.name : "None"}
+              </span>
             </div>
             <div className="activity sepcial">
               <i className="fa-solid fa-clock"></i>

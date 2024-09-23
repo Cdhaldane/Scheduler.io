@@ -1,5 +1,6 @@
 import React from "react";
 import Clock from "../Components/AnimatedDiv/Clock/Clock.jsx";
+import ThreeClock from "../Components/Three/Clock.js";
 import { useNavigate } from "react-router-dom";
 import "./Styles/Landing.css"; // Ensure you have the corresponding CSS file
 
@@ -22,7 +23,7 @@ import "./Styles/Landing.css"; // Ensure you have the corresponding CSS file
 
 const Landing = () => {
   const navigate = useNavigate();
-  const isMobile = window.innerWidth < 768;
+  const isMobile = window.innerWidth <= 768;
   return (
     <div className="landing-page">
       {/* <img src="/banner.png" alt="banner" /> */}
@@ -30,6 +31,7 @@ const Landing = () => {
         {!isMobile && (
           <div className="landing-clock-container">
             <Clock className="landing-clock" offset={4} color="bg-secondary" />
+            {/* <ThreeClock /> */}
           </div>
         )}
         <span>

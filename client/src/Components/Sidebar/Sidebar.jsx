@@ -45,7 +45,7 @@ const Sidebar = ({
   services,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const isMobile = window.innerWidth < 768;
+  const isMobile = window.innerWidth <= 768;
   const [personnelData, setPersonnelData] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);

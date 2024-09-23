@@ -31,7 +31,15 @@
 
 .navbar-item.profile-item {
   font-size: 1em !important;
-  margin-right: 20px;
+  height: 54px !important;
+  width: 54px !important;
+}
+
+.navbar-item.profile-item .fa-user {
+  color: var(--primary);
+  transition: all 0.3s ease-in-out;
+  margin-left: 8px;
+  font-size: 2.5em;
 }
 
 .navbar-content {
@@ -90,6 +98,11 @@
 }
 
 /* MOBILE STYLING  */
+@media screen and (max-width: 1500px) {
+  .navbar-content {
+    gap: 20px;
+  }
+}
 @media screen and (max-width: 768px) {
   .navbar-content {
     font-size: 0.8em;

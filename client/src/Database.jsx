@@ -142,6 +142,8 @@ export const signUp = async (email, password, name, phone) => {
 
 //Sign in an existing user
 export const signIn = async (email, password) => {
+  console.log("email", email);
+  console.log("password", password);
   const { data, error } = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
@@ -330,3 +332,34 @@ export const updateOrganization = async (id, organization) => {
   }
   return { data, error };
 };
+
+// Remove testuser from the database
+export default async function handler(req, res) {
+  if (req.method === "POST") {
+    const { email } = req.body;
+
+    // Initialize Supabase client with service role key
+    const supabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+
+    // Find the user by email and delete
+    const { data: user, error: findError } =
+      await supabase.auth.admin.getUserByEmail(email);
+    if (findError) {
+      return res.status(400).json({ error: findError.message });
+    }
+
+    const { error: deleteError } = await supabase.auth.admin.deleteUser(
+      user.id
+    );
+    if (deleteError) {
+      return res.status(400).json({ error: deleteError.message });
+    }
+
+    return res.status(200).json({ message: "User deleted successfully" });
+  } else {
+    res.status(405).json({ error: "Method not allowed" });
+  }
+}

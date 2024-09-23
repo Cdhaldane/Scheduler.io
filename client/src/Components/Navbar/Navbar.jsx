@@ -65,27 +65,30 @@ const Navbar = ({
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
-  const isMobile = window.innerWidth < 768;
+  const isMobile = window.innerWidth <= 768;
   const location = useLocation();
+
   let orgId = "";
   if (isLoggedIn) {
-    orgId = session.user.user_metadata.organization.org_id;
+    orgId = session.user.user_metadata.organization
+      ? session.user.user_metadata.organization.org_id
+      : "no_org";
   }
 
   /**
- * ProfilePic Component
- *
- * Purpose:
- * - The ProfilePic component displays the user's profile picture in the navigation bar.
- * - If the user has set a profile picture (avatar_url), it is shown as an image.
- * - If the user has not set a profile picture, a default icon is displayed instead.
- *
- * Inputs:
- * - None (assumes access to a global `session` object containing user information)
- *
- * Outputs:
- * - JSX for rendering the user's profile picture or a default icon in the navigation bar.
- */
+   * ProfilePic Component
+   *
+   * Purpose:
+   * - The ProfilePic component displays the user's profile picture in the navigation bar.
+   * - If the user has set a profile picture (avatar_url), it is shown as an image.
+   * - If the user has not set a profile picture, a default icon is displayed instead.
+   *
+   * Inputs:
+   * - None (assumes access to a global `session` object containing user information)
+   *
+   * Outputs:
+   * - JSX for rendering the user's profile picture or a default icon in the navigation bar.
+   */
 
   const ProfilePic = () => {
     return (
@@ -108,6 +111,7 @@ const Navbar = ({
 
   //Handler for login success
   const handleLoginSuccess = () => {
+    navigate("/");
     setShowModal(false);
     setIsLoggedIn(true);
   };
@@ -188,7 +192,7 @@ const Navbar = ({
             />
           </>
         )}
-        {isAdmin && isLoggedIn && (
+        {isAdmin && isLoggedIn && orgId !== "no_org" && (
           <>
             <NavbarItem icon="fa-solid fa-home" route={`/home/${orgId}`} />
             <NavbarItem
@@ -224,7 +228,7 @@ const Navbar = ({
           </>
         )}
       </div>
-      
+
       {/* Modal for login and registration */}
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <>

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-//import GuestBookingPage from "../GuestBookingPage/GuestBookingPage";
-import { supabase } from "../../Database";
 import Input from "../../DevComponents/Input/Input";
 import { useAlert } from "../Providers/Alert";
 
@@ -173,22 +171,21 @@ const BookingPage = () => {
             onInputChange={(newValue) => setName(newValue)}
             className="book-input"
           />
-          <span>
-            <Input
-              label="Phone Number"
-              type="tel"
-              value={phoneNumber}
-              onInputChange={(newValue) => setPhoneNumber(newValue)}
-              className="book-input"
-            />
-            <Input
-              label="Confirm Phone Number"
-              type="tel"
-              value={confirmPhoneNumber}
-              onInputChange={(newValue) => setConfirmPhoneNumber(newValue)}
-              className="book-input"
-            />
-          </span>
+
+          <Input
+            label="Phone Number"
+            type="tel"
+            value={phoneNumber}
+            onInputChange={(newValue) => setPhoneNumber(newValue)}
+            className="book-input"
+          />
+          <Input
+            label="Confirm Phone Number"
+            type="tel"
+            value={confirmPhoneNumber}
+            onInputChange={(newValue) => setConfirmPhoneNumber(newValue)}
+            className="book-input"
+          />
           <Input
             label="Email"
             type="email"

@@ -132,3 +132,14 @@ export const handleTwoWayCollapse = (state, setState, className, direction) => {
     setState(true);
   }
 };
+
+export const isToday = (someDate) => {
+  if (!someDate) return false;
+  const today = new Date();
+
+  return (
+    someDate.getDate() === today.getDate() &&
+    someDate.getMonth() === today.getMonth() &&
+    someDate.getFullYear() === today.getFullYear()
+  );
+};

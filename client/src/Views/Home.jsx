@@ -58,7 +58,7 @@ const Home = ({ session, type, organization }) => {
   const [bookings, setBookings] = useState([]);
   const timeFrame = useSelector((state) => state.timeFrame);
   const [org, setOrg] = useState(organization);
-  const isMobile = window.innerWidth < 768;
+  const isMobile = window.innerWidth <= 768;
   const url = useParams();
 
   const adminMode = type === "admin";

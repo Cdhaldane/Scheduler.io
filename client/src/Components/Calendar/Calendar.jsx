@@ -10,6 +10,7 @@ import { setTime } from "../../Store.js";
 import Modal from "../../DevComponents/Modal/Modal.jsx";
 import OrganizationSettings from "../Organization/OrganizationSettings.jsx";
 import ContextMenu from "./CalendarContextMenu/ContextMenu";
+import { isToday } from "../../Utils.jsx";
 
 import {
   getDaysOfWeek,
@@ -41,7 +42,7 @@ const Calendar = ({
   const [fullView, setFullView] = useState(true);
   const timeFrame = useSelector((state) => state.timeFrame.value);
   const dispatch = useDispatch();
-  const isMobile = window.innerWidth < 768;
+  const isMobile = window.innerWidth <= 768;
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
   const [organizationModal, setOrganizationModal] = useState(false);
 
@@ -223,7 +224,7 @@ const Calendar = ({
             className={`timeframe-button ${isMobile ? "" : ""}`}
           >
             <i className="fa-solid fa-calendar mr-10"></i>
-            {!isMobile && timeFrame}
+            {!isMobile && <h1>{timeFrame}</h1>}
           </button>
           <button
             onClick={() => {
@@ -232,7 +233,7 @@ const Calendar = ({
             className={`timeframe-button ${isMobile ? "hidden" : ""}`}
           >
             <i className="fa-solid fa-cog mr-10"></i>
-            {!isMobile && (fullView ? "Compact" : "Full")}
+            {!isMobile && (fullView ? <h1>Compact</h1> : <h1>Full</h1>)}
           </button>
         </div>
         {organization?.name && (
@@ -273,7 +274,9 @@ const Calendar = ({
           {currentView.map((day, index) => (
             <div
               key={index}
-              className={`header-cell noselect ${loading ? "loading" : ""}`}
+              className={`header-cell noselect ${loading ? "loading" : ""} ${
+                isToday(day) && "today"
+              }`}
             >
               {timeFrame !== "Month"
                 ? day?.toLocaleDateString("en-US", {

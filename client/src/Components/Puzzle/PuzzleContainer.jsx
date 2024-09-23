@@ -67,7 +67,7 @@ const PuzzleContainer = ({
   const [animateAddId, setAnimateAddId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const pieceRef = useRef(null);
-  const isMobile = window.innerWidth < 768;
+  const isMobile = window.innerWidth <= 768;
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
 
   //Effect hooks for handling animations when a service is deleted or added

@@ -62,7 +62,7 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
         setError(error.message);
       } else {
         alert.showAlert("success", "Logged in successfully");
-        onLoginSuccess(data);
+        if (onLoginSuccess) onLoginSuccess(data);
       }
     }
   };
@@ -124,6 +124,7 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
           onSubmit={(e) => handleSubmit(e)}
         />
         <Input
+          id="password"
           label="Password"
           placeholder="Password"
           type="password"
@@ -135,6 +136,7 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
         {signUpFlag && (
           <>
             <Input
+              id="confirm-password"
               label="Confirm Password"
               placeholder="Password"
               type="password"
