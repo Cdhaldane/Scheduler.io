@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, cloneElement } from "react";
 import { useAlert } from "../../Components/Providers/Alert";
+import axios from "axios";
 import "./Input.css";
 
 /**
@@ -43,6 +44,7 @@ const Input = ({
   const [isActive, setIsActive] = useState(propValue ? true : false);
   const [inputValue, setInputValue] = useState(propValue || "");
   const [hasChanged, setHasChanged] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
   const inputRef = useRef(null);
   const alert = useAlert();
 
@@ -52,10 +54,29 @@ const Input = ({
     setIsActive(!!propValue);
   }, [propValue]);
 
+  const formatPhoneNumber = (value) => {
+    const cleaned = value.replace(/\D/g, ""); // Remove all non-digit characters
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/); // Match the format 123-456-7890
+    if (match) {
+      return `${match[1]}-${match[2]}-${match[3]}`;
+    }
+    return value; // Return the value as is if it doesn't match
+  };
+
   const handleChange = (event) => {
-    setInputValue(event.target.value);
+    let newValue = event.target.value;
+    if (newValue === "") {
+      setHasChanged(false);
+      setSuggestions([]); // Clear suggestions when input is empty
+    }
+
+    // If the input type is 'tel', format the phone number
+    if (type === "tel") newValue = formatPhoneNumber(newValue);
+    if (type === "address") fetchAddressSuggestions(newValue); // Fetch suggestions for address input
+
+    setInputValue(newValue);
     if (onInputChange) {
-      onInputChange(event.target.value);
+      onInputChange(newValue);
     }
     setHasChanged(true);
   };
@@ -68,6 +89,8 @@ const Input = ({
     if (!inputValue) {
       setIsActive(false);
     }
+    // Close suggestions dropdown on blur
+    setTimeout(() => setSuggestions([]), 200);
   };
 
   const handleSubmit = async (e) => {
@@ -106,13 +129,55 @@ const Input = ({
     }
   };
 
+  const fetchAddressSuggestions = async (query) => {
+    if (!query) return;
+
+    try {
+      const response = await axios.get(
+        "https://nominatim.openstreetmap.org/search",
+        {
+          params: {
+            q: query,
+            format: "json",
+            addressdetails: 1,
+            limit: 5,
+            countrycodes: "us,ca", // Restrict to U.S. and Canada
+            extratags: 1, // Include additional tags like "shop" and "amenity" (business-related)
+          },
+        }
+      );
+
+      // Extract relevant details from the response to display as suggestions
+      setSuggestions(
+        response.data.map((result) => ({
+          display_name: result.display_name,
+          lat: result.lat,
+          lon: result.lon,
+        }))
+      );
+    } catch (error) {
+      console.error("Error fetching address suggestions:", error);
+      alert.showAlert("error", "Failed to fetch address suggestions");
+    }
+  };
+
+  const handleSelectSuggestion = (suggestion) => {
+    setInputValue(suggestion.display_name);
+    setSuggestions([]); // Clear suggestions after selection
+    if (onInputChange) {
+      onInputChange(suggestion.display_name);
+    }
+  };
+
   return (
     <form
       id="input-container"
       data-testid="input-container"
       className={`input-container ${
         isActive && "active"
-      } type-${type} ${className} ${hasChanged && "changed"}`}
+      } type-${type} ${className} ${hasChanged && "changed"} ${
+        suggestions.length > 0 && "has-suggestions"
+      }`}
       ref={inputRef}
       onSubmit={(e) => handleSubmit(e)}
       onKeyDown={(e) => handleKeyPress(e)}
@@ -146,6 +211,20 @@ const Input = ({
         <button className="input-submit-button" type="submit">
           <i className={`icon ${icon}`}></i>
         </button>
+      )}
+
+      {suggestions.length > 0 && (
+        <ul className="input-suggestions-dropdown">
+          {suggestions.map((suggestion, index) => (
+            <li
+              key={index}
+              className="input-suggestion-item"
+              onClick={() => handleSelectSuggestion(suggestion)}
+            >
+              {suggestion.display_name}
+            </li>
+          ))}
+        </ul>
       )}
     </form>
   );

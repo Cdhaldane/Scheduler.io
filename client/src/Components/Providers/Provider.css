@@ -143,3 +143,10 @@
 .lte8 .wrapper:hover .tooltip {
   display: block;
 }
+
+@media screen and (max-width: 768px) {
+  .alert {
+    right: 10px;
+    font-size: 1em !important;
+  }
+}

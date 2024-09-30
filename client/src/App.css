@@ -9,6 +9,7 @@
   --dark-blue: #0f6674;
   --red: #ff6961;
   --yellow: #d29315;
+  --green: #1f7c35;
   --ash: #d3dedd;
   --white: #d8d8d8;
   --bg-primary: #2d2d2a;
@@ -36,7 +37,7 @@
   --primary: #4b4b4b;
   --primary-dark: rgb(58, 58, 58);
   --secondary: #ee8484;
-  --light-grey: #1f1f1f;
+  --light-grey: #727272;
   --olive: #3f3f3f;
   --blue: #81bee0;
   --red: #ff6961;
@@ -190,6 +191,9 @@ input {
 }
 
 .timeslot-title {
+  position: relative;
+  top: -10px;
+  left: 10px;
   margin-block-start: 0px !important;
   margin-block-end: 0px !important;
   font-size: 1.5em;

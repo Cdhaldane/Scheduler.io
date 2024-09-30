@@ -1,5 +1,6 @@
 .schedule-container {
   display: flex;
+  min-width: 250px;
   justify-content: space-between;
   flex-direction: column;
   background-color: var(--bg-primary);
@@ -110,6 +111,7 @@
 .schedule-header h2 {
   font-size: 1.2em;
   margin-left: 2%;
+  padding-left: 10px;
   width: 100%;
   border: none;
   color: var(--bg-primary);
@@ -156,14 +158,22 @@
   bottom: 0px;
   left: 0;
   font-size: 0.8em !important;
-  z-index: 1000;
+  z-index: 100000;
   animation: slideInRight 0.5s ease-in-out normal forwards;
 }
 
 .service-dropdown {
-  width: 98%;
-  margin: 0px 1%;
+  width: 99%;
   border: 2px solid var(--primary);
+}
+
+.service-dropdown.dropdown-menu {
+  top: 100%;
+  border: 2px solid var(--primary);
+}
+
+.service-dropdown.dropdown-menu::after {
+  display: none;
 }
 
 @media screen and (max-width: 1500px) {

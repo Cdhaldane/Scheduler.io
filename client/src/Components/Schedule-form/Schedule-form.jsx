@@ -51,7 +51,7 @@ const ScheduleForm = ({
   const navigate = useNavigate();
   const [typing, setTyping] = useState(false);
   const alert = useAlert();
-  const isMobile = window.innerWidth <= 768;
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
 
   //Effect hooks for updating form data and handling typing animation
@@ -61,6 +61,18 @@ const ScheduleForm = ({
       setStart(selectedSlot?.hour || 9);
     }
   }, [selectedPersonnel, selectedSlot]);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      if (window.innerWidth <= 768) {
+        setIsMobile(true);
+        setMobileOpen(false);
+      } else {
+        setMobileOpen(true);
+        setIsMobile(false);
+      }
+    });
+  }, []);
 
   //Effect hook for handling typing animation
   useEffect(() => {

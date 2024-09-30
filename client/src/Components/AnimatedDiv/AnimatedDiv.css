@@ -16,7 +16,7 @@
 @keyframes slideInLeft {
   0% {
     opacity: 0;
-    transform: translateX(-50vw);
+    transform: translateX(-10vw);
   }
   100% {
     opacity: 1;
@@ -30,15 +30,15 @@
     transform: translateX(0%);
   }
   100% {
-    opacity: 0;
-    transform: translateX(-50vw);
+    opacity: 0.1;
+    transform: translateX(-20vw);
   }
 }
 
 @keyframes slideInRight {
   0% {
     opacity: 0;
-    transform: translateX(50vw);
+    transform: translateX(10vw);
   }
   100% {
     opacity: 1;
@@ -53,13 +53,13 @@
   }
   100% {
     opacity: 0;
-    transform: translateX(50vw);
+    transform: translateX(10vw);
   }
 }
 
 @keyframes slideInTop {
   0% {
-    transform: translateY(-50vh);
+    transform: translateY(-10vh);
   }
   100% {
     transform: translateY(0%);
@@ -71,7 +71,7 @@
     transform: translateY(0%);
   }
   100% {
-    transform: translateY(-50vh);
+    transform: translateY(-10vh);
   }
 }
 

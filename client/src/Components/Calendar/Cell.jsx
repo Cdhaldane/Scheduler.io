@@ -118,26 +118,26 @@ const Cell = ({
 
   // Function to handle right-click
   const handleContextMenu = (e, day, hour) => {
-    e.preventDefault(); // Prevent the default context menu from showing
-    e.stopPropagation(); // Stop the event from propagating
-    if (isSlotScheduled(day, hour))
-      setContextMenu({
-        id: day + hour,
-        visible: true,
-        x:
-          e.nativeEvent.pageX -
-          document.getElementsByClassName("calendar")[0].offsetLeft,
-        y: e.nativeEvent.pageY,
-        options: [
-          {
-            label: "Delete",
-            onClick: (e) => {
-              handleScheduledSlotDelete(day, hour, e);
-            },
-          },
-          { label: "Copy", onClick: () => console.log("Option 2 clicked") },
-        ],
-      });
+    // e.preventDefault(); // Prevent the default context menu from showing
+    // e.stopPropagation(); // Stop the event from propagating
+    // if (isSlotScheduled(day, hour))
+    //   setContextMenu({
+    //     id: day + hour,
+    //     visible: true,
+    //     x:
+    //       e.nativeEvent.pageX -
+    //       document.getElementsByClassName("calendar")[0].offsetLeft,
+    //     y: e.nativeEvent.pageY,
+    //     options: [
+    //       {
+    //         label: "Delete",
+    //         onClick: (e) => {
+    //           handleScheduledSlotDelete(day, hour, e);
+    //         },
+    //       },
+    //       { label: "Copy", onClick: () => console.log("Option 2 clicked") },
+    //     ],
+    //   });
   };
 
   // Function to hide the context menu
@@ -147,18 +147,17 @@ const Cell = ({
 
   //Effects hook to add and remove evernt listeners for the context menu
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (contextMenu.visible) {
-        setContextMenu({ ...contextMenu, visible: false });
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    document.addEventListener("contextmenu", handleCloseContextMenu);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-      document.removeEventListener("contextmenu", handleCloseContextMenu);
-    };
+    // const handleClickOutside = (e) => {
+    //   if (contextMenu.visible) {
+    //     setContextMenu({ ...contextMenu, visible: false });
+    //   }
+    // };
+    // document.addEventListener("click", handleClickOutside);
+    // document.addEventListener("contextmenu", handleCloseContextMenu);
+    // return () => {
+    //   document.removeEventListener("click", handleClickOutside);
+    //   document.removeEventListener("contextmenu", handleCloseContextMenu);
+    // };
   }, [contextMenu.visible]);
 
   const getSlot = (day, hour, scheduledSlots) => {

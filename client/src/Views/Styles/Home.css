@@ -10,13 +10,19 @@
 }
 
 .main-body {
-  width: calc(100% - var(--sidebar-width)) !important;
+  width: calc(100% - var(--sidebar-width));
   height: 100%;
   min-height: calc(var(--main-height) - 10px);
   display: flex;
   justify-content: space-between;
   background-color: var(--bg-primary);
   margin-left: var(--sidebar-width);
+  transition: all 0.5s ease-in-out;
+}
+
+.main-body.full-width {
+  width: calc(100% - 50px);
+  margin-left: 50px;
 }
 
 .main-body.collapsed .calendar {

@@ -15,7 +15,7 @@ import Landing from "./Views/Landing.jsx";
 import Home from "./Views/Home.jsx";
 import Admin from "./Views/Admin.jsx";
 import Employee from "./Views/Employee.jsx";
-import Appointments from "./Views/Appointments.jsx";
+import Profile from "./Views/Profile.jsx";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import Login from "./Components/Login/Login.jsx";
 import ResetPassword from "./Components/Login/LoginResetPassword.jsx";
@@ -130,8 +130,8 @@ function App() {
     location.pathname === "/create-organization";
 
   const isCalendar =
-    location.pathname === "/admin" ||
-    location.pathname === "/home" ||
+    location.pathname.includes("/admin") ||
+    location.pathname.includes("/home") ||
     location.pathname.includes("/employee");
 
   const handleOrganizationCreate = (org) => {
@@ -195,10 +195,7 @@ function App() {
                   />
                 }
               />
-              <Route
-                path="/appointments"
-                element={<Appointments session={session} />}
-              />
+              <Route path="/profile" element={<Profile session={session} />} />
               <Route
                 path="/admin/:organizationId"
                 element={

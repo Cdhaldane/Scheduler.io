@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDrop } from "react-dnd";
 import Cell from "./Cell.jsx";
+import CalendarHeader from "./Components/CalendarHeader/CalendarHeader.jsx";
 import "./Calendar.css";
 import { getServiceFromId } from "../../Database.jsx";
 import Button from "../../DevComponents/Button/Button.jsx";
@@ -8,7 +9,6 @@ import Spinner from "../Spinner/Spinner.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { setTime } from "../../Store.js";
 import Modal from "../../DevComponents/Modal/Modal.jsx";
-import OrganizationSettings from "../Organization/OrganizationSettings.jsx";
 import ContextMenu from "./CalendarContextMenu/ContextMenu";
 import { isToday } from "../../Utils.jsx";
 
@@ -37,12 +37,13 @@ const Calendar = ({
   const [currentView, setCurrentView] = useState(getDaysOfWeek(new Date()));
   const [scheduledSlots, setScheduledSlots] = useState([]);
   const [loading, setLoading] = useState(true);
-  const times = ["Week", "Month", "Day"];
+  const times = ["Day", "Week", "Month"];
   const [timeFrameIndex, setTimeFrameIndex] = useState(0);
   const [fullView, setFullView] = useState(true);
   const timeFrame = useSelector((state) => state.timeFrame.value);
   const dispatch = useDispatch();
   const isMobile = window.innerWidth <= 768;
+  const isCompact = window.innerWidth <= 1054;
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
   const [organizationModal, setOrganizationModal] = useState(false);
 
@@ -212,45 +213,16 @@ const Calendar = ({
   return (
     <div className={`calendar ${isMobile ? "mobile" : ""}`}>
       {loading && <Spinner className={"fast"} />}
-      <div className="calendar-top">
-        <div className="calendar-buttons">
-          <button
-            onClick={() => {
-              setLoading(true);
-              if (timeFrameIndex >= times.length - 1) setTimeFrameIndex(0);
-              else setTimeFrameIndex(timeFrameIndex + 1);
-              dispatch(setTime(times[timeFrameIndex + 1] || times[0]));
-            }}
-            className={`timeframe-button ${isMobile ? "" : ""}`}
-          >
-            <i className="fa-solid fa-calendar mr-10"></i>
-            {!isMobile && <h1>{timeFrame}</h1>}
-          </button>
-          <button
-            onClick={() => {
-              setFullView(!fullView);
-            }}
-            className={`timeframe-button ${isMobile ? "hidden" : ""}`}
-          >
-            <i className="fa-solid fa-cog mr-10"></i>
-            {!isMobile && (fullView ? <h1>Compact</h1> : <h1>Full</h1>)}
-          </button>
-        </div>
-        {organization?.name && (
-          <span className="fancy" onClick={() => setOrganizationModal(true)}>
-            {organization.name}
-          </span>
-        )}
-
-        <h2 className="noselect">
-          {currentView[0]?.toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          })}
-        </h2>
-      </div>
+      <CalendarHeader
+        setLoading={setLoading}
+        setTimeFrameIndex={setTimeFrameIndex}
+        timeFrameIndex={timeFrameIndex}
+        timeFrame={timeFrame}
+        setFullView={setFullView}
+        fullView={fullView}
+        organization={organization}
+        currentView={currentView}
+      />
       <div className="calendar-table">
         <div className={`calendar-header ${timeFrame}`}>
           <div className={`header-cell ${timeFrame}`}>
@@ -278,15 +250,30 @@ const Calendar = ({
                 isToday(day) && "today"
               }`}
             >
-              {timeFrame !== "Month"
-                ? day?.toLocaleDateString("en-US", {
-                    weekday: "long",
-                    month: "numeric",
-                    day: "numeric",
-                  })
-                : day?.toLocaleDateString("en-US", {
-                    day: "numeric",
-                  })}
+              {timeFrame === "Day" &&
+                day?.toLocaleDateString("en-US", {
+                  weekday: "short",
+                  month: "numeric",
+                  day: "numeric",
+                })}
+              {timeFrame === "Week" &&
+                day?.toLocaleDateString(
+                  "en-US",
+                  window.innerWidth <= 1054
+                    ? {
+                        weekday: "short",
+                        day: "numeric",
+                      }
+                    : {
+                        weekday: "short",
+                        month: "numeric",
+                        day: "numeric",
+                      }
+                )}
+              {timeFrame === "Month" &&
+                day?.toLocaleDateString("en-US", {
+                  day: "numeric",
+                })}
             </div>
           ))}
         </div>
@@ -348,17 +335,6 @@ const Calendar = ({
           onRequestClose={handleCloseContextMenu}
         />
       </div>
-
-      <Modal
-        isOpen={organizationModal}
-        onClose={() => setOrganizationModal(false)}
-        label="Organization Settings"
-      >
-        <OrganizationSettings
-          organization={organization}
-          onClose={() => setOrganizationModal(false)}
-        />
-      </Modal>
     </div>
   );
 };

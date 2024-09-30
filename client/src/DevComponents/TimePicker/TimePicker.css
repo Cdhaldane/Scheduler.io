@@ -42,7 +42,15 @@
 
 .time-select-dropdown {
   max-height: 300px;
+  width: 100%;
   overflow-y: auto;
+}
+
+.time-select-dropdown > .dropdown-item {
+  padding: 5px 10px;
+  margin: 0 auto;
+  font-size: 1.5rem;
+  color: var(--primary);
 }
 
 .time-select:hover {

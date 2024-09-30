@@ -123,10 +123,11 @@ export const handleTwoWayCollapse = (state, setState, className, direction) => {
   let animation = direction === "right" ? "slideOutRight" : "slideOutLeft";
 
   if (state && el) {
-    el.style.animation = `${animation} 0.2s ease-in-out`;
+    console.log("collapsing");
+    el.style.animation = `${animation} 0.3s ease-in-out`;
     setTimeout(() => {
       setState(false);
-    }, 180);
+    }, 280);
   }
   if (!state) {
     setState(true);

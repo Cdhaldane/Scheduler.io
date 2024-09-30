@@ -85,12 +85,6 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
     }
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setError("");
-    }, 5000);
-  }, [error]);
-
   //Render the login component with SSO buttons, input fields, and links
   return (
     <div className={`login-container ${type}`}>
@@ -120,7 +114,10 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
           placeholder="Email"
           type="email"
           value={email}
-          onInputChange={(newValue) => setEmail(newValue)}
+          onInputChange={(newValue) => {
+            setError("");
+            setEmail(newValue);
+          }}
           onSubmit={(e) => handleSubmit(e)}
         />
         <Input
@@ -129,7 +126,10 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
           placeholder="Password"
           type="password"
           value={password}
-          onInputChange={(newValue) => setPassword(newValue)}
+          onInputChange={(newValue) => {
+            setError("");
+            setPassword(newValue);
+          }}
           onSubmit={(e) => handleSubmit(e)}
         />
 
@@ -164,7 +164,7 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
         )}
         {error ? (
           <div className="login-error">
-            <p>{error}</p>
+            <p>{error.charAt(0).toUpperCase() + error.slice(1)}</p>
           </div>
         ) : (
           <></>

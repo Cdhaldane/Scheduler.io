@@ -3,7 +3,6 @@ import Input from "../Input/Input"; // Importing the Input component
 import Dropdown from "../Dropdown/Dropdown";
 import "./TimePicker.css"; // Importing the CSS file for styling
 
-
 /**
  * TimePicker Component
  *
@@ -21,7 +20,6 @@ import "./TimePicker.css"; // Importing the CSS file for styling
  * - JSX for rendering the time picker with dropdowns for hours, minutes, and seconds.
  * - The selected time is passed to the onChange callback function in the format "HH:MM:SS".
  */
-
 
 const TimePicker = ({ label, onChange, defaultValue }) => {
   const [selectedHour, setSelectedHour] = useState("");

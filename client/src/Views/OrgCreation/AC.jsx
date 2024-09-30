@@ -33,7 +33,7 @@ const AC = ({ onFinish, session }) => {
   const [loginModal, setLoginModal] = useState(true);
 
   const options = [
-    { label: "What is your organization's name?", value: "name", type: "name" },
+    { label: "What is your organization's name?", value: "name", type: "text" },
     {
       label: "What is your organization's email?",
       value: "email",
@@ -47,7 +47,7 @@ const AC = ({ onFinish, session }) => {
     {
       label: "What is your organization's address?",
       value: "address",
-      type: "text",
+      type: "address",
     },
   ];
 
@@ -108,7 +108,7 @@ const AC = ({ onFinish, session }) => {
 
         <div className="ac-bottom">
           <div className="typewriter">
-            <h1>Your business organization system</h1>
+            <h1>Create your organization</h1>
           </div>
           <div
             className={`animated-div ac-span`}

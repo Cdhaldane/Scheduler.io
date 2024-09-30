@@ -45,7 +45,7 @@ const Sidebar = ({
   services,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const isMobile = window.innerWidth <= 768;
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1268);
   const [personnelData, setPersonnelData] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
@@ -60,6 +60,21 @@ const Sidebar = ({
   useEffect(() => {
     setPersonnelData(personnel);
   }, [personnel]);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      if (window.innerWidth <= 768) {
+        setIsMobile(true);
+        document.querySelector(".main-body")?.classList.remove("full-width");
+      } else {
+        setIsMobile(false);
+        if (window.innerWidth <= 1168)
+          document.querySelector(".main-body")?.classList.add("full-width");
+        else
+          document.querySelector(".main-body")?.classList.remove("full-width");
+      }
+    });
+  }, []);
 
   const handleSelect = (e, person) => {
     e.preventDefault();
@@ -109,6 +124,21 @@ const Sidebar = ({
       document.removeEventListener("contextmenu", handleCloseContextMenu);
     };
   }, [contextMenu.visible]);
+
+  const handleMobileOpen = () => {
+    handleTwoWayCollapse(mobileOpen, setMobileOpen, "sidebar", "left");
+
+    const isCompact = window.innerWidth <= 1168;
+
+    if (mobileOpen && !isMobile) {
+      const main = document.querySelector(".main-body");
+      main?.classList.add("full-width");
+    }
+    if (!mobileOpen && !isMobile && !isCompact) {
+      const main = document.querySelector(".main-body");
+      main?.classList.remove("full-width");
+    }
+  };
 
   const getPersons = () => {
     return personnelData
@@ -197,74 +227,52 @@ const Sidebar = ({
 
   return (
     <>
-      {isMobile && (
-        <i
-          onClick={() =>
-            handleTwoWayCollapse(mobileOpen, setMobileOpen, "sidebar", "left")
-          }
-          className="fa-solid fa-bars sidebar-mobile-toggle"
-        ></i>
-      )}
-      {mobileOpen && (
-        <>
-          <div className={`sidebar ${isMobile && "mobile"}`}>
-            <div className="sidebar-title-header">
-              {isMobile && (
-                <i
-                  onClick={() =>
-                    handleTwoWayCollapse(
-                      mobileOpen,
-                      setMobileOpen,
-                      "sidebar",
-                      "left"
-                    )
-                  }
-                  className="fa-solid fa-bars sidebar-mobile-toggle"
-                ></i>
-              )}
-
-              <img
-                src="/logo.png"
-                alt="website logo"
-                className="navbar-logo"
-                onClick={() => navigate("/")}
-              />
-              <h1>
-                TIME<span>SLOT</span>
-              </h1>
-            </div>
-            {location.pathname.includes("/employee") ? (
-              <>
-                <div className="sidebar-content employee">
-                  <h1>
-                    {selectedPersonnel?.first_name}{" "}
-                    {selectedPersonnel?.last_name}
-                  </h1>
-                  <div className="sidebar-employee-item">
-                    <span className="title">
-                      {selectedPersonnel?.job_title}
-                    </span>
-                    <hr />
-                    <span>{selectedPersonnel?.email}</span>
-                    <span>{selectedPersonnel?.start_date}</span>
-                  </div>
-                </div>
-                {!isMobile ? (
-                  <div className="sidebar-employee-clock">
-                    <Clock offset={5} color={"bg-primary"} />
-                  </div>
-                ) : (
-                  <br />
-                )}
-              </>
-            ) : (
-              <div className="sidebar-content">
-                <h1>PERSONS</h1>
-                {getPersons()}{" "}
-              </div>
-            )}
-            <ThemeSwitch className="theme-switch" />
+      {mobileOpen ? (
+        <div className={`sidebar ${isMobile && "mobile"}`}>
+          <i
+            onClick={handleMobileOpen}
+            className={`fa-solid  ${
+              mobileOpen ? "fa-caret-left" : "fa-caret-right"
+            }  sidebar-mobile-toggle ${isMobile && "mobile"}`}
+          ></i>
+          <div className="sidebar-title-header">
+            <img
+              src="/logo.png"
+              alt="website logo"
+              onClick={() => navigate("/")}
+            />
+            <h1>
+              TIME<span>SLOT</span>
+            </h1>
           </div>
+          {location.pathname.includes("/employee") ? (
+            <>
+              <div className="sidebar-content employee">
+                <h1>
+                  {selectedPersonnel?.first_name} {selectedPersonnel?.last_name}
+                </h1>
+                <div className="sidebar-employee-item">
+                  <span className="title">{selectedPersonnel?.job_title}</span>
+                  <hr />
+                  <span>{selectedPersonnel?.email}</span>
+                  <span>{selectedPersonnel?.start_date}</span>
+                </div>
+              </div>
+              {!isMobile ? (
+                <div className="sidebar-employee-clock">
+                  <Clock offset={5} color={"bg-primary"} />
+                </div>
+              ) : (
+                <br />
+              )}
+            </>
+          ) : (
+            <div className="sidebar-content">
+              <h1>PERSONS</h1>
+              {getPersons()}{" "}
+            </div>
+          )}
+          <ThemeSwitch className="theme-switch" />
 
           {isOpen && (
             <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -283,7 +291,14 @@ const Sidebar = ({
             options={contextMenuOptions}
             onRequestClose={handleCloseContextMenu}
           />
-        </>
+        </div>
+      ) : (
+        <i
+          onClick={handleMobileOpen}
+          className={`fa-solid  ${
+            mobileOpen ? "fa-caret-left" : "fa-caret-right"
+          }  sidebar-mobile-toggle`}
+        ></i>
       )}
     </>
   );

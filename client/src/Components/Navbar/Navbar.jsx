@@ -9,6 +9,7 @@ import { sendEmail, supabase } from "../../Database";
 import { useSelector, useDispatch } from "react-redux";
 
 import "./Navbar.css"; // Import the CSS file for styling
+import AppointmentsModal from "../AppointmentsModal/AppointmentsModal.jsx";
 
 /**
  * NavbarItem Component
@@ -26,11 +27,28 @@ import "./Navbar.css"; // Import the CSS file for styling
  * - JSX for rendering the navbar item with the specified icon and click behavior.
  */
 
-const NavbarItem = ({ icon, route, action, id }) => {
+const NavbarItem = ({
+  icon,
+  route,
+  action,
+  id,
+  setCurrentPage,
+  currentPage = "",
+}) => {
   const navigate = useNavigate();
-  const onClick = action ? action : () => navigate(route);
+  const onClick = action
+    ? action
+    : () => {
+        setCurrentPage(route.split("/")[1]);
+        navigate(route);
+      };
   return (
-    <li onClick={onClick} className="navbar-item">
+    <li
+      onClick={onClick}
+      className={`navbar-item ${
+        currentPage === route?.split("/")[1] && "current"
+      }`}
+    >
       <i className={icon} data-testid={id}></i>
     </li>
   );
@@ -65,6 +83,8 @@ const Navbar = ({
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [currentPage, setCurrentPage] = useState("home");
+  const [showAppointments, setShowAppointments] = useState(false);
   const isMobile = window.innerWidth <= 768;
   const location = useLocation();
 
@@ -118,16 +138,17 @@ const Navbar = ({
 
   //Handler for dropdown click
   const handleDropdownClick = (option) => {
+    setCurrentPage(option);
     if (option === "Signout") {
       setShowModal(false);
       supabase.auth.signOut();
       setIsLoggedIn(false);
     }
-    if (option === "Create an Organization") {
-      navigate("/create-organization");
+    if (option === "Appointments") {
+      setShowAppointments(true);
     }
     if (option === "Profile") {
-      navigate("/appointments");
+      navigate("/profile");
     }
   };
 
@@ -184,7 +205,13 @@ const Navbar = ({
               icon="fa-solid fa-message"
               action={() => setIsOpen(true)}
             />
-            <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
+
+            <NavbarItem
+              icon="fa-solid fa-circle-info"
+              route="/info"
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
             <NavbarItem
               icon="fa-solid fa-arrow-right-to-bracket"
               route="#"
@@ -194,10 +221,17 @@ const Navbar = ({
         )}
         {isAdmin && isLoggedIn && orgId !== "no_org" && (
           <>
-            <NavbarItem icon="fa-solid fa-home" route={`/home/${orgId}`} />
+            <NavbarItem
+              icon="fa-solid fa-home"
+              route={`/home/${orgId}`}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
             <NavbarItem
               icon="fa-solid fa-clipboard"
               route={`/admin/${orgId}`}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
             />
           </>
         )}
@@ -206,19 +240,22 @@ const Navbar = ({
             <NavbarItem
               icon="fa-solid fa-message"
               action={() => setIsOpen(true)}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
             />
-            <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
+            <NavbarItem
+              icon="fa-solid fa-circle-info"
+              route="/info"
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
             <li className="navbar-item hover-none profile">
               <Dropdown
                 children={<ProfilePic />}
                 label={session?.user.user_metadata.name}
                 options={[
-                  !isLoggedIn
-                    ? {
-                        label: "Create an Organization",
-                        icon: "fa-solid fa-plus",
-                      }
-                    : { label: "Profile", icon: "fa-regular fa-user" },
+                  { label: "Profile", icon: "fa-regular fa-user" },
+                  { label: "Appointments", icon: "fa-solid fa-calendar" },
                   { label: "Signout", icon: "fa-solid fa-sign-out" },
                 ]}
                 onClick={(e) => handleDropdownClick(e)}
@@ -264,6 +301,13 @@ const Navbar = ({
           </p>
         </InputForm>
       </Modal>
+
+      {/* Modal for appointments */}
+      <AppointmentsModal
+        isOpen={showAppointments}
+        onClose={() => setShowAppointments(false)}
+        session={session}
+      />
     </nav>
   );
 };
