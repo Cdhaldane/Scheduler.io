@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAlert } from "../Providers/Alert";
+import { useAlert } from "../../DevComponents/Providers/Alert";
 import Input from "../../DevComponents/Input/Input";
 import { ReactComponent as GoogleIcon } from "../../Icons/Google.svg";
 import { ReactComponent as GitHubIcon } from "../../Icons/GitHub.svg";

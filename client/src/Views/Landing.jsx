@@ -1,6 +1,5 @@
 import React from "react";
 import Clock from "../Components/AnimatedDiv/Clock/Clock.jsx";
-import ThreeClock from "../Components/Three/Clock.js";
 import { useNavigate } from "react-router-dom";
 import "./Styles/Landing.css"; // Ensure you have the corresponding CSS file
 
@@ -42,9 +41,13 @@ const Landing = () => {
           <p>
             Effortless appointment booking and management for professionals.
           </p>
-          <button onClick={() => navigate("/create-organization")}>
-            Get Started
-          </button>
+          {/* <Button
+            onClick={() => navigate("/create-organization")}
+            className="hero-button"
+            color="secondary"
+          >
+            <span>Get Started</span>
+          </Button> */}
         </span>
       </section>
 

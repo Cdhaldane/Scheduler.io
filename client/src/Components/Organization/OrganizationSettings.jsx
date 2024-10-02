@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Input, { InputForm } from "../../DevComponents/Input/Input.jsx";
 import TimePicker from "../../DevComponents/TimePicker/TimePicker.jsx";
 import { getOrganization, updateOrganization } from "../../Database.jsx";
-import { useAlert } from "../Providers/Alert.jsx";
+import { useAlert } from "../../DevComponents/Providers/Alert.jsx";
 
 import "./Organization.css";
 

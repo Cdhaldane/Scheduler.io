@@ -1,7 +1,7 @@
 // AppointmentsModal.js
 import React, { useState, useEffect } from "react";
 import Modal from "../../DevComponents/Modal/Modal";
-import Spinner from "../Spinner/Spinner";
+import Spinner from "../../DevComponents/Spinner/Spinner";
 import { getBookingsByClientEmail, getServiceFromId } from "../../Database";
 import "./AppointmentsModal.css";
 

@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 import { HashRouter as Router } from "react-router-dom"; // Import BrowserRouter
-import { AppProviders } from "./Components/Providers/Providers";
+import { AppProviders } from "./DevComponents/Providers/Providers";
 import store from "./Store";
 import { Provider } from "react-redux";
 import App from "./App"; // Import your App component

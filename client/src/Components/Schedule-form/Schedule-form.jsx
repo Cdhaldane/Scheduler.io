@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../../DevComponents/Dropdown/Dropdown.jsx";
-import { useAlert } from "../Providers/Alert.jsx";
+import { useAlert } from "../../DevComponents/Providers/Alert.jsx";
 import Clock from "../AnimatedDiv/Clock/Clock.jsx";
 
 import "./Schedule-form.css";

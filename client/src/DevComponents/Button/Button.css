@@ -1,6 +1,5 @@
 /* Base Button Styles */
 button {
-  background-color: var(--primary);
   border: none;
   padding: 10px 20px;
   border-radius: 5px; /* Adjusted for a more standard look */
@@ -75,6 +74,10 @@ button:disabled {
   padding: 15px 30px;
   font-size: 1.25rem;
 }
+.button-default {
+  padding: 10px 20px;
+  font-size: 1rem;
+}
 
 /* Utility: Clearfix */
 .clearfix::after {
@@ -97,4 +100,9 @@ button:disabled {
 .button-transparent:hover {
   transform: scale(1.5);
   background-color: transparent !important;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
 }

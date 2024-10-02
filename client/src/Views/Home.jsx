@@ -4,14 +4,14 @@ import Calendar from "../Components/Calendar/Calendar.jsx";
 import ScheduleForm from "../Components/Schedule-form/Schedule-form";
 import EmployeeSchedule from "../Components/Employee/EmployeeSchedule";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
-import Spinner from "../Components/Spinner/Spinner.jsx";
+import Spinner from "../DevComponents/Spinner/Spinner.jsx";
 import _ from "lodash";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
-import { useAlert } from "../Components/Providers/Alert.jsx";
+import { useAlert } from "../DevComponents/Providers/Alert.jsx";
 import { useSelector } from "react-redux";
 import DragLayer from "../Components/Puzzle/Dnd/DragLayer.js";
 import { usePreview } from "react-dnd-preview";

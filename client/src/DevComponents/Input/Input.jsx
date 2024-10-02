@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, cloneElement } from "react";
-import { useAlert } from "../../Components/Providers/Alert";
+import { useAlert } from "../Providers/Alert";
 import axios from "axios";
+
 import "./Input.css";
 
 /**
@@ -102,7 +103,6 @@ const Input = ({
     const inputs = inputRef.current.querySelectorAll("input,textarea,select");
     inputs.forEach((input) => {
       if (!input.checkValidity()) {
-        console.log(input.validationMessage, input.pattern);
         isFormValid = false;
         if (input.pattern === "[0-9]{3}-[0-9]{3}-[0-9]{4}") {
           alert.showAlert(
@@ -251,7 +251,6 @@ export const InputForm = ({
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
-    console.log(values);
     e.preventDefault();
     await onSubmit(values);
     onClose();

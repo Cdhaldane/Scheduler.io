@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "../../DevComponents/Modal/Modal";
 import { supabase } from "../../Database";
-import { useAlert } from "../Providers/Alert";
+import { useAlert } from "../../DevComponents/Providers/Alert";
 import { addPersonnel, deletePersonnel } from "../../Database";
 
 import Input from "../../DevComponents/Input/Input";
@@ -45,7 +45,8 @@ const Sidebar = ({
   services,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1268);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isCompact, setIsCompact] = useState(window.innerWidth <= 1129);
   const [personnelData, setPersonnelData] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
@@ -63,8 +64,16 @@ const Sidebar = ({
 
   useEffect(() => {
     window.addEventListener("resize", () => {
+      if (window.innerWidth <= 1177) {
+        setIsCompact(true);
+        setMobileOpen(false);
+      } else {
+        setMobileOpen(true);
+        setIsCompact(false);
+      }
       if (window.innerWidth <= 768) {
         setIsMobile(true);
+        setMobileOpen(false);
         document.querySelector(".main-body")?.classList.remove("full-width");
       } else {
         setIsMobile(false);
@@ -229,12 +238,14 @@ const Sidebar = ({
     <>
       {mobileOpen ? (
         <div className={`sidebar ${isMobile && "mobile"}`}>
-          <i
-            onClick={handleMobileOpen}
-            className={`fa-solid  ${
-              mobileOpen ? "fa-caret-left" : "fa-caret-right"
-            }  sidebar-mobile-toggle ${isMobile && "mobile"}`}
-          ></i>
+          {isCompact && (
+            <i
+              onClick={handleMobileOpen}
+              className={`fa-solid  ${
+                mobileOpen ? "fa-caret-left" : "fa-caret-right"
+              }  sidebar-mobile-toggle ${isMobile && "mobile"}`}
+            ></i>
+          )}
           <div className="sidebar-title-header">
             <img
               src="/logo.png"
@@ -272,7 +283,7 @@ const Sidebar = ({
               {getPersons()}{" "}
             </div>
           )}
-          <ThemeSwitch className="theme-switch" />
+          <ThemeSwitch className="sidebar-theme-switch" />
 
           {isOpen && (
             <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -295,9 +306,7 @@ const Sidebar = ({
       ) : (
         <i
           onClick={handleMobileOpen}
-          className={`fa-solid  ${
-            mobileOpen ? "fa-caret-left" : "fa-caret-right"
-          }  sidebar-mobile-toggle`}
+          className={`fa-solid fa-bars sidebar-mobile-toggle`}
         ></i>
       )}
     </>

@@ -32,7 +32,7 @@ import "./Dropdown.css";
  */
 
 const Dropdown = ({
-  label,
+  label = "Dropdown Button",
   options,
   onClick,
   children,
@@ -61,7 +61,11 @@ const Dropdown = ({
 
   return (
     <div className="dropdown" ref={dropdownRef}>
-      <div onClick={() => setIsOpen(!isOpen)} className="dropdown-holder">
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className="dropdown-holder"
+        aria-label={label}
+      >
         {children}
         {type === "button" ? (
           isOpen ? (

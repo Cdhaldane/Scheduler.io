@@ -1,14 +1,13 @@
-import "@testing-library/jest-dom";
-
 // Input.test.js
 import React from "react";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import "@testing-library/jest-dom";
 import Input, { InputForm } from "./Input";
-import { useAlert } from "../../Components/Providers/Alert";
+import { useAlert } from "../Providers/Alert";
 
 // Mock the useAlert hook
-jest.mock("../../Components/Providers/Alert", () => ({
+jest.mock("../Providers/Alert", () => ({
   useAlert: jest.fn(),
 }));
 

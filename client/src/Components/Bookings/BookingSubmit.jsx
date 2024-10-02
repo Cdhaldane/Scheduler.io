@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ErrorPage from "../../Views/404";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useAlert } from "../Providers/Alert";
+import { useAlert } from "../../DevComponents/Providers/Alert";
 import { sendEmail, addBooking } from "../../Database";
 import queryString from "query-string";
 

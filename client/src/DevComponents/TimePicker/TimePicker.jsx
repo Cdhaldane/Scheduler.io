@@ -78,6 +78,7 @@ const TimePicker = ({ label, onChange, defaultValue }) => {
         width: timeWidth,
       }}
       ref={timeRef}
+      aria-label={label}
     >
       <span className="time-picker-title">
         <i className="fa-solid fa-clock"></i>
@@ -89,6 +90,7 @@ const TimePicker = ({ label, onChange, defaultValue }) => {
             setSelectedHour(hour);
             triggerChange(hour, selectedMinute, selectedSecond);
           }}
+          label="Hour Dropdown"
           {...dropdownProps}
         >
           <span className="time-select">
@@ -104,6 +106,7 @@ const TimePicker = ({ label, onChange, defaultValue }) => {
             setSelectedMinute(minute);
             triggerChange(selectedHour, minute, selectedSecond);
           }}
+          label="Minute Dropdown"
           {...dropdownProps}
         >
           <span className="time-select">
@@ -119,6 +122,7 @@ const TimePicker = ({ label, onChange, defaultValue }) => {
             setSelectedSecond(second);
             triggerChange(selectedHour, selectedMinute, second);
           }}
+          label="Second Dropdown"
           {...dropdownProps}
         >
           <span className="time-select">

@@ -5,7 +5,7 @@ import CalendarHeader from "./Components/CalendarHeader/CalendarHeader.jsx";
 import "./Calendar.css";
 import { getServiceFromId } from "../../Database.jsx";
 import Button from "../../DevComponents/Button/Button.jsx";
-import Spinner from "../Spinner/Spinner.jsx";
+import Spinner from "../../DevComponents/Spinner/Spinner.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { setTime } from "../../Store.js";
 import Modal from "../../DevComponents/Modal/Modal.jsx";

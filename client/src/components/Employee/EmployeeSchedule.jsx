@@ -5,7 +5,7 @@ import "./EmployeeSchedule.css"; // Importing the CSS file
 const EmployeeSchedule = ({ bookings }) => {
   const [services, setServices] = useState({});
   const [isOpen, setIsOpen] = useState(0);
-  const isMobile = window.innerWidth <= 768;
+  const isMobile = window.innerWidth < 768;
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
   const [loading, setLoading] = useState(true);
 

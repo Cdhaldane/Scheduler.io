@@ -5,7 +5,10 @@ import Modal from "../../DevComponents/Modal/Modal.jsx";
 import { InputForm } from "../../DevComponents/Input/Input.jsx";
 import { HexColorPicker } from "react-colorful";
 import PuzzlePiece from "./PuzzlePiece.jsx";
-import Tooltip, { TooltipProvider, useTooltip } from "../Providers/Tooltip";
+import Tooltip, {
+  TooltipProvider,
+  useTooltip,
+} from "../../DevComponents/Providers/Tooltip.jsx";
 import {
   supabase,
   getPersonnel,
