@@ -4,10 +4,10 @@ import "./Provider.css";
 
 /**
  * AlertContext
- * 
+ *
  * Purpose:
  * - The AlertContext is a React context that provides a way to display alert messages across the application.
- * 
+ *
  * Outputs:
  * - A context object that can be used with useContext to access the alert state and showAlert function.
  */
@@ -15,10 +15,10 @@ const AlertContext = createContext();
 
 /**
  * useAlert Hook
- * 
+ *
  * Purpose:
  * - A custom hook that provides a convenient way to access the alert context.
- * 
+ *
  * Outputs:
  * - The alert context value, which includes the current alert state and the showAlert function.
  */
@@ -29,13 +29,13 @@ export const useAlert = () => {
 
 /**
  * AlertProvider Component
- * 
+ *
  * Purpose:
  * - The AlertProvider component wraps the application with the AlertContext.Provider to provide the alert functionality to the entire app.
- * 
+ *
  * Inputs:
  * - children: The child components of the AlertProvider.
- * 
+ *
  * Outputs:
  * - JSX for rendering the context provider with the alert state and showAlert function.
  */
@@ -59,13 +59,13 @@ export const AlertProvider = ({ children }) => {
 
 /**
  * Alert Component
- * 
+ *
  * Purpose:
  * - The Alert component displays the current alert message with appropriate styling based on the alert type.
- * 
+ *
  * Inputs:
  * - None directly; the component uses the AlertContext to access the current alert state.
- * 
+ *
  * Outputs:
  * - JSX for rendering the alert message if it exists, or null if there is no alert.
  */

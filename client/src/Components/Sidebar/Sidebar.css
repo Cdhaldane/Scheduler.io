@@ -232,9 +232,10 @@
   top: 10px;
   left: 10px;
   font-size: 2em;
-  color: var(--primary);
+  color: var(--ash);
   z-index: 10000;
   opacity: 1 !important;
+  cursor: pointer;
 }
 
 .sidebar-mobile-toggle:hover {
@@ -251,6 +252,19 @@
 
 .sidebar-mobile-toggle.fa-caret-left.mobile {
   left: 95%;
+}
+
+.sidebar-theme-switch {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  color: var(--white);
+  margin: 0 auto;
+  bottom: 0px;
+  z-index: 100;
+  border-bottom: 3px solid var(--primary);
+  padding-bottom: 20px;
+  width: 80%;
 }
 
 @media (max-width: 1045px) {

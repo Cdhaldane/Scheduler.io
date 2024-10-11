@@ -3,7 +3,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import BookingSubmit from "./BookingSubmit";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAlert } from "../Providers/Alert";
+import { useAlert } from "../../DevComponents/Providers/Alert";
 import { sendEmail, addBooking } from "../../Database";
 import * as queryString from "query-string";
 
@@ -14,7 +14,7 @@ jest.mock("react-router-dom", () => ({
 }));
 
 // Mock useAlert
-jest.mock("../Providers/Alert", () => ({
+jest.mock("../../DevComponents/Providers/Alert", () => ({
   useAlert: jest.fn(),
 }));
 

@@ -28,16 +28,17 @@ import "./Button.css";
 const Button = ({
   onClick,
   children,
-  className = "default",
+  className = "button-default",
   type = "button",
   color = "primary",
-  multiple = false,
+  multiple,
+  flex_dir = "column",
   enterAnimation,
   exitAnimation,
   exitTrigger,
   ...props
 }) => {
-  const [animationClass, setAnimationClass] = useState("");
+  const [animationClass, setAnimationClass] = useState(enterAnimation || "");
 
   useEffect(() => {
     if (enterAnimation) {
@@ -51,14 +52,20 @@ const Button = ({
     }
   }, [exitTrigger]);
 
-  if (multiple) {
+  if (multiple && children && children.length > 1) {
     return (
-      <div className="button-group">
+      <div
+        className="button-group"
+        style={{
+          flexDirection: flex_dir,
+        }}
+        role="group"
+      >
         {React.Children.map(children, (child, index) => {
           return (
             <button
               type={type}
-              className={`button ${className}`}
+              className={`button ${className} ${animationClass}`}
               onClick={onClick}
               style={{
                 backgroundColor: `var(--${color})`,
@@ -75,7 +82,7 @@ const Button = ({
   return (
     <button
       type={type}
-      className={`button ${className}`}
+      className={`button ${className} ${animationClass}`}
       onClick={onClick}
       style={{ backgroundColor: `var(--${color})` }}
       {...props}

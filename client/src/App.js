@@ -14,7 +14,6 @@ import "./App.css";
 import Landing from "./Views/Landing.jsx";
 import Home from "./Views/Home.jsx";
 import Admin from "./Views/Admin.jsx";
-import Employee from "./Views/Employee.jsx";
 import Profile from "./Views/Profile.jsx";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import Login from "./Components/Login/Login.jsx";
@@ -23,9 +22,9 @@ import ACMain from "./Views/OrgCreation/ACMain.jsx";
 import BookingPage from "./Components/Bookings/BookingPage.jsx";
 import BookingSubmit from "./Components/Bookings/BookingSubmit.jsx";
 import NotFoundPage from "./Views/404.jsx";
-import Alert from "./Components/Providers/Alert";
+import Alert from "./DevComponents/Providers/Alert.jsx";
 import Info from "./Views/Info";
-import Spinner from "./Components/Spinner/Spinner";
+import Spinner from "./DevComponents/Spinner/Spinner.jsx";
 import CookieConsent from "./DevComponents/CookieConsent/CookieConsent.jsx";
 import Modal from "./DevComponents/Modal/Modal.jsx";
 import DevTools from "./DevComponents/DevTools/DevTools.jsx";
@@ -205,10 +204,6 @@ function App() {
                     organization={organization}
                   />
                 }
-              />
-              <Route
-                path="/employee"
-                element={<Employee session={session} type="employee" />}
               />
             </>
           ) : (

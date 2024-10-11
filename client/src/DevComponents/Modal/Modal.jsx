@@ -42,7 +42,7 @@ function Modal({ isOpen, onClose, children, className }) {
   return (
     <div className={`modal`}>
       <div className={`modal-content ${className}`} ref={modalRef}>
-        <span className="close" onClick={onClose}>
+        <span className="close" id="close-modal" onClick={onClose}>
           &times;
         </span>
         {children}

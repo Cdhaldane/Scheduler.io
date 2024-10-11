@@ -4,18 +4,19 @@ import Calendar from "../Components/Calendar/Calendar.jsx";
 import ScheduleForm from "../Components/Schedule-form/Schedule-form";
 import EmployeeSchedule from "../Components/Employee/EmployeeSchedule";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
-import Spinner from "../Components/Spinner/Spinner.jsx";
+import Spinner from "../DevComponents/Spinner/Spinner.jsx";
 import _ from "lodash";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
-import { useAlert } from "../Components/Providers/Alert.jsx";
+import { useAlert } from "../DevComponents/Providers/Alert.jsx";
 import { useSelector } from "react-redux";
 import DragLayer from "../Components/Puzzle/Dnd/DragLayer.js";
 import { usePreview } from "react-dnd-preview";
 import PuzzlePiece from "../Components/Puzzle/PuzzlePiece.jsx";
+import DynamicDiv from "../Components/DynamicDiv/DynamicDiv.jsx";
 
 import {
   supabase,
@@ -233,27 +234,48 @@ const Home = ({ session, type, organization }) => {
         />
         <div className="main-body">
           <Calendar {...calendarProps} />
-          {type === "employee" && <EmployeeSchedule bookings={bookings} />}
+          {type === "employee" && (
+            <DynamicDiv
+              sideIcon="fas fa-calendar-check"
+              title="My Bookings"
+              color="var(--ash)"
+            >
+              <EmployeeSchedule bookings={bookings} />
+            </DynamicDiv>
+          )}
           {type === "customer" && (
-            <ScheduleForm
-              selectedPersonnel={selectedPersonnel}
-              selectedSlot={selectedSlot}
-              personnel={personnel}
-              session={session}
-              selectedService={selectedService}
-              setSelectedService={setSelectedService}
-              services={services}
-              organization={org}
-            />
+            <DynamicDiv
+              sideIcon="fas fa-calendar-check"
+              title="Appointment"
+              color="var(--primary)"
+            >
+              <ScheduleForm
+                selectedPersonnel={selectedPersonnel}
+                selectedSlot={selectedSlot}
+                personnel={personnel}
+                session={session}
+                selectedService={selectedService}
+                setSelectedService={setSelectedService}
+                services={services}
+                organization={org}
+              />
+            </DynamicDiv>
           )}
           {type === "admin" && (
             <>
               <MyPreview />
-              <PuzzleContainer
-                puzzlePieces={services}
-                onDrop={onDrop}
-                {...calendarProps}
-              />
+              <DynamicDiv
+                title="Services"
+                sideIcon="fas fa-puzzle-piece"
+                color="var(--bg-primary)"
+                backgroundColor="var(--primary"
+              >
+                <PuzzleContainer
+                  puzzlePieces={services}
+                  onDrop={onDrop}
+                  {...calendarProps}
+                />
+              </DynamicDiv>
             </>
           )}
         </div>

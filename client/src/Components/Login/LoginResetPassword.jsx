@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Input from "../../DevComponents/Input/Input";
 import { supabase } from "../../Database";
-import { useAlert } from "../Providers/Alert";
+import { useAlert } from "../../DevComponents/Providers/Alert";
 import { useNavigate } from "react-router-dom";
 
 import "./Login.css";
@@ -22,7 +22,6 @@ import "./Login.css";
  * - JSX for rendering the password reset form with an input field for the new password and a submit button.
  * - Alerts to inform the user of the status of their password update.
  */
-
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");

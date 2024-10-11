@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoginForm from "../Login/Login";
-import RegisterAccount from "../Customer/CustomerRegister/CustomerRegister.jsx";
 import Modal from "../../DevComponents/Modal/Modal.jsx";
 import Dropdown from "../../DevComponents/Dropdown/Dropdown.jsx";
 import { InputForm } from "../../DevComponents/Input/Input.jsx";
@@ -82,7 +81,6 @@ const Navbar = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isRegistering, setIsRegistering] = useState(false);
   const [currentPage, setCurrentPage] = useState("home");
   const [showAppointments, setShowAppointments] = useState(false);
   const isMobile = window.innerWidth <= 768;
@@ -270,11 +268,7 @@ const Navbar = ({
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <>
           <div className="modal-body">
-            {isRegistering ? (
-              <RegisterAccount onClose={() => setShowModal(false)} />
-            ) : (
-              <LoginForm onLoginSuccess={handleLoginSuccess} />
-            )}
+            <LoginForm onLoginSuccess={handleLoginSuccess} />
           </div>
         </>
       </Modal>

@@ -30,6 +30,7 @@
 .clock::after {
   width: 25%;
   height: 25%;
+
   box-shadow: -1px 0px 20px 10px #000000, 1px 1px 3px rgba(0, 0, 0, 0.288);
 }
 
@@ -103,4 +104,23 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
+}
+
+/* Clock hands animation */
+@keyframes secondHand {
+  from {
+    transform: rotate(0deg) translateY(-30%);
+  }
+  to {
+    transform: rotate(360deg) translateY(-30%);
+  }
+}
+
+@keyframes minuteHand {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -15,8 +15,12 @@
 }
 
 .time-picker-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   position: absolute;
-  font-size: 1rem;
+  font-size: 1em;
   right: 5px;
   top: 3px;
   color: var(--light-grey);

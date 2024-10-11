@@ -6,7 +6,7 @@ import {
   updateUser,
 } from "../Database";
 import { useNavigate } from "react-router-dom";
-import Spinner from "../Components/Spinner/Spinner";
+import Spinner from "../DevComponents/Spinner/Spinner";
 import AppointmentsModal from "../Components/AppointmentsModal/AppointmentsModal";
 import "./Styles/Profile.css";
 

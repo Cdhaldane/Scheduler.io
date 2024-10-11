@@ -15,7 +15,7 @@ import "./ThemeSwitch.css";
  * - JSX for rendering the theme switch with icons for light and dark modes.
  */
 
-function ThemeSwitch(props) {
+function ThemeSwitch({ className = "" }) {
   const [isDarkMode, setIsDarkMode] = useState();
   const sunRef = useRef(null);
   const moonRef = useRef(null);
@@ -42,7 +42,7 @@ function ThemeSwitch(props) {
 
   //Render the theme switch with icons for light and dark modes
   return (
-    <div className={props.className}>
+    <div className={`theme-switch ${className}`}>
       <label className="switch">
         <i
           ref={sunRef}
@@ -70,7 +70,6 @@ export default ThemeSwitch;
 
 export const initializeTheme = () => {
   const isDarkMode = JSON.parse(localStorage.getItem("isDarkMode"));
-  console.log("isDarkMode", isDarkMode);
   if (isDarkMode) {
     document.body.classList.remove("light-mode");
   } else {

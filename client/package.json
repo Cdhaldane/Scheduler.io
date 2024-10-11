@@ -36,6 +36,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --env=jsdom --watchAll=false --coverage",
     "lint": "eslint .",
     "eject": "react-scripts eject"
   },
@@ -58,15 +59,23 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-transform-private-property-in-object": "^7.25.8",
+    "@babel/preset-env": "^7.25.7",
+    "@babel/preset-react": "^7.25.7",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^14.3.1",
     "@testing-library/user-event": "^14.5.2",
+    "babel-jest": "^29.7.0",
     "cypress": "^13.14.2",
     "dotenv": "^16.4.5",
     "jest": "^27.5.1",
     "react-scripts": "^5.0.1"
   },
   "jest": {
+    "moduleNameMapper": {
+      "^axios$": "axios/dist/node/axios.cjs"
+    },
     "transformIgnorePatterns": [
       "/node_modules/(?!react-dnd|dnd-core|@react-dnd)",
       "node_modules/(?!(query-string)/)"

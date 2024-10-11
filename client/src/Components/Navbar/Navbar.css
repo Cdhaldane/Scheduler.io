@@ -20,7 +20,6 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   width: 70%;
-  height: 100%;
   padding-left: 45px;
   padding-top: 5px;
 }
@@ -32,6 +31,7 @@
 }
 
 .navbar-header > h1 {
+  display: flex;
   font-weight: 800;
   font-size: 2.4em;
   margin-left: -5px;
