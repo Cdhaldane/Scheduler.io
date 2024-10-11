@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import "./Clocks.css";
+import "./Clock.css";
 
 const Clock = ({
   width,
