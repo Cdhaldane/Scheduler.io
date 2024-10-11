@@ -20,7 +20,6 @@ import React from "react";
  */
 
 const Puzzle = ({ children, ref, style, className, color }) => {
-  console.log(ref, style);
   return (
     <div className={className} style={style} ref={ref}>
       {children}

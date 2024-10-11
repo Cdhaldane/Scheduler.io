@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import DragLayer from "../Components/Puzzle/Dnd/DragLayer.js";
 import { usePreview } from "react-dnd-preview";
 import PuzzlePiece from "../Components/Puzzle/PuzzlePiece.jsx";
+import DynamicDiv from "../Components/DynamicDiv/DynamicDiv.jsx";
 
 import {
   supabase,
@@ -233,27 +234,48 @@ const Home = ({ session, type, organization }) => {
         />
         <div className="main-body">
           <Calendar {...calendarProps} />
-          {type === "employee" && <EmployeeSchedule bookings={bookings} />}
+          {type === "employee" && (
+            <DynamicDiv
+              sideIcon="fas fa-calendar-check"
+              title="My Bookings"
+              color="var(--ash)"
+            >
+              <EmployeeSchedule bookings={bookings} />
+            </DynamicDiv>
+          )}
           {type === "customer" && (
-            <ScheduleForm
-              selectedPersonnel={selectedPersonnel}
-              selectedSlot={selectedSlot}
-              personnel={personnel}
-              session={session}
-              selectedService={selectedService}
-              setSelectedService={setSelectedService}
-              services={services}
-              organization={org}
-            />
+            <DynamicDiv
+              sideIcon="fas fa-calendar-check"
+              title="Appointment"
+              color="var(--primary)"
+            >
+              <ScheduleForm
+                selectedPersonnel={selectedPersonnel}
+                selectedSlot={selectedSlot}
+                personnel={personnel}
+                session={session}
+                selectedService={selectedService}
+                setSelectedService={setSelectedService}
+                services={services}
+                organization={org}
+              />
+            </DynamicDiv>
           )}
           {type === "admin" && (
             <>
               <MyPreview />
-              <PuzzleContainer
-                puzzlePieces={services}
-                onDrop={onDrop}
-                {...calendarProps}
-              />
+              <DynamicDiv
+                title="Services"
+                sideIcon="fas fa-puzzle-piece"
+                color="var(--bg-primary)"
+                backgroundColor="var(--primary"
+              >
+                <PuzzleContainer
+                  puzzlePieces={services}
+                  onDrop={onDrop}
+                  {...calendarProps}
+                />
+              </DynamicDiv>
             </>
           )}
         </div>

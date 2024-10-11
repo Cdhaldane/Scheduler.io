@@ -137,122 +137,71 @@ const ScheduleForm = ({
 
   //Render the schedule form with the appointment details and booking button
   return (
-    <>
-      {isMobile && (
-        <i
-          onClick={() =>
-            handleTwoWayCollapse(
-              mobileOpen,
-              setMobileOpen,
-              "schedule-container",
-              "right"
-            )
-          }
-          className={`fa-solid fa-calendar-check schedule-form-mobile-toggle ${
-            mobileOpen ? "hidden" : ""
-          }`}
-        ></i>
-      )}
-      {mobileOpen && (
-        <div
-          className={`main-right schedule-container ${
-            isMobile ? "mobile" : ""
-          }`}
-          ref={drag}
-          style={{}}
-        >
-          <div className="body">
-            <div className="schedule-label">
-              <i
-                className="fa-solid fa-calendar-check"
-                onClick={() =>
-                  handleTwoWayCollapse(
-                    mobileOpen,
-                    setMobileOpen,
-                    "schedule-container",
-                    "right"
-                  )
-                }
-              ></i>
-              <h1>APPOINTMENT</h1>
-            </div>
-
-            <div className="schedule-appointment">
-              <div className="schedule-header">
-                PERSONEL:{" "}
-                <h2>
-                  {selectedPersonnel?.first_name} {selectedPersonnel?.last_name}
-                </h2>
-              </div>
-
-              {/* <select onChange={handleServiceChange} value={selectedService}>
-            <option value="haircut">Haircut</option>
-            <option value="shave">Shave</option>
-            <option value="haircut and shave">Haircut and Shave</option>
-          </select> */}
-
-              <div className="schedule-appointment-info">
-                <Dropdown
-                  type="button"
-                  className={"service-dropdown"}
-                  options={
-                    services?.map((service) => service.name) || [
-                      "No Services Available",
-                    ]
-                  }
-                  onClick={(service) => handleServiceChange(service)}
-                >
-                  {" "}
-                  <button className="dropdown-toggle">
-                    {selectedService?.name || "SELECT SERVICE"}
-                  </button>
-                </Dropdown>
-                <span>
-                  <h1>Duration</h1>
-                  <h2> {selectedService?.duration || 0} hours</h2>
-                </span>
-                <span>
-                  <h1>Price</h1>
-                  <h2> ${selectedService?.price || 0}</h2>
-                </span>
-                <span>
-                  <h1>Date</h1>
-                  <h2>
-                    {" "}
-                    {day?.toLocaleDateString("en-US", {
-                      weekday: "long",
-                      month: "numeric",
-                      day: "numeric",
-                    })}
-                  </h2>
-                </span>
-                <span>
-                  <h1>Start</h1>
-                  <h2> {start}:00</h2>
-                </span>
-                <span>
-                  <h1>End</h1>
-                  <h2>
-                    {" "}
-                    {start + (selectedService ? selectedService.duration : 2)}
-                    :00
-                  </h2>
-                </span>
-              </div>
-            </div>
-          </div>
-          <footer>
-            <button
-              className="book-appointment"
-              onClick={handleBookAppointment}
-            >
-              BOOK APPOINTMENT
-              <i className="fa-solid fa-computer-mouse"></i>
-            </button>
-          </footer>
+    <div className={`schedule-container`} ref={drag} style={{}}>
+      <div className="schedule-body">
+        <div className="schedule-header">
+          PERSONEL:{" "}
+          <h2>
+            {selectedPersonnel?.first_name} {selectedPersonnel?.last_name}
+          </h2>
         </div>
-      )}
-    </>
+
+        <div className="schedule-appointment-info">
+          <Dropdown
+            type="button"
+            className={"service-dropdown"}
+            options={
+              services?.map((service) => service.name) || [
+                "No Services Available",
+              ]
+            }
+            onClick={(service) => handleServiceChange(service)}
+          >
+            {" "}
+            <button className="dropdown-toggle">
+              {selectedService?.name || "SELECT SERVICE"}
+            </button>
+          </Dropdown>
+          <span>
+            <h1>Duration</h1>
+            <h2> {selectedService?.duration || 0} hours</h2>
+          </span>
+          <span>
+            <h1>Price</h1>
+            <h2> ${selectedService?.price || 0}</h2>
+          </span>
+          <span>
+            <h1>Date</h1>
+            <h2>
+              {" "}
+              {day?.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "numeric",
+                day: "numeric",
+              })}
+            </h2>
+          </span>
+          <span>
+            <h1>Start</h1>
+            <h2> {start}:00</h2>
+          </span>
+          <span>
+            <h1>End</h1>
+            <h2>
+              {" "}
+              {start + (selectedService ? selectedService.duration : 2)}
+              :00
+            </h2>
+          </span>
+        </div>
+      </div>
+      <footer>
+        <button className="book-appointment" onClick={handleBookAppointment}>
+          BOOK APPOINTMENT
+          <i className="fa-solid fa-computer-mouse"></i>
+        </button>
+      </footer>
+    </div>
   );
 };
 

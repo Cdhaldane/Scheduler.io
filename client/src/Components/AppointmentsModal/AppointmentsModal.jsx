@@ -14,7 +14,7 @@ const AppointmentsModal = ({ isOpen, onClose, session }) => {
   const fetchAppointments = async () => {
     const { data, error } = await getBookingsByClientEmail(session.user.email);
     if (error) {
-      console.log("Error fetching appointments:", error);
+      // console.log("Error fetching appointments:", error);
     }
     if (data) {
       updateAppointments(data);
@@ -59,6 +59,7 @@ const AppointmentsModal = ({ isOpen, onClose, session }) => {
           <span>
             <i
               className="fa-solid fa-check"
+              id="confirmed"
               style={{
                 backgroundColor:
                   selectedFilter === "confirmed"
@@ -73,6 +74,7 @@ const AppointmentsModal = ({ isOpen, onClose, session }) => {
             />
             <i
               className="fa-solid fa-hourglass"
+              id="pending"
               style={{
                 backgroundColor:
                   selectedFilter === "pending"
@@ -87,6 +89,7 @@ const AppointmentsModal = ({ isOpen, onClose, session }) => {
             />
             <i
               className="fa-solid fa-x"
+              id="cancelled"
               style={{
                 backgroundColor:
                   selectedFilter === "cancelled"

@@ -99,90 +99,51 @@ const PuzzleContainer = ({
   //Render the JSX for the PuzzleContainer
   return (
     <>
-      {isMobile && (
-        <i
-          onClick={() =>
-            handleTwoWayCollapse(
-              mobileOpen,
-              setMobileOpen,
-              "pieces-container",
-              "right"
-            )
-          }
-          className={`fa-solid fa-chevron-left calendar-mobile-expand ${
-            mobileOpen ? "hidden" : ""
-          }`}
-        ></i>
-      )}
-
-      {mobileOpen && (
-        <div className={`main-right pieces-container ${isMobile && "mobile"}`}>
-          <div className="pieces-main">
-            {isMobile && (
-              <i
-                className={`fa-solid fa-caret-right`}
-                onClick={() =>
-                  handleTwoWayCollapse(
-                    mobileOpen,
-                    setMobileOpen,
-                    "pieces-container",
-                    "right"
-                  )
-                }
-              ></i>
-            )}
-            <h1>
-              <i className="fas fa-puzzle-piece icon-right"></i> Services
-            </h1>
-            <div className="pieces-list">
-              {puzzlePieces?.map((piece, index) => (
-                // <Tooltip
-                //   tooltipText={piece.description}
-                //   theme={{ color: piece?.backgroundColor }}
-                //   direction="down"
-                // >
-                <PuzzlePiece
-                  puzzlePieces={puzzlePieces}
-                  key={index}
-                  piece={piece}
-                  animate={
-                    piece.id === animateDeleteId
-                      ? "animate-delete"
-                      : piece.id === animateAddId
-                      ? "animate-add"
-                      : null
-                  }
-                  pieceRef={pieceRef}
-                />
-                // </Tooltip>
-              ))}
+      <div className={`pieces-container`}>
+        <div className="pieces-list">
+          {puzzlePieces?.map((piece, index) => (
+            // <Tooltip
+            //   tooltipText={piece.description}
+            //   theme={{ color: piece?.backgroundColor }}
+            //   direction="down"
+            // >
+            <PuzzlePiece
+              puzzlePieces={puzzlePieces}
+              key={index}
+              piece={piece}
+              animate={
+                piece.id === animateDeleteId
+                  ? "animate-delete"
+                  : piece.id === animateAddId
+                  ? "animate-add"
+                  : null
+              }
+              pieceRef={pieceRef}
+            />
+            // </Tooltip>
+          ))}
+        </div>
+        <div className={`pieces-footer`}>
+          <Tooltip tooltipText="Add Service" theme={{ color: "primary" }}>
+            <div className="green" id="add-bin" onClick={() => setIsOpen(true)}>
+              <i className="fas fa-plus"></i>
             </div>
-          </div>
-          <div className={`pieces-footer`}>
-            <Tooltip tooltipText="Add Service" theme={{ color: "primary" }}>
-              <div
-                className="green"
-                id="add-bin"
-                onClick={() => setIsOpen(true)}
-              >
-                <i className="fas fa-plus"></i>
-              </div>
-            </Tooltip>
-            {/* <Tooltip
+          </Tooltip>
+          {/* <Tooltip
               tooltipText="Delete Service"
               theme={{ color: "secondary" }}
             > */}
-            <div
-              id="garbage-bin"
-              className={`${isBinOver ? "is-over" : "no"}`}
-              ref={dropRef}
-            >
-              <i className="fa-regular fa-trash-can"></i>
-            </div>
-            {/* </Tooltip> */}
+          <div
+            id="garbage-bin"
+            className={`${isBinOver ? "is-over" : "no"}`}
+            ref={dropRef}
+          >
+            <i className="fa-regular fa-trash-can"></i>
           </div>
+          {/* </Tooltip> */}
         </div>
-      )}
+      </div>
+
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <InputForm
           id="add-service"

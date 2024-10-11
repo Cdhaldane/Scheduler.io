@@ -32,55 +32,36 @@ const EmployeeSchedule = ({ bookings }) => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <>
-      {isMobile && (
-        <i
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className={`fa-solid fa-calendar-check schedule-form-mobile-toggle ${
-            mobileOpen ? "hidden" : ""
-          }`}
-        ></i>
-      )}
-      {mobileOpen && (
-        <div className={`schedule-view ${isMobile ? "mobile" : ""}`}>
-          <h2>
-            <i
-              onClick={() => isMobile && setMobileOpen(false)}
-              className={`fa-solid fa-calendar-check schedule-view-mobile-toggle`}
-            ></i>
-            My Bookings
-          </h2>
-          <ul className="booking-list">
-            {bookings.map((booking, index) => (
-              <div className="booking-list-container">
-                <li
-                  key={index}
-                  className="booking-item"
-                  onClick={() => setIsOpen(index === isOpen ? -1 : index)}
-                >
-                  <span className="booking-time">
-                    {booking.booking_date} {booking.booking_time}{" "}
-                    {parseInt(booking.booking_time) <= 12 ? "AM" : "PM"}
-                  </span>
-                  <span className="booking-client">{booking.client_name}</span>
-                  <span className="booking-service">
-                    {services[booking.service_id] || "Loading..."}
-                  </span>
-                </li>
-                {isOpen === index && (
-                  <div className="booking-details yellow">
-                    <i className="pin"></i>
-                    <p>Client Email: {booking.client_email}</p>
-                    <p>Client Phone: {booking.client_phone}</p>
-                    <p>Booking Status: {booking.status}</p>
-                  </div>
-                )}
+    <div className={`schedule-view`}>
+      <ul className="booking-list">
+        {bookings.map((booking, index) => (
+          <div className="booking-list-container">
+            <li
+              key={index}
+              className="booking-item"
+              onClick={() => setIsOpen(index === isOpen ? -1 : index)}
+            >
+              <span className="booking-time">
+                {booking.booking_date} {booking.booking_time}{" "}
+                {parseInt(booking.booking_time) <= 12 ? "AM" : "PM"}
+              </span>
+              <span className="booking-client">{booking.client_name}</span>
+              <span className="booking-service">
+                {services[booking.service_id] || "Loading..."}
+              </span>
+            </li>
+            {isOpen === index && (
+              <div className="booking-details yellow">
+                <i className="pin"></i>
+                <p>Client Email: {booking.client_email}</p>
+                <p>Client Phone: {booking.client_phone}</p>
+                <p>Booking Status: {booking.status}</p>
               </div>
-            ))}
-          </ul>
-        </div>
-      )}
-    </>
+            )}
+          </div>
+        ))}
+      </ul>
+    </div>
   );
 };
 

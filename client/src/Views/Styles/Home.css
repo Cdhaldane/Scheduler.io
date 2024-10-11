@@ -56,34 +56,6 @@
   display: flex;
 }
 
-.book-appointment {
-  position: relative;
-  justify-content: center;
-  background-color: var(--bg-primary) !important;
-  border: 3px solid var(--primary);
-  width: 90%;
-  font-size: 1.4em;
-  font-weight: 800;
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  margin: 0px auto;
-  border-radius: 4px;
-}
-
-.book-appointment i {
-  position: absolute;
-  right: 10px;
-}
-
-.book-appointment:hover {
-  background-color: var(--primary) !important;
-  transition: all 0.3s ease-in-out;
-
-  font-size: 1.5em;
-  color: var(--bg-primary);
-}
-
 .info-page {
   display: flex;
   justify-content: center;

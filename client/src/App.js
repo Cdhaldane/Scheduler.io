@@ -14,7 +14,6 @@ import "./App.css";
 import Landing from "./Views/Landing.jsx";
 import Home from "./Views/Home.jsx";
 import Admin from "./Views/Admin.jsx";
-import Employee from "./Views/Employee.jsx";
 import Profile from "./Views/Profile.jsx";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import Login from "./Components/Login/Login.jsx";
@@ -205,10 +204,6 @@ function App() {
                     organization={organization}
                   />
                 }
-              />
-              <Route
-                path="/employee"
-                element={<Employee session={session} type="employee" />}
               />
             </>
           ) : (

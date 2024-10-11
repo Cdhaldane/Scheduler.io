@@ -51,6 +51,7 @@ const Clock = ({
         width: width,
         height: height,
       }}
+      role="presentation"
     >
       <div className="clock-face"></div>
       {[...Array(12)].map((_, i) => (

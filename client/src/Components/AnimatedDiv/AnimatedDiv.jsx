@@ -3,7 +3,7 @@ import { useDidMountEffect } from "../../Utils";
 import "./AnimatedDiv.css";
 
 const AnimatedDiv = ({
-  className,
+  className = "",
   enterAnimation,
   exitAnimation,
   exitTrigger,
