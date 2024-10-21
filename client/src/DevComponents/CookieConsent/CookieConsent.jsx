@@ -34,8 +34,7 @@ const CookieConsent = () => {
   };
 
   return (
-    isVisible &&
-    !isLocalHost && (
+    isVisible && (
       <div className="modal">
         <div className="cookie-consent">
           <p>

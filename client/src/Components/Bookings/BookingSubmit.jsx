@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../DevComponents/Providers/Alert";
 import { sendEmail, addBooking } from "../../Database";
+import { validateEmail } from "../../Utils";
 import queryString from "query-string";
 
 import "./Bookings.css";
@@ -64,6 +65,20 @@ const BookingSubmit = () => {
     let time = appointment.day;
     if (typeof time === "string") time = new Date(time);
     time.setHours(appointment.start, 0, 0, 0);
+
+    if (!validateEmail(user.email))
+      return alert.showAlert("error", "Invalid Email");
+
+    if (
+      appointment.service === undefined ||
+      appointment.personnel === undefined
+    ) {
+      alert.showAlert(
+        "error",
+        "Booking Failed, No Service or Personnel Selected"
+      );
+      return;
+    }
 
     const { res, error } = await addBooking({
       client_email: user.email,

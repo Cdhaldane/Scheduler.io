@@ -48,8 +48,10 @@ const CalendarHeader = ({
             if (timeFrameIndex >= times.length - 1) setTimeFrameIndex(0);
             else setTimeFrameIndex(timeFrameIndex + 1);
             dispatch(setTime(times[timeFrameIndex + 1] || times[0]));
+            setLoading(false);
           }}
           className={`timeframe-button`}
+          id="timeframe-button-timeframe"
         >
           <i className="fa-solid fa-calendar mr-10"></i>
           {!isMobile && <h1>{timeFrame}</h1>}
@@ -59,6 +61,7 @@ const CalendarHeader = ({
             setFullView(!fullView);
           }}
           className={`timeframe-button`}
+          id="timeframe-button-view"
         >
           <i className="fa-solid fa-cog mr-10"></i>
           {!isMobile && (fullView ? <h1>Compact</h1> : <h1>Full</h1>)}

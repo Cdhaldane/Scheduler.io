@@ -17,7 +17,7 @@ import "./Spinner.css"; // Make sure to create this CSS file in the same directo
 
 const Spinner = () => {
   return (
-    <div className="spinner-container">
+    <div className="spinner-container" id="spinner">
       <div className="hourglass fast"></div>
     </div>
   );
