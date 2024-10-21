@@ -3,6 +3,28 @@ import React, { useState, useEffect } from "react";
 import "./DynamicDiv.css";
 import { handleTwoWayCollapse } from "../../Utils.jsx";
 
+/**
+ * DynamicDiv Component
+ *
+ * Purpose:
+ * This component renders a dynamic, collapsible side panel that can change its behavior based on the screen size (mobile or desktop).
+ * It provides an interface where the panel can be opened or closed using icons and adjusts the layout for mobile users.
+ *
+ * Props:
+ * - `children`: The content to be rendered inside the dynamic div.
+ * - `closeIcon`: The icon class for closing the panel (defaults to a chevron pointing right).
+ * - `openIcon`: The icon class for opening the panel (defaults to a chevron pointing left).
+ * - `sideIcon`: An additional icon on the right side of the header (defaults to a calendar icon).
+ * - `color`: The text color for the header (defaults to the primary theme color).
+ * - `backgroundColor`: The background color for the header (defaults to the primary background color).
+ * - `title`: The title text to be displayed in the header (defaults to "TIMESLOT").
+ *
+ * Example Usage:
+ * <DynamicDiv title="Schedule" color="red" backgroundColor="blue">
+ *   <div>Your content goes here</div>
+ * </DynamicDiv>
+ */
+
 const DynamicDiv = ({
   children,
   closeIcon = "fa-solid fa-chevron-right",
@@ -12,26 +34,29 @@ const DynamicDiv = ({
   backgroundColor = "var(--bg-primary)",
   title = "TIMESLOT",
 }) => {
+  // State to determine if the screen is mobile-sized and whether the mobile panel is open
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
 
+  // Effect to listen to window resize events and adjust mobile view accordingly
   useEffect(() => {
     window.addEventListener("resize", () => {
       if (window.innerWidth <= 768) {
         setIsMobile(true);
-        setMobileOpen(false);
+        setMobileOpen(false); // Close the panel on mobile view when resizing down
       } else {
-        setMobileOpen(true);
+        setMobileOpen(true); // Open the panel on larger screens
         setIsMobile(false);
       }
     });
   }, []);
 
-  //Render the schedule form with the appointment details and booking button
+  // Return JSX for rendering the dynamic div with mobile-specific controls
   return (
     <>
       {isMobile && (
         <i
+          id="open-icon"
           onClick={() =>
             handleTwoWayCollapse(
               mobileOpen,
@@ -39,7 +64,7 @@ const DynamicDiv = ({
               "dynamic-container",
               "right"
             )
-          }
+          } // Call handleTwoWayCollapse to open the panel when clicked
           className={`${openIcon} dynamic-mobile-toggle ${
             mobileOpen ? "hidden" : ""
           }`}
@@ -48,17 +73,18 @@ const DynamicDiv = ({
       {mobileOpen && (
         <div
           className={`main-right dynamic-container ${isMobile ? "mobile" : ""}`}
-          style={{}}
+          style={{}} // Apply mobile-specific styles if needed
         >
           <header
             className="dynamic-header"
             style={{
               backgroundColor: backgroundColor,
               color: color,
-            }}
+            }} // Header with custom background and text colors
           >
             {isMobile && (
               <i
+                id="close-icon"
                 onClick={() =>
                   isMobile &&
                   handleTwoWayCollapse(
@@ -67,14 +93,18 @@ const DynamicDiv = ({
                     "dynamic-container",
                     "right"
                   )
-                }
-                className={`${closeIcon} dynamic-header-icon-left`}
+                } // Call handleTwoWayCollapse to close the panel when clicked
+                className={`${closeIcon} dynamic-close-icon`}
               ></i>
             )}
-            <h1 className="no-margin">{title}</h1>
-            <i className={`${sideIcon} dynamic-header-icon-right`}></i>
+            <h1 className="no-margin">{title}</h1> {/* Render the title */}
+            <i
+              className={`${sideIcon} dynamic-header-icon-right`}
+              id="side-icon"
+            ></i>{" "}
+            {/* Render the optional side icon */}
           </header>
-          {children}
+          {children} {/* Render the children passed into the component */}
         </div>
       )}
     </>

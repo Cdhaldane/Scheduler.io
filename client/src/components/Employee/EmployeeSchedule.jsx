@@ -35,7 +35,7 @@ const EmployeeSchedule = ({ bookings }) => {
     <div className={`schedule-view`}>
       <ul className="booking-list">
         {bookings.map((booking, index) => (
-          <div className="booking-list-container">
+          <div className="booking-list-container" key={index}>
             <li
               key={index}
               className="booking-item"

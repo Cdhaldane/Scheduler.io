@@ -18,11 +18,11 @@ import "./Footer.css"; // Import the CSS file for the footer
  */
 
 const Footer = () => {
-  const location = useLocation();
-  const isCalendar =
-    location.pathname.includes("/admin") ||
-    location.pathname === "/home" ||
-    location.pathname.includes("/employee");
+  // const location = useLocation();
+  // const isCalendar =
+  //   location.pathname.includes("/admin") ||
+  //   location.pathname === "/home" ||
+  //   location.pathname.includes("/employee");
 
   return (
     <footer
@@ -80,7 +80,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
-{
-  /* <p>© 2024 Timeslot. All rights reserved.</p> */
-}

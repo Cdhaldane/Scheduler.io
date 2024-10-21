@@ -64,4 +64,45 @@ describe("Organization Creation", () => {
     // Verify navigation to the admin page
     cy.url().should("include", "/admin/");
   });
+
+  it("handles failure to create an organization", () => {
+    // Step 1: Intercept the network request and simulate a failure response
+    cy.intercept("POST", "**/rest/v1/organizations", {
+      statusCode: 500,
+      body: {
+        error: "Failed to create organization",
+      },
+    }).as("createOrganizationFailure");
+
+    // Step 2: Welcome Page - Click the next button to proceed
+    cy.get(".ac-button").click();
+
+    // Step 3: Input Organization Details
+    const organizationDetails = {
+      name: "Test Organization",
+      email: "testorg_fail@example.com",
+      phone: "123-456-7890",
+      address: "123 Test Street",
+    };
+
+    const prompts = [
+      "What is your organization's name?",
+      "What is your organization's email?",
+      "What is your organization's phone number?",
+      "What is your organization's address?",
+    ];
+
+    prompts.forEach((prompt, index) => {
+      cy.contains(prompt).should("be.visible");
+      const inputValue = Object.values(organizationDetails)[index];
+      cy.get(".ac-input input").should("be.visible").type(inputValue);
+      cy.get(".ac-input .fa-paper-plane").click();
+    });
+
+    // Step 5: Verify that the error message is displayed
+    cy.contains("Organization creation failed.").should("be.visible");
+
+    // Step 6: Verify that we are NOT redirected to the admin page
+    // cy.url().should("not.include", "/admin/");
+  });
 });

@@ -104,11 +104,7 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
           <Microsoft />
         </button>
       </div>
-      <form
-        className="login-form"
-        onSubmit={(e) => handleSubmit(e)}
-        autoComplete="new-password"
-      >
+      <div className="login-form" autoComplete="new-password">
         <Input
           label="Email"
           placeholder="Email"
@@ -169,14 +165,14 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
         ) : (
           <></>
         )}
-        <button type="submit" className="login-button">
+        <button type="submit" className="login-button" onClick={handleSubmit}>
           {signUpFlag ? "Sign Up" : "Sign In"}
         </button>
         <a onClick={handlePasswordReset}>Forgot your Password?</a>
         <a onClick={() => setSignUpFlag(!signUpFlag)}>
           {signUpFlag ? "Back to sign in" : "Don't have an account? Sign up"}{" "}
         </a>
-      </form>
+      </div>
 
       {/* <button onClick={signInWithEmail}>Sign in with Email</button> */}
     </div>

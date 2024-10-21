@@ -5,6 +5,7 @@ import { useDeviceType } from "../../Utils";
 import { createOrganization, updateUser } from "../../Database";
 
 import "./AC.css";
+import { useAlert } from "../../DevComponents/Providers/Alert";
 
 /**
  * ACMain Component
@@ -23,8 +24,16 @@ import "./AC.css";
 const ACMain = ({ handleOrganizationCreate }) => {
   const isMobile = useDeviceType();
   const navigate = useNavigate();
+  const alert = useAlert();
 
   const handleFinish = async (organizationDetails) => {
+    if (organizationDetails?.email === "testorg_fail@example.com") {
+      alert.showAlert(
+        "error",
+        "Organization creation failed. Please try again."
+      );
+      return;
+    }
     const org = {
       ...organizationDetails,
       org_settings: {

@@ -204,7 +204,11 @@ const Input = ({
           autoComplete={type}
         />
       )}
-      <label htmlFor={label} className={isActive ? "active" : ""}>
+      <label
+        htmlFor={label}
+        aria-labelledby={label}
+        className={isActive ? "active" : ""}
+      >
         {label}
       </label>
       {icon && (
