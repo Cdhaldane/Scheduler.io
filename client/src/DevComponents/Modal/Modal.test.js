@@ -1,4 +1,29 @@
 // Modal.test.js
+
+/**
+ * Modal Component Test Suite
+ *
+ * Purpose:
+ * - This suite verifies the functionality and behavior of the `Modal` component, ensuring it renders conditionally based on `isOpen`, and calls `onClose` under appropriate conditions.
+ *
+ * Tests:
+ * - `renders modal when isOpen is true`: Confirms that the modal content is displayed when `isOpen` is true.
+ * - `does not render modal when isOpen is false`: Ensures the modal content is not rendered when `isOpen` is false.
+ * - `calls onClose when clicking outside the modal`: Simulates an outside click and verifies that `onClose` is called, closing the modal.
+ * - `calls onClose when the close button is clicked`: Checks that clicking the close button inside the modal triggers `onClose`.
+ *
+ * Input:
+ * - `isOpen`: Boolean prop that determines whether the modal is visible.
+ * - `onClose`: Callback function called when the modal is closed (e.g., clicking outside or on the close button).
+ * - `children`: The content to display inside the modal.
+ *
+ * Output:
+ * - Renders the `Modal` component based on `isOpen` and verifies user interactions for closing the modal.
+ *
+ */
+
+
+
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";

@@ -1,9 +1,33 @@
 // AppointmentsModal.js
+
+/**
+ * AppointmentsModal Component
+ *
+ * Purpose:
+ * - Displays a modal with a list of upcoming appointments for the logged-in user.
+ * - Supports filtering appointments based on their status (confirmed, pending, cancelled).
+ *
+ *
+ * Functions:
+ * - `fetchAppointments`: Fetches appointments for the user by calling `getBookingsByClientEmail`. Updates appointments if data is available.
+ * - `updateAppointments`: Adds service information to each appointment, filters appointments by status if a filter is active, and sorts them by booking date.
+ *
+ * UI Elements:
+ * - `Modal`: Main modal container with the `appointments-section` content.
+ * - Filter icons: Icons representing each appointment status (confirmed, pending, cancelled) with click events to set `selectedFilter`.
+ * - `Spinner`: Loading spinner shown while appointments are being fetched.
+ * - Appointment list: Displays details for each appointment, including name, status, date/time, price, and action buttons (cancel/edit).
+ *
+ */
+
+
+
 import React, { useState, useEffect } from "react";
 import Modal from "../../DevComponents/Modal/Modal";
 import Spinner from "../../DevComponents/Spinner/Spinner";
 import { getBookingsByClientEmail, getServiceFromId } from "../../Database";
 import "./AppointmentsModal.css";
+
 
 const AppointmentsModal = ({ isOpen, onClose, session }) => {
   const [appointments, setAppointments] = useState([]);

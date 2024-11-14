@@ -1,5 +1,24 @@
 // cypress/e2e/login.cy.js
 
+/**
+ * Login Component Test
+ *
+ * Purpose:
+ * - This Cypress test suite validates the functionality of the `Login` component for both sign-in and sign-up flows.
+ * - It ensures that users can successfully log in, handle login errors, create new accounts, and handle sign-up errors.
+ *
+ * Inputs:
+ * - Sign-in inputs: `email`, `password`.
+ * - Sign-up inputs: `email`, `password`, `confirm-password`, `name`, `phone number`.
+ *
+ * Outputs:
+ * - Cypress assertions to verify success and error messages for each action.
+ */
+
+
+
+
+
 describe("Login Component", () => {
   beforeEach(() => {
     // Visit the page where the Login component is rendered

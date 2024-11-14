@@ -1,5 +1,23 @@
 // cypress/e2e/booking_submit.cy.js
 
+
+/**
+ * BookingSubmit Component Test
+ *
+ * Purpose:
+ * - This Cypress test verifies the functionality of the `BookingSubmit` component in the booking system.
+ * - It ensures that the component can handle a successful booking submission and provide appropriate feedback to the user.
+ *
+ * Inputs:
+ * - Mock user information (`name`, `email`, `phoneNumber`).
+ * - Mock appointment details (date, time, service, personnel, price).
+ * - Mock organization details (`org_id`, `name`).
+ *
+ * Outputs:
+ * - Cypress assertions to verify that the booking confirmation and navigation work as expected.
+ */
+
+
 describe("BookingSubmit Component", () => {
   it("handles successful booking", () => {
     // Prepare mock data

@@ -4,6 +4,31 @@ import { render, screen, queryByAttribute } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Clock, { BackgroundClockContainer } from "./Clock";
 
+
+/**
+ * Clock Component Test Suite
+ *
+ * Purpose:
+ * - This test suite verifies the functionality and rendering of the `Clock` component, ensuring it behaves as expected with default and custom properties.
+ * - Tests also cover the `BackgroundClockContainer` component, confirming that overlay content is correctly rendered over the clock.
+ *
+ * Tests:
+ * - `renders the clock with default properties`: Ensures the `Clock` component renders correctly with default styles, such as `bg-secondary` color, and includes the hour, minute, and second hands.
+ * - `applies custom width, height, and color properties`: Verifies that the component applies custom width, height, and color styles when provided as props.
+ * - `calculates correct rotation for the hour, minute, and second hands`: Mocks the date to confirm that the calculated rotation values for the clock hands (hour, minute, second) match expected angles based on the time.
+ * - `clears the timer on component unmount`: Checks that the timer set in `useEffect` is cleared properly when the component is unmounted, ensuring no memory leaks.
+ *
+ * BackgroundClockContainer Tests:
+ * - `renders Clock component with children overlaid`: Verifies that the `BackgroundClockContainer` renders the `Clock` component with additional overlay content correctly positioned.
+ * - `applies the correct container styles for overlay`: Confirms that the overlay container styles are applied correctly to center and position content over the clock.
+ *
+ * Mocking:
+ * - Mocks `Date` to set a specific time for testing rotation angles.
+ * - Uses `jest.spyOn` to monitor the `clearInterval` function to ensure timers are cleared on component unmount.
+ */
+
+
+
 const getById = queryByAttribute.bind(null, "id");
 
 describe("Clock Component", () => {

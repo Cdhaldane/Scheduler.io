@@ -1,4 +1,33 @@
 // BookingSubmit.test.js
+
+/**
+ * BookingSubmit Component Test Suite
+ *
+ * Purpose:
+ * - This suite tests the `BookingSubmit` component, verifying the rendering of booking details, handling of successful and failed bookings, and behavior when location state is missing.
+ *
+ * Tests:
+ * - `renders booking details correctly`: Ensures that the booking details (service name, personnel, date, price) are displayed as expected.
+ * - `handles successful booking`: Simulates a successful booking process by clicking the "Confirm Booking" button, confirming that:
+ *   - `addBooking` and `sendEmail` functions are called.
+ *   - A success alert is displayed.
+ *   - The thank-you message and "Back to Home" button are rendered.
+ *   - Navigation redirects the user back to the home page.
+ * - `handles booking failure`: Simulates a booking failure scenario, verifying that:
+ *   - `addBooking` is called, but `sendEmail` is not.
+ *   - An error alert is displayed without showing a confirmation or thank-you message.
+ * - `displays default values when location state is missing`: Ensures that when location state data is absent, an error message is displayed to the user.
+ *
+ *
+ * Async Handling:
+ * - Uses `waitFor` to handle asynchronous operations, such as waiting for booking and email functions to complete.
+ *
+ * Usage:
+ * - Run this test suite to confirm that the `BookingSubmit` component handles booking flows and errors as expected.
+ */
+
+
+
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import BookingSubmit from "./BookingSubmit";
