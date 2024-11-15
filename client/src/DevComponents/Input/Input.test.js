@@ -1,4 +1,38 @@
 // Input.test.js
+
+/**
+ * Input Component Test Suite
+ *
+ * Purpose:
+ * - This suite verifies the rendering, interactivity, and validation of the `Input` and `InputForm` components, ensuring they function as expected with user input, validation, and event handling.
+ *
+ * Tests:
+ * - `renders the input with label and placeholder`: Confirms that the input field displays the correct label, placeholder, and type attributes.
+ * - `calls onInputChange when the input value changes`: Checks that the `onInputChange` callback is called with the correct value when the input changes.
+ * - `handles focus and blur events correctly`: Verifies that the input container gains an 'active' class on focus and removes it on blur if empty.
+ * - `submits the form when Enter key is pressed`: Ensures that pressing Enter triggers the `onSubmit` callback, simulating form submission.
+ * - `shows validation error for invalid input`: Tests that entering an invalid phone number shows a validation error alert.
+ * - `renders the icon when provided`: Ensures the icon is displayed in the input field if the `icon` prop is set.
+ *
+ * InputForm Component:
+ * - `renders multiple input fields and handles submission`: Checks that the `InputForm` renders multiple input fields based on `states` and correctly submits entered values through `handleSubmit`.
+ *
+ * Input:
+ * - `label`: Label for the input.
+ * - `placeholder`: Placeholder text for the input.
+ * - `type`: Input type (e.g., "email", "text", "password").
+ * - `value`: Initial value for the input.
+ * - `onInputChange`: Callback function for handling input changes.
+ * - `onSubmit`: Callback function triggered when the form is submitted (e.g., by pressing Enter).
+ * - `icon`: Optional icon displayed in the input field.
+ *
+ *
+ * Output:
+ * - Renders the `Input` and `InputForm` components based on provided props and tests for correct behavior with user input, form submission, and validation feedback.
+ *
+ */
+
+
 import React from "react";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

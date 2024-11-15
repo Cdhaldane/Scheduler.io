@@ -1,3 +1,33 @@
+
+/**
+ * CalendarHeader Component
+ *
+ * Purpose:
+ * - Displays controls for navigating the calendar and viewing organizational settings.
+ * - Adapts layout based on screen width, supporting mobile and compact views.
+ *
+ *
+ * State:
+ * - `times`: Array defining available timeframes ("Day", "Week", "Month"), adjusted for mobile view.
+ * - `isMobile`: Boolean indicating if the view is mobile-sized (width ≤ 768px).
+ * - `isCompact`: Boolean indicating if the view is compact-sized (width ≤ 1477px).
+ * - `organizationModal`: Boolean to control the visibility of the organization settings modal.
+ *
+ * Effects:
+ * - On component mount and window resize, adjusts `times`, `isMobile`, and `isCompact` states based on screen width.
+ *
+ * UI Elements:
+ * - Timeframe Button: Cycles through `times` and dispatches the selected timeframe to global state.
+ * - View Toggle Button: Switches between full and compact calendar views.
+ * - Organization Name: Opens the `OrganizationSettings` modal when clicked, displaying organization-specific settings.
+ * - Current Date Display: Shows the current date(s) in compact or full format based on `isCompact`.
+ *
+ * 
+ */
+
+
+
+
 import React, { useState, useEffect } from "react";
 import { setTime } from "../../../../Store.js";
 import { useSelector, useDispatch } from "react-redux";

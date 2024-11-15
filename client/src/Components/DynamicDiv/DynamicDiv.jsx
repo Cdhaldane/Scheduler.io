@@ -1,3 +1,33 @@
+
+/**
+ * DynamicDiv Component
+ *
+ * Purpose:
+ * - This component renders a collapsible side panel that adjusts for mobile and desktop views, providing a responsive container with customizable icons, colors, and title.
+ *
+ *
+ * State:
+ * - `isMobile`: Boolean that tracks if the window width is 768px or smaller, adjusting the layout for mobile.
+ * - `mobileOpen`: Boolean that controls the visibility of the panel in mobile view.
+ *
+ * Effects:
+ * - On component mount and window resize, `isMobile` and `mobileOpen` are updated based on the screen width.
+ *
+ * Key Functions:
+ * - `handleTwoWayCollapse`: Invoked when toggling the panel visibility in mobile view, allowing for smooth collapse/expand animations.
+ *
+ * UI Structure:
+ * - Displays a toggle icon in mobile view to open/close the panel.
+ * - Renders a header with customizable title, color, background color, and side icon.
+ * - Displays `children` content inside the panel when `mobileOpen` is true.
+ *
+ * Notes:
+ * - Ensure that the `handleTwoWayCollapse` function is defined in `Utils.jsx` to handle the toggle behavior.
+ * - The CSS classes, such as `dynamic-container`, `dynamic-header`, and icon-specific classes, should be defined in `DynamicDiv.css`.
+ */
+
+
+
 import React, { useState, useEffect } from "react";
 
 import "./DynamicDiv.css";

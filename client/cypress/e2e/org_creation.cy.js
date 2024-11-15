@@ -1,5 +1,23 @@
 // cypress/e2e/organization_creation.cy.js
 
+/**
+ * Organization Creation Test
+ *
+ * Purpose:
+ * - This Cypress test suite verifies the functionality of the organization creation process within the application.
+ * - It ensures that a user can log in, access the organization creation form, provide required organization details, and successfully create an organization.
+ *
+ * Inputs:
+ * - Login inputs: `email`, `password`.
+ * - Organization details inputs: `name`, `email`, `phone`, `address`.
+ *
+ * Outputs:
+ * - Cypress assertions to verify successful login, form completion, and navigation to the admin page.
+ */
+
+
+
+
 describe("Organization Creation", () => {
   beforeEach(() => {
     // Visit the page where the ACMain component is rendered

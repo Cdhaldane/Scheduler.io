@@ -1,4 +1,31 @@
 // Dropdown.test.js
+
+/**
+ * Dropdown Component Test Suite
+ *
+ * Purpose:
+ * - This suite verifies the functionality, rendering, and interactivity of the `Dropdown` component, ensuring it behaves as expected with various props and user interactions.
+ *
+ * Tests:
+ * - `renders dropdown with default label`: Checks that the dropdown renders with a label and is initially closed.
+ * - `opens dropdown when clicked`: Confirms that clicking the dropdown trigger opens the dropdown and displays the options.
+ * - `closes dropdown when clicked outside`: Ensures that the dropdown closes when clicking outside the component.
+ * - `calls onClick when an option is selected`: Verifies that selecting an option calls the provided `onClick` handler with the selected option.
+ * - `renders options with icons if provided`: Ensures that options display icons when passed in the `options` prop.
+ *
+ * Input:
+ * - `label`: Text label for the dropdown trigger.
+ * - `options`: Array of options to display. Options can be strings or objects with `label` and `icon` properties.
+ * - `onClick`: Callback function invoked when an option is selected.
+ * - `children`: The button or element that triggers the dropdown.
+ *
+ * Output:
+ * - Renders the `Dropdown` component based on the provided props and checks the correct visibility, interactivity, and behavior of options.
+ *
+ */
+
+
+
 import React from "react";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";

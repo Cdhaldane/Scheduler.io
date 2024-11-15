@@ -4,6 +4,19 @@ import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import AnimatedDiv from "./AnimatedDiv";
 
+
+/**
+ * AnimatedDiv Component Test Suite
+ *
+ * Purpose:
+ * - This test suite verifies the functionality of the `AnimatedDiv` component, focusing on rendering, entry and exit animations, and animation updates.
+ *
+ * Note:
+ * - Ensure the CSS animations (e.g., `fade-in`, `fade-out`, `slide-in`, `zoom-in`) are defined in the stylesheet.
+ */
+
+
+
 describe("AnimatedDiv Component", () => {
   test("renders the children correctly", async () => {
     render(

@@ -1,4 +1,27 @@
 // AppointmentsModal.test.js
+
+/**
+ * AppointmentsModal Component Test Suite
+ *
+ * Purpose:
+ * - This suite tests the functionality of the `AppointmentsModal` component, including data fetching, filtering, and modal behavior.
+ *
+ * Tests:
+ * - `renders modal with loading spinner`: Ensures the modal and loading spinner are displayed while appointments are being fetched.
+ * - `fetches and displays appointments`: Mocks data fetching and verifies that appointments are displayed correctly in the modal.
+ * - `filters appointments by status`: Checks if filtering by appointment status (e.g., confirmed) updates the displayed appointments.
+ * - `shows message when no appointments are available`: Confirms that a message is shown when no appointments are returned from the database.
+ * - `handles errors when fetching appointments`: Ensures that errors during data fetching display a message indicating no appointments.
+ * - `renders and closes the modal`: Verifies that the modal can be closed by simulating a click on the close button.
+ *
+ *
+ * Usage:
+ * - Run this test suite to validate the `AppointmentsModal` component's behavior and ensure it handles various states, such as loading, filtering, empty data, and errors.
+ */
+
+
+
+
 import React from "react";
 import {
   render,

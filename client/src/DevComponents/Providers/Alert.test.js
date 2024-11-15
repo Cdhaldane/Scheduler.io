@@ -3,6 +3,26 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { AlertProvider, useAlert } from "./Alert";
 import "@testing-library/jest-dom";
 
+
+/**
+ * AlertProvider Test Suite
+ *
+ * Purpose:
+ * - This suite tests the functionality of the `AlertProvider` and `useAlert` hook, ensuring that alerts display when triggered and disappear after a set timeout.
+ *
+ * Mock Component:
+ * - `MockAlertComponent`: A mock component used to test `showAlert` from `useAlert`.
+ *   - Contains a button to trigger an alert and displays the alert message if an alert is present.
+ *
+ * Tests:
+ * - `displays alert message when showAlert is called`: Verifies that clicking the button calls `showAlert` with a "success" alert message.
+ *   - Confirms that the alert message is displayed immediately after `showAlert` is triggered.
+ *   - Waits for the alert message to disappear after the expected timeout (5 seconds in this case).
+ *
+ *
+ */
+
+
 jest.setTimeout(10000); // Set timeout to 10 seconds for all tests in this file
 
 // Mock component to test useAlert

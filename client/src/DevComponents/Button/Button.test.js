@@ -1,4 +1,28 @@
 // Button.test.js
+
+/**
+ * Button Component Test Suite
+ *
+ * Purpose:
+ * - This suite verifies the rendering, styling, interactivity, and animations of the `Button` component.
+ * - Ensures that the button renders correctly with different props, calls callback functions on click, and handles animations as expected.
+ *
+ * Input:
+ * - `children`: The text or elements to display inside the button.
+ * - `onClick`: Callback function triggered when the button is clicked.
+ * - `color`: Optional color prop for changing the button’s background color (e.g., `primary`, `secondary`).
+ * - `multiple`: Optional boolean indicating if the button renders as a group of buttons.
+ * - `enterAnimation`, `exitAnimation`: Animation classes applied when the button appears or disappears.
+ * - `exitTrigger`: Boolean indicating if the exit animation should be triggered.
+ *
+ * Output:
+ * - Renders the button component based on the provided props and checks for correct styles, interactions, and animations.
+ *
+ */
+
+
+
+
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";

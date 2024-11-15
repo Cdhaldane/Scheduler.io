@@ -2,6 +2,26 @@ import React, { useState, useEffect } from "react";
 
 import "./Clock.css";
 
+
+/**
+ * Clock Component
+ *
+ * Purpose:
+ * - Displays an analog clock with hour, minute, and second hands that update in real-time.
+ * - Customizable with props for size, color, offset, and additional CSS classes.
+ *
+ * Structure:
+ * - The clock face contains 12 hour markers, each positioned by rotating at 30-degree intervals.
+ * - Three clock hands (`hour`, `minute`, `second`) are rendered and positioned based on their respective rotation angles.
+ *
+ * Usage Example:
+ * ```jsx
+ * <Clock width="200px" height="200px" color="bg-primary" offset={20} />
+ * ```
+ */
+
+
+
 const Clock = ({
   width,
   height,
@@ -79,6 +99,25 @@ const Clock = ({
     </div>
   );
 };
+
+
+/**
+ * BackgroundClockContainer Component
+ *
+ * Purpose:
+ * - Wraps the `Clock` component with an overlay container, allowing additional content (children) to be centered over the clock.
+ *
+ * Styling:
+ * - Positions the clock and overlay content absolutely, centered within the container.
+ * - Allows for custom content (e.g., text, icons) to be placed over the clock with styling adjustments.
+ *
+ * Usage Example:
+ * ```jsx
+ * <BackgroundClockContainer>
+ *   <p>Your overlay content here</p>
+ * </BackgroundClockContainer>
+ * ```
+ */
 
 export const BackgroundClockContainer = ({ children }) => {
   const containerStyle = {
