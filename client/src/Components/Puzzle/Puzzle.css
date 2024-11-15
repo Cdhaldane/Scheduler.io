@@ -1,4 +1,4 @@
-.puzzle-piece.isDragging {
+.puzzle-piece.dragging {
   opacity: 1 !important;
 }
 .puzzle-piece:hover {

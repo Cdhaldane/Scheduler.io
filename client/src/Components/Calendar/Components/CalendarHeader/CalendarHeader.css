@@ -31,6 +31,10 @@
   overflow: hidden;
 }
 
+.calendar-top-buttons .timeframe-button:hover {
+  background-color: var(--bg-secondary);
+}
+
 .calendar-top-buttons .timeframe-button h1 {
   margin: 0;
   font-size: 1.2em;

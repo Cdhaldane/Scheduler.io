@@ -15,9 +15,25 @@ export const timeFrame = createSlice({
   },
 });
 
+export const selectedPersonnel = createSlice({
+  name: "selectedPersonnel",
+  initialState: {
+    value: "",
+  },
+  reducers: {
+    setPersonnel: (state, action) => {
+      state.value = action.payload;
+    },
+  },
+});
+
 // Action creators are generated for each case reducer function
 export const { setTime } = timeFrame.actions;
+export const { setPersonnel } = selectedPersonnel.actions;
 
 export default configureStore({
-  reducer: { timeFrame: timeFrame.reducer },
+  reducer: {
+    timeFrame: timeFrame.reducer,
+    selectedPersonnel: selectedPersonnel.reducer,
+  },
 });

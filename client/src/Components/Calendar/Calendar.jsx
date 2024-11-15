@@ -3,7 +3,7 @@ import { useDrop } from "react-dnd";
 import Cell from "./Cell.jsx";
 import CalendarHeader from "./Components/CalendarHeader/CalendarHeader.jsx";
 import "./Calendar.css";
-import { getServiceFromId } from "../../Database.jsx";
+import { getServiceFromId, addPersonnelService } from "../../Database.jsx";
 import Button from "../../DevComponents/Button/Button.jsx";
 import Spinner from "../../DevComponents/Spinner/Spinner.jsx";
 import { useSelector, useDispatch } from "react-redux";
@@ -31,6 +31,11 @@ const Calendar = ({
   bookings,
   adminMode,
   organization,
+  type,
+  homeLoading,
+  onAddPersonnelService,
+  personnel,
+  personnelSlots,
 }) => {
   // State hooks to manage current date, selected slot, and scheduled slots
 
@@ -93,11 +98,27 @@ const Calendar = ({
       setScheduledSlots(slots);
     };
 
-    if (adminMode === false) {
-      fetchData().finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+    const fetchAdminData = async () => {
+      setLoading(true);
+      setScheduledSlots([]);
+      const slots = await Promise.all(
+        personnelSlots.map(async (service) => {
+          return {
+            id: service.service_id,
+            day: new Date(service.date.id).getUTCDate(),
+            start: service.date.start,
+            end: service.date.end,
+            item: service.date.item,
+            type: "scheduled",
+          };
+        })
+      );
+
+      setScheduledSlots(slots);
+    };
+
+    if (adminMode) fetchAdminData().finally(() => setLoading(false));
+    else fetchData().finally(() => setLoading(false));
   }, [bookings]);
 
   // isSlotScheduled: Checks if a time slot is scheduled.
@@ -107,7 +128,7 @@ const Calendar = ({
     let status = false;
     scheduledSlots.some((slot) => {
       if (slot.day === day && hour >= slot.start && hour < slot.end) {
-        if (slot.type === "booking") status = "booking";
+        if (slot.type === "booking" && type == "customer") status = "booking";
         else status = "scheduled";
       }
     });
@@ -129,7 +150,7 @@ const Calendar = ({
   // handlePieceDrop: Handles dropping a puzzle piece into calendar, adding a new slot to the schedule form.
   // Input: date (String), hour (Number), item (Object)
   // Output: None
-  const handlePieceDrop = (day, hour, date, item) => {
+  const handlePieceDrop = async (day, hour, date, item) => {
     const newSlot = {
       id: date,
       day: date.getUTCDate(),
@@ -138,6 +159,12 @@ const Calendar = ({
       item: { ...item, type: "scheduled" },
     };
     setScheduledSlots((prev) => [...prev, newSlot]);
+
+    const newService = {
+      service_id: item.id,
+      date: newSlot,
+    };
+    onAddPersonnelService(newService);
     handleSlotClick(day, hour, date);
   };
 
@@ -186,6 +213,7 @@ const Calendar = ({
       }
     }
 
+    console.log("newSlots", newSlots);
     setScheduledSlots([...updatedSlots, ...newSlots]);
     handleSlotClick(null);
   };
@@ -223,6 +251,7 @@ const Calendar = ({
         organization={organization}
         currentView={currentView}
       />
+
       <div className="calendar-table">
         <div className={`calendar-header ${timeFrame}`}>
           <div className={`header-cell ${timeFrame}`}>
@@ -323,10 +352,12 @@ const Calendar = ({
                 timeView={times[timeFrameIndex]}
                 contextMenu={contextMenu}
                 setContextMenu={setContextMenu}
+                type={type}
               />
             ))}
           </div>
         ))}
+        {console.log("contextMenu", contextMenu)}
         <ContextMenu
           visible={contextMenu.visible}
           x={contextMenu.x}

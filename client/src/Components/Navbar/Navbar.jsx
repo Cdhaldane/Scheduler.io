@@ -6,6 +6,7 @@ import Dropdown from "../../DevComponents/Dropdown/Dropdown.jsx";
 import { InputForm } from "../../DevComponents/Input/Input.jsx";
 import { sendEmail, supabase } from "../../Database";
 import { useSelector, useDispatch } from "react-redux";
+import { useAlert } from "../../DevComponents/Providers/Alert.jsx";
 
 import "./Navbar.css"; // Import the CSS file for styling
 import AppointmentsModal from "../AppointmentsModal/AppointmentsModal.jsx";
@@ -85,6 +86,7 @@ const Navbar = ({
   const [showAppointments, setShowAppointments] = useState(false);
   const isMobile = window.innerWidth <= 768;
   const location = useLocation();
+  const alert = useAlert();
 
   let orgId = "";
   if (isLoggedIn) {
@@ -278,13 +280,26 @@ const Navbar = ({
         <InputForm
           id="contact"
           states={[
-            { id: "Name", type: "name", label: "Name" },
-            { id: "Email", type: "email", label: "Email" },
-            { id: "Message", type: "textarea", label: "Message" },
+            { id: "name", type: "name", label: "Name" },
+            { id: "email", type: "email", label: "Email" },
+            { id: "message", type: "textarea", label: "Message" },
           ]}
           onClose={() => setIsOpen(false)}
           onSubmit={async (states) => {
-            return sendEmail(states.name, states.email, states.message);
+            if (!states.name || !states.email || !states.message) {
+              alert.showAlert("warning", "Please fill in all fields");
+              return;
+            }
+            const res = await sendEmail(
+              states.name,
+              states.email,
+              states.message
+            );
+            if (res) {
+              alert.showAlert("success", "Message sent successfully");
+            } else {
+              alert.showAlert("erro", "Failed to send message");
+            }
           }}
           buttonLabel="Send"
         >

@@ -5,18 +5,19 @@ import ScheduleForm from "../Components/Schedule-form/Schedule-form";
 import EmployeeSchedule from "../Components/Employee/EmployeeSchedule";
 import PuzzleContainer from "../Components/Puzzle/PuzzleContainer";
 import Spinner from "../DevComponents/Spinner/Spinner.jsx";
-import _ from "lodash";
+import _, { set } from "lodash";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { useAlert } from "../DevComponents/Providers/Alert.jsx";
-import { useSelector } from "react-redux";
 import DragLayer from "../Components/Puzzle/Dnd/DragLayer.js";
 import { usePreview } from "react-dnd-preview";
 import PuzzlePiece from "../Components/Puzzle/PuzzlePiece.jsx";
 import DynamicDiv from "../Components/DynamicDiv/DynamicDiv.jsx";
+import { useSelector, useDispatch } from "react-redux";
+import { setPersonnel } from "../Store.js";
 
 import {
   supabase,
@@ -47,9 +48,11 @@ import "./Styles/Home.css";
  */
 
 const Home = ({ session, type, organization }) => {
-  const [selectedPersonnel, setSelectedPersonnel] = useState(null);
+  const selectedPersonnel = useSelector(
+    (state) => state.selectedPersonnel.value
+  );
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [personnel, setPersonnel] = useState([]);
+  const [personnel, setPersonnels] = useState([]);
   const [services, setServices] = useState([]);
   const [deletedService, setDeletedService] = useState(null);
   const [addedService, setAddedService] = useState(null);
@@ -57,6 +60,7 @@ const Home = ({ session, type, organization }) => {
   const [loading, setLoading] = useState(true);
   const [selectedService, setSelectedService] = useState();
   const [bookings, setBookings] = useState([]);
+  const [personnelSlots, setPersonnelSlots] = useState([]);
   const timeFrame = useSelector((state) => state.timeFrame);
   const [org, setOrg] = useState(organization);
   const isMobile = window.innerWidth <= 768;
@@ -65,6 +69,7 @@ const Home = ({ session, type, organization }) => {
   const adminMode = type === "admin";
   const alert = useAlert();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //Handlers for service-related actions
   const onDrop = (item) => {
@@ -79,12 +84,13 @@ const Home = ({ session, type, organization }) => {
     if (orgData) {
       setOrg(orgData);
       const personnelData = await getPersonnel(orgData.id);
-      setPersonnel(personnelData || []);
+      setPersonnels(personnelData || []);
       if (selectedPersonnel) {
         const bookingsData = await getBookings(selectedPersonnel?.id);
-        if (type === "admin") setBookings([]);
-        else setBookings(bookingsData || []);
+        setBookings(bookingsData || []);
+        setPersonnelSlots(selectedPersonnel.services || []);
       }
+
       const servicesData = await getServices(orgData.id);
       if (servicesData) setServices(servicesData);
     } else navigate("/404");
@@ -92,10 +98,38 @@ const Home = ({ session, type, organization }) => {
 
   //Effect hook for fetching personnel and services data
   useEffect(() => {
+    setLoading(true);
     fetchData().finally(() => {
+      personnelState(personnel);
       setLoading(false);
     });
-  }, [session, organization, selectedPersonnel]);
+  }, [session, organization, selectedPersonnel, type]);
+
+  const personnelState = async (personnel) => {
+    if (!selectedPersonnel) {
+      const orgData = await getOrganization(
+        organization.org_id || session?.user.user_metadata.organization.org_id
+      );
+      if (orgData) {
+        const personnelData = await getPersonnel(orgData.id);
+
+        if (type == "employee") {
+          const hashPath = window.location.hash;
+          const segments = hashPath.split("/");
+          const employeeId = parseInt(segments[segments.length - 1]);
+
+          const employee = personnelData.find((p) => p.id === employeeId);
+          console.log("employee", employee);
+
+          if (employee) {
+            dispatch(setPersonnel(employee));
+          }
+        } else {
+          dispatch(setPersonnel(personnelData[0]));
+        }
+      }
+    }
+  };
 
   //Handlers for service-related actions
   const onDeleteService = async (item) => {
@@ -114,19 +148,49 @@ const Home = ({ session, type, organization }) => {
 
   //Handler for adding a new service
   const onAddService = async (service) => {
+    console.log("service", service);
     await addService(service).then((res) => {
       if (res.error) {
         alert.showAlert("error", res.error.message);
       } else {
         setAddedService(res.data);
-        addPersonnelService(selectedPersonnel?.id, res.data);
         fetchData();
-
         alert.showAlert("success", "Service added");
       }
     });
 
     setTimeout(() => {}, 1000);
+  };
+
+  const onAddPersonnelService = async (service) => {
+    try {
+      // Add the new service to the selected personnel's existing services
+      const updatedServices = [...(selectedPersonnel.services || []), service];
+
+      // Update the database with the new list of services
+      const { data, error } = await addPersonnelService(
+        selectedPersonnel.id,
+        updatedServices
+      );
+
+      if (error) {
+        alert.showAlert("error", error.message);
+        return;
+      }
+
+      // Update the local personnel state with the newly added service
+      const updatedPersonnel = {
+        ...selectedPersonnel,
+        services: updatedServices,
+      };
+
+      dispatch(setPersonnel(updatedPersonnel)); // Update Redux state
+      setPersonnelServices(updatedServices); // Update local services state
+      alert.showAlert("success", "Service added successfully");
+    } catch (err) {
+      console.error("Error adding personnel service:", err);
+      alert.showAlert("error", "Failed to add service. Please try again.");
+    }
   };
 
   //Handler for updating the selected slot
@@ -167,7 +231,6 @@ const Home = ({ session, type, organization }) => {
   const calendarProps = {
     adminMode,
     selectedPersonnel,
-    onAddService,
     session,
     handleSelectedSlot,
     deletedService,
@@ -175,12 +238,17 @@ const Home = ({ session, type, organization }) => {
     puzzlePieces: services,
     fetchData,
     onDeleteService,
+    onAddPersonnelService,
     handlePersonnelServiceUpdate,
     personnelServices,
     selectedSlot,
     bookings,
     timeFrame,
     organization: org,
+    type,
+    homeLoading: loading,
+    personnel,
+    personnelSlots,
   };
 
   // allow vertical scrolling
@@ -196,7 +264,6 @@ const Home = ({ session, type, organization }) => {
     if (!preview.display) {
       return null;
     }
-    console.log("preview", preview);
     const { itemType, item, style } = preview;
     return (
       <div className="item-list__item" style={style}>
@@ -206,12 +273,12 @@ const Home = ({ session, type, organization }) => {
   };
 
   //Render the main interface
-  if (loading)
-    return (
-      <div className="app-main">
-        <Spinner />
-      </div>
-    );
+  // if (loading)
+  //   return (
+  //     <div className="app-main">
+  //       <Spinner />
+  //     </div>
+  //   );
 
   const backend = isMobile ? TouchBackend : HTML5Backend;
   return (
@@ -222,11 +289,6 @@ const Home = ({ session, type, organization }) => {
         options={{ enableMouseEvents: true }}
       >
         <Sidebar
-          setSelectedPersonnel={(e) => {
-            setSelectedPersonnel(e);
-            console.log("selectedPersonnel", e);
-          }}
-          selectedPersonnel={selectedPersonnel}
           personnel={personnel}
           adminMode={adminMode}
           organization={org}
@@ -234,6 +296,7 @@ const Home = ({ session, type, organization }) => {
         />
         <div className="main-body">
           <Calendar {...calendarProps} />
+
           {type === "employee" && (
             <DynamicDiv
               sideIcon="fas fa-calendar-check"
@@ -263,7 +326,7 @@ const Home = ({ session, type, organization }) => {
           )}
           {type === "admin" && (
             <>
-              <MyPreview />
+              {/* <MyPreview /> */}
               <DynamicDiv
                 title="Services"
                 sideIcon="fas fa-puzzle-piece"
@@ -273,6 +336,7 @@ const Home = ({ session, type, organization }) => {
                 <PuzzleContainer
                   puzzlePieces={services}
                   onDrop={onDrop}
+                  onAddService={onAddService}
                   {...calendarProps}
                 />
               </DynamicDiv>

@@ -49,7 +49,6 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
   });
   const color = piece.backgroundColor || "#17a2b8";
   if (isDragging) {
-    console.log("Dragging", piece);
   }
 
   // useEffect hook to handle animations
@@ -88,7 +87,7 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
     }
   }, [animate, piece.id]);
 
-  const pieceClass = `puzzle-piece ${animate && animate}`;
+  const pieceClass = `puzzle-piece ${isDragging ? "dragging" : ""}`;
   // Return the JSX for the puzzle piece
   return (
     <div

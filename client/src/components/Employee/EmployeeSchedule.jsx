@@ -2,13 +2,37 @@ import React, { useState, useEffect } from "react";
 import { getServiceFromId } from "../../Database";
 import "./EmployeeSchedule.css"; // Importing the CSS file
 
+/**
+ * EmployeeSchedule Component
+ *
+ * Purpose:
+ * - Displays a list of employee bookings with an expandable view for detailed information on each booking.
+ * - Provides a mobile-responsive layout for managing booking information efficiently.
+ *
+ * Props:
+ * - `bookings`: Array of booking objects, each containing details like `service_id`, `booking_date`, `booking_time`, `client_name`, and other client information.
+ *
+ * State:
+ * - `services`: An object that maps service IDs to their corresponding names, fetched from the database.
+ * - `isOpen`: Index of the currently expanded booking item; -1 if no item is expanded.
+ * - `mobileOpen`: Boolean indicating if the schedule view is open on mobile.
+ * - `loading`: Boolean to indicate if service data is being loaded.
+ *
+ * Effects:
+ * - `useEffect` on `bookings`: Fetches service names for each unique `service_id` in `bookings` using `getServiceFromId`. Populates `services` state for display.
+ *
+ *
+ * Notes:
+ * - Ensure the CSS classes, such as `schedule-view`, `booking-list`, `booking-item`, and `booking-details`, are defined in `EmployeeSchedule.css`.
+ * - The `getServiceFromId` function should be an asynchronous function that retrieves service information from the database.
+ */
+
 const EmployeeSchedule = ({ bookings }) => {
   const [services, setServices] = useState({});
   const [isOpen, setIsOpen] = useState(0);
   const isMobile = window.innerWidth <= 768;
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchServices = async () => {
       const servicesTemp = {};
@@ -53,9 +77,18 @@ const EmployeeSchedule = ({ bookings }) => {
             {isOpen === index && (
               <div className="booking-details yellow">
                 <i className="pin"></i>
-                <p>Client Email: {booking.client_email}</p>
-                <p>Client Phone: {booking.client_phone}</p>
-                <p>Booking Status: {booking.status}</p>
+                <p>
+                  <span>Client Email:</span> {booking.client_email}
+                </p>
+                {booking.client_phone && (
+                  <p>
+                    <span>Client Phone:</span>
+                    {booking.client_phone}
+                  </p>
+                )}
+                <p>
+                  <span>Booking Status:</span> {booking.status}
+                </p>
               </div>
             )}
           </div>

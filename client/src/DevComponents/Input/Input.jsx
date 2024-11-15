@@ -41,6 +41,7 @@ const Input = ({
   type = "text",
   className,
   icon,
+  options = [],
 }) => {
   const [isActive, setIsActive] = useState(propValue ? true : false);
   const [inputValue, setInputValue] = useState(propValue || "");
@@ -77,7 +78,8 @@ const Input = ({
 
     setInputValue(newValue);
     if (onInputChange) {
-      onInputChange(newValue);
+      if (type === "select") onInputChange(id, newValue);
+      else onInputChange(newValue);
     }
     setHasChanged(true);
   };
@@ -170,7 +172,7 @@ const Input = ({
   };
 
   return (
-    <form
+    <div
       id="input-container"
       data-testid="input-container"
       className={`input-container ${
@@ -182,16 +184,33 @@ const Input = ({
       onSubmit={(e) => handleSubmit(e)}
       onKeyDown={(e) => handleKeyPress(e)}
     >
-      {type === "textarea" ? (
+      {type === "textarea" && (
         <textarea
           id={id}
           value={inputValue}
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          placeholder={placeholder}
+          // placeholder={placeholder}
         />
-      ) : (
+      )}
+      {type === "select" && (
+        <select
+          id={id || label}
+          value={inputValue}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          required={true}
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      )}
+      {type !== "textarea" && type !== "select" && (
         <input
           id={id || label}
           type={type}
@@ -204,11 +223,7 @@ const Input = ({
           autoComplete={type}
         />
       )}
-      <label
-        htmlFor={label}
-        aria-labelledby={label}
-        className={isActive ? "active" : ""}
-      >
+      <label htmlFor={label} aria-labelledby={label}>
         {label}
       </label>
       {icon && (
@@ -230,7 +245,7 @@ const Input = ({
           ))}
         </ul>
       )}
-    </form>
+    </div>
   );
 };
 

@@ -3,6 +3,8 @@ import Modal from "../../DevComponents/Modal/Modal";
 import { supabase } from "../../Database";
 import { useAlert } from "../../DevComponents/Providers/Alert";
 import { addPersonnel, deletePersonnel } from "../../Database";
+import { setPersonnel } from "../../Store";
+import { useDispatch, useSelector } from "react-redux";
 
 import Input from "../../DevComponents/Input/Input";
 import ContextMenu from "../ContextMenu/ContextMenu";
@@ -36,14 +38,7 @@ import { handleTwoWayCollapse } from "../../Utils";
  * - Handlers for selecting personnel, adding personnel, and performing actions through the context menu.
  */
 
-const Sidebar = ({
-  selectedPersonnel,
-  setSelectedPersonnel,
-  personnel,
-  adminMode,
-  organization,
-  services,
-}) => {
+const Sidebar = ({ personnel, adminMode, organization, services }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isCompact, setIsCompact] = useState(window.innerWidth <= 1129);
@@ -57,6 +52,10 @@ const Sidebar = ({
     visible: false,
   });
   const location = useLocation() || "";
+  const selectedPersonnel = useSelector(
+    (state) => state.selectedPersonnel.value
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setPersonnelData(personnel);
@@ -87,8 +86,7 @@ const Sidebar = ({
 
   const handleSelect = (e, person) => {
     e.preventDefault();
-    // navigate(`/admin/${organization.org_id}/employee/${person.id}`);
-    setSelectedPersonnel(person);
+    dispatch(setPersonnel(person));
   };
 
   const handleAddPerson = (e) => {
@@ -106,7 +104,7 @@ const Sidebar = ({
       setPersonnelData(
         personnelData.filter((person, index) => index !== person.id)
       );
-      setSelectedPersonnel(null);
+      dispatch(setPersonnel(null));
     }
   };
 
@@ -168,7 +166,7 @@ const Sidebar = ({
               y: e.clientY,
               visible: true,
             });
-            setSelectedPersonnel(person);
+            dispatch(setPersonnel(person));
           }}
         >
           <div className="sidebar-item-header">
@@ -186,7 +184,7 @@ const Sidebar = ({
                     y: e.clientY,
                     visible: true,
                   });
-                  setSelectedPersonnel(person);
+                  dispatch(setPersonnel(person));
                 }}
               ></i>
             )}
@@ -206,6 +204,7 @@ const Sidebar = ({
                 className="sidebar-item-button"
                 onClick={(e) => {
                   e.stopPropagation();
+                  console.log("Navigate to bookings", person);
                   navigate(
                     `/admin/${organization.org_id}/employee/${person.id}`
                   );
@@ -285,16 +284,6 @@ const Sidebar = ({
           )}
           <ThemeSwitch className="sidebar-theme-switch" />
 
-          {isOpen && (
-            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-              <AddPersonForm
-                onAdd={handleAddPerson}
-                onClose={(e) => handleAddPerson(e)}
-                organization={organization}
-              />
-            </Modal>
-          )}
-
           <ContextMenu
             visible={contextMenu.visible}
             x={contextMenu.x}
@@ -308,6 +297,16 @@ const Sidebar = ({
           onClick={handleMobileOpen}
           className={`fa-solid fa-bars sidebar-mobile-toggle`}
         ></i>
+      )}
+
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+          <AddPersonForm
+            onAdd={handleAddPerson}
+            onClose={(e) => handleAddPerson(e)}
+            organization={organization}
+          />
+        </Modal>
       )}
     </>
   );
