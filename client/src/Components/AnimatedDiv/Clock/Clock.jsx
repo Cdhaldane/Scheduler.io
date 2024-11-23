@@ -2,6 +2,22 @@ import React, { useState, useEffect } from "react";
 
 import "./Clock.css";
 
+/**
+ * Clock Component
+ *
+ * Purpose:
+ * - Displays an analog clock with hour, minute, and second hands.
+ * - Updates in real-time, providing a visually dynamic clock interface.
+ *
+ * State:
+ * - `time` (Date): Tracks the current time and updates every second.
+ *
+ * Effects:
+ * - `useEffect`: Sets up an interval to update the `time` state every second and clears the interval on component unmount.
+ */
+
+
+
 const Clock = ({
   width,
   height,
