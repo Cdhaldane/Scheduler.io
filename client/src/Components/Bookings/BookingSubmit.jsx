@@ -113,6 +113,8 @@ const BookingSubmit = () => {
     const handleBookEmail = async () => {};
   };
 
+  console.log(user, appointment, organization);
+  if (!user.name) user.name = user?.full_name;
   if (!user?.name || !appointment?.day) return <ErrorPage />;
 
   return (

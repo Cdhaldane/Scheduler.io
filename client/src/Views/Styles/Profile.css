@@ -161,7 +161,7 @@
 @media screen and (max-width: 768px) {
   .activity {
     flex-direction: row;
-    width: 80% !important;
+    width: 95% !important;
     margin: 0 auto;
     padding: 0;
     font-size: 0.8em;
@@ -177,7 +177,7 @@
   }
 
   .activity .index {
-    width: 60%;
+    width: 70%;
   }
 
   .card-background {

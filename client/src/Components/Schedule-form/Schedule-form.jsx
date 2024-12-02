@@ -38,6 +38,8 @@ const ScheduleForm = ({
     dispatch(setAvailability(availabilityStatus)); // Dispatching plain object
   };
 
+  console.log("session", session);
+
   // Effect hooks for updating form data
   useEffect(() => {
     if (selectedSlot) {

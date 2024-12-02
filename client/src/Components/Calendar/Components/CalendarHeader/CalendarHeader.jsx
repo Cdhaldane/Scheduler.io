@@ -97,22 +97,20 @@ const CalendarHeader = ({
           <i className="fa-solid fa-cog mr-10"></i>
           {!isMobile && (fullView ? <h1>Compact</h1> : <h1>Full</h1>)}
         </button>
-        {!adminMode && (
-          <button
-            onClick={() => {
-              toggleAvailability(!availabilityStatus);
-            }}
-            className={`timeframe-button`}
-            id="timeframe-button-view"
-          >
-            <i
-              className={`${
-                availabilityStatus ? "fa-solid" : "fa-regular"
-              } fa-eye mr-10`}
-            ></i>
-            {!isMobile && <h1>Availability</h1>}
-          </button>
-        )}
+        <button
+          onClick={() => {
+            toggleAvailability(!availabilityStatus);
+          }}
+          className={`timeframe-button`}
+          id="timeframe-button-view"
+        >
+          <i
+            className={`${
+              availabilityStatus ? "fa-solid" : "fa-regular"
+            } fa-eye mr-10`}
+          ></i>
+          {!isMobile && <h1>Availability</h1>}
+        </button>
       </div>
       {organization?.name && (
         <div
