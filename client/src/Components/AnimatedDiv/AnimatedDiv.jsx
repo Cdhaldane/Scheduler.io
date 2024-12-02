@@ -6,13 +6,12 @@ import "./AnimatedDiv.css";
  * AnimatedDiv Component
  *
  * Purpose:
- * - Provides a wrapper `div` with support for customizable CSS animations on entry and exit.
- * - Allows animations to be dynamically triggered based on specified props.
- *
+ * - A wrapper `div` component that supports customizable CSS animations for entry and exit transitions.
+ * - The animation changes dynamically based on the `enterAnimation` and `exitAnimation` props.
  *
  * Notes:
- * - Ensure that CSS animations corresponding to `enterAnimation` and `exitAnimation` are defined in the stylesheets.
- * - The `useDidMountEffect` hook should be defined to apply effects only after the component has initially mounted.
+ * - Ensure `useDidMountEffect` is correctly implemented to trigger effects only after the initial render.
+ * - Define animations in the `AnimatedDiv.css` file to match the `enterAnimation` and `exitAnimation` prop values.
  */
 
 const AnimatedDiv = ({

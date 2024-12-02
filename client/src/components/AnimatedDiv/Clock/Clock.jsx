@@ -6,17 +6,14 @@ import "./Clock.css";
  * Clock Component
  *
  * Purpose:
- * - Displays an analog clock with hour, minute, and second hands that update in real-time.
- * - Customizable with props for size, color, offset, and additional CSS classes.
+ * - Displays an analog clock with hour, minute, and second hands.
+ * - Updates in real-time, providing a visually dynamic clock interface.
  *
- * Structure:
- * - The clock face contains 12 hour markers, each positioned by rotating at 30-degree intervals.
- * - Three clock hands (`hour`, `minute`, `second`) are rendered and positioned based on their respective rotation angles.
+ * State:
+ * - `time` (Date): Tracks the current time and updates every second.
  *
- * Usage Example:
- * ```jsx
- * <Clock width="200px" height="200px" color="bg-primary" offset={20} />
- * ```
+ * Effects:
+ * - `useEffect`: Sets up an interval to update the `time` state every second and clears the interval on component unmount.
  */
 
 const Clock = ({
