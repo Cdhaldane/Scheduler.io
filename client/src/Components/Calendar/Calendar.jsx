@@ -49,6 +49,7 @@ const Calendar = ({
   onUpdatePersonnelService,
   personnel,
   personnelSlots,
+  selectedPersonnel,
 }) => {
   // State hooks to manage current date, selected slot, and scheduled slots
   const [currentView, setCurrentView] = useState(getDaysOfWeek(new Date()));
@@ -64,6 +65,7 @@ const Calendar = ({
   const [slotToCopy, setSlotToCopy] = useState(null);
   const dispatch = useDispatch();
   const alert = useAlert();
+  const calendarRef = useRef(null);
 
   const [contextMenu, setContextMenu] = useState({
     visible: false,
@@ -72,6 +74,27 @@ const Calendar = ({
   });
 
   const isMobile = window.innerWidth <= 768;
+  useEffect(() => {
+    handleSelectedSlot(null);
+    const handleClickOutside = (e) => {
+      const mainRight = document.getElementsByClassName("main-right")[0];
+      const openIcon = document.getElementById("open-icon");
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(e.target) &&
+        !mainRight?.contains(e.target) &&
+        !openIcon?.contains(e.target)
+      ) {
+        handleSelectedSlot(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [selectedPersonnel]);
 
   useEffect(() => {
     const initializeCalendar = async () => {
@@ -338,6 +361,8 @@ const Calendar = ({
   // Context menu options
   const handleKeyboardNavigation = useCallback(
     (e) => {
+      console.log(selectedCell);
+      if (!selectedCell) return;
       const { day, hour } = selectedCell;
       if (day === null || hour === null) return;
 
@@ -463,7 +488,7 @@ const Calendar = ({
         adminMode={adminMode}
       />
 
-      <div className="calendar-table">
+      <div className="calendar-table" ref={calendarRef}>
         <div className={`calendar-header ${timeFrame}`}>
           <div className={`header-cell ${timeFrame}`}>
             <button

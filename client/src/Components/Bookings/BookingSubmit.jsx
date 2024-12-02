@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../DevComponents/Providers/Alert";
 import { sendEmail, addBooking } from "../../Database";
-import { validateEmail } from "../../Utils";
+import { validateEmail, convertMilitaryTime } from "../../Utils";
 import queryString from "query-string";
 
 import "./Bookings.css";
@@ -121,8 +121,13 @@ const BookingSubmit = () => {
         {booked ? <h1>Booking Confirmed</h1> : <h1>Confirm booking</h1>}
         <div className="book-info-display">
           <p>
-            Your appointment for a <var>{appointment.service?.name}</var> with{" "}
-            <var>{appointment.personnel?.first_name}</var> is on{" "}
+            Your appointment for a{" "}
+            <var>
+              {Array.isArray(appointment.service)
+                ? appointment.service.map((service) => service.name).join(" + ")
+                : appointment.service?.name}
+            </var>{" "}
+            with <var>{appointment.personnel?.first_name}</var> is on{" "}
             <var>
               {typeof appointment.day == "object"
                 ? appointment.day.toLocaleDateString("en-US", {
@@ -135,12 +140,12 @@ const BookingSubmit = () => {
           </p>
           <p>
             Starting at{" "}
+            <var>{convertMilitaryTime(appointment.start + ":00")} </var> &
+            Ending at{" "}
             <var>
-              {appointment.start}:00{appointment.start <= 12 ? "AM" : "PM"}
-            </var>{" "}
-            & Ending at{" "}
-            <var>
-              {appointment.end}:00 {appointment.end <= 12 ? "AM" : "PM"}
+              {convertMilitaryTime(
+                appointment.start + appointment.duration + ":00"
+              )}
             </var>
           </p>
           <p>

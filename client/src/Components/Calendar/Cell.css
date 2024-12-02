@@ -76,14 +76,14 @@
 }
 
 .cell.scheduled {
-  color: var(--ash);
+  color: white;
   font-weight: bold;
   font-family: var(--font-main);
 }
 
 .cell.booking {
   background-color: var(--secondary) !important;
-  color: var(--bg-primary) !important;
+  color: white !important;
   font-weight: bold !important;
   border: 1px solid var(--secondary) !important;
 }

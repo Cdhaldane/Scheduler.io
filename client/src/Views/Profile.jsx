@@ -59,56 +59,58 @@ const UserProfile = ({ session }) => {
   };
 
   return (
-    <div className="user-profile">
-      {session && (
-        <div className="card">
-          <header className="card-header">
-            <div className="card-title">
-              <img
-                src={session.user.user_metadata.avatar_url}
-                alt=""
-                referrerPolicy="no-referrer"
-              />
-              <div className="heading-box">
-                <h1>{session.user.user_metadata.full_name}</h1>
-                <h3>{session.user.email}</h3>
+    <>
+      <div className="user-profile">
+        {session && (
+          <div className="card">
+            <header className="card-header">
+              <div className="card-title">
+                <img
+                  src={session.user.user_metadata.avatar_url}
+                  alt=""
+                  referrerPolicy="no-referrer"
+                />
+                <div className="heading-box">
+                  <h1>{session.user.user_metadata.full_name}</h1>
+                  <h3>{session.user.email}</h3>
+                </div>
               </div>
-            </div>
-          </header>
-          <main className="card-main">
-            <div
-              className="activity"
-              onClick={() => navigate("/create-organization")}
-            >
-              <i className="fa-solid fa-house"></i>
-              <span className="activity-name">Organization</span>
-              <span className="index">
-                {organization ? organization.name : "None"}
-              </span>
-            </div>
-            <div className="activity special">
-              <i className="fa-solid fa-clock"></i>
-              <span className="activity-name">Activity</span>
-              <span className="index">
-                {session.user.updated_at?.split("T")[0]}
-              </span>
-            </div>
-            <div className="activity" onClick={() => setIsOpen(!isOpen)}>
-              <i className="fa-solid fa-calendar"></i>
-              <span className="activity-name">Appointments</span>
-              <span className="index">
-                {appointments && appointments.length}
-              </span>
-            </div>
-          </main>
-        </div>
-      )}
+            </header>
+            <main className="card-main">
+              <div
+                className="activity"
+                onClick={() => navigate("/create-organization")}
+              >
+                <i className="fa-solid fa-house"></i>
+                <span className="activity-name">Organization</span>
+                <span className="index">
+                  {organization ? organization.name : "None"}
+                </span>
+              </div>
+              <div className="activity special">
+                <i className="fa-solid fa-clock"></i>
+                <span className="activity-name">Activity</span>
+                <span className="index">
+                  {session.user.updated_at?.split("T")[0]}
+                </span>
+              </div>
+              <div className="activity" onClick={() => setIsOpen(!isOpen)}>
+                <i className="fa-solid fa-calendar"></i>
+                <span className="activity-name">Appointments</span>
+                <span className="index">
+                  {appointments && appointments.length}
+                </span>
+              </div>
+            </main>
+          </div>
+        )}
+      </div>
       <AppointmentsModal
         isOpen={isOpen}
         onClose={() => setIsOpen(!isOpen)}
         session={session}
       />
-    </div>
+    </>
   );
 };
 

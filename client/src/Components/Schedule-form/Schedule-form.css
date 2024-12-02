@@ -22,6 +22,25 @@
   align-items: center;
   justify-content: center;
   padding-bottom: 1.5em;
+  transition: all 0.3s ease-in-out;
+}
+
+.schedule-appointment-info.not-selected h1 {
+  animation: width-grow-90 0.5s ease-in-out;
+  width: 90%;
+}
+.schedule-appointment-info.not-selected h2 {
+  animation: width-shrink-0 0.5s ease-in-out;
+  width: 0px;
+}
+
+.schedule-appointment-info.selected h1 {
+  animation: width-shrink-30 0.5s ease-in-out;
+  width: 30%;
+}
+.schedule-appointment-info.selected h2 {
+  animation: width-grow-60 0.5s ease-in-out;
+  width: 60%;
 }
 
 .schedule-container span {
@@ -39,7 +58,6 @@
   max-height: 50px;
   height: 50%;
   font-size: 1.5em;
-  width: 30%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -62,7 +80,6 @@
   font-size: 1.6em;
   display: flex;
   align-items: center;
-  width: 60%;
   padding: 10px;
   border-radius: 10px 0px 0px 10px;
   background-color: var(--bg-secondary);
@@ -87,7 +104,7 @@
 }
 
 .schedule-header h2 {
-  font-size: 1.2em;
+  font-size: 100%;
   margin-left: 2%;
   padding-left: 10px;
   width: 100%;

@@ -1,4 +1,9 @@
-// AppointmentsModal.js
+import React, { useState, useEffect } from "react";
+import Modal from "../../DevComponents/Modal/Modal";
+import Spinner from "../../DevComponents/Spinner/Spinner";
+import { getBookingsByClientEmail, getServiceFromId } from "../../Database";
+
+import "./AppointmentsModal.css";
 
 /**
  * AppointmentsModal Component
@@ -19,13 +24,6 @@
  * - Appointment list: Displays details for each appointment, including name, status, date/time, price, and action buttons (cancel/edit).
  *
  */
-
-import React, { useState, useEffect } from "react";
-import Modal from "../../DevComponents/Modal/Modal";
-import Spinner from "../../DevComponents/Spinner/Spinner";
-import { getBookingsByClientEmail, getServiceFromId } from "../../Database";
-import "./AppointmentsModal.css";
-
 const AppointmentsModal = ({ isOpen, onClose, session }) => {
   const [appointments, setAppointments] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("all");

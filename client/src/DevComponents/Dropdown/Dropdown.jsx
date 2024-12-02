@@ -60,7 +60,7 @@ const Dropdown = ({
     <div className="dropdown" ref={dropdownRef}>
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="dropdown-holder"
+        className={`dropdown-holder ${isOpen ? "open" : ""}`}
         aria-label={label}
       >
         {children}
@@ -109,6 +109,7 @@ const Dropdown = ({
                     checked={selectedOptions.includes(option)}
                     onChange={() => handleCheckboxChange(option)}
                   />
+                  <div class="checkmark"></div>
                   {option.icon && <i className={option.icon}></i>}
                   {option.label || option}
                 </label>

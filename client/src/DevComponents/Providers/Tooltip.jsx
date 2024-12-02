@@ -101,6 +101,7 @@ const Tooltip = ({ tooltipText, children, theme, direction }) => {
       position: relative;
       border: 3px solid ${colorVar};
       box-shadow: 2px 2px 6px ${colorVar});
+      color: ${colorVar};
   
       /* Styles for the :before pseudo-element */
       &::after {

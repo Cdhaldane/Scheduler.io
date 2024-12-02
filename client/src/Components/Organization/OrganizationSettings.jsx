@@ -3,6 +3,10 @@ import Input, { InputForm } from "../../DevComponents/Input/Input.jsx";
 import TimePicker from "../../DevComponents/TimePicker/TimePicker.jsx";
 import { getOrganization, updateOrganization } from "../../Database.jsx";
 import { useAlert } from "../../DevComponents/Providers/Alert.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { HexColorPicker } from "react-colorful";
+import RadioGroup from "../../DevComponents/RadioGroup/RadioGroup.jsx";
+import { isReadable } from "../../Utils.jsx";
 
 import "./Organization.css";
 
@@ -26,9 +30,12 @@ import "./Organization.css";
 
 const OrganizationSettings = ({ organization, onClose }) => {
   const alert = useAlert();
+  const [selected, setSelected] = useState(["primary"]);
   const [orgDetails, setOrgDetails] = useState({
     openingTime: organization?.org_settings?.openingTime,
     closingTime: organization?.org_settings?.closingTime,
+    primaryColor: organization?.org_settings?.primaryColor || "#4CAF50",
+    secondaryColor: organization?.org_settings?.secondaryColor || "#FF9800",
   });
 
   const handleSubmit = async (e) => {
@@ -40,15 +47,46 @@ const OrganizationSettings = ({ organization, onClose }) => {
       ...orgDetails,
     };
 
-    const { data, error } = await updateOrganization(organization.org_id, {
+    const { error } = await updateOrganization(organization.org_id, {
       org_settings: updatedDetails,
     });
-    setOrgDetails(updatedDetails);
     if (!error) {
+      document.documentElement.style.setProperty(
+        "--primary",
+        updatedDetails.primaryColor
+      );
+      document.documentElement.style.setProperty(
+        "--secondary",
+        updatedDetails.secondaryColor
+      );
       alert.showAlert("success", "Organization updated successfully");
       onClose();
       window.location.reload();
-    } else alert.showAlert("error", "Error updating organization");
+    } else {
+      alert.showAlert("error", "Error updating organization");
+    }
+  };
+
+  const handleColorChange = (color) => {
+    const isDarkMode = localStorage.getItem("isDarkMode") === "true";
+    const backgroundColor = isDarkMode ? "#2d2d2a" : "#fdfdfd";
+    const readable = isReadable(color, backgroundColor);
+
+    if (!readable) {
+      alert.showAlert("error", "Color combination not readable");
+      return;
+    }
+    if (selected[0] === "primary") {
+      setOrgDetails((prevDetails) => ({
+        ...prevDetails,
+        primaryColor: color,
+      }));
+    } else {
+      setOrgDetails((prevDetails) => ({
+        ...prevDetails,
+        secondaryColor: color,
+      }));
+    }
   };
 
   return (
@@ -86,7 +124,27 @@ const OrganizationSettings = ({ organization, onClose }) => {
           </div>
         </span>
 
-        {/* <Input type="text" label="Operating Hours" /> */}
+        <div className="org-theme-container">
+          <div className="org-form-sub">
+            <RadioGroup
+              options={[
+                { label: "Primary", value: "primary" },
+                { label: "Secondary", value: "secondary" },
+              ]}
+              selectedValues={selected}
+              onChange={(selected) => setSelected(selected)}
+              multiSelect={false}
+            />
+            <HexColorPicker
+              color={
+                selected[0] === "primary"
+                  ? orgDetails.primaryColor
+                  : orgDetails.secondaryColor
+              }
+              onChange={handleColorChange}
+            />
+          </div>
+        </div>
 
         <button type="submit" className="org-form-button">
           Save

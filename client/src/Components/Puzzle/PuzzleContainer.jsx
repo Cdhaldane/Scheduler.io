@@ -124,22 +124,29 @@ const PuzzleContainer = ({
         </div>
         <div className={`pieces-footer`}>
           <Tooltip tooltipText="Add Service" theme={{ color: "primary" }}>
-            <div className="green" id="add-bin" onClick={() => setIsOpen(true)}>
+            <div
+              className="puzzle-footer-buttons"
+              id="add-bin"
+              onClick={() => setIsOpen(true)}
+            >
               <i className="fas fa-plus"></i>
             </div>
           </Tooltip>
-          {/* <Tooltip
-              tooltipText="Delete Service"
-              theme={{ color: "secondary" }}
-            > */}
-          <div
-            id="garbage-bin"
-            className={`${isBinOver ? "is-over" : "no"}`}
-            ref={dropRef}
+          <Tooltip
+            tooltipText="Delete Service"
+            theme={{ color: "secondary" }}
+            className="puzzle-footer-buttons"
           >
-            <i className="fa-regular fa-trash-can"></i>
-          </div>
-          {/* </Tooltip> */}
+            <div
+              id="garbage-bin"
+              className={`puzzle-footer-buttons  ${
+                isBinOver ? "is-over" : "no"
+              }`}
+              ref={dropRef}
+            >
+              <i className="fa-regular fa-trash-can"></i>
+            </div>
+          </Tooltip>
         </div>
       </div>
 

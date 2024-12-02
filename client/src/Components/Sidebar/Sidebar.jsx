@@ -56,6 +56,7 @@ const Sidebar = ({ personnel, adminMode, organization, services }) => {
     (state) => state.selectedPersonnel.value
   );
   const dispatch = useDispatch();
+  const alert = useAlert();
 
   useEffect(() => {
     setPersonnelData(personnel);
@@ -92,12 +93,16 @@ const Sidebar = ({ personnel, adminMode, organization, services }) => {
   const handleAddPerson = (e) => {
     setIsOpen(false);
     setPersonnelData([...personnelData, e]);
+
+    alert.showAlert("success", "Personnel added successfully");
   };
 
   const handleCloseContextMenu = () => {};
 
   const handlePersonnelDelete = async (person) => {
-    const { data, error } = await deletePersonnel(personnelData[person.id].id);
+    console.log("Deleting personnel: ", person, personnelData);
+    const index = personnelData.findIndex((p) => p.id === person.id);
+    const { data, error } = await deletePersonnel(person.id);
 
     if (error) console.log("Error deleting personnel: ", error);
     else {
@@ -105,6 +110,7 @@ const Sidebar = ({ personnel, adminMode, organization, services }) => {
         personnelData.filter((person, index) => index !== person.id)
       );
       dispatch(setPersonnel(null));
+      alert.showAlert("success", "Personnel deleted successfully");
     }
   };
 
@@ -282,7 +288,10 @@ const Sidebar = ({ personnel, adminMode, organization, services }) => {
               {getPersons()}{" "}
             </div>
           )}
-          <ThemeSwitch className="sidebar-theme-switch" />
+          <ThemeSwitch
+            className="sidebar-theme-switch"
+            organization={organization}
+          />
 
           <ContextMenu
             visible={contextMenu.visible}

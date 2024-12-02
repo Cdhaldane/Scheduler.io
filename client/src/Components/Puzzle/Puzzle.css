@@ -134,6 +134,9 @@
 #garbage-bin {
   border-left: 3px solid var(--bg-primary);
 }
+#add-bin {
+  color: var(--primary);
+}
 
 .animate-delete {
   z-index: 10;
@@ -145,6 +148,17 @@
   animation: fadeFromGarbageBin 1s forwards;
 }
 
+.puzzle-footer-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
 /* MOBILE STYLING */
 
 .item-list__item {
@@ -154,7 +168,6 @@
 }
 
 /* ANIMATIONS */
-
 @keyframes fillBorder {
   0% {
     background-color: var(--bg-secondary);

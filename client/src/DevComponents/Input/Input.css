@@ -267,6 +267,10 @@
     gap: 10px;
   }
 
+  .input-form-title {
+    font-size: 1.5em;
+  }
+
   /* .input-container textarea {
     max-height: ;
   } */

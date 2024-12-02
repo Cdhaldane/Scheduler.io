@@ -1,4 +1,3 @@
-
 /**
  * DynamicDiv Component
  *
@@ -26,12 +25,11 @@
  * - The CSS classes, such as `dynamic-container`, `dynamic-header`, and icon-specific classes, should be defined in `DynamicDiv.css`.
  */
 
-
-
 import React, { useState, useEffect } from "react";
 
 import "./DynamicDiv.css";
 import { handleTwoWayCollapse } from "../../Utils.jsx";
+import { useAlert } from "../../DevComponents/Providers/Alert.jsx";
 
 /**
  * DynamicDiv Component
@@ -63,10 +61,12 @@ const DynamicDiv = ({
   color = "var(--primary)",
   backgroundColor = "var(--bg-primary)",
   title = "TIMESLOT",
+  selectedSlot,
 }) => {
   // State to determine if the screen is mobile-sized and whether the mobile panel is open
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
+  const alert = useAlert();
 
   // Effect to listen to window resize events and adjust mobile view accordingly
   useEffect(() => {
@@ -87,14 +87,18 @@ const DynamicDiv = ({
       {isMobile && (
         <i
           id="open-icon"
-          onClick={() =>
+          onClick={() => {
+            if (!selectedSlot.day) {
+              alert.showAlert("warning", "Please select a time slot first");
+              return;
+            }
             handleTwoWayCollapse(
               mobileOpen,
               setMobileOpen,
               "dynamic-container",
               "right"
-            )
-          } // Call handleTwoWayCollapse to open the panel when clicked
+            );
+          }} // Call handleTwoWayCollapse to open the panel when clicked
           className={`${openIcon} dynamic-mobile-toggle ${
             mobileOpen ? "hidden" : ""
           }`}

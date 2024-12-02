@@ -28,10 +28,13 @@
 }
 
 .close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
-  right: 20px;
-  top: -10px;
-  color: var(--bg-secondary);
+  right: 10px;
+  top: -15px;
+  color: var(--light-grey);
   font-size: 50px;
   font-weight: bold;
 }
@@ -56,14 +59,16 @@
   /* margin-top: 20px; */
   padding: 10px;
   background-color: var(--primary); /* Green */
-  color: var(--bg-secondary);
+  color: var(--bg-primary);
   border: none;
   cursor: pointer;
   border-radius: 4px;
+  font-size: 1.2em;
 }
 
 button[type="submit"]:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--bg-primary);
+  color: var(--primary);
 }
 
 .modal-title {
@@ -107,6 +112,8 @@ button[type="submit"]:hover {
   }
 
   .modal-content button[type="submit"] {
+    height: fit-content;
+    font-size: 1em;
     padding: 10px;
   }
 
@@ -115,7 +122,9 @@ button[type="submit"]:hover {
   }
 
   .close {
-    font-size: 40px;
+    font-size: 2.4em;
+    height: 20px !important;
+    top: 10px;
     right: 10px;
   }
 }

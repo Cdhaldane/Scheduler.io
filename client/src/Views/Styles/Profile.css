@@ -198,12 +198,20 @@
     height: 400px;
   }
 
+  .appointments-section {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5em;
+  }
+
   .appointments-list {
     margin-block-start: 0px;
   }
 
   .appointments-title {
-    margin-top: 00px !important;
+    margin-top: 0px !important;
     font-size: 1em !important;
   }
 }

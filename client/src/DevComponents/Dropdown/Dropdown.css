@@ -40,7 +40,7 @@
 }
 
 .dropdown-toggle:active {
-  animation: button-pulse 0.3s ease;
+  /* animation: button-pulse 0.3s ease; */
 }
 
 .dropdown-toggle:focus {
@@ -63,7 +63,6 @@
   display: flex;
   flex-direction: column;
   align-items: left;
-  box-shadow: 0px 0px 10px 0px var(--bg-primary);
 }
 
 .dropdown-menu::after {
@@ -97,7 +96,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--white);
+  color: var(--primary);
   text-decoration: none;
   transition: background-color 0.3s ease;
   font-size: 1.5em;
@@ -113,8 +112,7 @@
 }
 
 .dropdown-item:hover {
-  background-color: var(--primary);
-  color: var(--bg-primary);
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -128,6 +126,17 @@
   z-index: 100;
 }
 
+.dropdown-holder.open .dropdown-toggle {
+  cursor: pointer;
+  background-color: var(--primary) !important;
+  color: var(--bg-primary);
+  border: 2px solid var(--primary);
+  width: 100%;
+  margin: 0px 0px;
+  margin-top: 8px;
+  border-radius: 0px;
+}
+
 .dropdown-holder > i {
   position: absolute;
   right: 5%;
@@ -137,44 +146,52 @@
   transition: transform 0.3s ease;
 }
 
-.radio-item {
+.checkbox-item input {
+  position: absolute;
+  opacity: 0;
+}
+
+.checkmark {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  top: 0;
+  left: 0;
+  border: 2px solid var(--bg-secondary);
+  border-radius: 5px;
+  box-shadow: 3px 3px var(--bg-secondary);
+  background-color: var(--bg-primary);
+  transition: all 0.3s;
 }
 
-.radio-item input[type="radio"] {
-  margin: 0;
-  accent-color: var(--primary-color);
+.checkbox-item input:checked ~ .checkmark {
+  background-color: var(--primary);
 }
 
-.radio-item.selected {
-  font-weight: bold;
+.checkmark:after {
+  content: "";
+  width: 7px;
+  height: 15px;
+  position: absolute;
+  top: 3px;
+  left: 10px;
+  display: none;
+  border: solid var(--bg-primary);
+  border-width: 0 4px 4px 0;
+  transform: rotate(45deg);
 }
 
-.checkbox-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.checkbox-item input[type="checkbox"] {
-  margin: 0;
-  accent-color: var(--primary-color);
-}
-
-.checkbox-item.selected {
-  font-weight: bold;
+.checkbox-item input:checked ~ .checkmark:after {
+  display: block;
 }
 
 @keyframes button-pulse {
   0%,
   100% {
-    transform: scale(1);
+    width: 100%;
   }
   50% {
-    transform: scale(1.02);
+    width: 95%;
   }
 }

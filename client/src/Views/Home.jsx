@@ -18,6 +18,7 @@ import PuzzlePiece from "../Components/Puzzle/PuzzlePiece.jsx";
 import DynamicDiv from "../Components/DynamicDiv/DynamicDiv.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { setPersonnel } from "../Store.js";
+import { useLocation } from "react-router-dom";
 
 import {
   supabase,
@@ -70,6 +71,7 @@ const Home = ({ session, type, organization }) => {
   const url = useParams();
 
   const adminMode = type === "admin";
+  const location = useLocation();
   const alert = useAlert();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -100,7 +102,6 @@ const Home = ({ session, type, organization }) => {
         const bookingsData = await getBookings(selectedPersonnel.id);
         setBookings(bookingsData || []);
         setPersonnelSlots(selectedPersonnel.services || []);
-        console.log("personnelSlots", selectedPersonnel.services);
       }
 
       const servicesData = await getServices(orgData.id);
@@ -354,9 +355,13 @@ const Home = ({ session, type, organization }) => {
           selectedSlot.hour >= slot.start &&
           selectedSlot.hour < slot.end
         ) {
-          const slotServices = slot.item.map((service) => {
-            return service;
-          });
+          let slotServices = [];
+          if (Array.isArray(slot.item))
+            slotServices = slot.item.map((service) => {
+              return service;
+            });
+          else slotServices.push(slot.item);
+
           setAvailableServices(slotServices);
         }
       });
@@ -394,6 +399,7 @@ const Home = ({ session, type, organization }) => {
               sideIcon="fas fa-calendar-check"
               title="Appointment"
               color="var(--primary)"
+              selectedSlot={selectedSlot}
             >
               <ScheduleForm
                 selectedPersonnel={selectedPersonnel}

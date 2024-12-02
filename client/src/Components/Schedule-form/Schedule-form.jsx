@@ -3,6 +3,9 @@ import { useDrag } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../../DevComponents/Dropdown/Dropdown.jsx";
 import { useAlert } from "../../DevComponents/Providers/Alert.jsx";
+import { convertMilitaryTime } from "../../Utils.jsx";
+import { useSelector, useDispatch } from "react-redux";
+import { setAvailability } from "../../Store.js";
 import "./Schedule-form.css";
 
 /**
@@ -29,6 +32,11 @@ const ScheduleForm = ({
   const alert = useAlert();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [mobileOpen, setMobileOpen] = useState(!isMobile);
+  const dispatch = useDispatch();
+  const availabilityStatus = useSelector((state) => state.availability.value);
+  const toggleAvailability = (availabilityStatus) => {
+    dispatch(setAvailability(availabilityStatus)); // Dispatching plain object
+  };
 
   // Effect hooks for updating form data
   useEffect(() => {
@@ -49,7 +57,6 @@ const ScheduleForm = ({
   }, []);
 
   const handleServiceChange = (serviceName) => {
-    console.log("Selected Service Name:", serviceName);
     if (Array.isArray(serviceName)) {
       let newService = [];
       serviceName.forEach((service) => {
@@ -57,11 +64,12 @@ const ScheduleForm = ({
         newService.push(someService);
       });
 
+      if (newService.length === 0) newService = "SELECT SERVICE";
       setSelectedService(newService);
-      console.log("Selected Service:", newService);
     } else {
       const service = services?.find((s) => s.name === serviceName);
 
+      if (!service) service = "SELECT SERVICE";
       setSelectedService(service);
     }
   };
@@ -128,9 +136,14 @@ const ScheduleForm = ({
     navigate(route, { state });
   };
 
+  const handleAvailability = () => {
+    toggleAvailability(!availabilityStatus);
+  };
+
   return (
     <div
       className={`schedule-container ${isDragging ? "dragging" : ""}`}
+      id="schedule-form"
       ref={drag}
       style={{ opacity: isDragging ? 0.6 : 1 }}
     >
@@ -142,19 +155,37 @@ const ScheduleForm = ({
           </h2>
         </div>
 
-        <div className="schedule-appointment-info">
+        <div
+          className={`schedule-appointment-info ${
+            !selectedSlot?.day ? "not-selected" : "selected"
+          }`}
+        >
           <Dropdown
             type="button"
             listType="checkbox"
             className="service-dropdown"
             options={
-              services?.map((service) => service.name) || [
+              services?.map((service) => service?.name) || [
                 "No Services Available",
               ]
             }
-            onClick={(service) => handleServiceChange(service)}
+            onClick={(service) => {
+              handleServiceChange(service);
+            }}
           >
-            <button className="dropdown-toggle">
+            <button
+              className="dropdown-toggle"
+              onClick={() => {
+                if (!selectedSlot?.day) {
+                  alert.showAlert(
+                    "info",
+                    "Show available Time Slots?",
+                    handleAvailability
+                  );
+                  return;
+                }
+              }}
+            >
               {Array.isArray(selectedService)
                 ? selectedService.map((service) => service.name).join(", ")
                 : selectedService?.name || "SELECT SERVICE"}
@@ -163,51 +194,63 @@ const ScheduleForm = ({
           <span>
             <h1>Duration</h1>
             <h2>
-              {Array.isArray(selectedService)
-                ? selectedService
-                    .map((service) => service.duration)
-                    .reduce((a, b) => a + b, 0) / 2
-                : selectedService?.duration || 0}{" "}
-              hours
+              {selectedSlot?.day
+                ? Array.isArray(selectedService)
+                  ? selectedService
+                      .map((service) => service.duration)
+                      .reduce((a, b) => a + b, 0) / 2
+                  : selectedService?.duration || "NA"
+                : ""}
             </h2>
           </span>
           <span>
             <h1>Price</h1>
             <h2>
-              $
-              {Array.isArray(selectedService)
-                ? selectedService
-                    .map((service) => service.price)
-                    .reduce((a, b) => a + b, 0) / 2
-                : selectedService?.price || 0}
+              {selectedSlot?.day
+                ? Array.isArray(selectedService)
+                  ? selectedService
+                      .map((service) => service.price)
+                      .reduce((a, b) => a + b, 0) / 2
+                  : selectedService?.price || "NA"
+                : ""}
             </h2>
           </span>
           <span>
             <h1>Date</h1>
             <h2>
-              {day?.toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "numeric",
-                day: "numeric",
-              })}
+              {selectedSlot?.day
+                ? day?.toLocaleDateString("en-US", {
+                    weekday: "long",
+                    month: "numeric",
+                    day: "numeric",
+                  })
+                : ""}
             </h2>
           </span>
           <span>
             <h1>Start</h1>
-            <h2>{start}:00</h2>
+            <h2>
+              {selectedSlot?.day ? convertMilitaryTime(start + ":00") : ""}
+            </h2>
           </span>
           <span>
             <h1>End</h1>
             <h2>
-              {start +
-                (Array.isArray(selectedService)
-                  ? Math.ceil(
-                      selectedService
-                        .map((service) => service.duration)
-                        .reduce((a, b) => a + b, 0) / 2
+              {selectedSlot?.day
+                ? Array.isArray(selectedService)
+                  ? convertMilitaryTime(
+                      start +
+                        Math.ceil(
+                          selectedService
+                            .map((service) => service.duration)
+                            .reduce((a, b) => a + b, 0) / 2
+                        ) +
+                        ":00"
                     )
-                  : selectedService?.duration || 2)}
-              :00
+                  : convertMilitaryTime(
+                      start + parseInt(selectedService?.duration) + ":00"
+                    )
+                : ""}
             </h2>
           </span>
         </div>

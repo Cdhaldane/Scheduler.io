@@ -43,8 +43,8 @@ export const AlertProvider = ({ children }) => {
   const [alert, setAlert] = useState(null);
 
   // Function to show the alert
-  const showAlert = (type, message) => {
-    setAlert({ type, message });
+  const showAlert = (type, message, onClick) => {
+    setAlert({ type, message, onClick });
     setTimeout(() => {
       setAlert(null); // Hide the alert after 5 seconds
     }, 5000);
@@ -93,8 +93,12 @@ const Alert = () => {
   }
 
   return (
-    <div className={`alert ${alertClass}`}>
+    <div
+      className={`alert ${alertClass} ${alert.onClick ? "clickable" : ""}`}
+      onClick={() => alert.onClick()}
+    >
       <i className="fas fa-exclamation-circle"></i>
+
       <div className="alert-body">
         {Array.isArray(alert.message) ? (
           alert.message.map((message, index) => <p key={index}>{message}</p>)
@@ -102,6 +106,7 @@ const Alert = () => {
           <p>{alert.message}</p>
         )}
       </div>
+      {/* {alert.onClick ? <div className="click-me">Click Me!</div> : null} */}
     </div>
   );
 };

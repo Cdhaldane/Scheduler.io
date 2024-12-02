@@ -39,15 +39,29 @@ export const availability = createSlice({
   },
 });
 
+export const organizationSettings = createSlice({
+  name: "organizationSettings",
+  initialState: {
+    value: {},
+  },
+  reducers: {
+    setOrganizationSettings: (state, action) => {
+      state.value = action.payload;
+    },
+  },
+});
+
 // Action creators are generated for each case reducer function
 export const { setTime } = timeFrame.actions;
 export const { setPersonnel } = selectedPersonnel.actions;
 export const { setAvailability } = availability.actions;
+export const { setOrganizationSettings } = organizationSettings.actions;
 
 export default configureStore({
   reducer: {
     timeFrame: timeFrame.reducer,
     selectedPersonnel: selectedPersonnel.reducer,
     availability: availability.reducer,
+    organizationSettings: organizationSettings.reducer,
   },
 });
