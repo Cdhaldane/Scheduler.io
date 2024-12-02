@@ -39,9 +39,9 @@
   font-size: 1em;
 }
 
-/* .calendar-buttons > button:focus {
+.calendar-buttons > button:focus {
   background-color: var(--bg-secondary);
-} */
+}
 
 .calendar-buttons > button:hover {
   background-color: var(--bg-secondary);

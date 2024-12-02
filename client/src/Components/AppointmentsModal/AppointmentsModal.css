@@ -8,7 +8,7 @@
 .user-info h2,
 .appointments-section h3 {
   color: var(--primary);
-  font-size: 1.5em;
+  font-size: 1em;
   margin-block-start: 20px;
   margin-block-end: 0px;
 }
@@ -22,7 +22,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 30px !important;
+  margin-top: 20px !important;
 }
 
 .appointments-title i {
@@ -97,10 +97,10 @@
   margin-bottom: 10px;
   width: 100%;
   border-bottom: 2px solid;
+  font-size: 0.9em;
 }
 .appointment-details h4 {
   margin: 0 0 10px 0;
-  font-size: 1.2em;
 }
 
 .appointment-date-time,
@@ -111,7 +111,7 @@
   align-items: center;
   gap: 10px;
   margin: 10px 0px !important;
-  font-size: 0.9em;
+  font-size: 0.7em;
 }
 
 .appointment-date-time,
