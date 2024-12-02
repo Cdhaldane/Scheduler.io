@@ -34,26 +34,127 @@
 
 .expand-indicator {
   position: absolute;
-  left: 40%;
   z-index: 100;
   cursor: -webkit-grab;
   animation: pulse 1s infinite;
-  border-color: inherit !important;
+  border-color: var(--ash) !important;
 }
 
 .expand-indicator.top {
   top: -20px; /* Adjust based on the cell's border and desired appearance */
   border-bottom: 15px solid white !important;
-  border-color: inherit !important;
+  border-color: var(--ash) !important;
   border-left: 15px solid transparent !important;
   border-right: 15px solid transparent !important;
 }
 
 .expand-indicator.bottom {
   border-top: 15px solid white !important;
-  border-color: inherit !important;
+  border-color: var(--ash) !important;
   border-left: 15px solid transparent !important;
   border-right: 15px solid transparent !important;
 
   bottom: -20px; /* Adjust based on the cell's border and desired appearance */
 }
+
+.cell.hours {
+  display: table-cell;
+  align-items: center;
+  justify-content: center; /* Align hour text to the right */
+  text-align: center; /* Align hour text to the right */
+}
+
+.cell.hours.Month {
+  padding: 5px;
+  min-width: 100px !important;
+  font-size: 0.8em;
+}
+
+.cell.hours.Day {
+  min-width: calc(30%) !important; /* Adjusted for 7 days + 1 hour column */
+}
+
+.cell.scheduled {
+  color: var(--ash);
+  font-weight: bold;
+  font-family: var(--font-main);
+}
+
+.cell.booking {
+  background-color: var(--secondary) !important;
+  color: var(--bg-primary) !important;
+  font-weight: bold !important;
+  border: 1px solid var(--secondary) !important;
+}
+
+.cell.single-select {
+  border: 1px solid white;
+  background-color: var(--bg-secondary);
+}
+
+.cell.group-select:not(.scheduled) {
+  background-color: var(--primary) !important ;
+  border: 1px solid transparent !important;
+  color: var(--bg-primary);
+}
+
+.cell.group-select.booking {
+  background-color: var(--secondary) !important;
+  border: 1px solid black !important;
+  color: var(--bg-primary);
+}
+
+.cell.group-select.start {
+  border-top: 1px solid var(--ash) !important;
+  border-left: 1px solid var(--ash) !important;
+  border-right: 1px solid var(--ash) !important;
+}
+
+.cell.group-select.middle {
+  border-left: 1px solid var(--ash) !important;
+  border-right: 1px solid var(--ash) !important;
+}
+
+.cell.group-select.end {
+  border-bottom: 1px solid var(--ash) !important;
+  border-left: 1px solid var(--ash) !important;
+  border-right: 1px solid var(--ash) !important;
+}
+
+.cell.group-select.booking.start {
+  border-bottom: 1px solid transparent !important;
+}
+
+.cell.group-select.booking.middle {
+  border-top: 1px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
+}
+
+.cell.group-select.booking.end {
+  border-top: 1px solid transparent !important;
+}
+
+.cell.over {
+  background-color: var(--bg-secondary) !important;
+}
+
+.cell:not(.admin):not(.available):not(.hours) {
+  pointer-events: none;
+  background-color: var(--bg-secondary);
+}
+/* .cell.available.top {
+  border-top: 1px solid var(--ash) !important;
+  border-left: 1px solid var(--ash) !important;
+  border-right: 1px solid var(--ash) !important;
+}
+
+.cell.available.middle {
+  border-left: 1px solid var(--ash) !important;
+  border-right: 1px solid var(--ash) !important;
+}
+
+.cell.available.bottom {
+  border-bottom: 1px solid var(--ash) !important;
+  border-left: 1px solid var(--ash) !important;
+  border-right: 1px solid var(--ash) !important;
+} */

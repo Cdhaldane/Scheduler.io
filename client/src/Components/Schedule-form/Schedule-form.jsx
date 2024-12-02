@@ -3,34 +3,14 @@ import { useDrag } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../../DevComponents/Dropdown/Dropdown.jsx";
 import { useAlert } from "../../DevComponents/Providers/Alert.jsx";
-import Clock from "../AnimatedDiv/Clock/Clock.jsx";
-
 import "./Schedule-form.css";
-import { handleTwoWayCollapse } from "../../Utils.jsx";
 
 /**
  * ScheduleForm Component
- * 
+ *
  * Purpose:
  * - The ScheduleForm component displays a form for scheduling an appointment.
  * - It allows the user to select a service, view the appointment duration and price, and book the appointment.
- * 
- * Inputs:
- * - personID: The ID of the personnel associated with the appointment.
- * - selectedSlot: The selected time slot for the appointment.
- * - personnel: An array of personnel objects.
- * - session: The current user session object.
- * 
- * Outputs:
- * - JSX for rendering the appointment scheduling form with service selection, appointment details, and a booking button.
- * 
- * Example usage:
- * <ScheduleForm
-    personID={personID}
-    selectedSlot={selectedSlot}
-    personnel={personnel}
-    session={session}
-  />
  */
 
 const ScheduleForm = ({
@@ -43,57 +23,50 @@ const ScheduleForm = ({
   services,
   organization,
 }) => {
-  const [day, setDay] = useState();
-  const [start, setStart] = useState();
-
-  const [price, setPrice] = useState();
-
+  const [day, setDay] = useState(null);
+  const [start, setStart] = useState(null);
   const navigate = useNavigate();
-  const [typing, setTyping] = useState(false);
   const alert = useAlert();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
+  const [mobileOpen, setMobileOpen] = useState(!isMobile);
 
-  //Effect hooks for updating form data and handling typing animation
+  // Effect hooks for updating form data
   useEffect(() => {
-    if (selectedPersonnel !== null) {
+    if (selectedSlot) {
       setDay(selectedSlot?.date || new Date());
       setStart(selectedSlot?.hour || 9);
     }
-  }, [selectedPersonnel, selectedSlot]);
+  }, [selectedSlot]);
 
   useEffect(() => {
-    window.addEventListener("resize", () => {
-      if (window.innerWidth <= 768) {
-        setIsMobile(true);
-        setMobileOpen(false);
-      } else {
-        setMobileOpen(true);
-        setIsMobile(false);
-      }
-    });
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      setMobileOpen(!mobile);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  //Effect hook for handling typing animation
-  useEffect(() => {
-    if (selectedPersonnel?.first_name) {
-      setTyping(true);
-
-      const timer = setTimeout(() => {
-        setTyping(false);
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [selectedPersonnel?.first_name]);
-
   const handleServiceChange = (serviceName) => {
-    console.log("service name", serviceName);
-    let service = services?.find((service) => service.name === serviceName);
-    console.log("service", service);
-    setSelectedService(service);
+    console.log("Selected Service Name:", serviceName);
+    if (Array.isArray(serviceName)) {
+      let newService = [];
+      serviceName.forEach((service) => {
+        const someService = services?.find((s) => s.name === service);
+        newService.push(someService);
+      });
+
+      setSelectedService(newService);
+      console.log("Selected Service:", newService);
+    } else {
+      const service = services?.find((s) => s.name === serviceName);
+
+      setSelectedService(service);
+    }
   };
-  //useDrag hook to make the component draggable
+
+  // useDrag hook to make the component draggable
   const [{ isDragging }, drag] = useDrag({
     type: "service",
     item: {
@@ -107,40 +80,63 @@ const ScheduleForm = ({
     }),
   });
 
-  //handler for booking the appointment
   const handleBookAppointment = () => {
-    if (!selectedService)
-      return alert.showAlert("error", "Please select a service");
-    if (!day) return alert.showAlert("error", "Please select a day");
+    if (!selectedService) {
+      alert.showAlert("error", "Please select a service.");
+      return;
+    }
+    if (!day) {
+      alert.showAlert("error", "Please select a day.");
+      return;
+    }
 
-    const appointment = {
+    let appointment = {
       personnel: selectedPersonnel,
-      day: day,
-      start: start,
-      end: start + selectedService?.duration,
+      day,
+      start,
+      end: start + selectedService.duration,
       service: selectedService,
-      duration: selectedService?.duration,
-      price: selectedService?.price,
+      duration: selectedService.duration,
+      price: selectedService.price,
     };
 
-    if (session) {
-      const user = session?.user.user_metadata;
-      navigate("/booking-submit", {
-        state: { user, appointment, organization },
-      });
-    } else {
-      navigate("/booking", {
-        state: { appointment },
-      });
+    if (Array.isArray(selectedService)) {
+      appointment = {
+        ...appointment,
+        service: selectedService,
+        duration: selectedService
+          .map((service) => service.duration)
+          .reduce((a, b) => a + b, 0),
+        price: selectedService
+          .map((service) => service.price)
+          .reduce((a, b) => a + b, 0),
+        end:
+          start +
+          Math.ceil(
+            selectedService
+              .map((service) => service.duration)
+              .reduce((a, b) => a + b, 0) / 2
+          ),
+      };
     }
+
+    const route = session ? "/booking-submit" : "/booking";
+    const state = session
+      ? { user: session?.user?.user_metadata, appointment, organization }
+      : { appointment };
+
+    navigate(route, { state });
   };
 
-  //Render the schedule form with the appointment details and booking button
   return (
-    <div className={`schedule-container`} ref={drag} style={{}}>
+    <div
+      className={`schedule-container ${isDragging ? "dragging" : ""}`}
+      ref={drag}
+      style={{ opacity: isDragging ? 0.6 : 1 }}
+    >
       <div className="schedule-body">
         <div className="schedule-header">
-          PERSONEL:{" "}
+          PERSONNEL:{" "}
           <h2>
             {selectedPersonnel?.first_name} {selectedPersonnel?.last_name}
           </h2>
@@ -149,7 +145,8 @@ const ScheduleForm = ({
         <div className="schedule-appointment-info">
           <Dropdown
             type="button"
-            className={"service-dropdown"}
+            listType="checkbox"
+            className="service-dropdown"
             options={
               services?.map((service) => service.name) || [
                 "No Services Available",
@@ -157,23 +154,37 @@ const ScheduleForm = ({
             }
             onClick={(service) => handleServiceChange(service)}
           >
-            {" "}
             <button className="dropdown-toggle">
-              {selectedService?.name || "SELECT SERVICE"}
+              {Array.isArray(selectedService)
+                ? selectedService.map((service) => service.name).join(", ")
+                : selectedService?.name || "SELECT SERVICE"}
             </button>
           </Dropdown>
           <span>
             <h1>Duration</h1>
-            <h2> {selectedService?.duration || 0} hours</h2>
+            <h2>
+              {Array.isArray(selectedService)
+                ? selectedService
+                    .map((service) => service.duration)
+                    .reduce((a, b) => a + b, 0) / 2
+                : selectedService?.duration || 0}{" "}
+              hours
+            </h2>
           </span>
           <span>
             <h1>Price</h1>
-            <h2> ${selectedService?.price || 0}</h2>
+            <h2>
+              $
+              {Array.isArray(selectedService)
+                ? selectedService
+                    .map((service) => service.price)
+                    .reduce((a, b) => a + b, 0) / 2
+                : selectedService?.price || 0}
+            </h2>
           </span>
           <span>
             <h1>Date</h1>
             <h2>
-              {" "}
               {day?.toLocaleDateString("en-US", {
                 weekday: "long",
                 month: "numeric",
@@ -183,13 +194,19 @@ const ScheduleForm = ({
           </span>
           <span>
             <h1>Start</h1>
-            <h2> {start}:00</h2>
+            <h2>{start}:00</h2>
           </span>
           <span>
             <h1>End</h1>
             <h2>
-              {" "}
-              {start + (selectedService ? selectedService.duration : 2)}
+              {start +
+                (Array.isArray(selectedService)
+                  ? Math.ceil(
+                      selectedService
+                        .map((service) => service.duration)
+                        .reduce((a, b) => a + b, 0) / 2
+                    )
+                  : selectedService?.duration || 2)}
               :00
             </h2>
           </span>

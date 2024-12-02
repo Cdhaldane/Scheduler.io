@@ -137,6 +137,38 @@
   transition: transform 0.3s ease;
 }
 
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.radio-item input[type="radio"] {
+  margin: 0;
+  accent-color: var(--primary-color);
+}
+
+.radio-item.selected {
+  font-weight: bold;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+  margin: 0;
+  accent-color: var(--primary-color);
+}
+
+.checkbox-item.selected {
+  font-weight: bold;
+}
+
 @keyframes button-pulse {
   0%,
   100% {

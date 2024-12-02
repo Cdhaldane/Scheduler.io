@@ -51,6 +51,12 @@
   margin-top: 10px;
 }
 
+.alert-info {
+  color: var(--bg-primary);
+  background-color: var(--info);
+  margin-top: 10px;
+}
+
 .tooltip-container {
   width: auto;
   text-transform: uppercase;

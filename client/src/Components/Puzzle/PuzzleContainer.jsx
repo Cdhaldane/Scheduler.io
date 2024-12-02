@@ -50,7 +50,6 @@ const PuzzleContainer = ({
   deletedService,
   addedService,
   puzzlePieces,
-  handlePersonnelServiceUpdate,
   personnelServices,
   organization,
   ...calendarProps

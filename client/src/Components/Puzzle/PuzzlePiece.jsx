@@ -96,6 +96,7 @@ const PuzzlePiece = ({ piece, animate, puzzlePieces }) => {
       style={{
         cursor: "grab",
         backgroundColor: color,
+        display: "flex",
       }}
       className={pieceClass}
     >

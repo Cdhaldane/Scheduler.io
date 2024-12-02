@@ -85,8 +85,11 @@ const Alert = () => {
     case "error":
       alertClass = "alert-error";
       break;
-    default:
+    case "info":
       alertClass = "alert-info";
+      break;
+    default:
+      alertClass = "alert";
   }
 
   return (

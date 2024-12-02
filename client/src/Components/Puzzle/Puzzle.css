@@ -149,7 +149,7 @@
 
 .item-list__item {
   z-index: 100000;
-  width: 100%;
+  width: 500px;
   opacity: 0.3;
 }
 

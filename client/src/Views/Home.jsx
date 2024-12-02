@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar.jsx";
 import Calendar from "../Components/Calendar/Calendar.jsx";
 import ScheduleForm from "../Components/Schedule-form/Schedule-form";
@@ -25,9 +25,12 @@ import {
   getServices,
   deleteService,
   addService,
-  addPersonnelService,
   getBookings,
   getOrganization,
+  updatePersonnelService,
+  addPersonnelService,
+  deletePersonnelService,
+  deleteallPersonnelService,
 } from "../Database.jsx";
 
 import "./Styles/Home.css";
@@ -56,14 +59,14 @@ const Home = ({ session, type, organization }) => {
   const [services, setServices] = useState([]);
   const [deletedService, setDeletedService] = useState(null);
   const [addedService, setAddedService] = useState(null);
-  const [personnelServices, setPersonnelServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedService, setSelectedService] = useState();
   const [bookings, setBookings] = useState([]);
   const [personnelSlots, setPersonnelSlots] = useState([]);
+  const [availableServices, setAvailableServices] = useState([]);
   const timeFrame = useSelector((state) => state.timeFrame);
   const [org, setOrg] = useState(organization);
-  const isMobile = window.innerWidth <= 768;
+  const isMobile = useMemo(() => window.innerWidth <= 768, []);
   const url = useParams();
 
   const adminMode = type === "admin";
@@ -77,33 +80,43 @@ const Home = ({ session, type, organization }) => {
   };
 
   //Fetch personnel and services data
-  const fetchData = async () => {
-    const orgData = await getOrganization(
-      organization.org_id || session?.user.user_metadata.organization.org_id
-    );
-    if (orgData) {
+  const fetchData = useCallback(async () => {
+    try {
+      // deleteallPersonnelService(19, []);
+      setLoading(true);
+      const orgData = await getOrganization(
+        organization?.org_id ||
+          session?.user?.user_metadata?.organization?.org_id
+      );
+      if (!orgData) {
+        navigate("/404");
+        return;
+      }
       setOrg(orgData);
+
       const personnelData = await getPersonnel(orgData.id);
       setPersonnels(personnelData || []);
       if (selectedPersonnel) {
-        const bookingsData = await getBookings(selectedPersonnel?.id);
+        const bookingsData = await getBookings(selectedPersonnel.id);
         setBookings(bookingsData || []);
         setPersonnelSlots(selectedPersonnel.services || []);
+        console.log("personnelSlots", selectedPersonnel.services);
       }
 
       const servicesData = await getServices(orgData.id);
-      if (servicesData) setServices(servicesData);
-    } else navigate("/404");
-  };
-
-  //Effect hook for fetching personnel and services data
-  useEffect(() => {
-    setLoading(true);
-    fetchData().finally(() => {
-      personnelState(personnel);
+      setServices(servicesData || []);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      alert.showAlert("error", "Failed to load data. Please try again.");
+    } finally {
       setLoading(false);
-    });
-  }, [session, organization, selectedPersonnel, type]);
+    }
+  }, [organization, session, selectedPersonnel, navigate]);
+
+  useEffect(() => {
+    fetchData();
+    personnelState(personnel);
+  }, [fetchData]);
 
   const personnelState = async (personnel) => {
     if (!selectedPersonnel) {
@@ -132,124 +145,171 @@ const Home = ({ session, type, organization }) => {
   };
 
   //Handlers for service-related actions
-  const onDeleteService = async (item) => {
-    setDeletedService(item);
-    setTimeout(() => {
-      deleteService(item.id).then((res) => {
-        if (res.error) {
-          alert.showAlert("error", res.error.message);
+  const onDeleteService = useCallback(
+    async (service) => {
+      try {
+        const response = await deleteService(service.id);
+        if (response.error) {
+          alert.showAlert("error", response.error.message);
         } else {
           alert.showAlert("warning", "Service deleted");
+          fetchData();
         }
-      });
-      fetchData();
-    }, 500);
-  };
+      } catch (err) {
+        console.error("Error deleting service:", err);
+        alert.showAlert("error", "Failed to delete service. Please try again.");
+      }
+    },
+    [fetchData, alert]
+  );
 
   //Handler for adding a new service
-  const onAddService = async (service) => {
-    console.log("service", service);
-    await addService(service).then((res) => {
-      if (res.error) {
-        alert.showAlert("error", res.error.message);
-      } else {
-        setAddedService(res.data);
-        fetchData();
-        alert.showAlert("success", "Service added");
+  const onAddService = useCallback(
+    async (service) => {
+      try {
+        const response = await addService(service);
+        if (response.error) {
+          alert.showAlert("error", response.error.message);
+        } else {
+          alert.showAlert("success", "Service added");
+          fetchData();
+        }
+      } catch (err) {
+        console.error("Error adding service:", err);
+        alert.showAlert("error", "Failed to add service. Please try again.");
       }
-    });
+    },
+    [fetchData, alert]
+  );
 
-    setTimeout(() => {}, 1000);
-  };
-
-  const onAddPersonnelService = async (service) => {
-    try {
-      // Add the new service to the selected personnel's existing services
-      const updatedServices = [...(selectedPersonnel.services || []), service];
-
-      // Update the database with the new list of services
-      const { data, error } = await addPersonnelService(
-        selectedPersonnel.id,
-        updatedServices
-      );
-
-      if (error) {
-        alert.showAlert("error", error.message);
-        return;
+  const onAddPersonnelService = useCallback(
+    async (service) => {
+      try {
+        const response = await addPersonnelService(
+          selectedPersonnel.id,
+          service
+        );
+        if (response.error) {
+          alert.showAlert("error", response.error.message);
+        } else {
+          alert.showAlert("success", "Service added");
+          dispatch(setPersonnel(response.data[0]));
+          fetchData();
+        }
+      } catch (err) {
+        console.error("Error adding service:", err);
+        alert.showAlert("error", "Failed to add service. Please try again.");
       }
+    },
+    [fetchData, alert]
+  );
 
-      // Update the local personnel state with the newly added service
-      const updatedPersonnel = {
-        ...selectedPersonnel,
-        services: updatedServices,
-      };
+  const onDeletePersonnelService = useCallback(
+    async (serviceId) => {
+      try {
+        console.log("serviceId", serviceId);
+        const response = await deletePersonnelService(
+          selectedPersonnel.id,
+          serviceId
+        );
+        if (response.error) {
+          alert.showAlert("error", response.error.message);
+        } else {
+          alert.showAlert("warning", "Service deleted");
+          dispatch(setPersonnel(response.data[0]));
+          setPersonnelSlots(response.data[0].services);
+          setSelectedSlot(null);
+          fetchData();
+        }
+      } catch (err) {
+        console.error("Error deleting service:", err);
+        alert.showAlert("error", "Failed to delete service. Please try again.");
+      }
+    },
+    [fetchData, alert]
+  );
 
-      dispatch(setPersonnel(updatedPersonnel)); // Update Redux state
-      setPersonnelServices(updatedServices); // Update local services state
-      alert.showAlert("success", "Service added successfully");
-    } catch (err) {
-      console.error("Error adding personnel service:", err);
-      alert.showAlert("error", "Failed to add service. Please try again.");
-    }
-  };
+  //Handler for updating a personnel service
+  const onUpdatePersonnelService = useCallback(
+    async (serviceId, updatedService) => {
+      console.log("service", serviceId, updatedService);
+      try {
+        const response = await updatePersonnelService(
+          selectedPersonnel.id,
+          serviceId,
+          updatedService
+        );
+        if (response.error) {
+          alert.showAlert("error", response.error.message);
+        } else {
+          alert.showAlert("success", "Service updated");
+          dispatch(setPersonnel(response.data[0]));
+          setPersonnelSlots(response.data[0].services);
+          fetchData();
+        }
+      } catch (err) {
+        console.error("Error updating service:", err);
+        alert.showAlert("error", "Failed to update service. Please try again.");
+      }
+    },
+    [fetchData, alert]
+  );
 
   //Handler for updating the selected slot
-  const handleSelectedSlot = (day, hour, date, group) => {
+  const handleSelectedSlot = useCallback((day, hour, date, group) => {
     if (group) {
-      let slots = [];
-      for (let i = group.start; i < group.end; i++) {
-        slots.push({
-          day: day,
-          hour: i,
-          date: date,
-        });
-      }
+      const slots = Array.from({ length: group.end - group.start }, (_, i) => ({
+        day,
+        hour: group.start + i,
+        date,
+      }));
       setSelectedSlot(slots);
-    } else
-      setSelectedSlot({
-        day: day,
-        hour: hour,
-        date: date,
-      });
-  };
-
-  //Handler for updating personnel services
-  const handlePersonnelServiceUpdate = async (services) => {
-    const allServices = await getServices();
-    const { data, error } = await addPersonnelService(
-      selectedPersonnel.id,
-      allServices
-    );
-    if (error) {
-      alert.showAlert("error", error.message);
     } else {
-      alert.showAlert("success", "Service added");
+      setSelectedSlot({ day, hour, date });
     }
-  };
+  }, []);
 
   //Props for the calendar component
-  const calendarProps = {
-    adminMode,
-    selectedPersonnel,
-    session,
-    handleSelectedSlot,
-    deletedService,
-    addedService,
-    puzzlePieces: services,
-    fetchData,
-    onDeleteService,
-    onAddPersonnelService,
-    handlePersonnelServiceUpdate,
-    personnelServices,
-    selectedSlot,
-    bookings,
-    timeFrame,
-    organization: org,
-    type,
-    homeLoading: loading,
-    personnel,
-    personnelSlots,
-  };
+  const calendarProps = useMemo(
+    () => ({
+      adminMode,
+      selectedPersonnel,
+      session,
+      handleSelectedSlot,
+      puzzlePieces: services,
+      bookings,
+      timeFrame,
+      organization: org,
+      personnel,
+      personnelSlots,
+      onDeleteService: onDeleteService,
+      onAddService: onAddService,
+      onAddPersonnelService: onAddPersonnelService,
+      onDeletePersonnelService: onDeletePersonnelService,
+      onUpdatePersonnelService: onUpdatePersonnelService,
+      selectedSlot,
+      type,
+    }),
+    [
+      adminMode,
+      selectedPersonnel,
+      session,
+      handleSelectedSlot,
+      services,
+      bookings,
+      timeFrame,
+      org,
+      personnel,
+      personnelSlots,
+      onDeleteService,
+      onAddService,
+      onAddPersonnelService,
+      onDeletePersonnelService,
+      onUpdatePersonnelService,
+      selectedSlot,
+      type,
+    ]
+  );
 
   // allow vertical scrolling
   const options = {
@@ -279,6 +339,27 @@ const Home = ({ session, type, organization }) => {
   //       <Spinner />
   //     </div>
   //   );
+
+  useEffect(() => {
+    setAvailableServices([]);
+    // Find all available services for the selected personnel
+    if (selectedSlot) {
+      personnelSlots.forEach((slot) => {
+        if (
+          selectedSlot.day === slot.day &&
+          selectedSlot.hour >= slot.start &&
+          selectedSlot.hour < slot.end
+        ) {
+          console.log("slot", slot.item);
+          const slotServices = slot.item.map((service) => {
+            return service;
+          });
+          console.log("services", slotServices);
+          setAvailableServices(slotServices);
+        }
+      });
+    }
+  }, [selectedSlot]);
 
   const backend = isMobile ? TouchBackend : HTML5Backend;
   return (
@@ -319,14 +400,14 @@ const Home = ({ session, type, organization }) => {
                 session={session}
                 selectedService={selectedService}
                 setSelectedService={setSelectedService}
-                services={services}
+                services={availableServices}
                 organization={org}
               />
             </DynamicDiv>
           )}
           {type === "admin" && (
             <>
-              {/* <MyPreview /> */}
+              <MyPreview />
               <DynamicDiv
                 title="Services"
                 sideIcon="fas fa-puzzle-piece"

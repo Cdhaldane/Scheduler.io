@@ -27,21 +27,28 @@ import "./Organization.css";
 const OrganizationSettings = ({ organization, onClose }) => {
   const alert = useAlert();
   const [orgDetails, setOrgDetails] = useState({
-    // Add other details you need
+    openingTime: organization?.org_settings?.openingTime,
+    closingTime: organization?.org_settings?.closingTime,
   });
 
   const handleSubmit = async (e) => {
-    console.log("orgDetails", organization);
     e.preventDefault();
-    const { data, error } = await updateOrganization(organization.org_id, {
-      org_settings: orgDetails,
-    });
+    const prevDetails = organization.org_settings;
 
+    const updatedDetails = {
+      ...prevDetails,
+      ...orgDetails,
+    };
+
+    const { data, error } = await updateOrganization(organization.org_id, {
+      org_settings: updatedDetails,
+    });
+    setOrgDetails(updatedDetails);
     if (!error) {
-      alert.showAlert("Organization updated successfully", "success");
+      alert.showAlert("success", "Organization updated successfully");
       onClose();
-    }
-    alert.showAlert("Error updating organization", "error");
+      window.location.reload();
+    } else alert.showAlert("error", "Error updating organization");
   };
 
   return (
@@ -59,7 +66,7 @@ const OrganizationSettings = ({ organization, onClose }) => {
                   openingTime: time,
                 }));
               }}
-              defaultValue={organization.org_settings?.openingTime}
+              defaultValue={orgDetails.openingTime}
             />
           </div>
 
@@ -74,7 +81,7 @@ const OrganizationSettings = ({ organization, onClose }) => {
                   closingTime: time,
                 }))
               }
-              defaultValue={organization.org_settings?.closingTime}
+              defaultValue={orgDetails.closingTime}
             />
           </div>
         </span>

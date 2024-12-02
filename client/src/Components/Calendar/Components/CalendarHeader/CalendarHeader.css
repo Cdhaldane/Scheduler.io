@@ -2,7 +2,6 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   transition: all 0.3s ease-in-out;
   gap: 10px;
   width: 100%;
@@ -14,7 +13,7 @@
 .calendar-top-buttons {
   display: flex;
   gap: 10px;
-  width: auto;
+  width: 40%;
 }
 
 .calendar-top-buttons .timeframe-button {
@@ -27,7 +26,7 @@
   cursor: pointer;
   border-radius: 2px;
   white-space: nowrap;
-  width: 50%;
+  width: fit-content;
   overflow: hidden;
 }
 
@@ -37,12 +36,12 @@
 
 .calendar-top-buttons .timeframe-button h1 {
   margin: 0;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
-.calendar-buttons > button:focus {
+/* .calendar-buttons > button:focus {
   background-color: var(--bg-secondary);
-}
+} */
 
 .calendar-buttons > button:hover {
   background-color: var(--bg-secondary);
@@ -63,9 +62,17 @@
   padding: 0px 2%;
   flex-wrap: nowrap;
   white-space: nowrap;
+  transition: all 0.3s ease-in-out;
+}
+
+.calendar-top-title:hover {
+  background-color: var(--bg-primary);
+  cursor: pointer;
 }
 
 .calendar-top-time {
+  position: absolute;
+  right: 0px;
   width: auto;
   white-space: nowrap;
   font-size: 1.5em !important;
@@ -100,6 +107,7 @@
 @media screen and (max-width: 768px) {
   .calendar-top {
     flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     margin: 0px;
     min-height: 60px;
@@ -112,5 +120,16 @@
   .calendar-top-buttons .timeframe-button > i {
     font-size: 1.5em;
     margin-right: 0px !important;
+  }
+
+  .calendar-top-title {
+    position: relative;
+    left: 15%;
+  }
+  .calendar-top-time {
+    position: relative;
+    left: 15%;
+    right: 0%;
+    text-align: center;
   }
 }

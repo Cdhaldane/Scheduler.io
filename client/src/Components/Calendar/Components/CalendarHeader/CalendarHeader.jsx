@@ -1,4 +1,3 @@
-
 /**
  * CalendarHeader Component
  *
@@ -22,14 +21,11 @@
  * - Organization Name: Opens the `OrganizationSettings` modal when clicked, displaying organization-specific settings.
  * - Current Date Display: Shows the current date(s) in compact or full format based on `isCompact`.
  *
- * 
+ *
  */
 
-
-
-
 import React, { useState, useEffect } from "react";
-import { setTime } from "../../../../Store.js";
+import { setTime, setAvailability } from "../../../../Store.js";
 import { useSelector, useDispatch } from "react-redux";
 import OrganizationSettings from "../../../Organization/OrganizationSettings.jsx";
 import Modal from "../../../../DevComponents/Modal/Modal.jsx";
@@ -45,11 +41,16 @@ const CalendarHeader = ({
   fullView,
   organization,
   currentView,
+  adminMode,
 }) => {
   const [times, setTimes] = useState(["Day", "Week", "Month"]);
   const dispatch = useDispatch();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isCompact, setCompact] = useState(window.innerWidth <= 1477);
+  const availabilityStatus = useSelector((state) => state.availability.value);
+  const toggleAvailability = (availabilityStatus) => {
+    dispatch(setAvailability(availabilityStatus)); // Dispatching plain object
+  };
   const [organizationModal, setOrganizationModal] = useState(false);
 
   useEffect(() => {
@@ -96,6 +97,22 @@ const CalendarHeader = ({
           <i className="fa-solid fa-cog mr-10"></i>
           {!isMobile && (fullView ? <h1>Compact</h1> : <h1>Full</h1>)}
         </button>
+        {!adminMode && (
+          <button
+            onClick={() => {
+              toggleAvailability(!availabilityStatus);
+            }}
+            className={`timeframe-button`}
+            id="timeframe-button-view"
+          >
+            <i
+              className={`${
+                availabilityStatus ? "fa-solid" : "fa-regular"
+              } fa-eye mr-10`}
+            ></i>
+            {!isMobile && <h1>Availability</h1>}
+          </button>
+        )}
       </div>
       {organization?.name && (
         <div

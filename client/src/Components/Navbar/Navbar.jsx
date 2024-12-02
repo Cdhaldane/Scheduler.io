@@ -82,7 +82,7 @@ const Navbar = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState("home");
+  const [currentPage, setCurrentPage] = useState("");
   const [showAppointments, setShowAppointments] = useState(false);
   const isMobile = window.innerWidth <= 768;
   const location = useLocation();
@@ -94,6 +94,18 @@ const Navbar = ({
       ? session.user.user_metadata.organization.org_id
       : "no_org";
   }
+
+  useEffect(() => {
+    if (location.pathname.includes("/admin")) {
+      setCurrentPage("admin");
+    } else if (location.pathname.includes("/home")) {
+      setCurrentPage("home");
+    } else if (location.pathname.includes("/info")) {
+      setCurrentPage("info");
+    } else {
+      setCurrentPage("");
+    }
+  }, [session]);
 
   /**
    * ProfilePic Component

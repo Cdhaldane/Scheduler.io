@@ -80,16 +80,22 @@ const BookingSubmit = () => {
       return;
     }
 
-    const { res, error } = await addBooking({
+    console.log(user, appointment);
+    const booking = {
       client_email: user.email,
       client_name: user.name,
       client_phone: user.phoneNumber,
       personnel_id: appointment.personnel.id,
-      service_id: appointment.service.id,
+      service_id: Array.isArray(appointment.service)
+        ? appointment.service[0].id
+        : appointment.service.id,
       booking_date: appointment.day,
       booking_time: time.toLocaleTimeString("en-US"),
       status: "confirmed",
-    });
+    };
+
+    console.log(booking);
+    const { res, error } = await addBooking(booking);
     if (error) {
       alert.showAlert("error", "Booking Failed");
       return;

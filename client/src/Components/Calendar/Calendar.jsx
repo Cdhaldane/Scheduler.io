@@ -1,9 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { useDrop } from "react-dnd";
 import Cell from "./Cell.jsx";
 import CalendarHeader from "./Components/CalendarHeader/CalendarHeader.jsx";
 import "./Calendar.css";
-import { getServiceFromId, addPersonnelService } from "../../Database.jsx";
+import {
+  getServiceFromId,
+  addPersonnelService,
+  updatePersonnelService,
+} from "../../Database.jsx";
 import Button from "../../DevComponents/Button/Button.jsx";
 import Spinner from "../../DevComponents/Spinner/Spinner.jsx";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,6 +21,7 @@ import { setTime } from "../../Store.js";
 import Modal from "../../DevComponents/Modal/Modal.jsx";
 import ContextMenu from "./CalendarContextMenu/ContextMenu";
 import { isToday } from "../../Utils.jsx";
+import { useAlert } from "../../DevComponents/Providers/Alert.jsx";
 
 import {
   getDaysOfWeek,
@@ -34,23 +45,25 @@ const Calendar = ({
   type,
   homeLoading,
   onAddPersonnelService,
+  onDeletePersonnelService,
+  onUpdatePersonnelService,
   personnel,
   personnelSlots,
 }) => {
   // State hooks to manage current date, selected slot, and scheduled slots
-
   const [currentView, setCurrentView] = useState(getDaysOfWeek(new Date()));
   const [scheduledSlots, setScheduledSlots] = useState([]);
+  const [availableSlots, setAvailableSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const times = ["Day", "Week", "Month"];
   const [timeFrameIndex, setTimeFrameIndex] = useState(0);
   const [fullView, setFullView] = useState(true);
   const timeFrame = useSelector((state) => state.timeFrame.value);
+  const availability = useSelector((state) => state.availability.value);
+  const [selectedCell, setSelectedCell] = useState({ day: null, hour: null });
+  const [slotToCopy, setSlotToCopy] = useState(null);
   const dispatch = useDispatch();
-  const isMobile = window.innerWidth <= 768;
-  const isCompact = window.innerWidth <= 1054;
-  const [mobileOpen, setMobileOpen] = useState(isMobile ? false : true);
-  const [organizationModal, setOrganizationModal] = useState(false);
+  const alert = useAlert();
 
   const [contextMenu, setContextMenu] = useState({
     visible: false,
@@ -58,8 +71,14 @@ const Calendar = ({
     y: 0,
   });
 
+  const isMobile = window.innerWidth <= 768;
+
   useEffect(() => {
-    const fetchData = async () => {
+    console.log("availability", availability);
+  }, [availability]);
+
+  useEffect(() => {
+    const initializeCalendar = async () => {
       switch (timeFrame) {
         case "Day":
           setCurrentView([new Date()]);
@@ -75,51 +94,79 @@ const Calendar = ({
       }
       setLoading(false);
     };
-    fetchData();
+    initializeCalendar();
   }, [timeFrame]);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      setScheduledSlots([]);
-      const slots = await Promise.all(
-        bookings.map(async (booking) => {
-          const service = await getServiceFromId(booking.service_id);
-          return {
-            id: booking.booking_id,
-            day: new Date(booking.booking_date).getUTCDate(),
-            start: parseInt(booking.booking_time),
-            end: parseInt(booking.booking_time) + service.duration,
-            item: service,
-            type: "booking",
-          };
-        })
-      );
-      setScheduledSlots(slots);
-    };
+      try {
+        setLoading(true);
 
-    const fetchAdminData = async () => {
-      setLoading(true);
-      setScheduledSlots([]);
-      const slots = await Promise.all(
+        if (adminMode) {
+          const slots = await fetchAdminData();
+          console.log("slots", slots);
+          setScheduledSlots(slots);
+        } else {
+          const slots = await Promise.all(
+            bookings.map(async (booking) => {
+              const service = await getServiceFromId(booking.service_id);
+              return {
+                id: booking.booking_id,
+                day: new Date(booking.booking_date).getUTCDate(),
+                start: parseInt(booking.booking_time.split(":")[0]), // Extract hours
+                end:
+                  parseInt(booking.booking_time.split(":")[0]) +
+                  service.duration,
+                item: service,
+                type: "booking",
+              };
+            })
+          );
+
+          setScheduledSlots(slots);
+
+          // Fetch available slots for non-admins (if needed)
+          // const availableSlots = await fetchAdminData();
+          setAvailableSlots(personnelSlots);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [bookings, adminMode]);
+
+  // Helper functions
+  const fetchAdminData = async () => {
+    const slots = (
+      await Promise.all(
         personnelSlots.map(async (service) => {
-          return {
-            id: service.service_id,
-            day: new Date(service.date.id).getUTCDate(),
-            start: service.date.start,
-            end: service.date.end,
-            item: service.date.item,
-            type: "scheduled",
-          };
+          if (!service) return [];
+
+          const validSlots = [];
+          const startHour = Math.max(service.start, 0);
+          const endHour = Math.min(service.end, 24);
+          console.log("service", service);
+          for (let i = startHour; i < endHour; i++) {
+            validSlots.push({
+              id: service.id,
+              day: new Date(service.date).getUTCDate(),
+              start: service.start,
+              end: service.end,
+              item: service.item,
+              type: "scheduled",
+            });
+          }
+
+          return validSlots;
         })
-      );
+      )
+    ).flat();
 
-      setScheduledSlots(slots);
-    };
-
-    if (adminMode) fetchAdminData().finally(() => setLoading(false));
-    else fetchData().finally(() => setLoading(false));
-  }, [bookings]);
+    return slots;
+  };
 
   // isSlotScheduled: Checks if a time slot is scheduled.
   // Input: day (String), hour (Number)
@@ -138,35 +185,61 @@ const Calendar = ({
   // handleSlotClick: Handles click events on slots/cells, updating the selected slot and calling the handleSelectedSlot callback.
   // Input: day (String), hour (Number), slots (Array of slots)
   // Output: None
-  const handleSlotClick = (day, hour, date) => {
-    const isSelected = isSlotScheduled(day, hour);
-    const connectedBookings = findConnectedGrouping(scheduledSlots, day, hour);
-
-    if (connectedBookings)
-      handleSelectedSlot(day, hour, date, connectedBookings);
-    else handleSelectedSlot(day, hour, date);
-  };
+  const handleSlotClick = useCallback(
+    (day, hour, date) => {
+      setSelectedCell({ day, hour });
+      const isSelected = findConnectedGrouping(scheduledSlots, day, hour);
+      handleSelectedSlot(day, hour, date, isSelected || null);
+    },
+    [scheduledSlots, handleSelectedSlot]
+  );
 
   // handlePieceDrop: Handles dropping a puzzle piece into calendar, adding a new slot to the schedule form.
   // Input: date (String), hour (Number), item (Object)
   // Output: None
-  const handlePieceDrop = async (day, hour, date, item) => {
-    const newSlot = {
-      id: date,
-      day: date.getUTCDate(),
-      start: hour,
-      end: hour + 1,
-      item: { ...item, type: "scheduled" },
-    };
-    setScheduledSlots((prev) => [...prev, newSlot]);
+  const handlePieceDrop = useCallback(
+    async (day, hour, date, item) => {
+      console.log(isSlotScheduled(day, hour));
+      if (isSlotScheduled(day, hour)) {
+        alert.showAlert("error", "This slot is already scheduled.");
+        let slot = personnelSlots.find((slot) => {
+          if (slot.day === day && hour >= slot.start && hour < slot.end) {
+            return slot;
+          }
+        });
 
-    const newService = {
-      service_id: item.id,
-      date: newSlot,
-    };
-    onAddPersonnelService(newService);
-    handleSlotClick(day, hour, date);
-  };
+        console.log(slot);
+        if (
+          Array.isArray(slot.item)
+            ? slot.item.find((i) => i.id === item.id)
+            : slot.item.id === item.id
+        ) {
+          alert.showAlert("error", "This service is already scheduled.");
+          return;
+        } else {
+          const newSlot = Array.isArray(slot.item)
+            ? [...slot.item, item]
+            : [slot.item, item];
+
+          onUpdatePersonnelService(slot.id, {
+            item: newSlot,
+          });
+          console.log(newSlot);
+          alert.showAlert("success", "Services have been combined.");
+        }
+        return;
+      }
+      onAddPersonnelService({
+        day: day,
+        start: hour,
+        end: hour + item.duration,
+        date: date,
+        item: item,
+        id: `${item.id}-${day}-${hour}:${hour + item.duration}`,
+      });
+    },
+    [onAddPersonnelService, scheduledSlots, onUpdatePersonnelService]
+  );
 
   // handlePieceExpand: Expands a slot to cover multiple hours when a puzzle piece is dragged (resized).
   // Input: day (String), hour (Number), item (Object)
@@ -182,6 +255,18 @@ const Calendar = ({
         : selectedSlot.hour,
       hour
     );
+    if (
+      (isSlotScheduled(day, hour) &&
+        item.direction === "top" &&
+        hour < selectedSlot[0].hour) ||
+      (isSlotScheduled(day, hour) &&
+        item.direction === "bottom" &&
+        hour > selectedSlot[selectedSlot.length - 1].hour)
+    ) {
+      alert.showAlert("error", "This slot is already scheduled.");
+      return;
+    }
+
     let updatedSlots = scheduledSlots.filter((slot) => {
       return (
         slot.day !== day || slot.end <= startingTime || slot.start > endingTime
@@ -213,19 +298,43 @@ const Calendar = ({
       }
     }
 
-    console.log("newSlots", newSlots);
     setScheduledSlots([...updatedSlots, ...newSlots]);
+    if (item.direction === "top") {
+      const id = `${
+        Array.isArray(item.item) ? item.item[0].id : item.item.id
+      }-${day}-${hour}:${endingTime}`;
+      onUpdatePersonnelService(id, {
+        start: hour,
+        end: endingTime + 1,
+      });
+    }
+    if (item.direction === "bottom") {
+      const id = `${
+        Array.isArray(item.item) ? item.item[0].id : item.item.id
+      }-${day}-${startingTime}:${hour}`;
+      onUpdatePersonnelService(id, {
+        start: startingTime,
+        end: hour + 1,
+      });
+    }
+
     handleSlotClick(null);
   };
 
-  const handleScheduledSlotDelete = (day, hour, e) => {
-    e.stopPropagation();
-    let connectedGrouping = findConnectedGrouping(scheduledSlots, day, hour);
-    setScheduledSlots(
-      deleteHelper(day, hour, connectedGrouping, scheduledSlots)
-    );
-    handleSelectedSlot();
-  };
+  const handleScheduledSlotDelete = useCallback(
+    (day, hour, e) => {
+      e.stopPropagation();
+      let connectedGrouping = findConnectedGrouping(scheduledSlots, day, hour);
+      console.log(connectedGrouping);
+      let id = `${
+        Array.isArray(connectedGrouping.itemData)
+          ? connectedGrouping.itemData[0].id
+          : connectedGrouping.itemData.id
+      }-${day}-${connectedGrouping.start}:${connectedGrouping.end}`;
+      onDeletePersonnelService(id);
+    },
+    [scheduledSlots]
+  );
 
   useEffect(() => {
     if (isMobile) dispatch(setTime("Day"));
@@ -237,6 +346,117 @@ const Calendar = ({
   };
 
   // Context menu options
+  const handleKeyboardNavigation = useCallback(
+    (e) => {
+      const { day, hour } = selectedCell;
+      if (day === null || hour === null) return;
+
+      let newDay = day;
+      let newHour = hour;
+
+      switch (e.key) {
+        case "ArrowUp":
+          newHour = Math.max(hour - 1, 0);
+          handleSlotClick(newDay, newHour, currentView[newDay]);
+          break;
+        case "ArrowDown":
+          newHour = Math.min(hour + 1, 23);
+          handleSlotClick(newDay, newHour, currentView[newDay]);
+          break;
+        case "ArrowLeft":
+          const currentIndex = currentView.findIndex(
+            (d) => d.getUTCDate() === day
+          );
+          if (currentIndex > 0) {
+            newDay = currentView[currentIndex - 1].getUTCDate();
+          }
+          handleSlotClick(newDay, newHour, currentView[newDay]);
+          break;
+        case "ArrowRight":
+          const nextIndex = currentView.findIndex(
+            (d) => d.getUTCDate() === day
+          );
+          if (nextIndex < currentView.length - 1) {
+            newDay = currentView[nextIndex + 1].getUTCDate();
+          }
+          handleSlotClick(newDay, newHour, currentView[newDay]);
+          break;
+        case "c": // Start copy mode
+          const slotToBeCopied = scheduledSlots.find(
+            (slot) =>
+              slot.day === selectedCell.day &&
+              selectedCell.hour >= slot.start &&
+              selectedCell.hour < slot.end
+          );
+          if (slotToBeCopied) startCopySlot(slotToBeCopied);
+          break;
+        case "Enter": // Finalize copy
+          if (slotToCopy) {
+            copySlotToNewDay(newDay);
+          }
+          break;
+        case "Delete":
+          handleScheduledSlotDelete(newDay, newHour, e);
+          break;
+        case "Escape": // Cancel copy
+          cancelCopySlot();
+          break;
+        default:
+          return;
+      }
+
+      setSelectedCell({ day: newDay, hour: newHour });
+      e.preventDefault();
+    },
+    [selectedCell, currentView, handleSlotClick, slotToCopy]
+  );
+
+  // Function to trigger copy mode
+  const startCopySlot = (slot) => {
+    setSlotToCopy(slot);
+    alert.showAlert(
+      "info",
+      "Copy mode activated. Select a new day and press 'ENTER' to copy the slot."
+    );
+  };
+
+  // Function to cancel copy mode
+  const cancelCopySlot = () => {
+    setSlotToCopy(null);
+    alert.showAlert("info", "Copy mode canceled.");
+  };
+
+  // Function to handle slot copy
+  const copySlotToNewDay = (newDay) => {
+    if (!slotToCopy) return;
+    const newSlot = {
+      ...slotToCopy,
+      day: newDay,
+      date: currentView[newDay - 1],
+      id: `${
+        Array.isArray(slotToCopy.item)
+          ? slotToCopy.item[0].id
+          : slotToCopy.item.id
+      }-${newDay}-${slotToCopy.id.split("-")[2]}`,
+    };
+
+    // Update state and backend
+    setScheduledSlots((prev) => [...prev, newSlot]);
+
+    if (onAddPersonnelService) {
+      onAddPersonnelService(newSlot);
+    }
+
+    setSlotToCopy(null);
+    alert.showAlert("success", "Slot copied successfully!");
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyboardNavigation);
+    return () => {
+      document.removeEventListener("keydown", handleKeyboardNavigation);
+    };
+  }, [handleKeyboardNavigation]);
 
   return (
     <div className={`calendar ${isMobile ? "mobile" : ""}`}>
@@ -250,6 +470,7 @@ const Calendar = ({
         fullView={fullView}
         organization={organization}
         currentView={currentView}
+        adminMode={adminMode}
       />
 
       <div className="calendar-table">
@@ -329,6 +550,7 @@ const Calendar = ({
                 date={day}
                 day={day.getUTCDate()}
                 hour={hour}
+                availableSlots={availableSlots} // Pass available slots here
                 handleSlotClick={(newDay, newHour, newDate) =>
                   handleSlotClick(newDay, newHour, newDate)
                 }
@@ -349,7 +571,8 @@ const Calendar = ({
                 puzzlePieces={puzzlePieces}
                 adminMode={adminMode}
                 organization={organization}
-                timeView={times[timeFrameIndex]}
+                timeView={timeFrame}
+                availability={availability}
                 contextMenu={contextMenu}
                 setContextMenu={setContextMenu}
                 type={type}
@@ -357,14 +580,13 @@ const Calendar = ({
             ))}
           </div>
         ))}
-        {console.log("contextMenu", contextMenu)}
-        <ContextMenu
+        {/* <ContextMenu
           visible={contextMenu.visible}
           x={contextMenu.x}
           y={contextMenu.y}
           options={contextMenu.options || []}
           onRequestClose={handleCloseContextMenu}
-        />
+        /> */}
       </div>
     </div>
   );
