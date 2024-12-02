@@ -41,13 +41,13 @@ const Landing = () => {
           <p>
             Effortless appointment booking and management for professionals.
           </p>
-          {/* <Button
+          <button
             onClick={() => navigate("/create-organization")}
             className="hero-button"
             color="secondary"
           >
             <span>Get Started</span>
-          </Button> */}
+          </button>
         </span>
       </section>
 

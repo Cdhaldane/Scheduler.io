@@ -8,6 +8,7 @@
   text-align: center;
   vertical-align: middle;
   position: relative;
+  transition: all 0s ease-in-out !important;
 }
 
 .cell:hover {
@@ -92,6 +93,10 @@
   background-color: var(--bg-secondary);
 }
 
+.cell.group-select {
+  transition: all 0s ease-in-out !important;
+}
+
 .cell.group-select:not(.scheduled) {
   background-color: var(--primary) !important ;
   border: 1px solid transparent !important;
@@ -105,20 +110,24 @@
 }
 
 .cell.group-select.start {
-  border-top: 1px solid var(--ash) !important;
-  border-left: 1px solid var(--ash) !important;
-  border-right: 1px solid var(--ash) !important;
+  border-top: 2px solid var(--bg-primary) !important;
+  border-bottom: 0px solid var(--bg-primary) !important;
+  border-left: 2px solid var(--bg-primary) !important;
+  border-right: 2px solid var(--bg-primary) !important;
 }
 
 .cell.group-select.middle {
-  border-left: 1px solid var(--ash) !important;
-  border-right: 1px solid var(--ash) !important;
+  border-left: 2px solid var(--bg-primary) !important;
+  border-right: 2px solid var(--bg-primary) !important;
+  border-top: 0px solid var(--bg-primary) !important;
+  border-bottom: 0px solid var(--bg-primary) !important;
 }
 
 .cell.group-select.end {
-  border-bottom: 1px solid var(--ash) !important;
-  border-left: 1px solid var(--ash) !important;
-  border-right: 1px solid var(--ash) !important;
+  border-bottom: 2px solid var(--bg-primary) !important;
+  border-left: 2px solid var(--bg-primary) !important;
+  border-right: 2px solid var(--bg-primary) !important;
+  border-top: 0px solid var(--bg-primary) !important;
 }
 
 .cell.group-select.booking.start {

@@ -227,7 +227,10 @@ const Input = ({
         {label}
       </label>
       {icon && (
-        <button className="input-submit-button" type="submit">
+        <button
+          className="input-submit-button"
+          onClick={(e) => handleSubmit(e)}
+        >
           <i className={`icon ${icon}`}></i>
         </button>
       )}

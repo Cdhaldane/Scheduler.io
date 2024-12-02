@@ -207,7 +207,6 @@ const Home = ({ session, type, organization }) => {
   const onDeletePersonnelService = useCallback(
     async (serviceId) => {
       try {
-        console.log("serviceId", serviceId);
         const response = await deletePersonnelService(
           selectedPersonnel.id,
           serviceId
@@ -232,7 +231,6 @@ const Home = ({ session, type, organization }) => {
   //Handler for updating a personnel service
   const onUpdatePersonnelService = useCallback(
     async (serviceId, updatedService) => {
-      console.log("service", serviceId, updatedService);
       try {
         const response = await updatePersonnelService(
           selectedPersonnel.id,
@@ -325,9 +323,15 @@ const Home = ({ session, type, organization }) => {
       return null;
     }
     const { itemType, item, style } = preview;
+    const displayItem = Array.isArray(item.item)
+      ? {
+          ...item.item[0], // Use the first item as a base
+          name: item.item.map((i) => i.name).join(", "), // Combine names
+        }
+      : item.item || item; // Fallback to `item` if `item.item` is not present
     return (
       <div className="item-list__item" style={style}>
-        <PuzzlePiece piece={item} />
+        <PuzzlePiece piece={displayItem} />
       </div>
     );
   };
@@ -350,11 +354,9 @@ const Home = ({ session, type, organization }) => {
           selectedSlot.hour >= slot.start &&
           selectedSlot.hour < slot.end
         ) {
-          console.log("slot", slot.item);
           const slotServices = slot.item.map((service) => {
             return service;
           });
-          console.log("services", slotServices);
           setAvailableServices(slotServices);
         }
       });

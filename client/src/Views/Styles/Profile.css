@@ -161,7 +161,7 @@
 @media screen and (max-width: 768px) {
   .activity {
     flex-direction: row;
-    width: 90%;
+    width: 80% !important;
     margin: 0 auto;
     padding: 0;
     font-size: 0.8em;

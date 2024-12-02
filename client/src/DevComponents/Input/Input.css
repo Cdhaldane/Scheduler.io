@@ -243,7 +243,12 @@
   }
 
   .input-container label {
-    margin-left: 0.8em;
+    margin-left: 0px;
+  }
+
+  .input-container.active label {
+    margin-top: -12px;
+    font-size: 0.7em;
   }
 
   .input-container input {
@@ -255,7 +260,7 @@
   }
 
   .type-textarea label {
-    margin-left: 0.7em;
+    margin-left: 0px;
   }
 
   .input-form {

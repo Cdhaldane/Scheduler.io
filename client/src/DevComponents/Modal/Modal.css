@@ -1,6 +1,6 @@
 .modal {
   position: fixed !important;
-  z-index: 10000 !important;
+  z-index: 100000 !important;
   left: 0;
   top: 0;
   width: 100%;
@@ -31,7 +31,7 @@
   position: absolute;
   right: 20px;
   top: -10px;
-  color: var(--primary);
+  color: var(--bg-secondary);
   font-size: 50px;
   font-weight: bold;
 }

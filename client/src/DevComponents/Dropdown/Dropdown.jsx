@@ -87,7 +87,10 @@ const Dropdown = ({
                 <div
                   key={index}
                   className="dropdown-item"
-                  onClick={() => onClick(option.label || option)}
+                  onClick={() => {
+                    onClick(option.label || option);
+                    setIsOpen(false);
+                  }}
                 >
                   {option.icon && <i className={option.icon}></i>}
                   {option.label || option}

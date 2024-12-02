@@ -284,7 +284,6 @@ const Cell = ({
 
   const availabilityClass = isAvailable(day, hour, availableSlots);
   // const availabilityClass = "";
-  console.log("availabilityClass", availability);
   return (
     <>
       <div

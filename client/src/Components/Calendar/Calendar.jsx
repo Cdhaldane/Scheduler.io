@@ -74,10 +74,6 @@ const Calendar = ({
   const isMobile = window.innerWidth <= 768;
 
   useEffect(() => {
-    console.log("availability", availability);
-  }, [availability]);
-
-  useEffect(() => {
     const initializeCalendar = async () => {
       switch (timeFrame) {
         case "Day":
@@ -104,7 +100,6 @@ const Calendar = ({
 
         if (adminMode) {
           const slots = await fetchAdminData();
-          console.log("slots", slots);
           setScheduledSlots(slots);
         } else {
           const slots = await Promise.all(
@@ -148,7 +143,6 @@ const Calendar = ({
           const validSlots = [];
           const startHour = Math.max(service.start, 0);
           const endHour = Math.min(service.end, 24);
-          console.log("service", service);
           for (let i = startHour; i < endHour; i++) {
             validSlots.push({
               id: service.id,
@@ -199,7 +193,6 @@ const Calendar = ({
   // Output: None
   const handlePieceDrop = useCallback(
     async (day, hour, date, item) => {
-      console.log(isSlotScheduled(day, hour));
       if (isSlotScheduled(day, hour)) {
         alert.showAlert("error", "This slot is already scheduled.");
         let slot = personnelSlots.find((slot) => {
@@ -208,7 +201,6 @@ const Calendar = ({
           }
         });
 
-        console.log(slot);
         if (
           Array.isArray(slot.item)
             ? slot.item.find((i) => i.id === item.id)
@@ -224,7 +216,6 @@ const Calendar = ({
           onUpdatePersonnelService(slot.id, {
             item: newSlot,
           });
-          console.log(newSlot);
           alert.showAlert("success", "Services have been combined.");
         }
         return;
@@ -325,7 +316,6 @@ const Calendar = ({
     (day, hour, e) => {
       e.stopPropagation();
       let connectedGrouping = findConnectedGrouping(scheduledSlots, day, hour);
-      console.log(connectedGrouping);
       let id = `${
         Array.isArray(connectedGrouping.itemData)
           ? connectedGrouping.itemData[0].id

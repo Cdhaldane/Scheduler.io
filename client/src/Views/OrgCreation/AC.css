@@ -84,7 +84,21 @@
 }
 
 .ac-input {
-  font-size: 2em !important;
+  width: 50%;
+}
+
+.ac-input input {
+  width: 100%;
+  height: 100%;
+  font-size: 1.8em;
+  border: 1px solid var(--primary);
+  border-radius: 5px;
+  background-color: var(--bg-primary);
+  color: var(--primary);
+}
+
+.ac-input label {
+  font-size: 1em !important;
 }
 
 @keyframes moveUp {
@@ -177,8 +191,8 @@
   }
 
   .ac-input {
-    font-size: 4em !important;
     width: 100%;
+    font-size: 3em;
   }
 
   .ac-main {

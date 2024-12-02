@@ -23,17 +23,6 @@ const checkRangeOverlap = (Id, updateId) => {
   const [oldStart, oldEnd] = oldRange.split(":").map(Number);
   const [updateStart, updateEnd] = updateRange.split(":").map(Number);
 
-  // Check for overlap
-  console.log(
-    "oldStart",
-    oldStart,
-    "oldEnd",
-    oldEnd,
-    "updateStart",
-    updateStart,
-    "updateEnd",
-    updateEnd
-  );
   return (
     !(updateEnd <= oldStart || updateStart >= oldEnd) &&
     Id.split("-")[1] === updateId.split("-")[1] &&
@@ -305,19 +294,11 @@ export const updatePersonnelService = async (
     if (!Array.isArray(oldServices)) {
       throw new Error("Existing services data is not an array.");
     }
-    console.log("Old Services:", oldServices);
 
     // Update the matching service
     const updatedServices = oldServices.map((service) => {
       // Check if the service being updated overlaps with the existing service
       if (checkRangeOverlap(service.id, serviceIdToUpdate)) {
-        console.log("Service range overlap detected.");
-      } else {
-        console.log(
-          "Service range overlap not detected.",
-          service.id,
-          serviceIdToUpdate
-        );
       }
 
       if (
@@ -332,8 +313,6 @@ export const updatePersonnelService = async (
       }
       return service; // Keep other services unchanged
     });
-
-    console.log("Updated Services:", updatedServices);
 
     // Save the updated services back to the database
     const { data, error: updateError } = await supabase
@@ -369,15 +348,12 @@ export const addPersonnelService = async (personnelId, newService) => {
     }
 
     const oldServices = personnel?.services || [];
-    console.log("Old Services:", oldServices);
     if (!Array.isArray(oldServices)) {
       throw new Error("Existing services data is not an array.");
     }
 
     // Update the services array
     const updatedServices = [...oldServices, newService];
-
-    console.log("Updated Services:", updatedServices, personnelId);
 
     // Save the updated services back to the database
     const { data, error: updateError } = await supabase
@@ -419,14 +395,12 @@ export const deletePersonnelService = async (
     if (!Array.isArray(oldServices)) {
       throw new Error("Existing services data is not an array.");
     }
-    console.log("DELETING: serviceIdToDelete", serviceIdToDelete);
 
     const serviceToDelete = oldServices.find((service) => {
       if (
         service.id === serviceIdToDelete ||
         checkRangeOverlap(service.id, serviceIdToDelete)
       ) {
-        console.log("Found service to delete:", service);
         return service;
       }
     });

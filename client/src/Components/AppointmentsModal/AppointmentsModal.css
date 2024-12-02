@@ -3,14 +3,14 @@
   color: var(--text-white);
   display: flex;
   flex-direction: column;
-  font-size: 1.5em;
+  font-size: 2em;
 }
 .user-info h2,
 .appointments-section h3 {
   color: var(--primary);
   font-size: 1em;
-  margin-block-start: 20px;
-  margin-block-end: 0px;
+  margin-block-start: 0px;
+  margin-block-end: 10px;
 }
 
 .user-info p,
@@ -22,7 +22,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px !important;
 }
 
 .appointments-title i {
@@ -61,7 +60,9 @@
   padding: 0;
   padding-right: 10px;
   overflow-y: scroll;
-  max-height: 700px;
+  max-height: 75vh;
+  margin-block-start: 0;
+  margin-block-end: 0;
 }
 
 .appointment-item {
