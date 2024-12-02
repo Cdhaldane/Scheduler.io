@@ -52,6 +52,7 @@ const CalendarHeader = ({
     dispatch(setAvailability(availabilityStatus)); // Dispatching plain object
   };
   const [organizationModal, setOrganizationModal] = useState(false);
+  const today = new Date();
 
   useEffect(() => {
     if (isMobile) setTimes(["Day", "Week"]);
@@ -120,16 +121,16 @@ const CalendarHeader = ({
           {organization.name}
         </div>
       )}
-
+      {console.log(currentView)}
       <h2 className="calendar-top-time noselect">
         {isCompact
-          ? currentView[0]?.toLocaleDateString("en-US", {
+          ? today?.toLocaleDateString("en-US", {
               weekday: "short",
               month: "numeric",
               day: "numeric",
               year: "numeric",
             })
-          : currentView[0]?.toLocaleDateString("en-US", {
+          : today?.toLocaleDateString("en-US", {
               weekday: "long",
               month: "long",
               day: "numeric",

@@ -154,7 +154,7 @@ const PuzzleContainer = ({
         <InputForm
           id="add-service"
           states={[
-            { id: "serviceName", type: "name", label: "Service Name" },
+            { id: "serviceName", label: "Service Name" },
             { id: "duration", type: "number", label: "Duration (hrs)" },
             { id: "price", type: "number", label: "Price ($)" },
             { id: "description", type: "textarea", label: "Description" },

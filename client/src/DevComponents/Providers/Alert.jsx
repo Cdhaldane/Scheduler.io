@@ -95,7 +95,7 @@ const Alert = () => {
   return (
     <div
       className={`alert ${alertClass} ${alert.onClick ? "clickable" : ""}`}
-      onClick={() => alert.onClick()}
+      onClick={() => alert.onClick && alert.onClick()}
     >
       <i className="fas fa-exclamation-circle"></i>
 
