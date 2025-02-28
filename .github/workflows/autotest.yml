@@ -16,6 +16,9 @@ jobs:
       - name: Install dependencies
         working-directory: ./client
         run: npm install
+      - name: Print file structure (debugging)
+        working-directory: ./client
+        run: ls -R src/Components/AnimatedDiv/Clock
       - name: Run tests
         working-directory: ./client
-        run: npm test
+        run: npm test --detectOpenHandles

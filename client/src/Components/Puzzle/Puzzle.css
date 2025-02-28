@@ -1,4 +1,4 @@
-.puzzle-piece.isDragging {
+.puzzle-piece.dragging {
   opacity: 1 !important;
 }
 .puzzle-piece:hover {
@@ -6,52 +6,15 @@
 }
 
 .pieces-container {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
   background-color: var(--bg-primary);
-  border: 3px solid var(--ash);
-  min-width: 100%;
-  height: 98%;
   border-radius: 4px;
-  animation: slideInRight 0.5s ease-in-out forwards;
-}
-
-.main-body.collapsed .pieces-container {
-  /* animation: slideOut 0.5s ease-in-out forwards; */
-  border: none;
-}
-
-.main-body.collapsed .pieces-main .puzzle-piece,
-.main-body.collapsed .pieces-main > h1,
-.main-body.collapsed .pieces-footer {
-  display: none;
-}
-
-.pieces-main {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
   display: flex;
-  position: relative;
-  flex-direction: row;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  width: 100%;
-  height: 82%;
-  z-index: 1;
-  align-content: flex-start;
-  transition: all 0.5s ease-in-out;
-}
-
-.pieces-main > h1 {
-  width: 100%;
-  text-align: center;
-  color: var(--bg-primary);
-  background-color: var(--primary);
-  font-size: 2em;
-  margin: 0;
-  padding: 5px;
-  font-size: 2.5em;
-  position: relative;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease-in-out;
 }
 
 .pieces-list {
@@ -61,7 +24,7 @@
   gap: 20px;
   margin-top: 5%;
   width: 100%;
-  height: 100%;
+  height: 82%;
   z-index: 1;
   transition: all 0.5s ease-in-out;
 }
@@ -171,6 +134,9 @@
 #garbage-bin {
   border-left: 3px solid var(--bg-primary);
 }
+#add-bin {
+  color: var(--primary);
+}
 
 .animate-delete {
   z-index: 10;
@@ -182,24 +148,26 @@
   animation: fadeFromGarbageBin 1s forwards;
 }
 
-.pieces-main .fa-caret-right,
-.fa-caret-left {
-  position: absolute;
-  left: 0px;
-  font-size: 3em;
-  color: var(--bg-primary);
-  padding: 10px;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.3s ease-in-out;
+.puzzle-footer-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
-.pieces-main .fa-caret-left {
-  display: block !important;
-  color: var(--primary) !important;
-  left: 0px;
+/* MOBILE STYLING */
+
+.item-list__item {
+  z-index: 100000;
+  width: 500px;
+  opacity: 0.3;
 }
 
+/* ANIMATIONS */
 @keyframes fillBorder {
   0% {
     background-color: var(--bg-secondary);

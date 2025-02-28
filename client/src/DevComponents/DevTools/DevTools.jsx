@@ -1,26 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./DevTools.css"; // Make sure to create a corresponding CSS file for styling
 
 /**
  * DevTools Component
- * 
+ *
  * Purpose:
  * - The DevTools component provides a developer tool interface for debugging purposes.
  * - It displays the contents of localStorage and sessionStorage, and allows clearing of these storage types.
  * - The tool can be collapsed or expanded with a button click.
- * 
+ *
  * Inputs:
  * - None.
- * 
+ *
  * Outputs:
  * - JSX for rendering the developer tool interface.
  */
 
-const DevTools = () => {
+const DevTools = ({ setOrgDefault }) => {
   //state hooks for managing the collapsed state and the data from localStorage and sessionStorage
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [localStorageData, setLocalStorageData] = useState({});
   const [sessionStorageData, setSessionStorageData] = useState({});
+  const navigate = useNavigate();
   const devRef = useRef();
 
   // Effect hook to handle clicks outside of the developer tool interface
@@ -105,11 +107,23 @@ const DevTools = () => {
       ref={devRef}
       data-testid="dev-tools"
     >
-      <button onClick={() => setIsCollapsed(!isCollapsed)}>
-        {isCollapsed ? <i className="fa-brands fa-dev"></i> : "Collapse"}
-      </button>
+      {isCollapsed && (
+        <button onClick={() => setIsCollapsed(!isCollapsed)}>
+          <i className="fa-brands fa-dev"></i>
+        </button>
+      )}
+
       {!isCollapsed && (
-        <div>
+        <div className="dev-tools-main">
+          <button
+            onClick={() => {
+              navigate("/home/bce8fd49-4a09-4d41-83e9-7c0a13bca6c3");
+            }}
+          >
+            Org Home
+          </button>
+          <button onClick={setOrgDefault}>Set Org</button>
+
           <h4>
             Local Storage{" "}
             <button onClick={() => clearStorage("local")}>CLEAR</button>

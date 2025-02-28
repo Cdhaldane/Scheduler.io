@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoginForm from "../Login/Login";
-import RegisterAccount from "../Customer/CustomerRegister/CustomerRegister.jsx";
 import Modal from "../../DevComponents/Modal/Modal.jsx";
 import Dropdown from "../../DevComponents/Dropdown/Dropdown.jsx";
 import { InputForm } from "../../DevComponents/Input/Input.jsx";
 import { sendEmail, supabase } from "../../Database";
 import { useSelector, useDispatch } from "react-redux";
+import { useAlert } from "../../DevComponents/Providers/Alert.jsx";
 
 import "./Navbar.css"; // Import the CSS file for styling
+import AppointmentsModal from "../AppointmentsModal/AppointmentsModal.jsx";
 
 /**
  * NavbarItem Component
@@ -26,11 +27,28 @@ import "./Navbar.css"; // Import the CSS file for styling
  * - JSX for rendering the navbar item with the specified icon and click behavior.
  */
 
-const NavbarItem = ({ icon, route, action, id }) => {
+const NavbarItem = ({
+  icon,
+  route,
+  action,
+  id,
+  setCurrentPage,
+  currentPage = "",
+}) => {
   const navigate = useNavigate();
-  const onClick = action ? action : () => navigate(route);
+  const onClick = action
+    ? action
+    : () => {
+        setCurrentPage(route.split("/")[1]);
+        navigate(route);
+      };
   return (
-    <li onClick={onClick} className="navbar-item">
+    <li
+      onClick={onClick}
+      className={`navbar-item ${
+        currentPage === route?.split("/")[1] && "current"
+      }`}
+    >
       <i className={icon} data-testid={id}></i>
     </li>
   );
@@ -64,13 +82,45 @@ const Navbar = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isRegistering, setIsRegistering] = useState(false);
-  const isMobile = window.innerWidth < 768;
+  const [currentPage, setCurrentPage] = useState("");
+  const [showAppointments, setShowAppointments] = useState(false);
+  const isMobile = window.innerWidth <= 768;
   const location = useLocation();
+  const alert = useAlert();
+
   let orgId = "";
   if (isLoggedIn) {
-    orgId = session.user.user_metadata.organization.org_id;
+    orgId = session.user.user_metadata.organization
+      ? session.user.user_metadata.organization.org_id
+      : "no_org";
   }
+
+  useEffect(() => {
+    if (location.pathname.includes("/admin")) {
+      setCurrentPage("admin");
+    } else if (location.pathname.includes("/home")) {
+      setCurrentPage("home");
+    } else if (location.pathname.includes("/info")) {
+      setCurrentPage("info");
+    } else {
+      setCurrentPage("");
+    }
+  }, [session]);
+
+  /**
+   * ProfilePic Component
+   *
+   * Purpose:
+   * - The ProfilePic component displays the user's profile picture in the navigation bar.
+   * - If the user has set a profile picture (avatar_url), it is shown as an image.
+   * - If the user has not set a profile picture, a default icon is displayed instead.
+   *
+   * Inputs:
+   * - None (assumes access to a global `session` object containing user information)
+   *
+   * Outputs:
+   * - JSX for rendering the user's profile picture or a default icon in the navigation bar.
+   */
 
   const ProfilePic = () => {
     return (
@@ -80,6 +130,7 @@ const Navbar = ({
             src={session.user.user_metadata.avatar_url}
             alt="profile"
             className="profile-pic"
+            referrerPolicy="no-referrer"
           />
         ) : (
           <i className="fa-solid fa-user"></i>
@@ -92,21 +143,24 @@ const Navbar = ({
 
   //Handler for login success
   const handleLoginSuccess = () => {
+    navigate("/");
     setShowModal(false);
     setIsLoggedIn(true);
   };
 
+  //Handler for dropdown click
   const handleDropdownClick = (option) => {
+    setCurrentPage(option);
     if (option === "Signout") {
       setShowModal(false);
       supabase.auth.signOut();
       setIsLoggedIn(false);
     }
-    if (option === "Create an Organization") {
-      navigate("/create-organization");
+    if (option === "Appointments") {
+      setShowAppointments(true);
     }
     if (option === "Profile") {
-      navigate("/appointments");
+      navigate("/profile");
     }
   };
 
@@ -131,15 +185,28 @@ const Navbar = ({
       <div className="navbar-header">
         {!isCalendar && (
           <>
-            <img
-              src="/logo.png"
-              alt="website logo"
-              className="navbar-logo"
-              onClick={() => navigate("/")}
-            />
-            <h1 className="timeslot-title">
-              TIME<span>SLOT</span>
-            </h1>
+            {!isMobile && (
+              <>
+                <img
+                  src="/logo.png"
+                  alt="website logo"
+                  className="navbar-logo"
+                  onClick={() => navigate("/")}
+                />
+                <h1 className="timeslot-title">
+                  TIME<span>SLOT</span>
+                </h1>
+              </>
+            )}
+            {!(
+              location.pathname.includes("/admin") ||
+              location.pathname.includes("/home")
+            ) &&
+              isMobile && (
+                <h1 className="timeslot-title">
+                  T<span>S</span>
+                </h1>
+              )}
           </>
         )}
       </div>
@@ -150,27 +217,33 @@ const Navbar = ({
               icon="fa-solid fa-message"
               action={() => setIsOpen(true)}
             />
-            <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
+
+            <NavbarItem
+              icon="fa-solid fa-circle-info"
+              route="/info"
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
             <NavbarItem
               icon="fa-solid fa-arrow-right-to-bracket"
               route="#"
               action={() => setShowModal(true)}
             />
-            <div
-              onClick={() =>
-                navigate("/home/bce8fd49-4a09-4d41-83e9-7c0a13bca6c3")
-              }
-            >
-              TEST
-            </div>
           </>
         )}
-        {isAdmin && isLoggedIn && (
+        {isAdmin && isLoggedIn && orgId !== "no_org" && (
           <>
-            <NavbarItem icon="fa-solid fa-home" route={`/home/${orgId}`} />
+            <NavbarItem
+              icon="fa-solid fa-home"
+              route={`/home/${orgId}`}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
             <NavbarItem
               icon="fa-solid fa-clipboard"
               route={`/admin/${orgId}`}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
             />
           </>
         )}
@@ -179,19 +252,22 @@ const Navbar = ({
             <NavbarItem
               icon="fa-solid fa-message"
               action={() => setIsOpen(true)}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
             />
-            <NavbarItem icon="fa-solid fa-circle-info" route="/info" />
+            <NavbarItem
+              icon="fa-solid fa-circle-info"
+              route="/info"
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
             <li className="navbar-item hover-none profile">
               <Dropdown
                 children={<ProfilePic />}
                 label={session?.user.user_metadata.name}
                 options={[
-                  !isLoggedIn
-                    ? {
-                        label: "Create an Organization",
-                        icon: "fa-solid fa-plus",
-                      }
-                    : { label: "Profile", icon: "fa-regular fa-user" },
+                  { label: "Profile", icon: "fa-regular fa-user" },
+                  { label: "Appointments", icon: "fa-solid fa-calendar" },
                   { label: "Signout", icon: "fa-solid fa-sign-out" },
                 ]}
                 onClick={(e) => handleDropdownClick(e)}
@@ -202,28 +278,40 @@ const Navbar = ({
         )}
       </div>
 
+      {/* Modal for login and registration */}
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <>
           <div className="modal-body">
-            {isRegistering ? (
-              <RegisterAccount onClose={() => setShowModal(false)} />
-            ) : (
-              <LoginForm onLoginSuccess={handleLoginSuccess} />
-            )}
+            <LoginForm onLoginSuccess={handleLoginSuccess} />
           </div>
         </>
       </Modal>
+
+      {/* Modal for contact form */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <InputForm
           id="contact"
           states={[
-            { id: "Name", type: "name", label: "Name" },
-            { id: "Email", type: "email", label: "Email" },
-            { id: "Message", type: "textarea", label: "Message" },
+            { id: "name", type: "name", label: "Name" },
+            { id: "email", type: "email", label: "Email" },
+            { id: "message", type: "textarea", label: "Message" },
           ]}
           onClose={() => setIsOpen(false)}
           onSubmit={async (states) => {
-            return sendEmail(states.name, states.email, states.message);
+            if (!states.name || !states.email || !states.message) {
+              alert.showAlert("warning", "Please fill in all fields");
+              return;
+            }
+            const res = await sendEmail(
+              states.name,
+              states.email,
+              states.message
+            );
+            if (res) {
+              alert.showAlert("success", "Message sent successfully");
+            } else {
+              alert.showAlert("erro", "Failed to send message");
+            }
           }}
           buttonLabel="Send"
         >
@@ -234,6 +322,13 @@ const Navbar = ({
           </p>
         </InputForm>
       </Modal>
+
+      {/* Modal for appointments */}
+      <AppointmentsModal
+        isOpen={showAppointments}
+        onClose={() => setShowAppointments(false)}
+        session={session}
+      />
     </nav>
   );
 };

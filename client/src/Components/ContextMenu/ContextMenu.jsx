@@ -20,10 +20,10 @@ import "./ContextMenu.css";
     </div>
  */
 
-  
 const ContextMenu = ({ visible, x, y, options, onRequestClose }) => {
   return (
     <div
+      id="context-menu"
       className="custom-context-menu"
       style={{
         position: "absolute",

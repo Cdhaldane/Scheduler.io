@@ -20,7 +20,7 @@
 .org-form-sub > span {
   font-size: 1.5rem;
   margin-top: 0px;
-  color: var(--bg-primary);
+  color: var(--white);
 }
 
 .org-form-title {
@@ -34,5 +34,6 @@
 }
 
 .org-form-button:hover {
-  background-color: var(--primary-dark) !important;
+  background-color: var(--bg-primary) !important;
+  color: var(--primary) !important;
 }

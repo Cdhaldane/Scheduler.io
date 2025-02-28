@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAlert } from "../Providers/Alert";
+import { useAlert } from "../../DevComponents/Providers/Alert";
 import Input from "../../DevComponents/Input/Input";
 import { ReactComponent as GoogleIcon } from "../../Icons/Google.svg";
 import { ReactComponent as GitHubIcon } from "../../Icons/GitHub.svg";
@@ -59,12 +59,10 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
     } else {
       const { data, error } = await signIn(email, password);
       if (error || data.session === null) {
-        console.log(error);
-
         setError(error.message);
       } else {
         alert.showAlert("success", "Logged in successfully");
-        onLoginSuccess(data);
+        if (onLoginSuccess) onLoginSuccess(data);
       }
     }
   };
@@ -72,13 +70,13 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
   //Handler for SSO authentication
   const handleSSO = (provider) => async () => {
     if (provider === "google") {
-      await loginWithGoogle(window.location.href);
+      await loginWithGoogle("/home");
     }
   };
 
   const handlePasswordReset = async (e) => {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:3000/reset-password",
+      redirectTo: "https://time-slot.ca/#/reset-password",
     });
     if (error) {
       setError(error.message);
@@ -86,12 +84,6 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
       alert.showAlert("success", "Password reset email sent");
     }
   };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setError("");
-    }, 5000);
-  }, [error]);
 
   //Render the login component with SSO buttons, input fields, and links
   return (
@@ -112,31 +104,35 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
           <Microsoft />
         </button>
       </div>
-      <form
-        className="login-form"
-        onSubmit={(e) => handleSubmit(e)}
-        autoComplete="new-password"
-      >
+      <div className="login-form" autoComplete="new-password">
         <Input
           label="Email"
           placeholder="Email"
           type="email"
           value={email}
-          onInputChange={(newValue) => setEmail(newValue)}
+          onInputChange={(newValue) => {
+            setError("");
+            setEmail(newValue);
+          }}
           onSubmit={(e) => handleSubmit(e)}
         />
         <Input
+          id="password"
           label="Password"
           placeholder="Password"
           type="password"
           value={password}
-          onInputChange={(newValue) => setPassword(newValue)}
+          onInputChange={(newValue) => {
+            setError("");
+            setPassword(newValue);
+          }}
           onSubmit={(e) => handleSubmit(e)}
         />
 
         {signUpFlag && (
           <>
             <Input
+              id="confirm-password"
               label="Confirm Password"
               placeholder="Password"
               type="password"
@@ -162,15 +158,21 @@ const Login = ({ onLoginSuccess, onClose, type }) => {
             />
           </>
         )}
-        <div className="login-error">{error ? <p>{error}</p> : <></>}</div>
-        <button type="submit" className="login-button">
+        {error ? (
+          <div className="login-error">
+            <p>{error.charAt(0).toUpperCase() + error.slice(1)}</p>
+          </div>
+        ) : (
+          <></>
+        )}
+        <button type="submit" className="login-button" onClick={handleSubmit}>
           {signUpFlag ? "Sign Up" : "Sign In"}
         </button>
         <a onClick={handlePasswordReset}>Forgot your Password?</a>
         <a onClick={() => setSignUpFlag(!signUpFlag)}>
           {signUpFlag ? "Back to sign in" : "Don't have an account? Sign up"}{" "}
         </a>
-      </form>
+      </div>
 
       {/* <button onClick={signInWithEmail}>Sign in with Email</button> */}
     </div>

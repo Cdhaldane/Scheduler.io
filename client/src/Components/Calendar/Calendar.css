@@ -5,7 +5,7 @@
   align-items: center;
   color: var(--primary);
   width: 70%;
-  height: calc(100% + 60px);
+  height: calc(var(--main-height) + 60px);
   padding-bottom: 1px;
   border-radius: 4px;
   font-size: 1em;
@@ -26,76 +26,6 @@
   align-items: center;
   justify-content: center;
   transition: all 0.1s ease-in-out;
-}
-
-.calendar-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: all 0.3s ease-in-out;
-  gap: 10px;
-  width: 100%;
-  margin: 10px;
-  color: var(--ash);
-}
-
-.calendar-buttons {
-  display: flex;
-  gap: 10px;
-  width: 30%;
-}
-
-.calendar-buttons > button {
-  background-color: var(--bg-primary);
-  color: var(--ash);
-  border: 2px solid var(--bg-secondary);
-  cursor: pointer;
-  font-size: 1.2em;
-  border-radius: 2px;
-  white-space: nowrap;
-  width: 50%;
-}
-
-.calendar-buttons > button:focus {
-  background-color: var(--bg-secondary);
-}
-
-.calendar-buttons > button:hover {
-  background-color: var(--bg-secondary);
-}
-
-.calendar-top > span {
-  font-size: 2.5em !important;
-  font-weight: 1000;
-  color: var(--primary);
-  border: 2px solid var(--bg-secondary);
-  background-color: var(--bg-secondary);
-  border-radius: 4px !important;
-  padding: 0px 10px;
-}
-
-.calendar-top > h2 {
-  font-size: 1.5em !important;
-  font-weight: 400;
-  margin-block-start: 0px;
-  margin-block-end: 0px;
-  width: 22%;
-  text-align: right;
-}
-
-.cell {
-  display: table-cell;
-  border: 1px solid var(--bg-secondary);
-  color: var(--primary);
-  transition: all 0.1s ease-in-out;
-  cursor: pointer;
-  background-color: var(--bg-primary);
-  text-align: center;
-  vertical-align: middle;
-}
-
-.cell:hover {
-  border: 1px solid var(--primary);
 }
 
 .calendar-table {
@@ -141,98 +71,13 @@
   color: var(--bg-secondary) !important;
 }
 
-.cell.hours {
-  display: table-cell;
-  align-items: center;
-  justify-content: center; /* Align hour text to the right */
-  text-align: center; /* Align hour text to the right */
-}
-
-.cell.hours.Month {
-  padding: 5px;
-  min-width: 100px !important;
-  font-size: 0.8em;
-}
-
-.cell.hours.Day {
-  min-width: calc(30%) !important; /* Adjusted for 7 days + 1 hour column */
-}
-
-.cell.scheduled {
-  color: var(--text-white);
-  font-weight: bold;
-  font-family: var(--font-main);
-}
-
-.cell.booking {
-  background-color: var(--secondary) !important;
-  color: var(--bg-primary) !important;
-  font-weight: bold !important;
-  border: 1px solid var(--secondary) !important;
-}
-
-.cell.single-select {
-  border: 1px solid white;
-  background-color: var(--bg-secondary);
-}
-
-.cell.group-select:not(.scheduled) {
-  background-color: var(--primary) !important ;
-  border: 1px solid transparent !important;
+.header-cell.today {
+  background-color: var(--primary);
   color: var(--bg-primary);
-}
-
-.cell.group-select.booking {
-  background-color: var(--secondary) !important;
-  border: 1px solid black !important;
-  color: var(--bg-primary);
-}
-
-.cell.group-select.booking.start {
-  border-bottom: 1px solid transparent !important;
-}
-
-.cell.group-select.booking.middle {
-  border-top: 1px solid transparent !important;
-  border-bottom: 1px solid transparent !important;
-}
-
-.cell.group-select.booking.end {
-  border-top: 1px solid transparent !important;
-}
-
-.cell.over {
-  background-color: var(--bg-secondary) !important;
 }
 
 .day.selected {
   background-color: #61dafb;
-}
-
-.expand-indicator {
-  position: absolute;
-  left: 44%;
-  z-index: 10000;
-  cursor: -webkit-grab;
-  animation: pulse 1s infinite;
-  border-color: inherit !important;
-}
-
-.expand-indicator.top {
-  top: -15px; /* Adjust based on the cell's border and desired appearance */
-  border-bottom: 10px solid white !important;
-  border-color: inherit !important;
-  border-left: 10px solid transparent !important;
-  border-right: 10px solid transparent !important;
-}
-
-.expand-indicator.bottom {
-  border-top: 10px solid white !important;
-  border-color: inherit !important;
-  border-left: 10px solid transparent !important;
-  border-right: 10px solid transparent !important;
-
-  bottom: -15px; /* Adjust based on the cell's border and desired appearance */
 }
 
 .scheduled-slot {
@@ -248,7 +93,7 @@
   cursor: pointer;
   color: var(--white);
   padding: 0;
-  width: 51%;
+  width: 50%;
   height: 100%;
   border-radius: 0px;
   border-right: 2px solid var(--bg-secondary);
@@ -270,17 +115,36 @@
 
 .calendar.mobile {
   width: 95%;
-  height: 100%;
   border-radius: 0;
   margin: 0 auto;
-  margin-top: 100px;
   align-items: flex-start;
 }
 
 .calendar.mobile .calendar-buttons {
-  width: 80%;
-  height: 8%;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: fit-content;
   margin: 0px;
+  position: absolute;
+  bottom: 25%;
+  left: 0px;
+  gap: 0px;
+}
+
+.calendar.mobile .calendar-buttons > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: 30px;
+  width: 30px;
+  padding: 15px;
+  font-size: 1.2em;
+}
+
+.calendar.mobile .calendar-buttons > button > i {
+  margin-right: 0px;
 }
 
 .calendar.mobile .calendar-buttons > span {
@@ -290,4 +154,68 @@
 
 .calendar.mobile .calendar-buttons > h2 {
   font-size: 1.2em !important;
+}
+
+.calendar-mobile-expand {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  top: 90px;
+  right: 10px;
+  font-size: 1em;
+  color: var(--ash);
+  border: 2px solid var(--bg-secondary);
+  border-radius: 4px;
+}
+
+/* @media screen and (max-width: 1500px) {
+  .calendar-top-time {
+    margin-top: 30px;
+    font-size: 1em !important;
+    text-align: center;
+  }
+  .calendar-top-title {
+    font-size: 2em !important;
+  }
+
+  .timeframe-button {
+    width: 20%;
+    font-size: 1.8em;
+  }
+  .timeframe-button i {
+    margin-right: 0px;
+  }
+  .timeframe-button h1 {
+    display: none !important;
+  }
+
+  .calendar-buttons {
+    gap: 5px;
+    margin-right: 0px;
+    width: 100px;
+  }
+} */
+
+@media screen and (max-width: 768px) {
+  /* .calendar-top {
+    flex-direction: column;
+    width: 100%;
+    margin: 0px;
+    min-height: 60px;
+    gap: 2px;
+  }
+
+  .calendar-top-title {
+    font-size: 1.5em !important;
+  }
+
+  .calendar-top-time {
+    font-size: 1em !important;
+    width: 90%;
+    text-align: center;
+    margin-top: 0px !important;
+  } */
 }

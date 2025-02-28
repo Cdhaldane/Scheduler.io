@@ -46,6 +46,7 @@
 }
 
 .login-form {
+  gap: 20px;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -54,13 +55,12 @@
 .login-form > a {
   color: var(--light-grey);
   text-decoration: underline;
-  margin: 5px auto;
+  margin: -5px auto;
   cursor: pointer !important;
 }
 
 .login-form > button {
   height: 50px;
-  margin-bottom: 10px;
   font-size: 1.2em;
   font-weight: 400;
 }
@@ -94,28 +94,32 @@
   background-color: var(--bg-primary);
   border: 1px solid var(--danger);
   border-radius: 5px;
-  margin-bottom: 20px !important;
-  margin-top: 0px !important;
   padding: 10px;
+  margin: 0px;
+  animation: appear 0.2s ease-in-out normal forwards;
 }
 
 .password-reset {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: calc(var(--main-height) - 70px);
   color: var(--ash);
   background-color: var(--bg-secondary);
-  width: 100%;
+  margin: 0 auto;
+  width: 30%;
+  border-radius: 10px;
+  padding: 50px;
 }
 
 .password-reset form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 50%;
+  gap: 20px;
+  width: 100% !important;
+  margin: 0 auto;
 }
 
 .password-reset h2 {
   font-size: 3em;
+  margin-bottom: 20px;
 }

@@ -82,6 +82,7 @@ export const createKeyframes = (keyframeName, keyframeCSS) => {
   );
 };
 
+// useDeviceType Hook
 export const useDeviceType = () => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -115,4 +116,96 @@ export const useDidMountEffect = (func, deps) => {
     if (didMount.current) func();
     else didMount.current = true;
   }, deps);
+};
+
+export const handleTwoWayCollapse = (state, setState, className, direction) => {
+  let el = document.getElementsByClassName(className)[0];
+  let animation = direction === "right" ? "slideOutRight" : "slideOutLeft";
+
+  if (state && el) {
+    console.log("collapsing");
+    el.style.animation = `${animation} 0.3s ease-in-out`;
+    setTimeout(() => {
+      setState(false);
+    }, 280);
+  }
+  if (!state) {
+    setState(true);
+  }
+};
+
+export const isToday = (someDate) => {
+  if (!someDate) return false;
+  const today = new Date();
+
+  return (
+    someDate.getDate() === today.getDate() &&
+    someDate.getMonth() === today.getMonth() &&
+    someDate.getFullYear() === today.getFullYear()
+  );
+};
+
+export const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const calculateLuminance = (r, g, b) => {
+  const normalize = (value) => {
+    value /= 255; // Normalize to [0, 1]
+    return value <= 0.03928
+      ? value / 12.92
+      : Math.pow((value + 0.055) / 1.055, 2.4);
+  };
+
+  const rNorm = normalize(r);
+  const gNorm = normalize(g);
+  const bNorm = normalize(b);
+
+  return 0.2126 * rNorm + 0.7152 * gNorm + 0.0722 * bNorm;
+};
+
+const calculateContrastRatio = (hex1, hex2) => {
+  const hexToRgb = (hex) => {
+    // Remove leading '#' if present
+    hex = hex.replace(/^#/, "");
+
+    // Parse 3-character hex shorthand (e.g., #abc -> #aabbcc)
+    if (hex.length === 3) {
+      hex = hex
+        .split("")
+        .map((char) => char + char)
+        .join("");
+    }
+
+    // Convert to RGB
+    const bigint = parseInt(hex, 16);
+    return {
+      r: (bigint >> 16) & 255,
+      g: (bigint >> 8) & 255,
+      b: bigint & 255,
+    };
+  };
+
+  const color1 = hexToRgb(hex1);
+  const color2 = hexToRgb(hex2);
+  const luminance1 = calculateLuminance(color1.r, color1.g, color1.b);
+  const luminance2 = calculateLuminance(color2.r, color2.g, color2.b);
+  const l1 = Math.max(luminance1, luminance2);
+  const l2 = Math.min(luminance1, luminance2);
+
+  return (l1 + 0.05) / (l2 + 0.05);
+};
+
+export const isReadable = (color1, color2) => {
+  const ratio = calculateContrastRatio(color1, color2);
+  return ratio >= 1.9;
+};
+
+export const convertMilitaryTime = (time) => {
+  const [hour, minute] = time.split(":").map(Number);
+  const period = hour >= 12 ? "PM" : "AM";
+  const standardHour = hour % 12 || 12; // Use 12 for midnight and noon
+
+  return `${standardHour}:${minute.toString().padStart(2, "0")} ${period}`;
 };

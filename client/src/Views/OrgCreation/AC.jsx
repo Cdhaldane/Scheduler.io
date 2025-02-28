@@ -5,6 +5,25 @@ import Button from "../../DevComponents/Button/Button";
 import Input from "../../DevComponents/Input/Input";
 import "./AC.css";
 
+/**
+ * AC Component
+ *
+ * Purpose:
+ * - The AC (Account Creation) component provides a user interface for creating a new organization account.
+ * - It consists of multiple pages with animations for transitioning between pages.
+ * - The first page is a welcome message with a button to proceed.
+ * - The second page collects information about the organization through a series of input fields.
+ * - The third page displays a message indicating that the account creation process is in progress.
+ *
+ * Inputs:
+ * - onFinish: A callback function that is called when the account creation process is completed.
+ * - session: A session object containing user session information (optional).
+ *
+ * Outputs:
+ * - JSX for rendering the different pages of the account creation process with animations and input fields.
+ * - The collected organization information is passed to the onFinish callback function upon completion.
+ */
+
 const AC = ({ onFinish, session }) => {
   const [page, setPage] = useState(0);
   const [animation, setAnimation] = useState(false);
@@ -14,7 +33,7 @@ const AC = ({ onFinish, session }) => {
   const [loginModal, setLoginModal] = useState(true);
 
   const options = [
-    { label: "What is your organization's name?", value: "name", type: "name" },
+    { label: "What is your organization's name?", value: "name", type: "text" },
     {
       label: "What is your organization's email?",
       value: "email",
@@ -28,7 +47,7 @@ const AC = ({ onFinish, session }) => {
     {
       label: "What is your organization's address?",
       value: "address",
-      type: "text",
+      type: "address",
     },
   ];
 
@@ -70,26 +89,26 @@ const AC = ({ onFinish, session }) => {
           className="button-lg button-transparent ac-button"
           onClick={() => handleNext(1)}
         >
-          <i class="fa-solid fa-arrow-right"></i>
+          <i className="fa-solid fa-arrow-right"></i>
         </Button>
       </div>
     );
   else if (page === 1)
     return (
-      <div className="ac-container row">
+      <div className="ac-container column">
         <AnimatedDiv
           enterAnimation={"slideInLeft"}
           exitAnimation={"slideOutLeft"}
           exitTrigger={animation}
-          className={"ac-left"}
+          className={"ac-top"}
         >
           {" "}
           <Clock />
         </AnimatedDiv>
 
-        <div className="ac-right">
+        <div className="ac-bottom">
           <div className="typewriter">
-            <h1>Your business organization system</h1>
+            <h1>Create your organization</h1>
           </div>
           <div
             className={`animated-div ac-span`}
@@ -137,7 +156,7 @@ const AC = ({ onFinish, session }) => {
         </AnimatedDiv>
 
         <div className="ac-content">
-          <h1>Finding the right one...</h1>
+          <h1>Creating your organization...</h1>
         </div>
       </div>
     );

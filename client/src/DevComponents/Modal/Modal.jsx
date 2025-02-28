@@ -17,7 +17,7 @@ import "./Modal.css";
  * - JSX for rendering the modal with its content when it is open. Returns null when the modal is closed.
  */
 
-function Modal({ isOpen, onClose, children, className }) {
+function Modal({ isOpen, onClose, children, className, noCloseIcon }) {
   const modalRef = useRef(null);
 
   //Effect hook to handle clicks outside the modal to close it
@@ -42,9 +42,11 @@ function Modal({ isOpen, onClose, children, className }) {
   return (
     <div className={`modal`}>
       <div className={`modal-content ${className}`} ref={modalRef}>
-        <span className="close" onClick={onClose}>
-          &times;
-        </span>
+        {!noCloseIcon && (
+          <span className="close" id="close-modal" onClick={onClose}>
+            &times;
+          </span>
+        )}
         {children}
       </div>
     </div>

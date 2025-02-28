@@ -3,6 +3,24 @@ import Input from "../Input/Input"; // Importing the Input component
 import Dropdown from "../Dropdown/Dropdown";
 import "./TimePicker.css"; // Importing the CSS file for styling
 
+/**
+ * TimePicker Component
+ *
+ * Purpose:
+ * - The TimePicker component provides a user interface for selecting a time.
+ * - It consists of dropdowns for selecting hours, minutes, and seconds.
+ * - The component supports default values and triggers a callback function when the time is changed.
+ *
+ * Inputs:
+ * - label: The label for the time picker (optional).
+ * - onChange: A callback function that is called when the time is changed.
+ * - defaultValue: The default time value in the format "HH:MM:SS" (optional).
+ *
+ * Outputs:
+ * - JSX for rendering the time picker with dropdowns for hours, minutes, and seconds.
+ * - The selected time is passed to the onChange callback function in the format "HH:MM:SS".
+ */
+
 const TimePicker = ({ label, onChange, defaultValue }) => {
   const [selectedHour, setSelectedHour] = useState("");
   const [selectedMinute, setSelectedMinute] = useState("");
@@ -60,6 +78,7 @@ const TimePicker = ({ label, onChange, defaultValue }) => {
         width: timeWidth,
       }}
       ref={timeRef}
+      aria-label={label}
     >
       <span className="time-picker-title">
         <i className="fa-solid fa-clock"></i>
@@ -71,6 +90,7 @@ const TimePicker = ({ label, onChange, defaultValue }) => {
             setSelectedHour(hour);
             triggerChange(hour, selectedMinute, selectedSecond);
           }}
+          label="Hour Dropdown"
           {...dropdownProps}
         >
           <span className="time-select">
@@ -86,6 +106,7 @@ const TimePicker = ({ label, onChange, defaultValue }) => {
             setSelectedMinute(minute);
             triggerChange(selectedHour, minute, selectedSecond);
           }}
+          label="Minute Dropdown"
           {...dropdownProps}
         >
           <span className="time-select">
@@ -101,6 +122,7 @@ const TimePicker = ({ label, onChange, defaultValue }) => {
             setSelectedSecond(second);
             triggerChange(selectedHour, selectedMinute, second);
           }}
+          label="Second Dropdown"
           {...dropdownProps}
         >
           <span className="time-select">

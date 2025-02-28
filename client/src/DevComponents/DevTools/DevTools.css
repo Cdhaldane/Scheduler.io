@@ -9,15 +9,26 @@
 }
 
 .dev-tools.collapsed {
-  max-height: 30px;
   overflow: hidden;
   width: 50px;
   background: none;
-  bottom: 10px !important;
 }
 
 .dev-tools.collapsed button i {
   font-size: 2em;
+}
+
+.dev-tools-main > button {
+  background: var(--bg-secondary) !important;
+  width: 100px !important;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin: 0px 10px;
+}
+
+.dev-tools-main > button:hover {
+  background: #444 !important;
 }
 
 .dev-tools h4 {

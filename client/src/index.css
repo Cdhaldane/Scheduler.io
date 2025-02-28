@@ -179,3 +179,40 @@
     transform: scale(1.1);
   }
 }
+
+@keyframes width-grow-90 {
+  0% {
+    width: 30%;
+  }
+  100% {
+    width: 90%;
+  }
+}
+
+@keyframes width-shrink-30 {
+  0% {
+    width: 90%;
+  }
+  100% {
+    width: 30%;
+  }
+}
+
+@keyframes width-grow-60 {
+  0% {
+    font-size: 0px;
+    width: 0%;
+  }
+  100% {
+    width: 60%;
+  }
+}
+
+@keyframes width-shrink-0 {
+  0% {
+    width: 60%;
+  }
+  100% {
+    width: 0%;
+  }
+}

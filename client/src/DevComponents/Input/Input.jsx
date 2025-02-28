@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, cloneElement } from "react";
-import { useAlert } from "../../Components/Providers/Alert";
+import { useAlert } from "../Providers/Alert";
+import axios from "axios";
+
 import "./Input.css";
 
 /**
@@ -30,6 +32,7 @@ import "./Input.css";
  */
 
 const Input = ({
+  id,
   label,
   placeholder,
   value: propValue,
@@ -38,10 +41,12 @@ const Input = ({
   type = "text",
   className,
   icon,
+  options = [],
 }) => {
   const [isActive, setIsActive] = useState(propValue ? true : false);
   const [inputValue, setInputValue] = useState(propValue || "");
   const [hasChanged, setHasChanged] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
   const inputRef = useRef(null);
   const alert = useAlert();
 
@@ -51,10 +56,30 @@ const Input = ({
     setIsActive(!!propValue);
   }, [propValue]);
 
+  const formatPhoneNumber = (value) => {
+    const cleaned = value.replace(/\D/g, ""); // Remove all non-digit characters
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/); // Match the format 123-456-7890
+    if (match) {
+      return `${match[1]}-${match[2]}-${match[3]}`;
+    }
+    return value; // Return the value as is if it doesn't match
+  };
+
   const handleChange = (event) => {
-    setInputValue(event.target.value);
+    let newValue = event.target.value;
+    if (newValue === "") {
+      setHasChanged(false);
+      setSuggestions([]); // Clear suggestions when input is empty
+    }
+
+    // If the input type is 'tel', format the phone number
+    if (type === "tel") newValue = formatPhoneNumber(newValue);
+    if (type === "address") fetchAddressSuggestions(newValue); // Fetch suggestions for address input
+
+    setInputValue(newValue);
     if (onInputChange) {
-      onInputChange(event.target.value);
+      if (type === "select") onInputChange(id, newValue);
+      else onInputChange(newValue);
     }
     setHasChanged(true);
   };
@@ -67,6 +92,8 @@ const Input = ({
     if (!inputValue) {
       setIsActive(false);
     }
+    // Close suggestions dropdown on blur
+    setTimeout(() => setSuggestions([]), 200);
   };
 
   const handleSubmit = async (e) => {
@@ -78,7 +105,6 @@ const Input = ({
     const inputs = inputRef.current.querySelectorAll("input,textarea,select");
     inputs.forEach((input) => {
       if (!input.checkValidity()) {
-        console.log(input.validationMessage, input.pattern);
         isFormValid = false;
         if (input.pattern === "[0-9]{3}-[0-9]{3}-[0-9]{4}") {
           alert.showAlert(
@@ -96,7 +122,7 @@ const Input = ({
     }
 
     // If the form is valid, proceed with submitting the form data
-    await onSubmit(e, inputValue);
+    if (onSubmit) await onSubmit(e, inputValue);
   };
 
   const handleKeyPress = (e) => {
@@ -105,26 +131,88 @@ const Input = ({
     }
   };
 
+  const fetchAddressSuggestions = async (query) => {
+    if (!query) return;
+
+    try {
+      const response = await axios.get(
+        "https://nominatim.openstreetmap.org/search",
+        {
+          params: {
+            q: query,
+            format: "json",
+            addressdetails: 1,
+            limit: 5,
+            countrycodes: "us,ca", // Restrict to U.S. and Canada
+            extratags: 1, // Include additional tags like "shop" and "amenity" (business-related)
+          },
+        }
+      );
+
+      // Extract relevant details from the response to display as suggestions
+      setSuggestions(
+        response.data.map((result) => ({
+          display_name: result.display_name,
+          lat: result.lat,
+          lon: result.lon,
+        }))
+      );
+    } catch (error) {
+      console.error("Error fetching address suggestions:", error);
+      alert.showAlert("error", "Failed to fetch address suggestions");
+    }
+  };
+
+  const handleSelectSuggestion = (suggestion) => {
+    setInputValue(suggestion.display_name);
+    setSuggestions([]); // Clear suggestions after selection
+    if (onInputChange) {
+      onInputChange(suggestion.display_name);
+    }
+  };
+
   return (
-    <form
+    <div
       id="input-container"
+      data-testid="input-container"
       className={`input-container ${
         isActive && "active"
-      } type-${type} ${className} ${hasChanged && "changed"}`}
+      } type-${type} ${className} ${hasChanged && "changed"} ${
+        suggestions.length > 0 && "has-suggestions"
+      }`}
       ref={inputRef}
       onSubmit={(e) => handleSubmit(e)}
       onKeyDown={(e) => handleKeyPress(e)}
     >
-      {type === "textarea" ? (
+      {type === "textarea" && (
         <textarea
+          id={id}
           value={inputValue}
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          placeholder={placeholder}
+          // placeholder={placeholder}
         />
-      ) : (
+      )}
+      {type === "select" && (
+        <select
+          id={id || label}
+          value={inputValue}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          required={true}
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      )}
+      {type !== "textarea" && type !== "select" && (
         <input
+          id={id || label}
           type={type}
           value={inputValue}
           onChange={handleChange}
@@ -135,13 +223,32 @@ const Input = ({
           autoComplete={type}
         />
       )}
-      <label className={isActive ? "active" : ""}>{label}</label>
+      <label htmlFor={label} aria-labelledby={label}>
+        {label}
+      </label>
       {icon && (
-        <button className="input-submit-button" type="submit">
+        <button
+          className="input-submit-button"
+          onClick={(e) => handleSubmit(e)}
+        >
           <i className={`icon ${icon}`}></i>
         </button>
       )}
-    </form>
+
+      {suggestions.length > 0 && (
+        <ul className="input-suggestions-dropdown">
+          {suggestions.map((suggestion, index) => (
+            <li
+              key={index}
+              className="input-suggestion-item"
+              onClick={() => handleSelectSuggestion(suggestion)}
+            >
+              {suggestion.display_name}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 };
 
@@ -156,19 +263,8 @@ export const InputForm = ({
 }) => {
   // Ref for the form element
   const inputRef = useRef(null);
-  const [compacted, setCompacted] = useState(false);
+  const compacted = false; // Set to true to compact the form for mobile view
   const [values, setValues] = useState({});
-
-  //Effect hook to adjust the form height when the input fields are too long
-  useEffect(() => {
-    const inputHeight = inputRef.current.getBoundingClientRect();
-    const viewBox = document
-      .querySelector(".modal-content")
-      .getBoundingClientRect();
-    if (inputHeight.bottom > viewBox.bottom) {
-      setCompacted(true);
-    }
-  }, [inputRef]);
 
   // Function to handle input changes
   const handleChange = (id, newValue) => {
@@ -188,14 +284,11 @@ export const InputForm = ({
       <div className="input-form-title">
         {id.toUpperCase().replace("-", " ")}
       </div>
-      <form
-        onSubmit={handleSubmit}
-        ref={inputRef}
-        className={`input-form ${compacted && "compacted"}`}
-      >
+      <div ref={inputRef} className={`input-form ${compacted && "compacted"}`}>
         {states.map((state, index) => {
           return state.child ? (
             cloneElement(state.child, {
+              key: index,
               onChange: (value) => handleChange(state.id, value),
               value: values[state.id],
               id: state.id,
@@ -203,6 +296,7 @@ export const InputForm = ({
             })
           ) : (
             <Input
+              key={index}
               label={state.label}
               type={state.type}
               onInputChange={(value) => handleChange(state.id, value)}
@@ -210,8 +304,10 @@ export const InputForm = ({
           );
         })}
         {children}
-        <button type="submit">{buttonLabel}</button>
-      </form>
+        <button type="submit" onClick={handleSubmit}>
+          {buttonLabel}
+        </button>
+      </div>
     </div>
   );
 };

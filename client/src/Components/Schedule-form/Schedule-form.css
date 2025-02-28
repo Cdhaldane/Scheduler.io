@@ -1,48 +1,15 @@
 .schedule-container {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
   background-color: var(--bg-primary);
-  border: 3px solid var(--ash);
-  height: 98% !important;
   border-radius: 4px;
-  /* animation: slideInRight 0.5s ease-in-out normal forwards; */
-}
-
-.schedule-container .body {
-  height: 90%;
-  width: 100%;
-}
-
-.body > h1 {
-  color: var(--primary);
-  border-bottom: 3px solid var(--ash);
-  font-size: 2em;
-  margin-bottom: 5px;
-  margin-top: 0px;
-  height: 5%;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
-}
-
-.body h1 > i {
-  font-size: 1.2em;
-  margin-left: 10px;
-  position: absolute;
-  left: 10px;
-}
-
-.schedule-appointment {
+  overflow: hidden;
+  height: 100%;
+  width: 90%;
+  padding: 10px 20px;
   display: flex;
   flex-direction: column;
-  align-items: left;
-  font-size: 1em;
-  padding: 10px 20px;
-  height: 90%;
+  justify-content: space-between;
+  transition: all 0.3s ease-in-out;
+  /* animation: slideInRight 0.5s ease-in-out normal forwards; */
 }
 
 .schedule-appointment-info {
@@ -51,65 +18,95 @@
   border-radius: 0px 0px 4px 4px;
   display: flex;
   flex-direction: column;
+  gap: 1.5em;
   align-items: center;
   justify-content: center;
+  padding-bottom: 1.5em;
+  transition: all 0.3s ease-in-out;
+}
+
+.schedule-appointment-info.not-selected h1 {
+  animation: width-grow-90 0.5s ease-in-out;
+  width: 90%;
+}
+.schedule-appointment-info.not-selected h2 {
+  animation: width-shrink-0 0.5s ease-in-out;
+  width: 0px;
+}
+
+.schedule-appointment-info.selected h1 {
+  animation: width-shrink-30 0.5s ease-in-out;
+  width: 30%;
+}
+.schedule-appointment-info.selected h2 {
+  animation: width-grow-60 0.5s ease-in-out;
+  width: 60%;
 }
 
 .schedule-container span {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   font-weight: bold;
   width: 100%;
-  height: 100px;
+  height: 17%;
 }
 
 .schedule-container span > h1 {
+  min-height: 30px;
+  max-height: 50px;
   height: 50%;
   font-size: 1.5em;
-  width: 25%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   color: var(--primary);
   background-color: var(--bg-secondary);
-
   border: 2px solid var(--primary);
   border-left: none;
   padding: 10px;
   border-radius: 0px 10px 10px 0px;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
 }
 
 .schedule-container span > h2 {
-  height: 50%;
+  min-height: 30px;
+  max-height: 50px;
   color: var(--ash);
   font-size: 1.6em;
   display: flex;
   align-items: center;
-  width: 57%;
   padding: 10px;
   border-radius: 10px 0px 0px 10px;
   background-color: var(--bg-secondary);
   border: 2px solid var(--primary);
   border-right: none;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
 }
 
 .schedule-header {
   display: flex;
   align-items: center;
   color: var(--ash);
-  padding-left: 10px;
+  padding-left: 2%;
   font-size: 1.5em;
   transition: all 0.3s ease-in-out;
   border: 2px solid var(--ash);
-  height: 10%;
+  height: 50px;
   border-radius: 5px 5px 0px 0px;
 }
 
 .schedule-header h2 {
-  font-size: 1.2em;
-  margin-left: 10px;
-  padding: 0 10px;
+  font-size: 100%;
+  margin-left: 2%;
+  padding-left: 10px;
   width: 100%;
   border: none;
   color: var(--bg-primary);
@@ -117,41 +114,81 @@
   height: 100%;
   display: flex;
   align-items: center;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
 }
 
 .schedule-container footer {
   width: 100%;
 }
 
-/* MOBILE STYLING  */
-
-.schedule-form-mobile-toggle {
-  position: absolute;
-  top: 80px;
-  right: 10px;
-  font-size: 1em;
-  color: var(--bg-secondary);
-  background-color: var(--ash);
-  border: 2px solid var(--bg-secondary);
-  border-radius: 50%;
-  padding: 10px;
+.book-appointment {
+  position: relative;
+  justify-content: center;
+  background-color: var(--bg-primary) !important;
+  border: 3px solid var(--primary);
+  width: 100%;
+  font-size: 1.4em;
+  font-weight: 800;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  margin: 0px auto;
+  border-radius: 4px;
 }
 
-.schedule-form-mobile-toggle.hidden {
+.book-appointment i {
+  position: absolute;
+  right: 10px;
+}
+
+.book-appointment:hover {
+  background-color: var(--primary) !important;
+  transition: all 0.3s ease-in-out;
+  font-size: 1.5em;
+  color: var(--bg-primary);
+}
+
+/* MOBILE STYLING  */
+.service-dropdown {
+  width: 99%;
+  border: 2px solid var(--primary);
+}
+
+.service-dropdown.dropdown-menu {
+  top: 100%;
+  border: 2px solid var(--primary);
+}
+
+.service-dropdown.dropdown-menu::after {
   display: none;
 }
 
-.schedule-container.mobile {
-  width: 98%;
-  max-height: 90%;
-  position: fixed;
-  top: 70px;
-  left: 0;
-  font-size: 0.8em !important;
-}
+@media screen and (max-width: 1500px) {
+  .schedule-body {
+    margin-bottom: 0px;
+    font-size: 1.3em;
+    padding: 0px;
+  }
+  .schedule-container {
+    padding: 0px;
+    width: 100%;
+    font-size: 0.8em !important;
+  }
 
-.service-dropdown {
-  width: 98%;
-  margin: 0px 1%;
-  border: 2px solid var(--primary);
+  .schedule-appointment-info {
+    border: none;
+  }
+
+  .schedule-header {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid var(--ash);
+  }
+
+  .book-appointment {
+    border: none;
+    border-top: 2px solid var(--ash);
+    border-radius: 0px;
+  }
 }

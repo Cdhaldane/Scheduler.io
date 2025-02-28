@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 
-import "./ContextMenu.css";
-
+import "./CalendarContextMenu.css";
 
 /**
  * ContextMenu Component
@@ -21,7 +20,6 @@ import "./ContextMenu.css";
       />
     </div>
  */
-
 
 const ContextMenu = ({ visible, x, y, options, onRequestClose }) => {
   return (

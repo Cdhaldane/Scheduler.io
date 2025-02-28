@@ -14,22 +14,24 @@ import "./App.css";
 import Landing from "./Views/Landing.jsx";
 import Home from "./Views/Home.jsx";
 import Admin from "./Views/Admin.jsx";
-import Employee from "./Views/Employee.jsx";
-import Appointments from "./Views/Appointments.jsx";
+import Profile from "./Views/Profile.jsx";
 import Navbar from "./Components/Navbar/Navbar.jsx";
-import Footer from "./Components/Footer/Footer.jsx";
 import Login from "./Components/Login/Login.jsx";
 import ResetPassword from "./Components/Login/LoginResetPassword.jsx";
 import ACMain from "./Views/OrgCreation/ACMain.jsx";
 import BookingPage from "./Components/Bookings/BookingPage.jsx";
 import BookingSubmit from "./Components/Bookings/BookingSubmit.jsx";
-import CookieConsent from "./DevComponents/CookieConsent/CookieConsent.jsx";
 import NotFoundPage from "./Views/404.jsx";
-import Alert from "./Components/Providers/Alert";
-import Modal from "./DevComponents/Modal/Modal.jsx";
+import Alert from "./DevComponents/Providers/Alert.jsx";
 import Info from "./Views/Info";
-import Spinner from "./Components/Spinner/Spinner";
+import Spinner from "./DevComponents/Spinner/Spinner.jsx";
+import CookieConsent from "./DevComponents/CookieConsent/CookieConsent.jsx";
+import Modal from "./DevComponents/Modal/Modal.jsx";
 import DevTools from "./DevComponents/DevTools/DevTools.jsx";
+import Footer from "./DevComponents/Footer/Footer.jsx";
+
+import { initializeTheme } from "./DevComponents/ThemeSwitch/ThemeSwitch.jsx";
+
 import * as db from "./Database";
 import "./index.css";
 
@@ -68,28 +70,30 @@ function App() {
         setIsAdmin(true);
         setIsLoggedIn(true);
       }
-      if (session?.user.user_metadata.organization) {
-        setOrganization(session.user.user_metadata.organization);
-      } else {
-        const org = await db.getOrganization(location.pathname.split("/")[2]);
+      // if (session?.user.user_metadata.organization) {
+      //   setOrganization(session.user.user_metadata.organization);
+      // } else {
+      if (location.pathname === "/") return;
+      const org = await db.getOrganization(location.pathname.split("/")[2]);
+      if (org) {
         setOrganization(org);
       }
+      // }
     };
     fetchData().finally(() => {
       setIsLoading(false);
     });
-  }, [session]);
+  }, [session, location.pathname]);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
-      if (window.innerWidth < 768) {
+      if (window.innerWidth <= 768) {
         setIsMobile(true);
-        window.location.reload();
       } else {
         setIsMobile(false);
-        window.location.reload();
       }
     });
+    initializeTheme();
   }, []);
 
   useEffect(() => {
@@ -122,12 +126,11 @@ function App() {
   }, []);
 
   const shouldRenderNavbarAndFooter =
-    location.pathname === "/create-organization" ||
-    location.pathname.includes("reset-password");
+    location.pathname === "/create-organization";
 
   const isCalendar =
-    location.pathname === "/admin" ||
-    location.pathname === "/home" ||
+    location.pathname.includes("/admin") ||
+    location.pathname.includes("/home") ||
     location.pathname.includes("/employee");
 
   const handleOrganizationCreate = (org) => {
@@ -135,13 +138,25 @@ function App() {
     setOrganization(org);
     db.updateUser(org, session.user);
   };
+
+  const setOrgDefault = async () => {
+    if (session) {
+      const o = await db.getOrganization(
+        "bce8fd49-4a09-4d41-83e9-7c0a13bca6c3"
+      );
+      if (o) console.log("o", o);
+      db.updateUser(o, session.user);
+    }
+  };
+
   if (isLoading) return <Spinner />;
   return (
     <>
       <Alert />
-      {/* <DevTools /> */}
 
-      <div className="app">
+      <DevTools setOrgDefault={setOrgDefault} />
+
+      <div className="app" id="app">
         {!shouldRenderNavbarAndFooter ? (
           <Navbar
             isLoggedIn={isLoggedIn}
@@ -179,10 +194,7 @@ function App() {
                   />
                 }
               />
-              <Route
-                path="/appointments"
-                element={<Appointments session={session} />}
-              />
+              <Route path="/profile" element={<Profile session={session} />} />
               <Route
                 path="/admin/:organizationId"
                 element={
@@ -192,10 +204,6 @@ function App() {
                     organization={organization}
                   />
                 }
-              />
-              <Route
-                path="/employee"
-                element={<Employee session={session} type="employee" />}
               />
             </>
           ) : (

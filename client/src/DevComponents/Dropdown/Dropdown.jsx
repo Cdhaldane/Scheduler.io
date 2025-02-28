@@ -4,44 +4,36 @@ import "./Dropdown.css";
 
 /**
  * Dropdown Component
- * 
+ *
  * Purpose:
  * - The Dropdown component provides a customizable dropdown menu with options.
- * - It uses the CSSTransition component for animation effects when opening and closing the dropdown.
- * 
+ * - Supports multiple selection via checkboxes when `listType` is set to "checkbox".
+ *
  * Inputs:
  * - label: A label for the dropdown (optional).
  * - options: An array of options to be displayed in the dropdown menu.
- * - onClick: A callback function that is called when an option is clicked.
+ * - onClick: A callback function that is called when an option is selected.
  * - children: The content to be displayed in the dropdown trigger area.
  * - direction: The direction in which the dropdown menu expands ('up' or 'down').
- * 
+ * - listType: Defines the list type, supports "ul" or "checkbox".
+ *
  * Outputs:
  * - JSX for rendering the dropdown component with the provided options and animation effects.
- * 
- * Example Usage:
- * <Dropdown
-      children={
-      <button className="dropdown-toggle">
-      {selectedService || "Select Service"}
-      </button>
-      }
-      options={["Haircut", "Shave", "Haircut and Shave"]}
-      onClick={(service) => handleServiceChange(service)}
-    />
  */
 
 const Dropdown = ({
-  label,
+  label = "Dropdown Button",
   options,
   onClick,
   children,
   direction,
   type,
   className,
+  listType = "ul",
   style,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -54,14 +46,23 @@ const Dropdown = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [dropdownRef]);
-  const handleClick = (option) => {
-    onClick(option);
-    setIsOpen(false);
+
+  const handleCheckboxChange = (option) => {
+    const updatedSelection = selectedOptions.includes(option)
+      ? selectedOptions.filter((selected) => selected !== option)
+      : [...selectedOptions, option];
+
+    setSelectedOptions(updatedSelection);
+    onClick(updatedSelection); // Pass all selected options to the parent
   };
 
   return (
     <div className="dropdown" ref={dropdownRef}>
-      <div onClick={() => setIsOpen(!isOpen)} className="dropdown-holder">
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className={`dropdown-holder ${isOpen ? "open" : ""}`}
+        aria-label={label}
+      >
         {children}
         {type === "button" ? (
           isOpen ? (
@@ -81,16 +82,39 @@ const Dropdown = ({
           className={`dropdown-menu ${direction} ${className && className}`}
           style={style}
         >
-          {options.map((option, index) => (
-            <div
-              key={index}
-              className="dropdown-item"
-              onClick={() => handleClick(option.label || option)}
-            >
-              {option.icon && <i className={option.icon}></i>}
-              {option.label || option}
-            </div>
-          ))}
+          {listType === "ul"
+            ? options.map((option, index) => (
+                <div
+                  key={index}
+                  className="dropdown-item"
+                  onClick={() => {
+                    onClick(option.label || option);
+                    setIsOpen(false);
+                  }}
+                >
+                  {option.icon && <i className={option.icon}></i>}
+                  {option.label || option}
+                </div>
+              ))
+            : listType === "checkbox"
+            ? options.map((option, index) => (
+                <label
+                  key={index}
+                  className={`dropdown-item checkbox-item ${
+                    selectedOptions.includes(option) ? "selected" : ""
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedOptions.includes(option)}
+                    onChange={() => handleCheckboxChange(option)}
+                  />
+                  <div class="checkmark"></div>
+                  {option.icon && <i className={option.icon}></i>}
+                  {option.label || option}
+                </label>
+              ))
+            : null}
         </div>
       </CSSTransition>
     </div>

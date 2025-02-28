@@ -41,7 +41,7 @@ export const getStartOfWeek = (date) => {
 export const getEndOfWeek = (date) => {
   const end = new Date(date);
   const day = end.getDay(); // Get the current day of the week (0 is Sunday)
-  const diff = end.getUTCDate() - day; // Calculate the difference from the start of the week
+  const diff = end.getDate() - day; // Calculate the difference from the start of the week
 
   end.setDate(diff + 6);
   end.setHours(0, 0, 0, 0); // Set the time to the start of the day for consistency
@@ -188,4 +188,49 @@ export const handleOperatingHours = (hour, organization) => {
     return true;
   }
   return false;
+};
+
+export const combineColors = (colors) => {
+  if (!colors || colors.length === 0) {
+    throw new Error("The colors array must not be empty.");
+  }
+
+  // Convert a hex color to its RGB components
+  const hexToRgb = (hex) => {
+    const bigint = parseInt(hex.replace("#", ""), 16);
+    return {
+      r: (bigint >> 16) & 255,
+      g: (bigint >> 8) & 255,
+      b: bigint & 255,
+    };
+  };
+
+  // Convert RGB components to a hex color
+  const rgbToHex = ({ r, g, b }) => {
+    const toHex = (component) => component.toString(16).padStart(2, "0");
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  };
+
+  // Accumulate the sum of RGB components
+  const totalRgb = colors.reduce(
+    (acc, color) => {
+      const rgb = hexToRgb(color);
+      return {
+        r: acc.r + rgb.r,
+        g: acc.g + rgb.g,
+        b: acc.b + rgb.b,
+      };
+    },
+    { r: 0, g: 0, b: 0 }
+  );
+
+  // Compute the average of RGB components
+  const averagedRgb = {
+    r: Math.round(totalRgb.r / colors.length),
+    g: Math.round(totalRgb.g / colors.length),
+    b: Math.round(totalRgb.b / colors.length),
+  };
+
+  // Convert the averaged RGB to hex
+  return rgbToHex(averagedRgb);
 };

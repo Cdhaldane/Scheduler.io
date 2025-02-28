@@ -20,18 +20,21 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   width: 70%;
-  height: 100%;
-  padding-left: 20px;
+  padding-left: 45px;
+  padding-top: 5px;
+}
+
+.navbar-header img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
 }
 
 .navbar-header > h1 {
+  display: flex;
   font-weight: 800;
-  font-size: 2rem;
-}
-
-.navbar-item.profile-item {
-  font-size: 1em !important;
-  margin-right: 20px;
+  font-size: 2.4em;
+  margin-left: -5px;
 }
 
 .navbar-content {
@@ -49,12 +52,6 @@
   transition: all 0.3s ease-in-out;
 }
 
-.navbar-header img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-
 .navbar-item {
   display: flex;
   align-items: center;
@@ -62,8 +59,35 @@
   font-size: 1em;
 }
 
+.navbar-item > i {
+  color: var(--ash);
+  transition: all 0.3s ease-in-out;
+}
+
 .navbar-item > i:hover {
   scale: 1.1;
+}
+
+.navbar-item.profile-item {
+  font-size: 1em !important;
+  height: 54px !important;
+  width: 54px !important;
+}
+
+.navbar-item.profile-item .fa-user {
+  color: var(--primary);
+  transition: all 0.3s ease-in-out;
+  margin-left: 8px;
+  font-size: 2.5em;
+}
+
+.navbar-item.current > i {
+  color: var(--primary) !important;
+  scale: 1.1 !important;
+}
+
+.navbar-item.current:hover > i {
+  scale: 1 !important;
 }
 
 .profile-pic {
@@ -90,8 +114,25 @@
 }
 
 /* MOBILE STYLING  */
+@media screen and (max-width: 1500px) {
+  .navbar-content {
+    gap: 20px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .navbar-content {
+    font-size: 0.8em;
+    gap: 15px;
+    width: 50%;
+    justify-content: flex-end;
+  }
 
-.navbar.mobile .navbar-content {
-  font-size: 2em;
-  gap: 20px;
+  .navbar-header {
+    width: 50%;
+    padding-left: 10px;
+  }
+
+  .navbar-item.profile-item {
+    margin-right: 5px;
+  }
 }

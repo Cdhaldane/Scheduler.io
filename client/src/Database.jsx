@@ -16,6 +16,20 @@ export const supabase = createClient(
   options
 );
 
+const checkRangeOverlap = (Id, updateId) => {
+  // Parse the ranges into start and end integers
+  const oldRange = Id.split("-")[2];
+  const updateRange = updateId.split("-")[2];
+  const [oldStart, oldEnd] = oldRange.split(":").map(Number);
+  const [updateStart, updateEnd] = updateRange.split(":").map(Number);
+
+  return (
+    !(updateEnd <= oldStart || updateStart >= oldEnd) &&
+    Id.split("-")[1] === updateId.split("-")[1] &&
+    Id.split("-")[0] === updateId.split("-")[0]
+  );
+};
+
 //Fetch all personnel from the database
 export const getPersonnel = async (org_id) => {
   const { data, error } = await supabase
@@ -98,6 +112,7 @@ export const deleteUser = async (id) => {
 // AUTH
 // Sign in with Google OAuth
 export const loginWithGoogle = async (redirect) => {
+  console.log("redirect", redirect);
   await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
@@ -141,6 +156,8 @@ export const signUp = async (email, password, name, phone) => {
 
 //Sign in an existing user
 export const signIn = async (email, password) => {
+  console.log("email", email);
+  console.log("password", password);
   const { data, error } = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
@@ -239,19 +256,182 @@ export const deleteService = async (id) => {
 };
 
 // PERSONNEL SERVICES HANDLERS
-
-export const addPersonnelService = async (personnelId, newPersonnelService) => {
+export const deleteallPersonnelService = async (
+  personnelId,
+  updatedServices
+) => {
   const { data, error } = await supabase
     .from("personnel")
-    .update({ services: newPersonnelService })
+    .update({ services: updatedServices })
     .eq("id", personnelId)
     .select();
+
   if (error) {
     console.log("Error adding personnel service:", error);
   }
   return { data, error };
 };
 
+export const updatePersonnelService = async (
+  personnelId,
+  serviceIdToUpdate,
+  updatedServiceData
+) => {
+  try {
+    // Fetch the existing services
+    const { data: personnel, error: fetchError } = await supabase
+      .from("personnel")
+      .select("services")
+      .eq("id", personnelId)
+      .single();
+
+    if (fetchError) {
+      console.error("Error fetching personnel services:", fetchError);
+      return { data: null, error: fetchError };
+    }
+
+    const oldServices = personnel?.services || [];
+    if (!Array.isArray(oldServices)) {
+      throw new Error("Existing services data is not an array.");
+    }
+
+    // Update the matching service
+    const updatedServices = oldServices.map((service) => {
+      // Check if the service being updated overlaps with the existing service
+      if (checkRangeOverlap(service.id, serviceIdToUpdate)) {
+      }
+
+      if (
+        service.id === serviceIdToUpdate ||
+        checkRangeOverlap(service.id, serviceIdToUpdate)
+      ) {
+        // Update the matching service with new data
+        return {
+          ...service,
+          ...updatedServiceData,
+        };
+      }
+      return service; // Keep other services unchanged
+    });
+
+    // Save the updated services back to the database
+    const { data, error: updateError } = await supabase
+      .from("personnel")
+      .update({ services: updatedServices })
+      .eq("id", personnelId)
+      .select();
+
+    if (updateError) {
+      console.error("Error updating personnel services:", updateError);
+      return { data: null, error: updateError };
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    console.error("Unexpected error in updatePersonnelService:", error);
+    return { data: null, error };
+  }
+};
+
+export const addPersonnelService = async (personnelId, newService) => {
+  try {
+    // Fetch the existing services
+    const { data: personnel, error: fetchError } = await supabase
+      .from("personnel")
+      .select("services")
+      .eq("id", personnelId)
+      .single();
+
+    if (fetchError) {
+      console.error("Error fetching personnel services:", fetchError);
+      return { data: null, error: fetchError };
+    }
+
+    const oldServices = personnel?.services || [];
+    if (!Array.isArray(oldServices)) {
+      throw new Error("Existing services data is not an array.");
+    }
+
+    // Update the services array
+    const updatedServices = [...oldServices, newService];
+
+    // Save the updated services back to the database
+    const { data, error: updateError } = await supabase
+      .from("personnel")
+      .update({ services: updatedServices })
+      .eq("id", personnelId)
+      .select();
+
+    if (updateError) {
+      console.error("Error updating personnel services:", updateError);
+      return { data: null, error: updateError };
+    }
+
+    return { data, error: updateError };
+  } catch (error) {
+    console.error("Unexpected error in addPersonnelService:", error);
+    return { data: null, error };
+  }
+};
+
+export const deletePersonnelService = async (
+  personnelId,
+  serviceIdToDelete
+) => {
+  try {
+    // Fetch the existing services
+    const { data: personnel, error: fetchError } = await supabase
+      .from("personnel")
+      .select("services")
+      .eq("id", personnelId)
+      .single();
+
+    if (fetchError) {
+      console.error("Error fetching personnel services:", fetchError);
+      return { data: null, error: fetchError };
+    }
+
+    const oldServices = personnel?.services || [];
+    if (!Array.isArray(oldServices)) {
+      throw new Error("Existing services data is not an array.");
+    }
+
+    const serviceToDelete = oldServices.find((service) => {
+      if (
+        service.id === serviceIdToDelete ||
+        checkRangeOverlap(service.id, serviceIdToDelete)
+      ) {
+        return service;
+      }
+    });
+    // Filter out the service to delete
+    const updatedServices = oldServices.filter(
+      (service) => service.id !== serviceToDelete.id
+    );
+
+    if (updatedServices.length === oldServices.length) {
+      console.warn(
+        `Service with ID ${serviceIdToDelete} not found for personnel ${personnelId}.`
+      );
+    }
+    // Save the updated services back to the database
+    const { data, error: updateError } = await supabase
+      .from("personnel")
+      .update({ services: updatedServices })
+      .eq("id", personnelId)
+      .select();
+
+    if (updateError) {
+      console.error("Error updating personnel services:", updateError);
+      return { data: null, error: updateError };
+    }
+
+    return { data, error: null };
+  } catch (error) {
+    console.error("Unexpected error in deletePersonnelService:", error);
+    return { data: null, error };
+  }
+};
 // BOOKINGS HANDLERS
 
 export const getBookings = async (personnelId) => {
@@ -260,7 +440,7 @@ export const getBookings = async (personnelId) => {
     .select("*")
     .eq("personnel_id", personnelId);
   if (error) {
-    // console.log("Error fetching bookings:", error);
+    console.log("Error fetching bookings:", error);
   }
   return data;
 };
@@ -329,3 +509,34 @@ export const updateOrganization = async (id, organization) => {
   }
   return { data, error };
 };
+
+// Remove testuser from the database
+export default async function handler(req, res) {
+  if (req.method === "POST") {
+    const { email } = req.body;
+
+    // Initialize Supabase client with service role key
+    const supabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+
+    // Find the user by email and delete
+    const { data: user, error: findError } =
+      await supabase.auth.admin.getUserByEmail(email);
+    if (findError) {
+      return res.status(400).json({ error: findError.message });
+    }
+
+    const { error: deleteError } = await supabase.auth.admin.deleteUser(
+      user.id
+    );
+    if (deleteError) {
+      return res.status(400).json({ error: deleteError.message });
+    }
+
+    return res.status(200).json({ message: "User deleted successfully" });
+  } else {
+    res.status(405).json({ error: "Method not allowed" });
+  }
+}

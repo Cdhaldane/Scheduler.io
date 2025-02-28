@@ -3,7 +3,7 @@
   color: var(--text-white);
   background-color: var(--bg-primary);
   width: 100%;
-  height: var(--main-height);
+  min-height: var(--main-height);
   margin: 0 auto;
   z-index: 1000;
 }
@@ -16,9 +16,10 @@
 
 .hero {
   text-align: center;
+  justify-content: center;
   padding: 0px 20px;
   padding-bottom: 30px;
-  width: 50%;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: row;
@@ -30,13 +31,22 @@
 }
 
 .hero > span {
+  width: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-right: 10%;
 }
 
+.landing-clock-container {
+  width: 40%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0 auto;
+}
 .landing-clock {
-  width: 35%;
+  width: 350px;
   aspect-ratio: 1/1 !important;
 }
 
@@ -46,24 +56,29 @@
   margin-block-end: 0px !important;
 }
 
+.hero .timeslot-title {
+  font: 1.8em var(--font-secondary);
+}
+
 .hero p {
   font: 1em var(--font-main);
   margin-bottom: 30px;
 }
 
-.hero button {
+.hero-button {
   background-color: var(--secondary);
-  color: var(--secondary-dark) !important;
-  border: none;
+  color: var(--bg-primary) !important;
+  border: 1px solid var(--secondary);
   cursor: pointer;
-  width: 50%;
-  border-radius: 9px;
+  width: 60%;
+  padding: 15px 20px;
+  border-radius: 5px;
   font-size: 0.7em;
   margin: 0 auto;
 }
 
-.hero button:hover {
-  background-color: var(--secondary-dark);
+.hero-button:hover {
+  background-color: var(--bg-primary) !important;
   color: var(--secondary) !important;
 }
 
@@ -124,4 +139,42 @@
   text-align: center;
   position: relative;
   z-index: 2 !important;
+}
+
+.slideInUp {
+  animation: slideInTop 0.5s ease-in-out normal forwards;
+}
+
+.slideOutDown {
+  animation: slideOutTop 0.5s ease-in-out normal forwards;
+}
+
+@media screen and (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .hero > span {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .landing-clock-container {
+    width: 100%;
+  }
+
+  .landing-clock {
+    width: 100%;
+  }
+
+  .feature-list {
+    width: 100%;
+  }
+
+  .feature {
+    width: 100%;
+  }
 }
