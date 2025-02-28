@@ -1,3 +1,0 @@
-id,email,password_hash,name,phone_number,user_type,created_at,updated_at
-1,johndoe@example.com,hashed_password,John Doe,123-456-7890,client,2024-03-05 22:37:55.563897+00,2024-03-05 22:37:55.563897+00
-2,janedoe@example.com,hashed_password,Jane Doe,098-765-4321,staff,2024-03-05 22:37:55.563897+00,2024-03-05 22:37:55.563897+00
