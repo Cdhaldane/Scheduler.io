@@ -1,0 +1,125 @@
+/* FILEPATH: /c:/Users/CharllieDhaldane/Desktop/Work/portfolio/Scheduler.io/client/src/Components/Login/Login.css */
+
+.login-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  gap: 16px;
+}
+
+.login-container.page {
+  background-color: var(--bg-secondary);
+  padding: 20px 30px;
+  width: 80%;
+  max-width: 500px; /* Adjust width for smaller screens */
+  max-height: calc(90%) !important;
+  color: var(--white);
+  border-radius: 10px;
+  animation: appear 0.2s ease-in-out normal forwards;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.login-container > div {
+  width: 100%;
+}
+
+.login-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0px;
+}
+
+.login-header > img {
+  width: 13%;
+}
+
+.login-header > h1 {
+  font-size: 2rem;
+  color: var(--white);
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+}
+
+.login-form {
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.login-form > a {
+  color: var(--light-grey);
+  text-decoration: underline;
+  margin: -5px auto;
+  cursor: pointer !important;
+}
+
+.login-form > button {
+  height: 50px;
+  font-size: 1.2em;
+  font-weight: 400;
+}
+
+.login-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 16px;
+}
+
+.login-buttons button {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--light-grey);
+}
+
+.login-buttons button:hover {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--primary);
+}
+
+.login-buttons svg {
+  width: 50px;
+  height: 50px;
+}
+
+.login-error p {
+  color: var(--danger);
+  font-size: 1.2em;
+  text-align: center;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--danger);
+  border-radius: 5px;
+  padding: 10px;
+  margin: 0px;
+  animation: appear 0.2s ease-in-out normal forwards;
+}
+
+.password-reset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ash);
+  background-color: var(--bg-secondary);
+  margin: 0 auto;
+  width: 30%;
+  border-radius: 10px;
+  padding: 50px;
+}
+
+.password-reset form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100% !important;
+  margin: 0 auto;
+}
+
+.password-reset h2 {
+  font-size: 3em;
+  margin-bottom: 20px;
+}

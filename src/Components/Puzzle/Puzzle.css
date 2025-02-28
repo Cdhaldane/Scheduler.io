@@ -1,0 +1,198 @@
+.puzzle-piece.dragging {
+  opacity: 1 !important;
+}
+.puzzle-piece:hover {
+  scale: 1.05;
+}
+
+.pieces-container {
+  background-color: var(--bg-primary);
+  border-radius: 4px;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease-in-out;
+}
+
+.pieces-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 5%;
+  width: 100%;
+  height: 82%;
+  z-index: 1;
+  transition: all 0.5s ease-in-out;
+}
+
+.puzzle-piece {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 95%;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  z-index: 1;
+  color: var(--bg-primary);
+}
+
+.puzzle-piece > h1 {
+  font-size: 2em;
+  color: var(--bg-primary);
+  margin: 0;
+  font-size: 2.5em;
+  position: relative;
+  margin-left: 10px;
+}
+
+.puzzle-piece > h1 > i {
+  color: var(--bg-primary);
+  margin: 0;
+  position: relative;
+  margin-right: 10px;
+}
+
+.puzzle-piece span {
+  background-color: var(--bg-primary);
+  color: var(--ash);
+  padding: 0px 10px;
+  font-size: 0.7em;
+  margin-right: 7%;
+  width: 30%;
+}
+
+.puzzle-piece span > h1 {
+  font-size: 1.5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0;
+  text-align: left;
+  font-size: 2em;
+  position: relative;
+}
+
+.puzzle-piece span > h1 > i {
+  margin-right: 15px;
+  text-align: right;
+  width: 15%;
+}
+
+.puzzle-container.isOver {
+  background-color: lightblue;
+}
+
+.puzzle-container.default {
+  background-color: white;
+}
+
+.btn-piece {
+  border: 3px dashed var(--blue);
+  background-color: var(--olive);
+}
+
+.btn-piece::before {
+  background-color: var(--olive);
+  border: 3px dashed var(--blue);
+  border-right: none;
+}
+
+.pieces-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 100%;
+  height: 10%;
+  z-index: 1;
+  background-color: var(--primary);
+}
+
+.pieces-footer > div {
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  color: var(--secondary);
+  font-size: 3rem;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  background-color: var(--bg-secondary) !important;
+}
+
+.pieces-footer > div:hover,
+.pieces-footer > div.is-over {
+  width: 80%;
+}
+#garbage-bin {
+  border-left: 3px solid var(--bg-primary);
+}
+#add-bin {
+  color: var(--primary);
+}
+
+.animate-delete {
+  z-index: 10;
+  animation: fadeToGarbageBin 1s forwards;
+}
+
+.animate-add {
+  z-index: 10;
+  animation: fadeFromGarbageBin 1s forwards;
+}
+
+.puzzle-footer-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* MOBILE STYLING */
+
+.item-list__item {
+  z-index: 100000;
+  width: 500px;
+  opacity: 0.3;
+}
+
+/* ANIMATIONS */
+@keyframes fillBorder {
+  0% {
+    background-color: var(--bg-secondary);
+  }
+  100% {
+    background-color: var(--primary);
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    width: 0%;
+    visibility: hidden;
+  }
+  100% {
+    width: 25%;
+    visibility: visible;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    width: 25%;
+  }
+  100% {
+    width: 3%;
+  }
+}

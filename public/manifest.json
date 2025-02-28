@@ -1,0 +1,58 @@
+{
+  "short_name": "TimeSlot",
+  "name": "TimeSlot - Book Appointments Effortlessly",
+  "description": "TimeSlot is your go-to app for seamless time slot bookings. Simplify scheduling and manage appointments like a pro.",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#4CAF50",
+  "background_color": "#f4f4f4",
+  "orientation": "portrait",
+  "categories": ["productivity", "utilities", "scheduling"],
+  "related_applications": [
+    {
+      "platform": "web",
+      "url": "https://timeslot.example.com"
+    }
+  ],
+  "scope": "/",
+  "shortcuts": [
+    {
+      "name": "Quick Book",
+      "short_name": "Quick Book",
+      "description": "Book a time slot instantly",
+      "url": "/quick-book",
+      "icons": [
+        {
+          "src": "icons/quick-book.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "View Bookings",
+      "short_name": "My Bookings",
+      "description": "Check your upcoming bookings",
+      "url": "/bookings",
+      "icons": [
+        {
+          "src": "icons/view-bookings.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

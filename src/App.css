@@ -1,0 +1,222 @@
+:root {
+  --primary: #88f188; /*77dd77*/
+  --primary-dark: #4d9a4f;
+  --secondary: #ee8484;
+  --secondary-dark: #572828;
+  --light-grey: #7a7a7a;
+  --olive: #38423b;
+  --blue: #81bee0;
+  --dark-blue: #0f6674;
+  --red: #ff6961;
+  --yellow: #d29315;
+  --green: #1f7c35;
+  --ash: #d3dedd;
+  --white: #d8d8d8;
+  --bg-primary: #2d2d2a;
+  --bg-secondary: #4a4a4a;
+  --bg-tertiary: #3f3f3f;
+  --success: #2ec952;
+  --info: rgb(23, 162, 184);
+  --info-dark: #0f6674;
+  --info-light: #4eb9d0;
+  --black: #000;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --notify: #026fcf;
+  --font-main: "Archivo Narrow", sans-serif;
+  --font-secondary: "Julius Sans One", sans-serif;
+  --text-white: #ffffff;
+  --sidebar-width: 300px;
+  --nav-padding: 40px;
+  --nav-height: 70px;
+  --footer-height: 250px;
+  --main-height: calc(100vh - var(--nav-height));
+  --puzzle-width: 180px;
+}
+
+.light-mode {
+  --primary: #4b4b4b;
+  --primary-dark: rgb(58, 58, 58);
+  --secondary: #ee8484;
+  --light-grey: #727272;
+  --olive: #3f3f3f;
+  --blue: #81bee0;
+  --red: #ff6961;
+  --ash: #727272;
+  --white: #1d1d1d;
+  --text-white: #282828;
+  --bg-primary: #fdfdfd;
+  --bg-secondary: #cacaca;
+  --success: #2ec952;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  min-height: var(--main-height);
+}
+
+.app {
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+.row {
+  display: flex;
+  flex-direction: row !important;
+}
+
+form > button {
+  height: 60px;
+}
+
+input {
+  box-sizing: border-box;
+  padding-block: 0px;
+}
+
+.min-height {
+  min-height: var(--main-height);
+}
+
+.red {
+  background-color: var(--secondary) !important;
+}
+
+.green {
+  color: var(--primary) !important;
+}
+.text-center {
+  text-align: center;
+  margin: 0px;
+}
+.m-bot {
+  margin-bottom: 20px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.inline {
+  display: flex;
+  flex-direction: row;
+}
+
+.width-50 {
+  width: 45% !important;
+}
+
+.icon-right {
+  font-size: 1.2em;
+  margin-left: 10px;
+  position: absolute;
+  right: 10px;
+}
+
+.temp-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 100;
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50%;
+  padding: 0px !important;
+  border: 2px white solid;
+}
+
+/* h2 {
+  margin-block-start: 0px !important;
+  margin-block-end: 0px !important;
+} */
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ash);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-secondary);
+  width: 3px;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+/* Style for the element that will have the typing effect */
+.typing-animation {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 0.15em solid black; /* The cursor */
+}
+
+/* Trigger the typing animation */
+.animate-typing {
+  animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.timeslot-title {
+  position: relative;
+  left: 10px;
+  margin-block-start: 0px !important;
+  margin-block-end: 0px !important;
+  font-size: 1.5em;
+  color: var(--primary);
+}
+
+.timeslot-title > span {
+  font-size: 1em;
+  color: var(--secondary);
+}
+
+.no-margin {
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+}
+@media screen and (max-width: 768px) {
+  html {
+    overflow-x: hidden;
+  }
+  .app {
+    min-width: auto;
+    min-height: auto;
+  }
+}

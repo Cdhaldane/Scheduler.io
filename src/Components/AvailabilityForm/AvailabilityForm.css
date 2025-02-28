@@ -1,0 +1,46 @@
+.availability-form {
+    width: var(--sidebar-width);
+    height: 100vh; /* Full height */
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--bg-secondary); /* Dark background */
+    padding-top: 20px;
+    animation: slideInLeft 0.5s ease-in-out normal forwards;
+    z-index: 10;
+  }
+  .employee-name{
+    color: var(--white);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .availability-block {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border: 2px solid #555;
+    color: var(--light-grey);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .availability-block:hover {
+    background-color: var(--bg-secondary);
+    color: var(--white);
+  }
+  
+  .availability-block[selected="true"] {
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+
+  #available {
+    color: black;
+    border-color: black;
+    background-color: rgb(175, 238, 175);
+  }
+  
+  #notAvailable {
+    color: black;
+    border-color: black;
+    background-color: rgb(252, 176, 176);
+  }

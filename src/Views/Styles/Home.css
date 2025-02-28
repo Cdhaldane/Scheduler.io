@@ -1,0 +1,134 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - var(--sidebar-width));
+  height: 100%;
+  margin-left: 300px;
+  border-radius: 10px 0px 0px 10px;
+  /* animation: slideInTop 0.5s ease-in-out normal forwards; */
+  background-color: var(--bg-primary);
+}
+
+.main-body {
+  width: calc(100% - var(--sidebar-width));
+  height: 100%;
+  min-height: calc(var(--main-height) - 10px);
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--bg-primary);
+  margin-left: var(--sidebar-width);
+  transition: all 0.5s ease-in-out;
+}
+
+.main-body.full-width {
+  width: calc(100% - 50px);
+  margin-left: 50px;
+}
+
+.main-body.collapsed .calendar {
+  width: 100%;
+}
+
+.main-right {
+  display: flex;
+  width: 25%;
+  height: calc(var(--main-height) - 25px);
+  justify-content: space-between;
+  align-items: end;
+  margin-right: 1.5% !important;
+  margin-top: 19px;
+}
+
+.main-right.collapsed {
+  width: 3%;
+  margin-right: 0px !important;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  min-width: fit-content;
+  width: 80%;
+}
+
+.right {
+  display: flex;
+}
+
+.info-page {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0% 5%;
+  background-color: var(--bg-primary);
+  color: var(--primary);
+  padding-bottom: 2%;
+  /* animation: slideInBottom 0.5s ease-in-out normal forwards; */
+}
+
+.info-page h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  font-family: var(--font-secondary);
+}
+
+.info-page h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-family: var(--font-secondary);
+}
+
+.info-page p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--white);
+  display: inline-block;
+}
+
+.info-page ul li {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--white);
+}
+
+.admin-button {
+  position: fixed;
+  bottom: 10px;
+  left: 100px;
+  z-index: 1000000;
+  background-color: var(--secondary);
+  color: var(--bg-primary);
+  border-radius: 10px;
+  font-size: 1rem;
+  width: 100px;
+  padding: 10px;
+  transition: all 0.1s ease-in-out;
+}
+
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(var(--main-height) - var(--footer-height) - 111px);
+  background-color: var(--bg-primary);
+}
+
+.not-found-container h1 {
+  font-size: 3rem;
+  color: var(--primary);
+}
+
+.not-found-container p {
+  font-size: 1.5rem;
+  color: var(--primary-dark);
+}
+
+@media (max-width: 768px) {
+  .main-body {
+    margin-left: 0px;
+    width: 100% !important;
+    overflow: hidden;
+  }
+}
